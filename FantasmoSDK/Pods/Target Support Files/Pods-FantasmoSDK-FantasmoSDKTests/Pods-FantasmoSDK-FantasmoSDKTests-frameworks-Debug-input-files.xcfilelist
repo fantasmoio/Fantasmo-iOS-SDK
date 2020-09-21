@@ -1,0 +1,5 @@
+${PODS_ROOT}/Target Support Files/Pods-FantasmoSDK-FantasmoSDKTests/Pods-FantasmoSDK-FantasmoSDKTests-frameworks.sh
+${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework
+${BUILT_PRODUCTS_DIR}/BrightFutures/BrightFutures.framework
+${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework

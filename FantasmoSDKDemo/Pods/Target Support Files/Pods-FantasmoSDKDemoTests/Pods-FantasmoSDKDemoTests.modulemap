@@ -1,0 +1,6 @@
+framework module Pods_FantasmoSDKDemoTests {
+  umbrella header "Pods-FantasmoSDKDemoTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

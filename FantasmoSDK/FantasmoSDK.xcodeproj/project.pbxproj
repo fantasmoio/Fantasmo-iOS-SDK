@@ -26,7 +26,6 @@
 		18764CF62513A95800F8BA7D /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18764CEC2513A95700F8BA7D /* FantasmoSDK.framework */; };
 		18764CFB2513A95800F8BA7D /* FantasmoSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18764CFA2513A95800F8BA7D /* FantasmoSDKTests.swift */; };
 		18764CFD2513A95800F8BA7D /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 18764CEF2513A95700F8BA7D /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4A86EF69880A600DDC5FA128 /* Pods_FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C53B39FBA63D7B2AC2B712 /* Pods_FantasmoSDK.framework */; };
 		BC22BEA1C5CE6A3AECE7A0C4 /* Pods_FantasmoSDK_FantasmoSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47E7C79F72A359EB01501E46 /* Pods_FantasmoSDK_FantasmoSDKTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -76,7 +75,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A86EF69880A600DDC5FA128 /* Pods_FantasmoSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,7 +16,9 @@
 		184A4DF32513ACA6008C55CA /* FantasmoSDKDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184A4DF22513ACA6008C55CA /* FantasmoSDKDemoTests.swift */; };
 		184A4DFE2513ACA6008C55CA /* FantasmoSDKDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184A4DFD2513ACA6008C55CA /* FantasmoSDKDemoUITests.swift */; };
 		186066862513B2A400EE7A94 /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184A4E122513ACD1008C55CA /* FantasmoSDK.framework */; };
-		186066872513B2A400EE7A94 /* FantasmoSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 184A4E122513ACD1008C55CA /* FantasmoSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		249F906E2391909BE8A6FD7B /* Pods_FantasmoSDKDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 717172F2ECBD05B4351EC7D2 /* Pods_FantasmoSDKDemoTests.framework */; };
+		480DC8BA62D05C83C0020A50 /* Pods_FantasmoSDKDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BAE1F19627E20EB896B49C3 /* Pods_FantasmoSDKDemo.framework */; };
+		626F023C0123041E0EE3F769 /* Pods_FantasmoSDKDemo_FantasmoSDKDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F16675CDD95E71986B21F4 /* Pods_FantasmoSDKDemo_FantasmoSDKDemoUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,20 +59,6 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		186066882513B2A400EE7A94 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				186066872513B2A400EE7A94 /* FantasmoSDK.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		184A4DD82513ACA4008C55CA /* FantasmoSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		184A4DDB2513ACA4008C55CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +75,15 @@
 		184A4DFD2513ACA6008C55CA /* FantasmoSDKDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FantasmoSDKDemoUITests.swift; sourceTree = "<group>"; };
 		184A4DFF2513ACA6008C55CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		184A4E0C2513ACD1008C55CA /* FantasmoSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FantasmoSDK.xcodeproj; path = ../FantasmoSDK/FantasmoSDK.xcodeproj; sourceTree = "<group>"; };
+		2EF75E70610821163DC3A44A /* Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests.release.xcconfig"; path = "Target Support Files/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
+		5522C0DCF6CEC45857A58A8D /* Pods-FantasmoSDKDemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FantasmoSDKDemoTests.release.xcconfig"; path = "Target Support Files/Pods-FantasmoSDKDemoTests/Pods-FantasmoSDKDemoTests.release.xcconfig"; sourceTree = "<group>"; };
+		5537F511832DDBF9084C9869 /* Pods-FantasmoSDKDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FantasmoSDKDemo.debug.xcconfig"; path = "Target Support Files/Pods-FantasmoSDKDemo/Pods-FantasmoSDKDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		717172F2ECBD05B4351EC7D2 /* Pods_FantasmoSDKDemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FantasmoSDKDemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		83ECBE39ADEF23C5A9A1DA4C /* Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests.debug.xcconfig"; path = "Target Support Files/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		8BAE1F19627E20EB896B49C3 /* Pods_FantasmoSDKDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FantasmoSDKDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		94F16675CDD95E71986B21F4 /* Pods_FantasmoSDKDemo_FantasmoSDKDemoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FantasmoSDKDemo_FantasmoSDKDemoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA32E26D46ECC6C9F599B8DD /* Pods-FantasmoSDKDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FantasmoSDKDemo.release.xcconfig"; path = "Target Support Files/Pods-FantasmoSDKDemo/Pods-FantasmoSDKDemo.release.xcconfig"; sourceTree = "<group>"; };
+		F28316E312096BEF13C907A6 /* Pods-FantasmoSDKDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FantasmoSDKDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-FantasmoSDKDemoTests/Pods-FantasmoSDKDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +92,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				186066862513B2A400EE7A94 /* FantasmoSDK.framework in Frameworks */,
+				480DC8BA62D05C83C0020A50 /* Pods_FantasmoSDKDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				249F906E2391909BE8A6FD7B /* Pods_FantasmoSDKDemoTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				626F023C0123041E0EE3F769 /* Pods_FantasmoSDKDemo_FantasmoSDKDemoUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,6 +124,7 @@
 				184A4DFC2513ACA6008C55CA /* FantasmoSDKDemoUITests */,
 				184A4DD92513ACA4008C55CA /* Products */,
 				184A4E172513ACE3008C55CA /* Frameworks */,
+				441A125DD3B8D541E8E40F41 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -181,8 +182,24 @@
 		184A4E172513ACE3008C55CA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8BAE1F19627E20EB896B49C3 /* Pods_FantasmoSDKDemo.framework */,
+				94F16675CDD95E71986B21F4 /* Pods_FantasmoSDKDemo_FantasmoSDKDemoUITests.framework */,
+				717172F2ECBD05B4351EC7D2 /* Pods_FantasmoSDKDemoTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		441A125DD3B8D541E8E40F41 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5537F511832DDBF9084C9869 /* Pods-FantasmoSDKDemo.debug.xcconfig */,
+				BA32E26D46ECC6C9F599B8DD /* Pods-FantasmoSDKDemo.release.xcconfig */,
+				83ECBE39ADEF23C5A9A1DA4C /* Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests.debug.xcconfig */,
+				2EF75E70610821163DC3A44A /* Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests.release.xcconfig */,
+				F28316E312096BEF13C907A6 /* Pods-FantasmoSDKDemoTests.debug.xcconfig */,
+				5522C0DCF6CEC45857A58A8D /* Pods-FantasmoSDKDemoTests.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,10 +209,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 184A4E022513ACA6008C55CA /* Build configuration list for PBXNativeTarget "FantasmoSDKDemo" */;
 			buildPhases = (
+				4AC7B85098EB5B225C248B33 /* [CP] Check Pods Manifest.lock */,
 				184A4DD42513ACA4008C55CA /* Sources */,
 				184A4DD52513ACA4008C55CA /* Frameworks */,
 				184A4DD62513ACA4008C55CA /* Resources */,
-				186066882513B2A400EE7A94 /* Embed Frameworks */,
+				4879D0F6FBCC9F417A380C3F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -211,6 +229,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 184A4E052513ACA6008C55CA /* Build configuration list for PBXNativeTarget "FantasmoSDKDemoTests" */;
 			buildPhases = (
+				87A9882558C8B552119C9245 /* [CP] Check Pods Manifest.lock */,
 				184A4DEA2513ACA6008C55CA /* Sources */,
 				184A4DEB2513ACA6008C55CA /* Frameworks */,
 				184A4DEC2513ACA6008C55CA /* Resources */,
@@ -229,9 +248,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 184A4E082513ACA6008C55CA /* Build configuration list for PBXNativeTarget "FantasmoSDKDemoUITests" */;
 			buildPhases = (
+				A8303F73746AAD561EF489F4 /* [CP] Check Pods Manifest.lock */,
 				184A4DF52513ACA6008C55CA /* Sources */,
 				184A4DF62513ACA6008C55CA /* Frameworks */,
 				184A4DF72513ACA6008C55CA /* Resources */,
+				F2A3BF9660FDE87DDD65E16F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -335,6 +356,109 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4879D0F6FBCC9F417A380C3F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FantasmoSDKDemo/Pods-FantasmoSDKDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FantasmoSDKDemo/Pods-FantasmoSDKDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FantasmoSDKDemo/Pods-FantasmoSDKDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4AC7B85098EB5B225C248B33 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FantasmoSDKDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		87A9882558C8B552119C9245 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FantasmoSDKDemoTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A8303F73746AAD561EF489F4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F2A3BF9660FDE87DDD65E16F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests/Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		184A4DD42513ACA4008C55CA /* Sources */ = {
@@ -519,6 +643,7 @@
 		};
 		184A4E032513ACA6008C55CA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5537F511832DDBF9084C9869 /* Pods-FantasmoSDKDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -538,6 +663,7 @@
 		};
 		184A4E042513ACA6008C55CA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA32E26D46ECC6C9F599B8DD /* Pods-FantasmoSDKDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -557,6 +683,7 @@
 		};
 		184A4E062513ACA6008C55CA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F28316E312096BEF13C907A6 /* Pods-FantasmoSDKDemoTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -579,6 +706,7 @@
 		};
 		184A4E072513ACA6008C55CA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5522C0DCF6CEC45857A58A8D /* Pods-FantasmoSDKDemoTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -601,6 +729,7 @@
 		};
 		184A4E092513ACA6008C55CA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 83ECBE39ADEF23C5A9A1DA4C /* Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -622,6 +751,7 @@
 		};
 		184A4E0A2513ACA6008C55CA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2EF75E70610821163DC3A44A /* Pods-FantasmoSDKDemo-FantasmoSDKDemoUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;

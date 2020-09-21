@@ -1,0 +1,7 @@
+# Ignoring the pod directory 
+FantasmoSDK/Pods/
+FantasmoSDKDemo/Pods/
+.DS_Store
+.AppleDouble
+.LSOverride
+xcuserdata/

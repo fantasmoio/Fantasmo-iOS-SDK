@@ -7,22 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		134B585F2514914C0026000D /* ARSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B585E2514914C0026000D /* ARSessionManager.swift */; };
-		134B58632514D6D30026000D /* TOSImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B58622514D6D30026000D /* TOSImage.swift */; };
-		134B58652514D8560026000D /* TOSIntrinsics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B58642514D8560026000D /* TOSIntrinsics.swift */; };
-		134B58672514D8B30026000D /* TOSPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B58662514D8B30026000D /* TOSPose.swift */; };
-		134B58692514D8DF0026000D /* TOSPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B58682514D8DF0026000D /* TOSPosition.swift */; };
-		134B586B2514D91D0026000D /* TOSOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B586A2514D91D0026000D /* TOSOrientation.swift */; };
+		134B585F2514914C0026000D /* FMARSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B585E2514914C0026000D /* FMARSessionExtension.swift */; };
+		134B58632514D6D30026000D /* FMImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B58622514D6D30026000D /* FMImage.swift */; };
+		134B58652514D8560026000D /* FMIntrinsics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B58642514D8560026000D /* FMIntrinsics.swift */; };
+		134B58672514D8B30026000D /* FMPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B58662514D8B30026000D /* FMPose.swift */; };
+		134B58692514D8DF0026000D /* FMPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B58682514D8DF0026000D /* FMPosition.swift */; };
+		134B586B2514D91D0026000D /* FMOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B586A2514D91D0026000D /* FMOrientation.swift */; };
 		134B586E2514D98A0026000D /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B586D2514D98A0026000D /* UIImage+Extension.swift */; };
 		134B58702514DAE80026000D /* CGImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B586F2514DAE80026000D /* CGImage+Extension.swift */; };
-		134B58752514FB5E0026000D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B58742514FB5E0026000D /* NetworkManager.swift */; };
-		134B5878251513EE0026000D /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B5877251513EE0026000D /* Constant.swift */; };
-		134B587A251528880026000D /* FantasmoHttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B5879251528880026000D /* FantasmoHttpRouter.swift */; };
-		134B587C251528B40026000D /* HttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B587B251528B40026000D /* HttpRouter.swift */; };
+		134B58752514FB5E0026000D /* FMNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B58742514FB5E0026000D /* FMNetworkManager.swift */; };
+		134B5878251513EE0026000D /* FMConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B5877251513EE0026000D /* FMConfiguration.swift */; };
+		134B587C251528B40026000D /* FMHTTPRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 134B587B251528B40026000D /* FMHTTPRouter.swift */; };
+		18495EAA2519F0130039C754 /* FMLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18495EA92519F0130039C754 /* FMLocationManager.swift */; };
+		18495EAC251A18CC0039C754 /* FMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18495EAB251A18CC0039C754 /* FMError.swift */; };
 		1850A9082513C6CD00F64453 /* NSObject+Loader.h in Headers */ = {isa = PBXBuildFile; fileRef = 1850A9062513C6CD00F64453 /* NSObject+Loader.h */; };
 		1850A9092513C6CD00F64453 /* NSObject+Loader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1850A9072513C6CD00F64453 /* NSObject+Loader.m */; };
-		1850A90B2513C6F100F64453 /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850A90A2513C6F100F64453 /* Loader.swift */; };
-		186066BE2513C3E300EE7A94 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186066BD2513C3E300EE7A94 /* LocationManager.swift */; };
+		1850A90B2513C6F100F64453 /* FMLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850A90A2513C6F100F64453 /* FMLoader.swift */; };
 		18764CF62513A95800F8BA7D /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18764CEC2513A95700F8BA7D /* FantasmoSDK.framework */; };
 		18764CFB2513A95800F8BA7D /* FantasmoSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18764CFA2513A95800F8BA7D /* FantasmoSDKTests.swift */; };
 		18764CFD2513A95800F8BA7D /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 18764CEF2513A95700F8BA7D /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -40,22 +40,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		134B585E2514914C0026000D /* ARSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARSessionManager.swift; sourceTree = "<group>"; };
-		134B58622514D6D30026000D /* TOSImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOSImage.swift; sourceTree = "<group>"; };
-		134B58642514D8560026000D /* TOSIntrinsics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOSIntrinsics.swift; sourceTree = "<group>"; };
-		134B58662514D8B30026000D /* TOSPose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOSPose.swift; sourceTree = "<group>"; };
-		134B58682514D8DF0026000D /* TOSPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOSPosition.swift; sourceTree = "<group>"; };
-		134B586A2514D91D0026000D /* TOSOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOSOrientation.swift; sourceTree = "<group>"; };
+		134B585E2514914C0026000D /* FMARSessionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMARSessionExtension.swift; sourceTree = "<group>"; };
+		134B58622514D6D30026000D /* FMImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMImage.swift; sourceTree = "<group>"; };
+		134B58642514D8560026000D /* FMIntrinsics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMIntrinsics.swift; sourceTree = "<group>"; };
+		134B58662514D8B30026000D /* FMPose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPose.swift; sourceTree = "<group>"; };
+		134B58682514D8DF0026000D /* FMPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPosition.swift; sourceTree = "<group>"; };
+		134B586A2514D91D0026000D /* FMOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMOrientation.swift; sourceTree = "<group>"; };
 		134B586D2514D98A0026000D /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		134B586F2514DAE80026000D /* CGImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGImage+Extension.swift"; sourceTree = "<group>"; };
-		134B58742514FB5E0026000D /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		134B5877251513EE0026000D /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
-		134B5879251528880026000D /* FantasmoHttpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FantasmoHttpRouter.swift; sourceTree = "<group>"; };
-		134B587B251528B40026000D /* HttpRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRouter.swift; sourceTree = "<group>"; };
+		134B58742514FB5E0026000D /* FMNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMNetworkManager.swift; sourceTree = "<group>"; };
+		134B5877251513EE0026000D /* FMConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMConfiguration.swift; sourceTree = "<group>"; };
+		134B587B251528B40026000D /* FMHTTPRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMHTTPRouter.swift; sourceTree = "<group>"; };
+		181242EA2518CD6700D33E30 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		181242EB2518CD6700D33E30 /* AlamofireObjectMapper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AlamofireObjectMapper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		181242EC2518CD6700D33E30 /* BrightFutures.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BrightFutures.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		181242ED2518CD6700D33E30 /* ObjectMapper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ObjectMapper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		18495EA92519F0130039C754 /* FMLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationManager.swift; sourceTree = "<group>"; };
+		18495EAB251A18CC0039C754 /* FMError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMError.swift; sourceTree = "<group>"; };
 		1850A9062513C6CD00F64453 /* NSObject+Loader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+Loader.h"; sourceTree = "<group>"; };
 		1850A9072513C6CD00F64453 /* NSObject+Loader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Loader.m"; sourceTree = "<group>"; };
-		1850A90A2513C6F100F64453 /* Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
-		186066BD2513C3E300EE7A94 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		1850A90A2513C6F100F64453 /* FMLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLoader.swift; sourceTree = "<group>"; };
 		18764CEC2513A95700F8BA7D /* FantasmoSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FantasmoSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		18764CEF2513A95700F8BA7D /* FantasmoSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FantasmoSDK.h; sourceTree = "<group>"; };
 		18764CF02513A95700F8BA7D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -90,16 +94,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		134B58612514D6B10026000D /* TerraOS */ = {
+		134B58612514D6B10026000D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				134B58622514D6D30026000D /* TOSImage.swift */,
-				134B58642514D8560026000D /* TOSIntrinsics.swift */,
-				134B58662514D8B30026000D /* TOSPose.swift */,
-				134B58682514D8DF0026000D /* TOSPosition.swift */,
-				134B586A2514D91D0026000D /* TOSOrientation.swift */,
+				134B58622514D6D30026000D /* FMImage.swift */,
+				134B58642514D8560026000D /* FMIntrinsics.swift */,
+				134B58662514D8B30026000D /* FMPose.swift */,
+				134B58682514D8DF0026000D /* FMPosition.swift */,
+				134B586A2514D91D0026000D /* FMOrientation.swift */,
 			);
-			path = TerraOS;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		134B586C2514D96E0026000D /* Extension */ = {
@@ -114,9 +118,8 @@
 		134B58712514E5C00026000D /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				134B58742514FB5E0026000D /* NetworkManager.swift */,
-				134B5879251528880026000D /* FantasmoHttpRouter.swift */,
-				134B587B251528B40026000D /* HttpRouter.swift */,
+				134B58742514FB5E0026000D /* FMNetworkManager.swift */,
+				134B587B251528B40026000D /* FMHTTPRouter.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -146,14 +149,15 @@
 			children = (
 				134B58712514E5C00026000D /* Network */,
 				134B586C2514D96E0026000D /* Extension */,
-				134B58612514D6B10026000D /* TerraOS */,
-				134B5877251513EE0026000D /* Constant.swift */,
+				134B58612514D6B10026000D /* Models */,
 				18764CEF2513A95700F8BA7D /* FantasmoSDK.h */,
 				1850A9062513C6CD00F64453 /* NSObject+Loader.h */,
 				1850A9072513C6CD00F64453 /* NSObject+Loader.m */,
-				1850A90A2513C6F100F64453 /* Loader.swift */,
-				186066BD2513C3E300EE7A94 /* LocationManager.swift */,
-				134B585E2514914C0026000D /* ARSessionManager.swift */,
+				18495EAB251A18CC0039C754 /* FMError.swift */,
+				1850A90A2513C6F100F64453 /* FMLoader.swift */,
+				134B5877251513EE0026000D /* FMConfiguration.swift */,
+				134B585E2514914C0026000D /* FMARSessionExtension.swift */,
+				18495EA92519F0130039C754 /* FMLocationManager.swift */,
 				18764CF02513A95700F8BA7D /* Info.plist */,
 			);
 			path = FantasmoSDK;
@@ -171,6 +175,10 @@
 		95A2B2A90B9FD16962C5BAC2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				181242EA2518CD6700D33E30 /* Alamofire.framework */,
+				181242EB2518CD6700D33E30 /* AlamofireObjectMapper.framework */,
+				181242EC2518CD6700D33E30 /* BrightFutures.framework */,
+				181242ED2518CD6700D33E30 /* ObjectMapper.framework */,
 				F2C53B39FBA63D7B2AC2B712 /* Pods_FantasmoSDK.framework */,
 				47E7C79F72A359EB01501E46 /* Pods_FantasmoSDK_FantasmoSDKTests.framework */,
 			);
@@ -385,21 +393,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				134B58752514FB5E0026000D /* NetworkManager.swift in Sources */,
-				134B586B2514D91D0026000D /* TOSOrientation.swift in Sources */,
+				134B58752514FB5E0026000D /* FMNetworkManager.swift in Sources */,
+				18495EAC251A18CC0039C754 /* FMError.swift in Sources */,
+				134B586B2514D91D0026000D /* FMOrientation.swift in Sources */,
 				1850A9092513C6CD00F64453 /* NSObject+Loader.m in Sources */,
-				1850A90B2513C6F100F64453 /* Loader.swift in Sources */,
-				186066BE2513C3E300EE7A94 /* LocationManager.swift in Sources */,
-				134B585F2514914C0026000D /* ARSessionManager.swift in Sources */,
-				134B58652514D8560026000D /* TOSIntrinsics.swift in Sources */,
-				134B58632514D6D30026000D /* TOSImage.swift in Sources */,
+				1850A90B2513C6F100F64453 /* FMLoader.swift in Sources */,
+				134B585F2514914C0026000D /* FMARSessionExtension.swift in Sources */,
+				134B58652514D8560026000D /* FMIntrinsics.swift in Sources */,
+				134B58632514D6D30026000D /* FMImage.swift in Sources */,
 				134B58702514DAE80026000D /* CGImage+Extension.swift in Sources */,
-				134B5878251513EE0026000D /* Constant.swift in Sources */,
+				18495EAA2519F0130039C754 /* FMLocationManager.swift in Sources */,
+				134B5878251513EE0026000D /* FMConfiguration.swift in Sources */,
 				134B586E2514D98A0026000D /* UIImage+Extension.swift in Sources */,
-				134B587A251528880026000D /* FantasmoHttpRouter.swift in Sources */,
-				134B58672514D8B30026000D /* TOSPose.swift in Sources */,
-				134B58692514D8DF0026000D /* TOSPosition.swift in Sources */,
-				134B587C251528B40026000D /* HttpRouter.swift in Sources */,
+				134B58672514D8B30026000D /* FMPose.swift in Sources */,
+				134B58692514D8DF0026000D /* FMPosition.swift in Sources */,
+				134B587C251528B40026000D /* FMHTTPRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

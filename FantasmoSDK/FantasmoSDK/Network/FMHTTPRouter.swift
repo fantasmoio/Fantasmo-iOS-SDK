@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-protocol HTTPRouter: URLRequestConvertible {
+protocol FMHTTPRouter: URLRequestConvertible {
     var baseURL: String { get }
     var path: String { get }
     var method: HTTPMethod { get }
@@ -17,10 +17,10 @@ protocol HTTPRouter: URLRequestConvertible {
     var request: URLRequest { get }
 }
 
-extension HTTPRouter {
+extension FMHTTPRouter {
     
     var baseURL: String {
-        return Server.Constants.routeUrl
+        return FMConfiguration.Server.routeUrl
     }
     
     var url: URL {

@@ -1,5 +1,5 @@
 //
-//  TOSOrientation.swift
+//  FMOrientation.swift
 //  FantasmoSDK
 //
 //  Copyright © 2020 Fantasmo. All rights reserved.
@@ -7,7 +7,7 @@
 
 import ARKit
 
-public struct TOSOrientation:Codable {
+public struct FMOrientation:Codable {
     
     var x:Float
     var y:Float
@@ -71,7 +71,7 @@ public struct TOSOrientation:Codable {
         self.w = Float(rotation.real)
     }
     
-    init(_ or: TOSOrientation) {
+    init(_ or: FMOrientation) {
         self.x = Float(or.x)
         self.y = Float(or.y)
         self.z = Float(or.z)
@@ -82,16 +82,16 @@ public struct TOSOrientation:Codable {
         return simd_quatf(ix: self.x, iy: self.y, iz: self.z, r: self.w)
     }
     
-    public func getRotationTo(orientation:TOSOrientation) -> simd_quatf {
+    public func getRotationTo(orientation:FMOrientation) -> simd_quatf {
         return (self.toSimdQuaternion().inverse)*orientation.toSimdQuaternion()
     }
     
-    public func difference(to orientation:TOSOrientation) -> TOSOrientation {
+    public func difference(to orientation:FMOrientation) -> FMOrientation {
         let thisDifference = (self.toSimdQuaternion()*(orientation.toSimdQuaternion().inverse)).normalized
-        return TOSOrientation(fromQuaternion: thisDifference.real, x: thisDifference.imag[0], y: thisDifference.imag[1], z: thisDifference.imag[2])
+        return FMOrientation(fromQuaternion: thisDifference.real, x: thisDifference.imag[0], y: thisDifference.imag[1], z: thisDifference.imag[2])
     }
     
-    public func hamiltonProduct(quaternionRotation: simd_quatf) -> TOSOrientation {
+    public func hamiltonProduct(quaternionRotation: simd_quatf) -> FMOrientation {
         let a1 = quaternionRotation.real
         let b1 = quaternionRotation.imag[0]
         let c1 = quaternionRotation.imag[1]
@@ -107,10 +107,10 @@ public struct TOSOrientation:Codable {
         let hamiltonY = a1*c2 - b1*d2 + c1*a2 + d1*b2
         let hamiltonZ = a1*d2 + b1*c2 - c1*b2 + d1*a2
         
-        return TOSOrientation(fromQuaternion: hamiltonW, x: hamiltonX, y: hamiltonY, z: hamiltonZ)
+        return FMOrientation(fromQuaternion: hamiltonW, x: hamiltonX, y: hamiltonY, z: hamiltonZ)
     }
     
-    public func hamiltonProduct(quaternionRotation: simd_quatd) -> TOSOrientation {
+    public func hamiltonProduct(quaternionRotation: simd_quatd) -> FMOrientation {
         let a1 = Float(quaternionRotation.real)
         let b1 = Float(quaternionRotation.imag[0])
         let c1 = Float(quaternionRotation.imag[1])
@@ -126,10 +126,10 @@ public struct TOSOrientation:Codable {
         let hamiltonY = a1*c2 - b1*d2 + c1*a2 + d1*b2
         let hamiltonZ = a1*d2 + b1*c2 - c1*b2 + d1*a2
         
-        return TOSOrientation(fromQuaternion: hamiltonW, x: hamiltonX, y: hamiltonY, z: hamiltonZ)
+        return FMOrientation(fromQuaternion: hamiltonW, x: hamiltonX, y: hamiltonY, z: hamiltonZ)
     }
     
-    public func hamiltonProduct(_ quaternionRotation: TOSOrientation) -> TOSOrientation {
+    public func hamiltonProduct(_ quaternionRotation: FMOrientation) -> FMOrientation {
         let a1 = quaternionRotation.w
         let b1 = quaternionRotation.x
         let c1 = quaternionRotation.y
@@ -145,10 +145,10 @@ public struct TOSOrientation:Codable {
         let hamiltonY = a1*c2 - b1*d2 + c1*a2 + d1*b2
         let hamiltonZ = a1*d2 + b1*c2 - c1*b2 + d1*a2
         
-        return TOSOrientation(fromQuaternion: hamiltonW, x: hamiltonX, y: hamiltonY, z: hamiltonZ)
+        return FMOrientation(fromQuaternion: hamiltonW, x: hamiltonX, y: hamiltonY, z: hamiltonZ)
     }
     
-    func interpolated(distance: Float, startOrientation: TOSOrientation, differenceOrientation: TOSOrientation) -> TOSOrientation {
+    func interpolated(distance: Float, startOrientation: FMOrientation, differenceOrientation: FMOrientation) -> FMOrientation {
         let differenceQuaternion = differenceOrientation.toSimdQuaternion()
         
         let ang = distance*differenceQuaternion.angle
@@ -162,7 +162,7 @@ public struct TOSOrientation:Codable {
         
         let resultOrientation = iq*startOrientation.toSimdQuaternion()*self.toSimdQuaternion()
         
-        return TOSOrientation(fromQuaternion: resultOrientation.real, x: resultOrientation.imag[0], y: resultOrientation.imag[1], z: resultOrientation.imag[2])
+        return FMOrientation(fromQuaternion: resultOrientation.real, x: resultOrientation.imag[0], y: resultOrientation.imag[1], z: resultOrientation.imag[2])
     }
     
     func toString() -> String {
@@ -173,23 +173,23 @@ public struct TOSOrientation:Codable {
         return simd_quatd(ix: Double(x), iy: Double(y), iz: Double(z), r: Double(w))
     }
     
-    func rotate(_ rot : TOSOrientation) -> TOSOrientation {
+    func rotate(_ rot : FMOrientation) -> FMOrientation {
         return hamiltonProduct(rot)
     }
     
-    func rotate(_ pos : TOSPosition) -> TOSPosition {
+    func rotate(_ pos : FMPosition) -> FMPosition {
         let q = self.ToQuaternion()
         let p = simd_double3(x: Double(pos.x), y: Double(pos.y), z: Double(pos.z))
         let pRot = q.act(p)
-        return TOSPosition(Float(pRot.x), Float(pRot.y), Float(pRot.z))
+        return FMPosition(Float(pRot.x), Float(pRot.y), Float(pRot.z))
     }
     
-    func inverse() -> TOSOrientation {
+    func inverse() -> FMOrientation {
         let q = ToQuaternion()
-        return TOSOrientation(q.inverse)
+        return FMOrientation(q.inverse)
     }
     
-    func angularDistance(_ other : TOSOrientation) -> Double {
+    func angularDistance(_ other : FMOrientation) -> Double {
         let qd = getRotationTo(orientation: other)
         return Double(qd.angle) * .pi / 180.0
     }
@@ -209,11 +209,11 @@ public struct TOSOrientation:Codable {
         z *= lengthD;
     }
     
-    func quaternionDot(other: TOSOrientation) -> Float {
+    func quaternionDot(other: FMOrientation) -> Float {
         return (w * other.w + x * other.x + y * other.y + z * other.z)
     }
     
-    static func getAverageQuaternion(quaternions: [TOSOrientation]) -> TOSOrientation? {
+    static func getAverageQuaternion(quaternions: [FMOrientation]) -> FMOrientation? {
         
         if(quaternions.count == 0) {
             return nil

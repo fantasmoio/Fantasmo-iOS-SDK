@@ -9,9 +9,8 @@ import Foundation
 import CoreLocation
 import ARKit
 
-public class Loader: NSObject {
+public class FMLoader: NSObject {
     @objc public static func swiftyLoad() {
-        CLLocationManager.swizzle()
         ARSession.swizzle()
     }
 }

@@ -11,7 +11,7 @@ import AlamofireObjectMapper
 import BrightFutures
 import ObjectMapper
 
-struct NetworkManager {
+struct FMNetworkManager {
     static let networkUnavailableCode: Double = 1000
 
     static let networkQueue = DispatchQueue(label: "\(String(describing: Bundle.main.bundleIdentifier)).networking-queue", attributes: .concurrent)
@@ -64,7 +64,7 @@ struct NetworkManager {
             let code = (error as NSError).code
             switch code {
             case NSURLErrorNotConnectedToInternet, NSURLErrorCannotConnectToHost, NSURLErrorCannotFindHost:
-                return NetworkError.error(code: NetworkManager.networkUnavailableCode, message: Errors.networkUnreachableError)
+                return NetworkError.error(code: FMNetworkManager.networkUnavailableCode, message: Errors.networkUnreachableError)
             default:
                 return NetworkError.errorString(Errors.genericError)
             }
@@ -72,23 +72,20 @@ struct NetworkManager {
         return NetworkError.errorString(Errors.genericError)
     }
     
-    static func uploadImage(url:String, parameters: [String : Any], image:TOSImage, jpegData:Data, mapName:String, onCompletion: ((Data?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil) {
+    static func uploadImage(url:String, parameters: [String : Any], image:FMImage, jpegData:Data, mapName:String,
+                            onCompletion: ((Data?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil) {
         let headers: HTTPHeaders = [
             "Content-type": "multipart/form-data"
         ]
         
-        print("POST IMAGE.LOCALIZE")
         AF.upload(multipartFormData: { (multipartFormData) in
             for (key, value) in parameters {
                 multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
             }
-            
             multipartFormData.append("\(NSDate().timeIntervalSince1970)".data(using: String.Encoding.utf8)!, withName: "capturedAt" as String)
             multipartFormData.append("\(image.uuid)".data(using: String.Encoding.utf8)!, withName: "uuid" as String)
             multipartFormData.append(mapName.data(using: String.Encoding.utf8)!, withName: "mapId" as String)
-            
             multipartFormData.append(jpegData, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
-            
         }, to: url, usingThreshold: UInt64.init(), method: .post, headers: headers).response  { (result) in
             print(result)
         }

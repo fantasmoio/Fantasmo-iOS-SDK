@@ -10,9 +10,9 @@ import Foundation
 import ARKit
 import CoreLocation
 
-class TOSImage: Codable {
+internal class FMImage:Codable {
     
-    public enum Constants {
+    private enum Constants {
         public static let JpegCompressionRatio: CGFloat = 0.9
         public static let ImageScaleFactor: CGFloat = 2.0/3.0
         public static let PixelBufferWidth: Int = 1920
@@ -20,13 +20,14 @@ class TOSImage: Codable {
         public static let PixelBufferPlaneCount: Int = 2
     }
     
-    public let uuid = UUID().uuidString
-    public private(set) var userId:String?
-    public private(set) var timestamp:Double
-    public private(set) var intrinsics:TOSIntrinsics
-    public private(set) var pose:TOSPose
-    public private(set) var latitude:Double
-    public private(set) var longitude:Double
+    private var userId:String?
+    private var timestamp:Double
+    private var latitude:Double
+    private var longitude:Double
+    
+    internal let uuid = UUID().uuidString
+    internal var intrinsics:FMIntrinsics
+    internal var pose:FMPose
     
     public var filename:String {
         return String(format:"%.9f_%@", timestamp, uuid)
@@ -41,9 +42,9 @@ class TOSImage: Codable {
         
         timestamp = (Date().timeIntervalSince1970 - ProcessInfo().systemUptime) + frame.timestamp
                 
-        pose = TOSPose(fromTransform: frame.camera.transform)
-        intrinsics = TOSIntrinsics(fromIntrinsics: frame.camera.intrinsics,
-                                   atScale: Float(TOSImage.Constants.ImageScaleFactor),
+        pose = FMPose(fromTransform: frame.camera.transform)
+        intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
+                                   atScale: Float(FMImage.Constants.ImageScaleFactor),
                                    withStatusBarOrientation: currentStatusBarOrientation,
                                    withDeviceOrientation: currentDeviceOrientation,
                                    withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
@@ -66,14 +67,14 @@ class TOSImage: Codable {
         let pixelBufferWidth = CVPixelBufferGetWidth(pixelBuffer)
         let pixelBufferPlaneCount = CVPixelBufferGetPlaneCount(pixelBuffer)
                 
-        if( (pixelBufferHeight != TOSImage.Constants.PixelBufferHeight) ||
-            (pixelBufferWidth != TOSImage.Constants.PixelBufferWidth) ||
-            (pixelBufferPlaneCount != TOSImage.Constants.PixelBufferPlaneCount)) {
+        if( (pixelBufferHeight != FMImage.Constants.PixelBufferHeight) ||
+            (pixelBufferWidth != FMImage.Constants.PixelBufferWidth) ||
+            (pixelBufferPlaneCount != FMImage.Constants.PixelBufferPlaneCount)) {
             return nil
         }
         
-        if let uiImage = UIImage(pixelBuffer: pixelBuffer, scale: TOSImage.Constants.ImageScaleFactor, deviceOrientation: deviceOrientation) {
-            if let jpegData = uiImage.toJpeg(compressionQuality: TOSImage.Constants.JpegCompressionRatio){
+        if let uiImage = UIImage(pixelBuffer: pixelBuffer, scale: FMImage.Constants.ImageScaleFactor, deviceOrientation: deviceOrientation) {
+            if let jpegData = uiImage.toJpeg(compressionQuality: FMImage.Constants.JpegCompressionRatio){
                 return jpegData
             } else {
                 return nil

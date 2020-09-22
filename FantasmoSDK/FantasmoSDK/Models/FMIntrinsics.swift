@@ -1,5 +1,5 @@
 //
-//  TOSIntrinsics.swift
+//  FMIntrinsics.swift
 //  FantasmoSDK
 //
 //  Copyright © 2020 Fantasmo. All rights reserved.
@@ -7,7 +7,7 @@
 
 import ARKit
 
-public struct TOSIntrinsics:Codable {
+public struct FMIntrinsics:Codable {
     
     var fx:Float
     var fy:Float

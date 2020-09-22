@@ -12,7 +12,7 @@
 
 + (void)load {
     NSLog(@"Load callled");
-    [Loader swiftyLoad];
+    [FMLoader swiftyLoad];
 }
 
 @end

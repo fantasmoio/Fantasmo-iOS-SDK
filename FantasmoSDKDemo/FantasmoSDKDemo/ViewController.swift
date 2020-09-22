@@ -36,12 +36,20 @@ class ViewController: UIViewController {
 
 extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        print("ARSession did Update frame")
     }
 }
 
 extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])")
+    }
+}
+
+extension ViewController: FMLocationDelegate {
+    func locationManager(receivedCPSLocation location: CLLocation) {
+        
+    }
+    
+    func locationManager(didFailWithError error: Error) {
+        
     }
 }

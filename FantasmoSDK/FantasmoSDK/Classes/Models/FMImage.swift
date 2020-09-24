@@ -10,6 +10,7 @@ import Foundation
 import ARKit
 import CoreLocation
 
+// Convert and format images into the TerraOS specification.
 internal class FMImage:Codable {
     
     private enum Constants {
@@ -29,6 +30,7 @@ internal class FMImage:Codable {
     internal var intrinsics:FMIntrinsics
     internal var pose:FMPose
     
+    // Filename used for both the jpeg and metadata files
     public var filename:String {
         return String(format:"%.9f_%@", timestamp, uuid)
     }

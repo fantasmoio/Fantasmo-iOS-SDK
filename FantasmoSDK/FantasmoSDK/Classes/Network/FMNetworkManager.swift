@@ -14,6 +14,7 @@ struct FMNetworkManager {
 
     static let networkQueue = DispatchQueue(label: "\(String(describing: Bundle.main.bundleIdentifier)).networking-queue", attributes: .concurrent)
     
+    //Make request for alamofire url request
     static func makeRequest(_ urlRequest: URLRequestConvertible, showLog: Bool = false, completion: @escaping (NetworkResult) -> ()) {
         AF.request(urlRequest).responseJSON { responseObject in
             switch responseObject.result {
@@ -35,6 +36,7 @@ struct FMNetworkManager {
         }
     }
     
+    // Return error from response
     static func error(fromResponseObject responseObject: DataResponse<Any, AFError>) -> Error? {
         if let statusCode = responseObject.response?.statusCode {
             switch statusCode {
@@ -70,6 +72,7 @@ struct FMNetworkManager {
         return NetworkError.errorString(Errors.genericError)
     }
     
+    // Create method for multipart image uploading
     static func uploadImage(url:String, parameters: [String : Any], image:FMImage, jpegData:Data, mapName:String,
                             onCompletion: ((Data?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil) {
         let headers: HTTPHeaders = [

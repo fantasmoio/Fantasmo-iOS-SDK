@@ -7,12 +7,15 @@
 
 import ARKit
 
+// Position of the device at the moment of image capture . Units are meters.
 public struct FMPosition:Codable, Equatable {
     
     var x:Float
     var y:Float
     var z:Float
     
+    // Extracts the position from an ARKit camera transform matrix and converts
+    // from iOS coordinates (right-handed, Y Up) to OpenCV coordinates (right-handed, Y Down)
     init(fromTransform transform:simd_float4x4) {
         x = transform.columns.3.x
         y = -transform.columns.3.y

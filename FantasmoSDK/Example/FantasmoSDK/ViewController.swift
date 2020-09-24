@@ -7,17 +7,24 @@
 
 import UIKit
 import FantasmoSDK
+import CoreLocation
 import ARKit
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var sceneView: ARSCNView!
-        
+    
+    var fmLocationManager: FMLocationManager?
+    var fmLocationDelegate: FMLocationDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         sceneView.delegate = self
         sceneView.session.delegate = self
+        
+        fmLocationManager?.delegate = self
+        fmLocationManager?.start(locationDelegate: fmLocationDelegate!, licenseKey: "")
     }
     
     override func viewWillAppear(_ animated: Bool) {

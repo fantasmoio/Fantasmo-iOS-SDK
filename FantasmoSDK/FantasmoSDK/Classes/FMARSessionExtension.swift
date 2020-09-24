@@ -13,11 +13,13 @@ private var sessionObj: ARSession!
 
 
 extension ARSession : ARSessionDelegate {
+    // Intercept delegate method for execute delegate
     @objc func interceptedDelegate(delegate : ARSessionDelegate) {
         sessionDelegate = delegate
         self.interceptedDelegate(delegate: self)
     }
     
+    // Swizzle method for exchange swizzled and original methods
     static func swizzle() {
         let _: () = {
             let originalSelector = #selector(setter: ARSession.delegate)
@@ -28,6 +30,7 @@ extension ARSession : ARSessionDelegate {
         }()
     }
     
+    // Session delegate method while update frame
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         print("didUpdate frame Called")
         sessionObj = session

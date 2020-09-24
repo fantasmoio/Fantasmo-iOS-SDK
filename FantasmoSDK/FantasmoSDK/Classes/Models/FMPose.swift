@@ -7,6 +7,9 @@
 
 import ARKit
 
+// Device pose at the moment of image capture. The coordinate frame is
+// right-handed, Y down (i.e., OpenCV convention). Y is gravity aligned. Rotation
+// around Y axis is relative to true north.
 public struct FMPose:Codable {
     
     var source = "device"
@@ -14,6 +17,8 @@ public struct FMPose:Codable {
     var orientation:FMOrientation
     var confidence = ""
     
+    // Extracts the position and orientation from an ARKit camera transform matrix and converts
+    // from ARKit coordinates (right-handed, Y Up) to OpenCV coordinates (right-handed, Y Down)
     init(fromTransform transform:simd_float4x4) {
         position = FMPosition(fromTransform: transform)
         orientation = FMOrientation(fromTransform: transform)

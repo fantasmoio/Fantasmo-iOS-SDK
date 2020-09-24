@@ -10,9 +10,10 @@ import CoreGraphics
 import UIKit
 
 extension UIImage {
-    
+
     convenience init?(pixelBuffer: CVPixelBuffer, scale: CGFloat, deviceOrientation: UIDeviceOrientation) {
         
+        // Convert to a CGImage
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         let ciContext = CIContext(options: [CIContextOption.highQualityDownsample: true,
                                             CIContextOption.priorityRequestLow: true])
@@ -49,6 +50,7 @@ extension UIImage {
         }
     }
     
+    // Convert to a jpeg inside an Autorelease Pool to memory performance
     func toJpeg(compressionQuality: CGFloat) -> Data? {
         return autoreleasepool(invoking: { () -> Data? in
             return self.jpegData(compressionQuality: compressionQuality)

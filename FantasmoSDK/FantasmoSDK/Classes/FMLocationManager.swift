@@ -34,18 +34,22 @@ open class FMLocationManager {
 
     public static let shared = FMLocationManager()
     private var anchorFrame: ARFrame?
-    private var delegate: FMLocationDelegate?
+    public var delegate: FMLocationDelegate?
     
     private init() {}
     
+    // Start method for pass delegate and license key.
     public func start(locationDelegate: FMLocationDelegate, licenseKey: String) {
+        // TODO: Here we have to validate license key for each user.
         delegate = locationDelegate
     }
     
+    // Set current anchor ARFrame
     public func setAnchorTimeNow(frame: ARFrame) {
         anchorFrame = frame
     }
     
+    // Localize method for upload images
     internal func localize(frame: ARFrame) {
         let interfaceOrientation = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.windowScene?.interfaceOrientation ?? UIInterfaceOrientation.unknown
         let deviceOrientation = UIDevice.current.orientation

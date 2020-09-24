@@ -7,6 +7,7 @@
 
 import ARKit
 
+// Orientation of the device at moment of image capture.
 public struct FMOrientation:Codable {
     
     var x:Float
@@ -14,6 +15,8 @@ public struct FMOrientation:Codable {
     var z:Float
     var w:Float
     
+    // Extracts the orientation from an ARKit camera transform matrix and converts
+    // from ARKit coordinates (right-handed, Y Up) to OpenCV coordinates (right-handed, Y Down)
     init(fromTransform transform:simd_float4x4) {
         var rotationMatrix = simd_float3x3(simd_make_float3(transform.columns.1),
                                            simd_make_float3(transform.columns.0),
@@ -50,6 +53,7 @@ public struct FMOrientation:Codable {
         self = hamiltonProduct( quaternionRotation: qz)
     }
     
+    // Initializes the orientation with a (OpenCV coordinate system) quaternion
     init(fromQuaternion w:Float, x:Float, y:Float, z:Float) {
         self.x = x
         self.y = y
@@ -91,6 +95,7 @@ public struct FMOrientation:Codable {
         return FMOrientation(fromQuaternion: thisDifference.real, x: thisDifference.imag[0], y: thisDifference.imag[1], z: thisDifference.imag[2])
     }
     
+    // Rotate myself by quaternionRotation
     public func hamiltonProduct(quaternionRotation: simd_quatf) -> FMOrientation {
         let a1 = quaternionRotation.real
         let b1 = quaternionRotation.imag[0]

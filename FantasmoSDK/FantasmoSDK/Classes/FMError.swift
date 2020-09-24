@@ -7,6 +7,7 @@
 
 import Foundation
 
+// Define enum for different types of errors
 enum FMError {
     case network(type: Enums.NetworkError)
     case file(type: Enums.FileError)
@@ -16,6 +17,7 @@ enum FMError {
 }
 
 extension FMError: LocalizedError {
+    // Error description for show error messages
     var errorDescription: String? {
         switch self {
             case .network(let type): return type.localizedDescription

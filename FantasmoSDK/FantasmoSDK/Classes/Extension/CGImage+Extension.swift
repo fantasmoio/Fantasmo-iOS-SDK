@@ -10,6 +10,7 @@ import CoreGraphics
 
 extension CGImage {
     
+    // Scale the image and preserve the aspect ratio.
     func scale(byFactor scale:CGFloat) -> CGImage? {
         
         guard let colorSpace = self.colorSpace else {

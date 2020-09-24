@@ -1,6 +1,5 @@
 # Ignoring the pod directory 
-FantasmoSDK/Pods/
-FantasmoSDKDemo/Pods/
+FantasmoSDK/Example/Pods/
 .DS_Store
 .AppleDouble
 .LSOverride

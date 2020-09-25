@@ -88,6 +88,10 @@ struct FMNetworkManager {
             multipartFormData.append(mapName.data(using: String.Encoding.utf8)!, withName: "mapId" as String)
             multipartFormData.append(jpegData, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
         }, to: url, usingThreshold: UInt64.init(), method: .post, headers: headers).response  { (result) in
+            if result.error != nil {
+                onError?(result.error)
+            }
+            onCompletion?(result.data)
             print(result)
         }
     }

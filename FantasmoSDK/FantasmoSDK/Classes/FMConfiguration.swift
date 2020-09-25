@@ -9,7 +9,9 @@ import Foundation
 
 internal class FMConfiguration {
     
-    // Enum for base url
+    /**
+     Internal enum for base url.
+     */
     internal enum Server {
         static let routeUrl = "http://3.216.31.155:8090/v1/image.localize"
     }

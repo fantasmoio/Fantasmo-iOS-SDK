@@ -13,13 +13,19 @@ private var sessionObj: ARSession!
 
 
 extension ARSession : ARSessionDelegate {
-    // Intercept delegate method for execute delegate
+    /**
+     Intercept delegate method for execute delegate.
+     
+     - Parameter delegate: Delegate of ARSession .
+     */
     @objc func interceptedDelegate(delegate : ARSessionDelegate) {
         sessionDelegate = delegate
         self.interceptedDelegate(delegate: self)
     }
     
-    // Swizzle method for exchange swizzled and original methods
+    /**
+     Swizzle method for exchange swizzled and original methods
+     */
     static func swizzle() {
         let _: () = {
             let originalSelector = #selector(setter: ARSession.delegate)
@@ -30,7 +36,12 @@ extension ARSession : ARSessionDelegate {
         }()
     }
     
-    // Session delegate method while update frame
+    /**
+     This is called when a new frame has been updated.
+     
+     @param session The session being run.
+     @param frame The frame that has been updated.
+     */
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         print("didUpdate frame Called")
         sessionObj = session

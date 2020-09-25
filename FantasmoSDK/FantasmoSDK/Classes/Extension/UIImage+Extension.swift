@@ -10,7 +10,13 @@ import CoreGraphics
 import UIKit
 
 extension UIImage {
-
+    /**
+     Init method of image
+     
+     - Parameter pixelBuffer: PixelBuffer of image.
+     - Parameter scale: Scale of image.
+     - Parameter deviceOrientation: Current orientation of device.
+     */
     convenience init?(pixelBuffer: CVPixelBuffer, scale: CGFloat, deviceOrientation: UIDeviceOrientation) {
         
         // Convert to a CGImage
@@ -29,7 +35,7 @@ extension UIImage {
             
             cgImage = scaledImage
         }
-
+        
         switch deviceOrientation {
         case .portrait:
             self.init(cgImage: cgImage, scale: 1.0, orientation: .right)
@@ -50,7 +56,12 @@ extension UIImage {
         }
     }
     
-    // Convert to a jpeg inside an Autorelease Pool to memory performance
+    /**
+     Convert to a jpeg inside an Autorelease Pool to memory performance
+     
+     - Parameter compressionQuality:  Compression quality of the image .
+     - Returns: NSData of after compress image
+     */
     func toJpeg(compressionQuality: CGFloat) -> Data? {
         return autoreleasepool(invoking: { () -> Data? in
             return self.jpegData(compressionQuality: compressionQuality)

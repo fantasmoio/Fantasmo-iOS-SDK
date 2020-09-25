@@ -1,5 +1,5 @@
 //
-//  TOSImage.swift
+//  FMImage.swift
 //  FantasmoSDK
 //
 //  Copyright © 2020 Fantasmo. All rights reserved.
@@ -10,7 +10,7 @@ import Foundation
 import ARKit
 import CoreLocation
 
-// Convert and format images into the TerraOS specification.
+/// Convert and format images into the TerraOS specification.
 internal class FMImage:Codable {
     
     private enum Constants {
@@ -34,7 +34,7 @@ internal class FMImage:Codable {
     public var filename:String {
         return String(format:"%.9f_%@", timestamp, uuid)
     }
-
+    
     // MARK: - Initializers
     
     init(frame: ARFrame,
@@ -43,14 +43,14 @@ internal class FMImage:Codable {
          atLocation newLocation: CLLocationCoordinate2D?) {
         
         timestamp = (Date().timeIntervalSince1970 - ProcessInfo().systemUptime) + frame.timestamp
-                
+        
         pose = FMPose(fromTransform: frame.camera.transform)
         intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
-                                   atScale: Float(FMImage.Constants.ImageScaleFactor),
-                                   withStatusBarOrientation: currentStatusBarOrientation,
-                                   withDeviceOrientation: currentDeviceOrientation,
-                                   withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
-                                   withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
+                                  atScale: Float(FMImage.Constants.ImageScaleFactor),
+                                  withStatusBarOrientation: currentStatusBarOrientation,
+                                  withDeviceOrientation: currentDeviceOrientation,
+                                  withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
+                                  withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
         
         if let _location = newLocation {
             latitude = Double(_location.latitude)
@@ -68,10 +68,10 @@ internal class FMImage:Codable {
         let pixelBufferHeight = CVPixelBufferGetHeight(pixelBuffer)
         let pixelBufferWidth = CVPixelBufferGetWidth(pixelBuffer)
         let pixelBufferPlaneCount = CVPixelBufferGetPlaneCount(pixelBuffer)
-                
+        
         if( (pixelBufferHeight != FMImage.Constants.PixelBufferHeight) ||
-            (pixelBufferWidth != FMImage.Constants.PixelBufferWidth) ||
-            (pixelBufferPlaneCount != FMImage.Constants.PixelBufferPlaneCount)) {
+                (pixelBufferWidth != FMImage.Constants.PixelBufferWidth) ||
+                (pixelBufferPlaneCount != FMImage.Constants.PixelBufferPlaneCount)) {
             return nil
         }
         

@@ -10,7 +10,9 @@ import CoreLocation
 import ARKit
 
 public class FMLoader: NSObject {
-    //Loader method for initialize swizzle method
+    /**
+     Loader method for initialize swizzle method.
+     */
     @objc public static func swiftyLoad() {
         ARSession.swizzle()
     }

@@ -18,7 +18,7 @@ import CoreLocation
      @param location The current CPS Location
      @param metadata The meta data releated to the CPS Location
      */
-    @objc optional func locationManager(_ frame: ARFrame, receivedCPSLocation location: CLLocation?, locationMetadata metadata: Any)
+    @objc optional func locationManager(didUpdateLocation location: CLLocation?, locationMetadata metadata: Any)
     
     /**
     This is called when CPS update fails.
@@ -88,7 +88,7 @@ open class FMLocationManager {
                                        image: tosImage, jpegData: jpegData, mapName: "", onCompletion: { (response) in
                 if let response = response {
                     let cpsLocation = CLLocation()
-                    self.delegate?.locationManager?(frame, receivedCPSLocation: cpsLocation, locationMetadata: response)
+                    self.delegate?.locationManager?(didUpdateLocation: cpsLocation, locationMetadata: response)
                 }
             }) { (err) in
                 let error: Error = FMError.network(type: .notFound)

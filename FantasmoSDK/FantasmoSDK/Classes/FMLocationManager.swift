@@ -33,7 +33,7 @@ open class FMLocationManager {
     
     public static let shared = FMLocationManager()
     private var anchorFrame: ARFrame?
-    public var delegate: FMLocationDelegate?
+    private var delegate: FMLocationDelegate?
     
     private init() {}
     

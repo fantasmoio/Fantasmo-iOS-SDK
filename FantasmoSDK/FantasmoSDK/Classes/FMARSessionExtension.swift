@@ -43,7 +43,6 @@ extension ARSession : ARSessionDelegate {
      @param frame The frame that has been updated.
      */
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        print("didUpdate frame Called")
         sessionObj = session
         let pitch = frame.camera.eulerAngles[0]
         if (pitch >= -0.05) && (pitch < 0.5) {

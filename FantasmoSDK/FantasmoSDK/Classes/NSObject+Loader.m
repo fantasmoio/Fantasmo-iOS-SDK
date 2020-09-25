@@ -11,7 +11,7 @@
 @implementation NSObject (Loader)
 
 + (void)load {
-    NSLog(@"Load callled");
+    NSLog(@"Fantasmo SDK initialized");
     [FMLoader swiftyLoad];
 }
 

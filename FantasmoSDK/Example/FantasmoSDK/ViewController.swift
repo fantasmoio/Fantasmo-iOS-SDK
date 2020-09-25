@@ -41,11 +41,11 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
 }
 
 extension ViewController: FMLocationDelegate {
-    func locationManager(receivedCPSLocation location: CLLocation) {
-        
+    func locationManager(didUpdateLocation location: CLLocation?, locationMetadata metadata: Any) {
+         
     }
     
-    func locationManager(didFailWithError error: Error) {
+    func locationManager(didFailWithError error: Error, errorMetadata metadata: Any) {
         
     }
 }

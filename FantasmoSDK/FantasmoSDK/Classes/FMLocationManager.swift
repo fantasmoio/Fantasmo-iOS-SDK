@@ -13,8 +13,7 @@ import CoreLocation
 @objc public protocol FMLocationDelegate : NSObjectProtocol {
     /**
      This is called when a new CPS location has been updated.
-     
-     @param frame The frame recorded for location udpate.
+     @discussion
      @param location The current CPS Location
      @param metadata The meta data releated to the CPS Location
      */
@@ -22,11 +21,12 @@ import CoreLocation
     
     /**
     This is called when CPS update fails.
-    
-    @param frame The frame which cause the failure, It will return nil if session is not available.
+     
+    @discussion
     @param error The error being reported .
+    @param metadata The meta data releated to the error
     */
-    @objc optional func locationManager(_ frame: ARFrame, didFailWithError error: Error)
+    @objc optional func locationManager(didFailWithError error: Error, errorMetadata metadata: Any)
 }
 
 
@@ -92,7 +92,7 @@ open class FMLocationManager {
                 }
             }) { (err) in
                 let error: Error = FMError.network(type: .notFound)
-                self.delegate?.locationManager?(frame, didFailWithError: error)
+                self.delegate?.locationManager?(didFailWithError: error, errorMetadata:frame)
             }
         }
     }

@@ -45,7 +45,7 @@ struct FMNetworkManager {
                 if let result = responseObject.result.value as? [String: Any],
                     let errorMessage = result["error"] as? String {
                     if let code = result["code"] as? Double {
-                        return NetworkError.error(code: code, message: errorMessage)
+                        return NetworkError.custom(code: code, message: errorMessage)
                     } else {
                         return NetworkError.errorString(errorMessage)
                     }
@@ -58,13 +58,13 @@ struct FMNetworkManager {
     private func generateError(from error: Error, with responseObject: DataResponse<Any, AFError>) -> Error {
         if let statusCode = responseObject.response?.statusCode {
             if let data = responseObject.data, let jsonString = String(data: data, encoding: .utf8) {
-                return NetworkError.error(code: Double(statusCode), message: jsonString)
+                return NetworkError.custom(code: Double(statusCode), message: jsonString)
             }
         } else {
             let code = (error as NSError).code
             switch code {
             case NSURLErrorNotConnectedToInternet, NSURLErrorCannotConnectToHost, NSURLErrorCannotFindHost:
-                return NetworkError.error(code: FMNetworkManager.networkUnavailableCode, message: Errors.networkUnreachableError)
+                return NetworkError.custom(code: FMNetworkManager.networkUnavailableCode, message: Errors.networkUnreachableError)
             default:
                 return NetworkError.errorString(Errors.genericError)
             }
@@ -73,7 +73,7 @@ struct FMNetworkManager {
     }
     
     // Create method for multipart image uploading
-    static func uploadImage(url:String, parameters: [String : Any], image:FMImage, jpegData:Data, mapName:String,
+    static func uploadImage(url:String, parameters: [String : Any], jpegData:Data,
                             onCompletion: ((Data?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil) {
         let headers: HTTPHeaders = [
             "Content-type": "multipart/form-data"
@@ -83,16 +83,14 @@ struct FMNetworkManager {
             for (key, value) in parameters {
                 multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
             }
-            multipartFormData.append("\(NSDate().timeIntervalSince1970)".data(using: String.Encoding.utf8)!, withName: "capturedAt" as String)
-            multipartFormData.append("\(image.uuid)".data(using: String.Encoding.utf8)!, withName: "uuid" as String)
-            multipartFormData.append(mapName.data(using: String.Encoding.utf8)!, withName: "mapId" as String)
             multipartFormData.append(jpegData, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
         }, to: url, usingThreshold: UInt64.init(), method: .post, headers: headers).response  { (result) in
             if result.error != nil {
                 onError?(result.error)
             }
             onCompletion?(result.data)
-            print(result)
+            
+            print("Response\(result.response.debugDescription)")
         }
     }
 }
@@ -131,48 +129,4 @@ enum NetworkResult {
             return error
         }
     }
-}
-
-enum NetworkError: FantasmoLocalizedError {
-    
-    case errorString(String)
-    case error(code: Double?, message: String)
-    case generic
-    
-    var errorDescription: String? {
-        switch self {
-        case .errorString(let errorMessage): return errorMessage
-        case .error(_,let message): return message
-        case .generic: return Errors.genericError
-        }
-    }
-    
-    var info: (code: Double?, message: String) {
-        switch self {
-        case .error(let code, let message):
-            return (code, message)
-        case .errorString(let errorMessage): return (nil, errorMessage)
-        case .generic: return  (nil, Errors.genericError)
-        }
-    }
-}
-
-protocol FantasmoLocalizedError: LocalizedError {
-    var title: String { get }
-    var localDescription: String { get }
-}
-
-extension FantasmoLocalizedError {
-    var title: String {
-        return ""
-    }
-    
-    var localDescription : String {
-        return ""
-    }
-}
-
-struct Errors {
-    static let genericError = "Something went wrong. Please try again."
-    static let networkUnreachableError  = "No internet connection. Please try again later."
 }

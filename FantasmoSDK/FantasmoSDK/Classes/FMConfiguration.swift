@@ -13,6 +13,6 @@ internal class FMConfiguration {
      Internal enum for base url.
      */
     internal enum Server {
-        static let routeUrl = "http://3.216.31.155:8090/v1/image.localize"
+        static let routeUrl = "http://40.87.86.233:8090/v1/image.localize"
     }
 }

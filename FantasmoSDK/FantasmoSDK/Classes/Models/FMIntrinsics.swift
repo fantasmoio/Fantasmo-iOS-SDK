@@ -17,8 +17,6 @@ public struct FMIntrinsics:Codable {
     var fy:Float
     var cx:Float
     var cy:Float
-    var radialDistortion:[Float]?
-    var tangentialDistortion:[Float]?
     
     init(fromIntrinsics intrinsics: simd_float3x3,
          atScale scale:Float,

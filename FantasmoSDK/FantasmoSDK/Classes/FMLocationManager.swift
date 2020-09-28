@@ -68,36 +68,30 @@ open class FMLocationManager {
         
         DispatchQueue.global(qos: .background).async {
             
-            let fmImage = FMImage(frame: frame,
-                                   withStatusBarOrientation: interfaceOrientation,
-                                   withDeviceOrientation: deviceOrientation,
-                                   atLocation: nil)
-            
-            guard let jpegData = FMImage.convertToJpeg(fromPixelBuffer: frame.capturedImage,
+            let pose = FMPose(fromTransform: frame.camera.transform)
+            let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
+                                      atScale: Float(Constants.ImageScaleFactor),
+                                      withStatusBarOrientation: interfaceOrientation,
+                                      withDeviceOrientation: deviceOrientation,
+                                      withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
+                                      withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
+                        
+            guard let jpegData = self.convertToJpeg(fromPixelBuffer: frame.capturedImage,
                                                        withDeviceOrientation: deviceOrientation) else {
                 print("Error: Could not convert frame to JPEG.")
                 return
             }
             
-            let intrinsicsJson = String(format: "{\"fx\": %f, \"fy\": %f, \"cx\": %f, \"cy\": %f}",
-                                        fmImage.intrinsics.fx,
-                                        fmImage.intrinsics.fy,
-                                        fmImage.intrinsics.cx,
-                                        fmImage.intrinsics.cy)
-            
-            let gravityJson = String(format: "{\"w\": %f, \"x\": %f, \"y\": %f, \"z\": %f}",
-                                     fmImage.pose.orientation.w,
-                                     fmImage.pose.orientation.x,
-                                     fmImage.pose.orientation.y,
-                                     fmImage.pose.orientation.z)
-            
             let parameters = [
-                "intrinsics" : intrinsicsJson,
-                "gravity"    : gravityJson
-            ]
-            
+                "intrinsics" : intrinsics.toJson(),
+                "gravity"    : pose.orientation.toJson(),
+                "capturedAt" :"\(NSDate().timeIntervalSince1970)".data(using: String.Encoding.utf8)!,
+                "uuid" : UUID().uuidString,
+                "mapId" : "",
+                "coordinate": ["longitude" : 11.572596873561112, "latitude": 48.12844364094412]
+            ] as [String : Any]
             FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl, parameters: parameters,
-                                         image: fmImage, jpegData: jpegData, mapName: "", onCompletion: { (response) in
+                                         jpegData: jpegData, onCompletion: { (response) in
                                             if let response = response {
                                                 let cpsLocation = CLLocation()
                                                 self.delegate?.locationManager?(didUpdateLocation: cpsLocation, locationMetadata: response)
@@ -108,4 +102,41 @@ open class FMLocationManager {
             }
         }
     }
+    
+    
+    // MARK: - Public static methods
+    
+    public func convertToJpeg(fromPixelBuffer pixelBuffer: CVPixelBuffer, withDeviceOrientation deviceOrientation: UIDeviceOrientation) -> Data? {
+        
+        let pixelBufferHeight = CVPixelBufferGetHeight(pixelBuffer)
+        let pixelBufferWidth = CVPixelBufferGetWidth(pixelBuffer)
+        let pixelBufferPlaneCount = CVPixelBufferGetPlaneCount(pixelBuffer)
+        
+        if( (pixelBufferHeight != Constants.PixelBufferHeight) ||
+                (pixelBufferWidth != Constants.PixelBufferWidth) ||
+                (pixelBufferPlaneCount != Constants.PixelBufferPlaneCount)) {
+            return nil
+        }
+        
+        if let uiImage = UIImage(pixelBuffer: pixelBuffer, scale: Constants.ImageScaleFactor, deviceOrientation: deviceOrientation) {
+            if let jpegData = uiImage.toJpeg(compressionQuality: Constants.JpegCompressionRatio){
+                return jpegData
+            } else {
+                return nil
+            }
+        }
+        else {
+            print("No image data supplied. Skipping write.")
+            return nil
+        }
+    }
+    
+    private enum Constants {
+        public static let JpegCompressionRatio: CGFloat = 0.9
+        public static let ImageScaleFactor: CGFloat = 2.0/3.0
+        public static let PixelBufferWidth: Int = 1920
+        public static let PixelBufferHeight: Int = 1440
+        public static let PixelBufferPlaneCount: Int = 2
+    }
 }
+

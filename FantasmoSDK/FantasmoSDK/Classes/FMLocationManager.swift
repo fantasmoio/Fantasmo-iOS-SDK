@@ -34,6 +34,7 @@ open class FMLocationManager {
     public static let shared = FMLocationManager()
     private var anchorFrame: ARFrame?
     private var delegate: FMLocationDelegate?
+    private let isStatic = true // For Static data
     
     private init() {}
     
@@ -75,14 +76,13 @@ open class FMLocationManager {
                                       withDeviceOrientation: deviceOrientation,
                                       withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                       withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
-                        
-            guard let jpegData = self.convertToJpeg(fromPixelBuffer: frame.capturedImage,
-                                                       withDeviceOrientation: deviceOrientation) else {
+        
+            guard let jpegData = self.isStatic ? UIImage(named: "testImage")?.toJpeg(compressionQuality: Constants.JpegCompressionRatio) : self.convertToJpeg(fromPixelBuffer: frame.capturedImage, withDeviceOrientation: deviceOrientation) else {
                 print("Error: Could not convert frame to JPEG.")
                 return
             }
             
-            let parameters = [
+            var parameters = [
                 "intrinsics" : intrinsics.toJson(),
                 "gravity"    : pose.orientation.toJson(),
                 "capturedAt" :"\(NSDate().timeIntervalSince1970)".data(using: String.Encoding.utf8)!,
@@ -90,6 +90,17 @@ open class FMLocationManager {
                 "mapId" : "",
                 "coordinate": ["longitude" : 11.572596873561112, "latitude": 48.12844364094412]
             ] as [String : Any]
+
+            if self.isStatic {
+                parameters = [
+                    "intrinsics" : "{\"fx\": 1211.782470703125, \"fy\": 1211.9073486328125, \"cx\": 1017.4938354492188, \"cy\": 788.2992553710938}",
+                    "gravity"    : "{\"w\": 0.7729115057076497, \"x\": 0.026177782246603, \"y\": 0.6329531644390612, \"z\": -0.03595580186787759}",
+                    "capturedAt" :"\(NSDate().timeIntervalSince1970)".data(using: String.Encoding.utf8)!,
+                    "uuid" : "C6241E04-974A-4131-8B36-044A11E2C7F0",
+                    "mapId" : "terra_explorer",
+                    "coordinate": "{\"longitude\" : 11.572596873561112, \"latitude\": 48.12844364094412}"
+                ] as [String : Any]
+            }
             FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl, parameters: parameters,
                                          jpegData: jpegData, onCompletion: { (response) in
                                             if let response = response {

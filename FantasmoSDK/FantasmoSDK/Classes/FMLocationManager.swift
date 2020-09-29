@@ -85,19 +85,17 @@ open class FMLocationManager {
             var parameters = [
                 "intrinsics" : intrinsics.toJson(),
                 "gravity"    : pose.orientation.toJson(),
-                "capturedAt" :"\(NSDate().timeIntervalSince1970)".data(using: String.Encoding.utf8)!,
+                "capturedAt" :(NSDate().timeIntervalSince1970),
                 "uuid" : UUID().uuidString,
-                "mapId" : "",
-                "coordinate": ["longitude" : 11.572596873561112, "latitude": 48.12844364094412]
+                "coordinate": "{\"longitude\" : 11.572596873561112, \"latitude\": 48.12844364094412}"
             ] as [String : Any]
 
             if self.isStatic {
                 parameters = [
                     "intrinsics" : "{\"fx\": 1211.782470703125, \"fy\": 1211.9073486328125, \"cx\": 1017.4938354492188, \"cy\": 788.2992553710938}",
                     "gravity"    : "{\"w\": 0.7729115057076497, \"x\": 0.026177782246603, \"y\": 0.6329531644390612, \"z\": -0.03595580186787759}",
-                    "capturedAt" :"\(NSDate().timeIntervalSince1970)".data(using: String.Encoding.utf8)!,
+                    "capturedAt" :(NSDate().timeIntervalSince1970),
                     "uuid" : "C6241E04-974A-4131-8B36-044A11E2C7F0",
-                    "mapId" : "terra_explorer",
                     "coordinate": "{\"longitude\" : 11.572596873561112, \"latitude\": 48.12844364094412}"
                 ] as [String : Any]
             }

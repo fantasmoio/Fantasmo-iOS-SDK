@@ -22,10 +22,17 @@ import CoreLocation
     /**
      This is called when CPS update fails.
      
-     - Parameter error:  The error being reported .
+     - Parameter error:  The error being reported
      - Parameter metadata: The meta data releated to the error
      */
     @objc optional func locationManager(didFailWithError error: Error, errorMetadata metadata: Any)
+    
+    /**
+     This is called when CPS update fails.
+     
+     - Parameter error: The error being reported
+     */
+    @objc optional func locationManager(didFailWithError description: String)
 }
 
 
@@ -63,89 +70,65 @@ open class FMLocationManager {
      
      - Parameter frame:  Frame of image .
      */
-    internal func localize(frame: ARFrame) {
+    internal func localize(frame: ARFrame, currentLocation: CLLocation) {
         let interfaceOrientation = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.windowScene?.interfaceOrientation ?? UIInterfaceOrientation.unknown
         let deviceOrientation = UIDevice.current.orientation
         
         DispatchQueue.global(qos: .background).async {
+            var params: [String : Any]?
+            var imageData: Data?
+            #if DEBUG
+            let mockData = MockData().getLocaliseResponseWithType(success: true)
+            params = mockData.params
+            imageData = mockData.image
+            #else
+            let localiseResponse = self.getLocaliseResponse(frame: frame, deviceOrientation: deviceOrientation, interfaceOrientation: interfaceOrientation, currentLocation: currentLocation)
+            params = localiseResponse.params
+            imageData = localiseResponse.image
+            #endif
             
-            let pose = FMPose(fromTransform: frame.camera.transform)
-            let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
-                                      atScale: Float(Constants.ImageScaleFactor),
-                                      withStatusBarOrientation: interfaceOrientation,
-                                      withDeviceOrientation: deviceOrientation,
-                                      withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
-                                      withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
-        
-            guard let jpegData = self.isStatic ? UIImage(named: "testImage")?.toJpeg(compressionQuality: Constants.JpegCompressionRatio) : self.convertToJpeg(fromPixelBuffer: frame.capturedImage, withDeviceOrientation: deviceOrientation) else {
-                print("Error: Could not convert frame to JPEG.")
+            guard let parameters = params else {
+                self.delegate?.locationManager?(didFailWithError: "Invalid parameters")
                 return
             }
             
-            var parameters = [
-                "intrinsics" : intrinsics.toJson(),
-                "gravity"    : pose.orientation.toJson(),
-                "capturedAt" :(NSDate().timeIntervalSince1970),
-                "uuid" : UUID().uuidString,
-                "coordinate": "{\"longitude\" : 11.572596873561112, \"latitude\": 48.12844364094412}"
-            ] as [String : Any]
-
-            if self.isStatic {
-                parameters = [
-                    "intrinsics" : "{\"fx\": 1211.782470703125, \"fy\": 1211.9073486328125, \"cx\": 1017.4938354492188, \"cy\": 788.2992553710938}",
-                    "gravity"    : "{\"w\": 0.7729115057076497, \"x\": 0.026177782246603, \"y\": 0.6329531644390612, \"z\": -0.03595580186787759}",
-                    "capturedAt" :(NSDate().timeIntervalSince1970),
-                    "uuid" : "C6241E04-974A-4131-8B36-044A11E2C7F0",
-                    "coordinate": "{\"longitude\" : 11.572596873561112, \"latitude\": 48.12844364094412}"
-                ] as [String : Any]
+            guard let image = imageData else {
+                self.delegate?.locationManager?(didFailWithError: "Invalid frame")
+                return
             }
+            
             FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl, parameters: parameters,
-                                         jpegData: jpegData, onCompletion: { (response) in
+                                         jpegData: image, onCompletion: { (response) in
                                             if let response = response {
                                                 let cpsLocation = CLLocation()
                                                 self.delegate?.locationManager?(didUpdateLocation: cpsLocation, locationMetadata: response)
                                             }
-                                         }) { (err) in
+                                         }) { (error) in
                 let error: Error = FMError.network(type: .notFound)
                 self.delegate?.locationManager?(didFailWithError: error, errorMetadata:frame)
             }
         }
     }
-    
-    
-    // MARK: - Public static methods
-    
-    public func convertToJpeg(fromPixelBuffer pixelBuffer: CVPixelBuffer, withDeviceOrientation deviceOrientation: UIDeviceOrientation) -> Data? {
+            
+    func getLocaliseResponse(frame: ARFrame, deviceOrientation: UIDeviceOrientation,
+                interfaceOrientation: UIInterfaceOrientation, currentLocation: CLLocation) -> (params: [String : Any]?, image: Data?) {
+        let pose = FMPose(fromTransform: frame.camera.transform)
+        let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
+                                      atScale: Float(FMUtility.Constants.ImageScaleFactor),
+                                      withStatusBarOrientation: interfaceOrientation,
+                                      withDeviceOrientation: deviceOrientation,
+                                      withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
+                                      withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
         
-        let pixelBufferHeight = CVPixelBufferGetHeight(pixelBuffer)
-        let pixelBufferWidth = CVPixelBufferGetWidth(pixelBuffer)
-        let pixelBufferPlaneCount = CVPixelBufferGetPlaneCount(pixelBuffer)
-        
-        if( (pixelBufferHeight != Constants.PixelBufferHeight) ||
-                (pixelBufferWidth != Constants.PixelBufferWidth) ||
-                (pixelBufferPlaneCount != Constants.PixelBufferPlaneCount)) {
-            return nil
+        guard let jpegData = FMUtility().convertToJpeg(fromPixelBuffer: frame.capturedImage, withDeviceOrientation: deviceOrientation) else {
+            return (nil, nil)
         }
-        
-        if let uiImage = UIImage(pixelBuffer: pixelBuffer, scale: Constants.ImageScaleFactor, deviceOrientation: deviceOrientation) {
-            if let jpegData = uiImage.toJpeg(compressionQuality: Constants.JpegCompressionRatio){
-                return jpegData
-            } else {
-                return nil
-            }
-        }
-        else {
-            print("No image data supplied. Skipping write.")
-            return nil
-        }
-    }
-    
-    private enum Constants {
-        public static let JpegCompressionRatio: CGFloat = 0.9
-        public static let ImageScaleFactor: CGFloat = 2.0/3.0
-        public static let PixelBufferWidth: Int = 1920
-        public static let PixelBufferHeight: Int = 1440
-        public static let PixelBufferPlaneCount: Int = 2
+        return ([
+            "intrinsics" : intrinsics.toJson(),
+            "gravity"    : pose.orientation.toJson(),
+            "capturedAt" :(NSDate().timeIntervalSince1970),
+            "uuid" : UUID().uuidString,
+            "coordinate": "{\"longitude\" : \(currentLocation.coordinate.longitude), \"latitude\": \(currentLocation.coordinate.latitude)}"
+        ] as [String : Any], jpegData)
     }
 }
-

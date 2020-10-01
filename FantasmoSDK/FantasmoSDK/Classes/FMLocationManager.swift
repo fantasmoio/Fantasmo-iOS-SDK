@@ -100,8 +100,13 @@ open class FMLocationManager {
             FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl, parameters: parameters,
                                          jpegData: image, onCompletion: { (response) in
                                             if let response = response {
-                                                let cpsLocation = CLLocation()
-                                                self.delegate?.locationManager?(didUpdateLocation: cpsLocation, locationMetadata: response)
+                                                do {
+                                                    let decoder = JSONDecoder()
+                                                    let userLocation = try decoder.decode(UserLocation.self, from: response)
+                                                    let cpsLocation = userLocation.location?.coordinate?.getLocation()
+                                                    self.delegate?.locationManager?(didUpdateLocation: cpsLocation, locationMetadata: response)
+                                                } catch {
+                                                }
                                             }
                                          }) { (error) in
                 let error: Error = FMError.network(type: .notFound)

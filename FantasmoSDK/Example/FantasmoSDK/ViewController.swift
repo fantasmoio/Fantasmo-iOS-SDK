@@ -51,6 +51,7 @@ extension ViewController: FMLocationDelegate {
     func locationManager(didUpdateLocation location: CLLocation?, locationMetadata metadata: Any) {
         if let metadata = metadata as? Data, let jsonResponse = String(data: metadata, encoding: String.Encoding.utf8) {
             print("Success Response JSON: \(jsonResponse)")
+            print("User location Lat: \(location?.coordinate.latitude ?? 0.0) Longitude: \(location?.coordinate.longitude ?? 0.0)")
         }
     }
     

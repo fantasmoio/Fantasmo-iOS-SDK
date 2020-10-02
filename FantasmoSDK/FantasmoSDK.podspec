@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FantasmoSDK'
-  s.version          = '1.0.1'
+  s.version          = '0.1.0'
   s.summary          = 'FantasmoSDK summary goes here..'
   s.description      = 'FantasmoSDK description goes here…'
 
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.author           = { 'krishn' => 'krishn@github.io' }
   s.source           = { :git => 'https://krishn-fantasmo@github.com/fantasmoio/Fantasmo-iOS-SDK.git', :branch => 'pod_implementation' }
 
-  s.ios.deployment_target = '13.0'
+  s.ios.deployment_target = '12.0'
   s.swift_version    = '5.0'
 
   s.source_files = 'FantasmoSDK/Classes/**/*.{h,m,swift}'

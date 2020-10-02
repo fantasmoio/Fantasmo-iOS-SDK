@@ -1,7 +1,7 @@
 PODS:
   - Alamofire (5.0.5)
   - BrightFutures (8.0.0)
-  - FantasmoSDK (1.0.1):
+  - FantasmoSDK (0.1.0):
     - Alamofire (~> 5.0.0)
     - BrightFutures
 
@@ -20,8 +20,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: df2f8f826963b08b9a870791ad48e07a10090b2e
   BrightFutures: f8427b46feabaf73c5e71ace7d86d65dfbb47696
-  FantasmoSDK: 9c8fe675729414f78af819a35556d8b2715faf47
+  FantasmoSDK: 8a28b098fc767c21fec50a8b60e3db5218c20635
 
 PODFILE CHECKSUM: ccb1416270b4690d2373986162e455f7f95cd601
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3

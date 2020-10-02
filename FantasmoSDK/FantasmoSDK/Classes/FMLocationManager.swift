@@ -10,113 +10,192 @@ import UIKit
 import ARKit
 import CoreLocation
 
-@objc public protocol FMLocationDelegate : NSObjectProtocol {
-    /**
-     This is called when a new CPS location has been updated.
-     
-     - Parameter location: The current CPS Location
-     - Parameter metadata: The meta data releated to the CPS Location
-     */
-    @objc optional func locationManager(didUpdateLocation location: CLLocation?, locationMetadata metadata: Any)
+
+/// The methods that you use to receive events from an associated
+/// location manager object.
+public protocol FMLocationDelegate : NSObjectProtocol {
     
-    /**
-     This is called when CPS update fails.
-     
-     - Parameter error:  The error being reported
-     - Parameter metadata: The meta data releated to the error
-     */
-    @objc optional func locationManager(didFailWithError error: Error, errorMetadata metadata: Any)
+    /// Tells the delegate that new location data is available.
+    ///
+    /// - Parameters:
+    ///   - location: Location of the device (or anchor if set)
+    ///   - zones: Semantic zone corresponding to the location
+    func locationManager(didUpdateLocation location: CLLocation,
+                         withZones zones: [FMZone]?)
     
-    /**
-     This is called when CPS update fails.
-     
-     - Parameter error: The error being reported
-     */
-    @objc optional func locationManager(didFailWithError description: String)
+    
+    /// Tells the delegate that an error has occurred.
+    ///
+    /// - Parameters:
+    ///   - error: The error reported.
+    ///   - metadata: Metadata related to the error.
+    func locationManager(didFailWithError error: Error,
+                         errorMetadata metadata: Any?)
+}
+
+/// Empty implementations of the protocol to allow optional
+/// implementation for delegates.
+extension FMLocationDelegate {
+    func locationManager(didUpdateLocation location: CLLocation,
+                         withZones zones: [FMZone]?) {}
+    
+    func locationManager(didFailWithError error: Error,
+                         errorMetadata metadata: Any?) {}
 }
 
 
+/// Start and stop the delivery of camera-based location events.
 open class FMLocationManager {
     
+    public enum State {
+        case stopped
+        case idle
+        case localizing
+    }
+    
+    
+    // MARK: - Properties
+    
     public static let shared = FMLocationManager()
+    public private(set) var state = State.idle
+    
     private var anchorFrame: ARFrame?
     private var delegate: FMLocationDelegate?
     private let isStatic = true // For Static data
     
+    
+    // MARK: - Lifecycle
+    
     private init() {}
     
-    /**
-     Start method for pass delegate and license key.
-     
-     - Parameter locationDelegate:  The error being reported .
-     - Parameter licenseKey: LicenseKey of user
-     */
-    public func start(locationDelegate: FMLocationDelegate, licenseKey: String) {
-        // TODO: Here we have to validate license key for each user.
-        delegate = locationDelegate
+    /// Connect to the location service.
+    ///
+    /// - Parameters:
+    ///   - accessToken: Token for service authorization.
+    ///   - delegate: Delegate for receiving location events.
+    public func connect(accessToken: String,
+                        delegate: FMLocationDelegate) {
+        
+        // TODO: Validate token
+        
+        self.delegate = delegate
     }
     
-    /**
-     Set current anchor ARFrame.
-     
-     - Parameter frame:  Current frame of image .
-     */
-    public func setAnchorTimeNow(frame: ARFrame) {
-        anchorFrame = frame
+    
+    // MARK: - Public instance methods
+    
+    /// Starts the generation of updates that report the user’s current location.
+    public func startUpdatingLocation() {
+        self.state = .idle
     }
     
-    /**
-     Localize method for upload images.
-     
-     - Parameter frame:  Frame of image .
-     */
-    internal func localize(frame: ARFrame, currentLocation: CLLocation) {
-        let interfaceOrientation = UIApplication.shared.windows.first(where: { $0.isKeyWindow })?.windowScene?.interfaceOrientation ?? UIInterfaceOrientation.unknown
+    /// Stops the generation of location updates.
+    public func stopUpdatingLocation() {
+        self.state = .stopped
+    }
+    
+    /// Set an anchor point. All location updates will now report the
+    /// location of the anchor instead of the camera.
+    public func setAnchor() {
+        self.anchorFrame = ARSession.lastFrame
+    }
+    
+    /// Unset the anchor point. All location updates will now report the
+    /// location of the camera.
+    public func unsetAnchor() {
+        self.anchorFrame = nil
+    }
+    
+    
+    // MARK: - Internal instance methods
+    
+    /// Localize the image frame. It triggers a network request that
+    /// provides a response via the delegate.
+    ///
+    /// - Parameter frame: Frame to localize.
+    internal func localize(frame: ARFrame) {
+        
+        self.state = .localizing
+        
+        let interfaceOrientation = UIApplication.shared.statusBarOrientation
         let deviceOrientation = UIDevice.current.orientation
         
         DispatchQueue.global(qos: .background).async {
             var params: [String : Any]?
             var imageData: Data?
             #if DEBUG
-            let mockData = MockData().getLocaliseResponseWithType(success: true)
+            let mockData = MockData.getLocalizeRequestWithType(success: true)
             params = mockData.params
             imageData = mockData.image
             #else
-            let localiseResponse = self.getLocaliseResponse(frame: frame, deviceOrientation: deviceOrientation, interfaceOrientation: interfaceOrientation, currentLocation: currentLocation)
-            params = localiseResponse.params
-            imageData = localiseResponse.image
+            let localizeRequest = self.getlocalizeRequest(frame: frame,
+                                                          deviceOrientation: deviceOrientation,
+                                                          interfaceOrientation: interfaceOrientation,
+                                                          currentLocation: CLLocationManager.lastLocation ?? CLLocation())
+            params = localizeRequest.params
+            imageData = localizeRequest.image
             #endif
             
             guard let parameters = params else {
-                self.delegate?.locationManager?(didFailWithError: "Invalid parameters")
+                self.delegate?.locationManager(didFailWithError: "Invalid request parameters" as! Error, errorMetadata: nil)
                 return
             }
             
             guard let image = imageData else {
-                self.delegate?.locationManager?(didFailWithError: "Invalid frame")
+                self.delegate?.locationManager(didFailWithError: "Invalid image frame" as! Error, errorMetadata: nil)
                 return
             }
             
-            FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl, parameters: parameters,
+            FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl,
+                                         parameters: parameters,
                                          jpegData: image, onCompletion: { (response) in
+                                            
+                                            self.state = .idle
+                                            
                                             if let response = response {
                                                 do {
                                                     let decoder = JSONDecoder()
                                                     let userLocation = try decoder.decode(UserLocation.self, from: response)
                                                     let cpsLocation = userLocation.location?.coordinate?.getLocation()
-                                                    self.delegate?.locationManager?(didUpdateLocation: cpsLocation, locationMetadata: response)
+                                                    
+                                                    // TODO - add guard statement to throw error if the cpsLocation
+                                                    
+                                                    // TODO - Transform to anchor position if set
+                                                    
+                                                    // TODO - add zones from the response
+                                                    
+                                                    self.delegate?.locationManager(didUpdateLocation: cpsLocation!, withZones: nil)
+                                                    
                                                 } catch {
+                                                    // TODO - Handle exception
                                                 }
                                             }
                                          }) { (error) in
+                
+                self.state = .idle
+                
                 let error: Error = FMError.network(type: .notFound)
-                self.delegate?.locationManager?(didFailWithError: error, errorMetadata:frame)
+                self.delegate?.locationManager(didFailWithError: error,
+                                               errorMetadata:frame)
             }
         }
     }
-            
-    func getLocaliseResponse(frame: ARFrame, deviceOrientation: UIDeviceOrientation,
-                interfaceOrientation: UIInterfaceOrientation, currentLocation: CLLocation) -> (params: [String : Any]?, image: Data?) {
+    
+    
+    /// Generate the localize HTTP request parameters. Can fail if the jpeg
+    /// conversion throws an exception.
+    ///
+    /// - Parameters:
+    ///   - frame: Frame to localize
+    ///   - deviceOrientation: Current device orientation for computing intrinsics
+    ///   - interfaceOrientation: Current interface orientation for computing intrinsics
+    ///   - currentLocation: Current geo location for coarse estimate
+    /// - Returns: Formatted
+    func getLocalizeParams(frame: ARFrame,
+                           deviceOrientation: UIDeviceOrientation,
+                           interfaceOrientation: UIInterfaceOrientation,
+                           currentLocation: CLLocation) -> (params: [String : Any]?,
+                                                            image: Data?) {
         let pose = FMPose(fromTransform: frame.camera.transform)
         let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
                                       atScale: Float(FMUtility.Constants.ImageScaleFactor),
@@ -125,9 +204,11 @@ open class FMLocationManager {
                                       withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                       withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
         
-        guard let jpegData = FMUtility().convertToJpeg(fromPixelBuffer: frame.capturedImage, withDeviceOrientation: deviceOrientation) else {
+        guard let jpegData = FMUtility.toJpeg(fromPixelBuffer: frame.capturedImage, withDeviceOrientation: deviceOrientation) else {
+            // TODO - Handle exception
             return (nil, nil)
         }
+        
         return ([
             "intrinsics" : intrinsics.toJson(),
             "gravity"    : pose.orientation.toJson(),

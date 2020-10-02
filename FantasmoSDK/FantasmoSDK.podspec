@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'FantasmoSDK'
   s.version          = '0.1.0'
-  s.summary          = 'FantasmoSDK summary goes here..'
+  s.summary          = 'Hyper-accurate global positioning for cameras.'
   s.description      = 'FantasmoSDK description goes here…'
 
   s.homepage         = 'https://github.com/fantasmoio/Fantasmo-iOS-SDK'
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://krishn-fantasmo@github.com/fantasmoio/Fantasmo-iOS-SDK.git', :branch => 'pod_implementation' }
 
   s.ios.deployment_target = '11.0'
-  s.swift_version    = '5.0'
+  s.swift_version    = '4.2'
 
   s.source_files = 'FantasmoSDK/Classes/**/*.{h,m,swift}'
 

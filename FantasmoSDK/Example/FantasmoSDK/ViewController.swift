@@ -10,6 +10,7 @@ import FantasmoSDK
 import CoreLocation
 import ARKit
 
+
 class ViewController: UIViewController {
 
     @IBOutlet weak var sceneView: ARSCNView!
@@ -26,6 +27,10 @@ class ViewController: UIViewController {
         sceneView.session.delegate = self
         
         FMLocationManager.shared.connect(accessToken: "", delegate: self)
+        
+//        FMLocationManager.shared.isSimulation = true
+//        FMLocationManager.shared.simulationZone = .parking
+        
         FMLocationManager.shared.startUpdatingLocation()
     }
     
@@ -50,7 +55,13 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
 
 extension ViewController: FMLocationDelegate {
     func locationManager(didUpdateLocation location: CLLocation, withZones zones: [FMZone]?) {
-            print("User location Lat: \(location.coordinate.latitude) Longitude: \(location.coordinate.longitude)")
+        print("User location Lat: \(location.coordinate.latitude) Longitude: \(location.coordinate.longitude)")
+            
+        if let zone = zones?.first, zone.zoneType == .parking {
+            print("Parking validated!")
+        } else {
+            print("Parking invalid.")
+        }
     }
     
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {

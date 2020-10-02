@@ -88,6 +88,7 @@ struct FMNetworkManager {
             if result.error != nil {
                 onError?(result.error)
             }
+            
             onCompletion?(result.data)            
         }
     }

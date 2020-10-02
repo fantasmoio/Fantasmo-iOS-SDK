@@ -9,7 +9,7 @@
 /// Semantic zones corresponding to a position
 public struct FMZone {
     
-    internal enum ZoneType: String {
+    public enum ZoneType: String {
         case street
         case sidewalk
         case furniture
@@ -24,10 +24,10 @@ public struct FMZone {
     }
     
     /// Type of semantic zone
-    internal var zoneType: ZoneType
+    public var zoneType: ZoneType
     
     /// ID corresponding to a specific zone
-    internal var id: String?
+    public var id: String?
     
     init(zoneType: ZoneType, id: String?) {
         self.zoneType = zoneType

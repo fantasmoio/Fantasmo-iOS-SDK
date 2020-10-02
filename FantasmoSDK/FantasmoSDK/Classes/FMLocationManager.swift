@@ -61,8 +61,12 @@ open class FMLocationManager {
     
     private var anchorFrame: ARFrame?
     private var delegate: FMLocationDelegate?
-    private let isStatic = true // For Static data
     
+    /// When in simulation mode, mock data is used from the assets directory instead of the live camera feed.
+    /// This mode is useful for implementation and debugging.
+    public var isSimulation = false
+    /// The zone that will be simulated.
+    public var simulationZone = FMZone.ZoneType.parking
     
     // MARK: - Lifecycle
     
@@ -121,22 +125,25 @@ open class FMLocationManager {
         let deviceOrientation = UIDevice.current.orientation
         
         DispatchQueue.global(qos: .background).async {
-            var params: [String : Any]?
+            var localizeParams: [String : Any]?
             var imageData: Data?
-            #if DEBUG
-            let mockData = MockData.getLocalizeRequestWithType(success: true)
-            params = mockData.params
-            imageData = mockData.image
-            #else
-            let localizeRequest = self.getlocalizeRequest(frame: frame,
-                                                          deviceOrientation: deviceOrientation,
-                                                          interfaceOrientation: interfaceOrientation,
-                                                          currentLocation: CLLocationManager.lastLocation ?? CLLocation())
-            params = localizeRequest.params
-            imageData = localizeRequest.image
-            #endif
             
-            guard let parameters = params else {
+            // Use the mock data instead of the ARFrame if we are simulating
+            if self.isSimulation {
+                let mockData = MockData.simulateLocalizeRequest(forZone: self.simulationZone,
+                                                                isValid: true)
+                localizeParams = mockData.params
+                imageData = mockData.image
+            } else {
+                localizeParams = self.getLocalizeParams(frame: frame,
+                                                  deviceOrientation: deviceOrientation,
+                                                  interfaceOrientation: interfaceOrientation,
+                                                  currentLocation: CLLocationManager.lastLocation ?? CLLocation())
+                imageData = FMUtility.toJpeg(fromPixelBuffer: frame.capturedImage,
+                                             withDeviceOrientation: deviceOrientation)
+            }
+            
+            guard let parameters = localizeParams else {
                 self.delegate?.locationManager(didFailWithError: "Invalid request parameters" as! Error, errorMetadata: nil)
                 return
             }
@@ -157,23 +164,25 @@ open class FMLocationManager {
                                                     let decoder = JSONDecoder()
                                                     let localizeResponse = try decoder.decode(LocalizeResponse.self, from: response)
                                                     let cpsLocation = localizeResponse.location?.coordinate?.getLocation()
-                                                    
+
                                                     guard let location = cpsLocation else {
                                                         let error: Error = FMError.custom(errorDescription: "Invalid location")
                                                         self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
                                                         return
                                                     }
-                                                    
+                                                
+                                                    var zones: [FMZone]?
+
                                                     if let geofences = localizeResponse.geofences {
-                                                        let zones = geofences.map {
+                                                        zones = geofences.map {
                                                             FMZone(zoneType: FMZone.ZoneType(rawValue: $0.elementType.lowercased()) ?? .unknown, id: $0.elementID.description)
                                                         }
-                                                        
-                                                        self.delegate?.locationManager(didUpdateLocation: location,
-                                                                                       withZones: zones)
                                                     }
-                                                    
+
                                                     // TODO - Transform to anchor position if set
+                                                    
+                                                    self.delegate?.locationManager(didUpdateLocation: location,
+                                                                                   withZones: zones)
                                                     
                                                 } catch {
                                                     // TODO - Handle exception
@@ -203,8 +212,8 @@ open class FMLocationManager {
     func getLocalizeParams(frame: ARFrame,
                            deviceOrientation: UIDeviceOrientation,
                            interfaceOrientation: UIInterfaceOrientation,
-                           currentLocation: CLLocation) -> (params: [String : Any]?,
-                                                            image: Data?) {
+                           currentLocation: CLLocation) -> [String : Any]? {
+        
         let pose = FMPose(fromTransform: frame.camera.transform)
         let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
                                       atScale: Float(FMUtility.Constants.ImageScaleFactor),
@@ -213,17 +222,12 @@ open class FMLocationManager {
                                       withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                       withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
         
-        guard let jpegData = FMUtility.toJpeg(fromPixelBuffer: frame.capturedImage, withDeviceOrientation: deviceOrientation) else {
-            // TODO - Handle exception
-            return (nil, nil)
-        }
-        
         return ([
             "intrinsics" : intrinsics.toJson(),
             "gravity"    : pose.orientation.toJson(),
             "capturedAt" :(NSDate().timeIntervalSince1970),
             "uuid" : UUID().uuidString,
             "coordinate": "{\"longitude\" : \(currentLocation.coordinate.longitude), \"latitude\": \(currentLocation.coordinate.latitude)}"
-        ] as [String : Any], jpegData)
+        ] as [String : Any])
     }
 }

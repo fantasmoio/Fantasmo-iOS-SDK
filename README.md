@@ -56,6 +56,8 @@ When a position is found that is in a semantic zone, the server will report the 
 
 ### Quick Start 
 
+Try out the `Example` project or implement the code below. 
+
 ```
 import FantasmoSDK
 import CoreLocation 
@@ -138,3 +140,14 @@ To return to device localization, simply unset the anchor point.
 FMLocationManager.shared.unsetAnchor()
 ```
 
+### Simulation Mode
+
+Since it's not always possible to be onsite for testing, a simulation mode is provided
+queries the localization service with stored images. 
+
+In order to activate simulation mode, set the flag and choose a semantic zone type to simulate. 
+
+```
+FMLocationManager.shared.isSimulation = true
+FMLocationManager.shared.simulationZone = .parking
+```

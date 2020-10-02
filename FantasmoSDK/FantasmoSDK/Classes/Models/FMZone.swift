@@ -15,7 +15,6 @@ public struct FMZone {
         case furniture
         case crosswalk
         case accessRamp
-        case mobilityParking
         case autoParking
         case busStop
         case planter

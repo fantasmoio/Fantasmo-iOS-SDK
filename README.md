@@ -20,8 +20,8 @@ the Fantasmo SDK directory can be imported directly into a project.
 
 ## Requirements
 
-- iOS 12.0+
-- Xcode 11.0
+- iOS 11.0+
+- Xcode 11.0+
 
 ## Functionality
 
@@ -58,7 +58,7 @@ When a position is found that is in a semantic zone, the server will report the 
 
 Try out the `Example` project or implement the code below. 
 
-```
+```swift
 import FantasmoSDK
 import CoreLocation 
 import ARKit
@@ -91,27 +91,27 @@ extension ViewController: FMLocationDelegate {
 
 The location manager is accessed through a shared instance. `ARSessionDelegate` methods are swizzled to the SDK so there is no need to pass a reference.  
 
-```
+```swift
 FMLocationManager.shared.connect(accessToken: "", delegate: self)
 ```
 
 ### Localizing 
 
 To start location updates:
-```
+```swift
 FMLocationManager.shared.startUpdatingLocation()
 ```
 
 Images frames will be continuously captured and sent to the server for localization. 
 
 To stop location updates:
-```
+```swift
 FMLocationManager.shared.stopUpdatingLocation()
 ```
 
 Location events are be provided through `FMLocationDelegate`.
 
-```
+```swift
 extension ViewController: FMLocationDelegate {
     func locationManager(didUpdateLocation location: CLLocation, 
                          withZones zones: [FMZone]?) {
@@ -130,13 +130,13 @@ extension ViewController: FMLocationDelegate {
 In order to get location updates for an anchor, set the anchor before
 starting or during location updates. 
 
-```
+```swift
 FMLocationManager.shared.setAnchor()
 ```
 
 To return to device localization, simply unset the anchor point. 
 
-```
+```swift
 FMLocationManager.shared.unsetAnchor()
 ```
 
@@ -147,7 +147,7 @@ queries the localization service with stored images.
 
 In order to activate simulation mode, set the flag and choose a semantic zone type to simulate. 
 
-```
+```swift
 FMLocationManager.shared.isSimulation = true
 FMLocationManager.shared.simulationZone = .parking
 ```

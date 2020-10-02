@@ -9,7 +9,6 @@ import UIKit
 import ARKit
 import CoreLocation
 
-private var sessionDelegate: ARSessionDelegate?
 
 extension ARSession : ARSessionDelegate {
     

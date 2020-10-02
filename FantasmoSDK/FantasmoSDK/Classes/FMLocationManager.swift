@@ -155,21 +155,26 @@ open class FMLocationManager {
                                             if let response = response {
                                                 do {
                                                     let decoder = JSONDecoder()
-                                                    let userLocation = try decoder.decode(UserLocation.self, from: response)
-                                                    let cpsLocation = userLocation.location?.coordinate?.getLocation()
+                                                    let localizeResponse = try decoder.decode(LocalizeResponse.self, from: response)
+                                                    let cpsLocation = localizeResponse.location?.coordinate?.getLocation()
+                                                    
                                                     guard let location = cpsLocation else {
-                                                        self.delegate?.locationManager(didFailWithError: "Invalid location" as! Error, errorMetadata: nil)
+                                                        let error: Error = FMError.custom(errorDescription: "Invalid location")
+                                                        self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
                                                         return
                                                     }
-                                                    guard let geofances = userLocation.geofences else {
-                                                        self.delegate?.locationManager(didFailWithError: "Invalid Zones" as! Error, errorMetadata: nil)
-                                                        return
+                                                    
+                                                    if let geofences = localizeResponse.geofences {
+                                                        let zones = geofences.map {
+                                                            FMZone(zoneType: FMZone.ZoneType(rawValue: $0.elementType.lowercased()) ?? .unknown, id: $0.elementID.description)
+                                                        }
+                                                        
+                                                        self.delegate?.locationManager(didUpdateLocation: location,
+                                                                                       withZones: zones)
                                                     }
-                                                    let fmZones = geofances.map {
-                                                        FMZone(zoneType: FMZone.ZoneType(rawValue: $0.elementType.lowercased()) ?? .none, id: $0.elementID.description)
-                                                    }
+                                                    
                                                     // TODO - Transform to anchor position if set
-                                                    self.delegate?.locationManager(didUpdateLocation: location, withZones: fmZones)
+                                                    
                                                 } catch {
                                                     // TODO - Handle exception
                                                 }

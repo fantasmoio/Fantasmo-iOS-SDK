@@ -20,7 +20,7 @@ public struct FMZone {
         case busStop
         case planter
         case parking
-        case none
+        case unknown
     }
     
     /// Type of semantic zone

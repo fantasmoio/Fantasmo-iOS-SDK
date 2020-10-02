@@ -7,7 +7,7 @@
 import Foundation
 import CoreLocation
 
-class UserLocation: Codable {
+class LocalizeResponse: Codable {
     let geofences: [Geofence]?
     let location: Location?
     let pose: Pose?

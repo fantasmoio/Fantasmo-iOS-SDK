@@ -7,9 +7,11 @@
 
 import CoreLocation
 
-var locationDelegate: CLLocationManagerDelegate?
-
 extension CLLocationManager : CLLocationManagerDelegate {
+    
+    private struct AssociatedKeys {
+        static var delegateState: UInt8 = 0
+    }
     
     public private(set) static var lastLocation: CLLocation?
     
@@ -19,7 +21,7 @@ extension CLLocationManager : CLLocationManagerDelegate {
      - Parameter delegate: Delegate of CLLocation .
      */
     @objc func interceptedDelegate(delegate : CLLocationManagerDelegate) {
-        locationDelegate = delegate
+        objc_setAssociatedObject(self, &AssociatedKeys.delegateState, delegate, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         self.interceptedDelegate(delegate: self)
     }
     
@@ -44,5 +46,9 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         CLLocationManager.lastLocation = locations.last
+        guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
+            return
+        }
+        delegate.locationManager?(manager, didUpdateLocations: locations)
     }
 }

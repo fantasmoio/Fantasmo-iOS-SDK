@@ -10,9 +10,12 @@ import ARKit
 import CoreLocation
 
 private var sessionDelegate: ARSessionDelegate?
-private var sessionObj: ARSession!
 
 extension ARSession : ARSessionDelegate {
+    
+    private struct AssociatedKeys {
+        static var delegateState: UInt8 = 0
+    }
     
     public private(set) static var lastFrame: ARFrame?
     
@@ -22,7 +25,7 @@ extension ARSession : ARSessionDelegate {
      - Parameter delegate: Delegate of ARSession .
      */
     @objc func interceptedDelegate(delegate : ARSessionDelegate) {
-        sessionDelegate = delegate
+        objc_setAssociatedObject(self, &AssociatedKeys.delegateState, delegate, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         self.interceptedDelegate(delegate: self)
     }
     
@@ -46,7 +49,6 @@ extension ARSession : ARSessionDelegate {
      @param frame The frame that has been updated.
      */
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        sessionObj = session
         ARSession.lastFrame = frame
         
         // TODO - Add in pitch threshold with UX warning
@@ -58,7 +60,11 @@ extension ARSession : ARSessionDelegate {
             FMLocationManager.shared.localize(frame: frame)
         }
         
-        sessionDelegate?.session?(session, didUpdate: frame)
+        guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? ARSessionDelegate else {
+            return
+        }
+        
+        delegate.session?(session, didUpdate: frame)
     }
 }
 

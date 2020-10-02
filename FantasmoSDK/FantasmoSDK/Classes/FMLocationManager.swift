@@ -157,15 +157,19 @@ open class FMLocationManager {
                                                     let decoder = JSONDecoder()
                                                     let userLocation = try decoder.decode(UserLocation.self, from: response)
                                                     let cpsLocation = userLocation.location?.coordinate?.getLocation()
-                                                    
-                                                    // TODO - add guard statement to throw error if the cpsLocation
-                                                    
+                                                    guard let location = cpsLocation else {
+                                                        self.delegate?.locationManager(didFailWithError: "Invalid location" as! Error, errorMetadata: nil)
+                                                        return
+                                                    }
+                                                    guard let geofances = userLocation.geofences else {
+                                                        self.delegate?.locationManager(didFailWithError: "Invalid Zones" as! Error, errorMetadata: nil)
+                                                        return
+                                                    }
+                                                    let fmZones = geofances.map {
+                                                        FMZone(zoneType: FMZone.ZoneType(rawValue: $0.elementType.lowercased()) ?? .none, id: $0.elementID.description)
+                                                    }
                                                     // TODO - Transform to anchor position if set
-                                                    
-                                                    // TODO - add zones from the response
-                                                    
-                                                    self.delegate?.locationManager(didUpdateLocation: cpsLocation!, withZones: nil)
-                                                    
+                                                    self.delegate?.locationManager(didUpdateLocation: location, withZones: fmZones)
                                                 } catch {
                                                     // TODO - Handle exception
                                                 }

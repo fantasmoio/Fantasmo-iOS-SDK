@@ -20,7 +20,7 @@ extension CLLocationManager : CLLocationManagerDelegate {
      
      - Parameter delegate: Delegate of CLLocation .
      */
-    @objc func interceptedDelegate(delegate : CLLocationManagerDelegate) {
+    @objc func interceptedDelegate(delegate : Any) {
         objc_setAssociatedObject(self, &AssociatedKeys.delegateState, delegate, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         self.interceptedDelegate(delegate: self)
     }

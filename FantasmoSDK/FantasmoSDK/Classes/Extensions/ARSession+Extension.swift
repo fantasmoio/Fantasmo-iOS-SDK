@@ -23,7 +23,7 @@ extension ARSession : ARSessionDelegate {
      
      - Parameter delegate: Delegate of ARSession .
      */
-    @objc func interceptedDelegate(delegate : ARSessionDelegate) {
+    @objc func interceptedDelegate(delegate : Any) {
         objc_setAssociatedObject(self, &AssociatedKeys.delegateState, delegate, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         self.interceptedDelegate(delegate: self)
     }
@@ -50,15 +50,13 @@ extension ARSession : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         ARSession.lastFrame = frame
         
-        // TODO - Add in pitch threshold with UX warning
-//        let pitch = frame.camera.eulerAngles[0]
-//        if (pitch >= -0.05) && (pitch < 0.5) {
-//        }
-        
-        if FMLocationManager.shared.state == .idle {
-            FMLocationManager.shared.localize(frame: frame)
+        let pitch = frame.camera.eulerAngles[0]
+        if (pitch >= -0.05) && (pitch < 0.5) {
+            if FMLocationManager.shared.state == .idle {
+                FMLocationManager.shared.localize(frame: frame)
+            }
         }
-        
+            
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? ARSessionDelegate else {
             return
         }

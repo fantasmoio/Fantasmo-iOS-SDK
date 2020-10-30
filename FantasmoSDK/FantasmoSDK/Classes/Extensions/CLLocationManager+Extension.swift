@@ -51,4 +51,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
         }
         delegate.locationManager?(manager, didUpdateLocations: locations)
     }
+    
+    public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
+          return
+        }
+        delegate.locationManager?(manager, didUpdateHeading: newHeading)
+      }
 }

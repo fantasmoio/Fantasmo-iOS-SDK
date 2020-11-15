@@ -51,10 +51,9 @@ extension ARSession : ARSessionDelegate {
         ARSession.lastFrame = frame
         
         let pitch = frame.camera.eulerAngles[0]
-        if (pitch >= -0.05) && (pitch < 0.5) {
-            if FMLocationManager.shared.state == .idle {
-                FMLocationManager.shared.localize(frame: frame)
-            }
+ 
+        if FMLocationManager.shared.state == .idle {
+            FMLocationManager.shared.localize(frame: frame)
         }
             
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? ARSessionDelegate else {

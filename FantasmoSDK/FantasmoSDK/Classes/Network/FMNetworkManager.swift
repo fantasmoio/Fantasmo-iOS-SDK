@@ -15,7 +15,9 @@ struct FMNetworkManager {
     static let networkQueue = DispatchQueue(label: "\(String(describing: Bundle.main.bundleIdentifier)).networking-queue", attributes: .concurrent)
     
     //Make request for alamofire url request
-    static func makeRequest(_ urlRequest: URLRequestConvertible, showLog: Bool = false, completion: @escaping (NetworkResult) -> ()) {
+    static func makeRequest(_ urlRequest: URLRequestConvertible,
+                            showLog: Bool = false,
+                            completion: @escaping (NetworkResult) -> ()) {
         AF.request(urlRequest).responseJSON { responseObject in
             switch responseObject.result {
             case .success(let value):

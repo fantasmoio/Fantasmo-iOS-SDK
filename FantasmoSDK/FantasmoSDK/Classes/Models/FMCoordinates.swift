@@ -39,7 +39,7 @@ class Coordinate: Codable {
 
 // MARK: - Pose
 class Pose: Codable {
-    let confidence: String
+//    let confidence: String
     let orientation, position: Aspect
 }
 

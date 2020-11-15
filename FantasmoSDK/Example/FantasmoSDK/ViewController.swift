@@ -28,8 +28,8 @@ class ViewController: UIViewController {
         
         FMLocationManager.shared.connect(accessToken: "", delegate: self)
         
-//        FMLocationManager.shared.isSimulation = true
-//        FMLocationManager.shared.simulationZone = .parking
+        FMLocationManager.shared.isSimulation = true
+        FMLocationManager.shared.simulationZone = .parking
         
         FMLocationManager.shared.startUpdatingLocation()
     }
@@ -65,6 +65,7 @@ extension ViewController: FMLocationDelegate {
     }
     
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {
+        print("error")
         if let metadataError = metadata as? Error {
             print("Error : \(metadataError.localizedDescription)")
         }

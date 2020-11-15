@@ -160,11 +160,14 @@ open class FMLocationManager {
                                             self.state = .idle
                                             
                                             if let response = response {
+                                                
+                                                // print(String(decoding: response, as: UTF8.self))
+                                                
                                                 do {
                                                     let decoder = JSONDecoder()
                                                     let localizeResponse = try decoder.decode(LocalizeResponse.self, from: response)
                                                     let cpsLocation = localizeResponse.location?.coordinate?.getLocation()
-
+                                                    
                                                     guard let location = cpsLocation else {
                                                         let error: Error = FMError.custom(errorDescription: "Invalid location")
                                                         self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
@@ -183,9 +186,9 @@ open class FMLocationManager {
                                                     
                                                     self.delegate?.locationManager(didUpdateLocation: location,
                                                                                    withZones: zones)
-                                                    
                                                 } catch {
-                                                    // TODO - Handle exception
+                                                    // TODO - Properly handle exception
+                                                    print("Error info: \(error)")
                                                 }
                                             }
                                          }) { (error) in

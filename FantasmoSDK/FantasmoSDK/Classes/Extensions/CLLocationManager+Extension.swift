@@ -6,6 +6,7 @@
 //
 
 import CoreLocation
+import CocoaLumberjack
 
 extension CLLocationManager : CLLocationManagerDelegate {
     
@@ -35,6 +36,7 @@ extension CLLocationManager : CLLocationManagerDelegate {
             let originalMethod = class_getInstanceMethod(self, originalSelector)
             let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
             method_exchangeImplementations (originalMethod!, swizzledMethod!)
+            DDLogVerbose("CLLocationManager:swizzle")
         }()
     }
     
@@ -47,15 +49,26 @@ extension CLLocationManager : CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         CLLocationManager.lastLocation = locations.last
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
+            DDLogWarn("CLLocationManager:swizzle didUpdateLocations delegate not available")
             return
         }
         delegate.locationManager?(manager, didUpdateLocations: locations)
+        DDLogVerbose("CLLocationManager:swizzle didUpdateLocations")
     }
     
+    /**
+     invoked when new headings are available.  Required for delivery of deferred headings.
+
+     @param manager Currnet location manager.
+     @param locations CLHeading object with updated heading.
+     */
     public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
+            DDLogWarn("CLLocationManager:swizzle didUpdateHeading delegate not available")
           return
         }
         delegate.locationManager?(manager, didUpdateHeading: newHeading)
-      }
+        DDLogVerbose("CLLocationManager:swizzle didUpdateHeading")
+    }
 }
+

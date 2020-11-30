@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreGraphics
+import CocoaLumberjack
 
 extension CGImage {
     
@@ -19,7 +20,7 @@ extension CGImage {
     func scale(byFactor scale:CGFloat) -> CGImage? {
         
         guard let colorSpace = self.colorSpace else {
-            print("No color space.")
+            DDLogWarn("No color space.")
             return nil
         }
         
@@ -35,7 +36,7 @@ extension CGImage {
                                 bitmapInfo: self.bitmapInfo.rawValue)
         
         guard let imageContext = context else {
-            print("No context.")
+            DDLogWarn("No context.")
             return nil
         }
         

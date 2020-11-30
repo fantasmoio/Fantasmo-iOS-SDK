@@ -52,10 +52,17 @@ extension CLLocationManager : CLLocationManagerDelegate {
         delegate.locationManager?(manager, didUpdateLocations: locations)
     }
     
+    /**
+     invoked when new headings are available.  Required for delivery of deferred headings.
+
+     @param manager Currnet location manager.
+     @param locations CLHeading object with updated heading.
+     */
     public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
           return
         }
         delegate.locationManager?(manager, didUpdateHeading: newHeading)
-      }
+    }
 }
+

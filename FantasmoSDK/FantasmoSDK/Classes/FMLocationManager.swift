@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import ARKit
 import CoreLocation
-
+import CocoaLumberjack
 
 /// The methods that you use to receive events from an associated
 /// location manager object.
@@ -160,9 +160,6 @@ open class FMLocationManager {
                                             self.state = .idle
                                             
                                             if let response = response {
-                                                
-                                                // print(String(decoding: response, as: UTF8.self))
-                                                
                                                 do {
                                                     let decoder = JSONDecoder()
                                                     let localizeResponse = try decoder.decode(LocalizeResponse.self, from: response)
@@ -188,7 +185,7 @@ open class FMLocationManager {
                                                                                    withZones: zones)
                                                 } catch {
                                                     // TODO - Properly handle exception
-                                                    print("Error info: \(error)")
+                                                    DDLogError("Error info: \(error)")
                                                 }
                                             }
                                          }) { (error) in

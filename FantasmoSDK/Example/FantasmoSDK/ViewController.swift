@@ -9,7 +9,7 @@ import UIKit
 import FantasmoSDK
 import CoreLocation
 import ARKit
-
+import CocoaLumberjack
 
 class ViewController: UIViewController {
 
@@ -55,19 +55,18 @@ extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
 
 extension ViewController: FMLocationDelegate {
     func locationManager(didUpdateLocation location: CLLocation, withZones zones: [FMZone]?) {
-        print("User location Lat: \(location.coordinate.latitude) Longitude: \(location.coordinate.longitude)")
-            
+        DDLogInfo("User location Lat: \(location.coordinate.latitude) Longitude: \(location.coordinate.longitude)")
         if let zone = zones?.first, zone.zoneType == .parking {
-            print("Parking validated!")
+            DDLogInfo("Parking validated!")
         } else {
-            print("Parking invalid.")
+            DDLogInfo("Parking invalid.")
         }
     }
     
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {
-        print("error")
+        DDLogWarn("didFailWithError called")
         if let metadataError = metadata as? Error {
-            print("Error : \(metadataError.localizedDescription)")
+            DDLogWarn("Error : \(metadataError.localizedDescription)")
         }
     }
 }

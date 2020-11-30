@@ -80,6 +80,7 @@ open class FMLocationManager {
     public func connect(accessToken: String,
                         delegate: FMLocationDelegate) {
         
+        DDLogVerbose("FMLocationManager connected with delegate: \(delegate)")
         // TODO: Validate token
         
         self.delegate = delegate
@@ -90,23 +91,27 @@ open class FMLocationManager {
     
     /// Starts the generation of updates that report the user’s current location.
     public func startUpdatingLocation() {
+        DDLogVerbose("FMLocationManager:startUpdatingLocation")
         self.state = .idle
     }
     
     /// Stops the generation of location updates.
     public func stopUpdatingLocation() {
+        DDLogVerbose("FMLocationManager:stopUpdatingLocation")
         self.state = .stopped
     }
     
     /// Set an anchor point. All location updates will now report the
     /// location of the anchor instead of the camera.
     public func setAnchor() {
+        DDLogVerbose("FMLocationManager:setAnchor")
         self.anchorFrame = ARSession.lastFrame
     }
     
     /// Unset the anchor point. All location updates will now report the
     /// location of the camera.
     public func unsetAnchor() {
+        DDLogVerbose("FMLocationManager:unsetAnchor")
         self.anchorFrame = nil
     }
     
@@ -118,7 +123,7 @@ open class FMLocationManager {
     ///
     /// - Parameter frame: Frame to localize.
     internal func localize(frame: ARFrame) {
-        
+        DDLogVerbose("FMLocationManager:localize called with simulation: \(isSimulation)")
         self.state = .localizing
         
         let interfaceOrientation = UIApplication.shared.statusBarOrientation
@@ -144,28 +149,33 @@ open class FMLocationManager {
             }
             
             guard let parameters = localizeParams else {
+                DDLogWarn("FMLocationManager:didFailWithError localizeParams")
                 self.delegate?.locationManager(didFailWithError: "Invalid request parameters" as! Error, errorMetadata: nil)
                 return
             }
             
             guard let image = imageData else {
+                DDLogWarn("FMLocationManager:didFailWithError imageData")
                 self.delegate?.locationManager(didFailWithError: "Invalid image frame" as! Error, errorMetadata: nil)
                 return
             }
             
+            DDLogVerbose("FMLocationManager:uploadImage")
             FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl,
                                          parameters: parameters,
                                          jpegData: image, onCompletion: { (response) in
                                             
                                             self.state = .idle
-                                            
+            
                                             if let response = response {
+                                                DDLogVerbose("FMLocationManager:uploadImage response: \(String(describing: response))")
                                                 do {
                                                     let decoder = JSONDecoder()
                                                     let localizeResponse = try decoder.decode(LocalizeResponse.self, from: response)
                                                     let cpsLocation = localizeResponse.location?.coordinate?.getLocation()
                                                     
                                                     guard let location = cpsLocation else {
+                                                        DDLogWarn("FMLocationManager:uploadImage didFailWithError cpsLocation")
                                                         let error: Error = FMError.custom(errorDescription: "Invalid location")
                                                         self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
                                                         return
@@ -185,13 +195,16 @@ open class FMLocationManager {
                                                                                    withZones: zones)
                                                 } catch {
                                                     // TODO - Properly handle exception
-                                                    DDLogError("Error info: \(error)")
+                                                    DDLogError("FMLocationManager:uploadImage didFailWithError \(error)")
                                                 }
+                                            }
+                                            else {
+                                                DDLogVerbose("FMLocationManager:uploadImage response not received.")
                                             }
                                          }) { (error) in
                 
                 self.state = .idle
-                
+                DDLogError("FMLocationManager:uploadImage didFailWithError \(String(describing: error))")
                 let error: Error = FMError.network(type: .notFound)
                 self.delegate?.locationManager(didFailWithError: error,
                                                errorMetadata:frame)

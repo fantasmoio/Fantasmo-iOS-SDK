@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FantasmoSDK'
-  s.version          = '0.1.2'
+  s.version          = '0.1.3'
   s.summary          = 'Hyper-accurate global positioning for cameras.'
   s.description      = 'FantasmoSDK description goes here…'
 
@@ -21,7 +21,8 @@ Pod::Spec.new do |s|
   s.swift_version    = '4.2'
 
   s.source_files = 'FantasmoSDK/Classes/**/*.{h,m,swift}'
-
+  s.resources = 'FantasmoSDK/Assets/**'
+  
   s.dependency 'Alamofire', '~> 5.0.0'
   s.dependency 'BrightFutures'
   s.dependency 'CocoaLumberjack/Swift'

@@ -150,13 +150,13 @@ open class FMLocationManager {
             
             guard let parameters = localizeParams else {
                 DDLogWarn("FMLocationManager:didFailWithError localizeParams")
-                self.delegate?.locationManager(didFailWithError: "Invalid request parameters" as! Error, errorMetadata: nil)
+                self.delegate?.locationManager(didFailWithError: FMError.custom(errorDescription: "Invalid request parameters") as Error, errorMetadata: nil)
                 return
             }
             
             guard let image = imageData else {
                 DDLogWarn("FMLocationManager:didFailWithError imageData")
-                self.delegate?.locationManager(didFailWithError: "Invalid image frame" as! Error, errorMetadata: nil)
+                self.delegate?.locationManager(didFailWithError: FMError.custom(errorDescription: "Invalid image frame") as Error, errorMetadata: nil)
                 return
             }
             

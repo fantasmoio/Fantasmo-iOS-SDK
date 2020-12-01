@@ -4,7 +4,7 @@ PODS:
   - CocoaLumberjack/Core (3.7.0)
   - CocoaLumberjack/Swift (3.7.0):
     - CocoaLumberjack/Core
-  - FantasmoSDK (0.1.2):
+  - FantasmoSDK (0.1.3):
     - Alamofire (~> 5.0.0)
     - BrightFutures
     - CocoaLumberjack/Swift
@@ -26,7 +26,7 @@ SPEC CHECKSUMS:
   Alamofire: df2f8f826963b08b9a870791ad48e07a10090b2e
   BrightFutures: f8427b46feabaf73c5e71ace7d86d65dfbb47696
   CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
-  FantasmoSDK: a61122244100a2a59cdb983c4ab14e984e328899
+  FantasmoSDK: e710d2584046ba460dfe7478251918be1594d380
 
 PODFILE CHECKSUM: ccb1416270b4690d2373986162e455f7f95cd601
 

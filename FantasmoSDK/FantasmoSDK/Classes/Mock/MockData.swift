@@ -27,10 +27,10 @@ open class MockData {
         switch zone {
         case .parking:
             params = MockData.parkingMockParameters
-            jpegData = UIImage(named: "inParking")?.toJpeg(compressionQuality: FMUtility.Constants.JpegCompressionRatio)
+            jpegData = UIImage(named: "inParking", in:Bundle(for:MockData.self), compatibleWith: nil)?.toJpeg(compressionQuality: FMUtility.Constants.JpegCompressionRatio)
         default:
             params = MockData.streetMockParameters
-            jpegData = UIImage(named: "onStreet")?.toJpeg(compressionQuality: FMUtility.Constants.JpegCompressionRatio)
+            jpegData = UIImage(named: "onStreet", in:Bundle(for:MockData.self), compatibleWith: nil)?.toJpeg(compressionQuality: FMUtility.Constants.JpegCompressionRatio)
         }
 
         guard jpegData != nil else {

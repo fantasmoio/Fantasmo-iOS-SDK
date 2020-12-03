@@ -5,11 +5,11 @@
 //  Copyright © 2020 Fantasmo. All rights reserved.
 //
 
-#import "NSObject+Loader.h"
+#import "FantasmoLoader.h"
 #import <FantasmoSDK/FantasmoSDK-Swift.h>
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
-@implementation NSObject (Loader)
+@implementation FantasmoLoader: NSObject
 
 #if DEBUG
     static const DDLogLevel ddLogLevel = DDLogLevelVerbose;

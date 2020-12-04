@@ -8,5 +8,7 @@ import Foundation
 // MARK: - Orientation
 class Orientation: Codable {
     let w: Double?
-    let x, y, z: Double
+    let x: Double
+    let y: Double
+    let z: Double
 }

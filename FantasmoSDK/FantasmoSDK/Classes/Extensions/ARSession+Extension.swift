@@ -64,7 +64,7 @@ extension ARSession : ARSessionDelegate {
         }
         
         delegate.session?(session, didUpdate: frame)
-        DDLogVerbose("ARSession:swizzle didUpdate frame")
+        //DDLogVerbose("ARSession:swizzle didUpdate frame")
     }
 }
 

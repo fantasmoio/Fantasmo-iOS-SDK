@@ -163,51 +163,57 @@ open class FMLocationManager {
             DDLogVerbose("FMLocationManager:uploadImage")
             FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl,
                                          parameters: parameters,
-                                         jpegData: image, onCompletion: { (response) in
+                                         jpegData: image, onCompletion: { (code, response) in
                                             
                                             self.state = .idle
             
                                             if let response = response {
-                                                DDLogVerbose("FMLocationManager:uploadImage response: \(String(describing: response))")
+                                                DDLogVerbose("FMLocationManager:uploadImage response: (\(code)) \(String(data: response, encoding: .utf8)!)")
                                                 do {
                                                     let decoder = JSONDecoder()
-                                                    let localizeResponse = try decoder.decode(LocalizeResponse.self, from: response)
-                                                    let cpsLocation = localizeResponse.location?.coordinate?.getLocation()
                                                     
-                                                    guard let location = cpsLocation else {
-                                                        DDLogWarn("FMLocationManager:uploadImage didFailWithError cpsLocation")
-                                                        let error: Error = FMError.custom(errorDescription: "Invalid location")
-                                                        self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
-                                                        return
-                                                    }
-                                                
-                                                    var zones: [FMZone]?
-
-                                                    if let geofences = localizeResponse.geofences {
-                                                        zones = geofences.map {
-                                                            FMZone(zoneType: FMZone.ZoneType(rawValue: $0.elementType.lowercased()) ?? .unknown, id: $0.elementID.description)
+                                                    switch code {
+                                                    case 200:
+                                                        let localizeResponse = try decoder.decode(LocalizeResponse.self, from: response)
+                                                        let cpsLocation = localizeResponse.location?.coordinate?.getLocation()
+            
+                                                        guard let location = cpsLocation else {
+                                                            DDLogError("FMLocationManager:uploadImage didFailWithError cpsLocation")
+                                                            let error: Error = FMError.custom(errorDescription: "Location not found")
+                                                            self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
+                                                            return
                                                         }
-                                                    }
-
-                                                    // TODO - Transform to anchor position if set
                                                     
-                                                    self.delegate?.locationManager(didUpdateLocation: location,
-                                                                                   withZones: zones)
+                                                        var zones: [FMZone]?
+                                                        if let geofences = localizeResponse.geofences {
+                                                            zones = geofences.map {
+                                                                FMZone(zoneType: FMZone.ZoneType(rawValue: $0.elementType.lowercased()) ?? .unknown, id: $0.elementID.description)
+                                                            }
+                                                        }
+
+                                                        // TODO - Transform to anchor position if set
+                                                        self.delegate?.locationManager(didUpdateLocation: location, withZones: zones)
+                                                    default:
+                                                        let errorResponse = try decoder.decode(ErrorResponse.self, from: response)
+                                                        DDLogError("FMLocationManager:uploadImage didFailWithError: \(errorResponse.message ?? "Unkown error")")
+                                                        let error: Error = FMError.custom(errorDescription: errorResponse.message)
+                                                        self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
+                                                    }
+                                                    
                                                 } catch {
-                                                    // TODO - Properly handle exception
                                                     DDLogError("FMLocationManager:uploadImage didFailWithError \(error)")
                                                 }
                                             }
                                             else {
-                                                DDLogVerbose("FMLocationManager:uploadImage response not received.")
+                                                DDLogError("FMLocationManager:uploadImage response not received.")
                                             }
-                                         }) { (error) in
-                
+                                            
+                                         })
+            { (error) in
                 self.state = .idle
                 DDLogError("FMLocationManager:uploadImage didFailWithError \(String(describing: error))")
-                let error: Error = FMError.network(type: .notFound)
-                self.delegate?.locationManager(didFailWithError: error,
-                                               errorMetadata:frame)
+                let error: Error = FMError.custom(errorDescription: error?.localizedDescription)
+                self.delegate?.locationManager(didFailWithError: error, errorMetadata:frame)
             }
         }
     }

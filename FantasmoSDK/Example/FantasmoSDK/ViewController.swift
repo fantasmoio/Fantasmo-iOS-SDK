@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         
         FMLocationManager.shared.connect(accessToken: "", delegate: self)
         
-        FMLocationManager.shared.isSimulation = true
+        FMLocationManager.shared.isSimulation = false
         FMLocationManager.shared.simulationZone = .parking
         
         FMLocationManager.shared.startUpdatingLocation()
@@ -49,7 +49,7 @@ extension ViewController: CLLocationManagerDelegate {
 
 extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        DDLogVerbose("ViewController: didUpdate frame")
+        //DDLogVerbose("ViewController: didUpdate frame")
     }
 }
 

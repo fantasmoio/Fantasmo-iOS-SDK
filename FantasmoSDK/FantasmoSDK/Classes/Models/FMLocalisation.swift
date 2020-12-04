@@ -7,11 +7,18 @@
 import Foundation
 import CoreLocation
 
+// MARK: - LocalizeResponse
 class LocalizeResponse: Codable {
     let geofences: [Geofence]?
     let location: Location?
     let pose: Pose?
     let uuid: String?
+}
+
+// MARK: - ErrorResponse
+class ErrorResponse: Codable {
+    let code: Int
+    let message: String?
 }
 
 // MARK: - Geofence

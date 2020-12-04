@@ -73,7 +73,7 @@ struct FMNetworkManager {
     
     // Create method for multipart image uploading
     static func uploadImage(url:String, parameters: [String : Any], jpegData:Data,
-                            onCompletion: ((Data?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil) {
+                            onCompletion: ((Int, Data?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil) {
         let headers: HTTPHeaders = [
             "Content-type": "multipart/form-data"
         ]
@@ -88,7 +88,7 @@ struct FMNetworkManager {
                 onError?(result.error)
             }
             
-            onCompletion?(result.data)            
+            onCompletion?(result.response!.statusCode, result.data)
         }
     }
 }

@@ -240,7 +240,6 @@ open class FMLocationManager {
             "gravity"    : pose.orientation.toJson(),
             "capturedAt" :(NSDate().timeIntervalSince1970),
             "uuid" : UUID().uuidString,
-            "mapId" : "map",
             "coordinate": "{\"longitude\" : \(currentLocation.coordinate.longitude), \"latitude\": \(currentLocation.coordinate.latitude)}"
         ] as [String : Any])
     }

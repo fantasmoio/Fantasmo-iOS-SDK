@@ -7,6 +7,5 @@ import Foundation
 
 // MARK: - Pose
 class Pose: Codable {
-//    let confidence: String
-    let orientation, position: Aspect
+    let orientation: Orientation, position: Position
 }

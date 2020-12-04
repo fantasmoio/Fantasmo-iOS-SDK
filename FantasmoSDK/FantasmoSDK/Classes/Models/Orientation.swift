@@ -5,8 +5,8 @@
 
 import Foundation
 
-// MARK: - Aspect
-class Aspect: Codable {
+// MARK: - Orientation
+class Orientation: Codable {
     let w: Double?
     let x, y, z: Double
 }

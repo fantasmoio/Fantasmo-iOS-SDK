@@ -7,5 +7,7 @@ import Foundation
 
 // MARK: - Position
 class Position: Codable {
-    let x, y, z: Double
+    let x: Double
+    let y: Double
+    let z: Double
 }

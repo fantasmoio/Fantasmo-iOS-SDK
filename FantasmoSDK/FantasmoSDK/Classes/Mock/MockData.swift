@@ -8,6 +8,9 @@ import Foundation
 import ARKit
 import UIKit
 import CocoaLumberjack
+#if SWIFT_PACKAGE
+import CocoaLumberjackSwift
+#endif
 
 open class MockData {
 

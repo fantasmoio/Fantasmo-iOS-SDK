@@ -9,6 +9,9 @@ import UIKit
 import ARKit
 import CoreLocation
 import CocoaLumberjack
+#if SWIFT_PACKAGE
+import CocoaLumberjackSwift
+#endif
 
 extension ARSession : ARSessionDelegate {
     

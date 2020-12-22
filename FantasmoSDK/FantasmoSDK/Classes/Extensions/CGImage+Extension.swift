@@ -8,6 +8,9 @@
 import Foundation
 import CoreGraphics
 import CocoaLumberjack
+#if SWIFT_PACKAGE
+import CocoaLumberjackSwift
+#endif
 
 extension CGImage {
     

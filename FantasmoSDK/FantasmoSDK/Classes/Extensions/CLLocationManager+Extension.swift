@@ -7,6 +7,9 @@
 
 import CoreLocation
 import CocoaLumberjack
+#if SWIFT_PACKAGE
+import CocoaLumberjackSwift
+#endif
 
 extension CLLocationManager : CLLocationManagerDelegate {
     

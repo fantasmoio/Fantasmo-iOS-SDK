@@ -9,6 +9,9 @@ import Foundation
 import CoreLocation
 import ARKit
 import CocoaLumberjack
+#if SWIFT_PACKAGE
+import CocoaLumberjackSwift
+#endif
 
 public class FMLoader: NSObject {
     /**

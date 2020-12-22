@@ -9,6 +9,9 @@ import Foundation
 import Alamofire
 import BrightFutures
 import CocoaLumberjack
+#if SWIFT_PACKAGE
+import CocoaLumberjackSwift
+#endif
 
 struct FMNetworkManager {
     static let networkUnavailableCode: Double = 1000

@@ -10,6 +10,9 @@ import UIKit
 import ARKit
 import CoreLocation
 import CocoaLumberjack
+#if SWIFT_PACKAGE
+import CocoaLumberjackSwift
+#endif
 
 /// The methods that you use to receive events from an associated
 /// location manager object.

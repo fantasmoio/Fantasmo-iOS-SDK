@@ -4,7 +4,7 @@
 //
 
 import Foundation
-
+import UIKit
 
 /// Utility class for Fantasmo SDK.
 open class FMUtility {

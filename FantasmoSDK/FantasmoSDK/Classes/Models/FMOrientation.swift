@@ -7,6 +7,9 @@
 
 import ARKit
 import CocoaLumberjack
+#if SWIFT_PACKAGE
+import CocoaLumberjackSwift
+#endif
 
 // Orientation of the device at moment of image capture.
 public struct FMOrientation:Codable {

@@ -8,10 +8,6 @@
 import UIKit
 import ARKit
 import CoreLocation
-import CocoaLumberjack
-#if SWIFT_PACKAGE
-import CocoaLumberjackSwift
-#endif
 
 extension ARSession : ARSessionDelegate {
     
@@ -41,7 +37,7 @@ extension ARSession : ARSessionDelegate {
             let originalMethod = class_getInstanceMethod(self, originalSelector)
             let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
             method_exchangeImplementations (originalMethod!, swizzledMethod!)
-            DDLogVerbose("ARSession:swizzle")
+            print("ARSession:swizzle")
         }()
     }
     
@@ -57,17 +53,16 @@ extension ARSession : ARSessionDelegate {
         //let pitch = frame.camera.eulerAngles[0]
  
         if FMLocationManager.shared.state == .idle {
-            DDLogWarn("ARSession:swizzle didUpdate frame localize called")
+            print("ARSession:swizzle didUpdate frame localize called")
             FMLocationManager.shared.localize(frame: frame)
         }
             
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? ARSessionDelegate else {
-            DDLogWarn("ARSession:swizzle didUpdate frame delegate not available")
+            print("ARSession:swizzle didUpdate frame delegate not available")
             return
         }
         
         delegate.session?(session, didUpdate: frame)
-        //DDLogVerbose("ARSession:swizzle didUpdate frame")
     }
 }
 

@@ -8,10 +8,6 @@
 import Foundation
 import Alamofire
 import BrightFutures
-import CocoaLumberjack
-#if SWIFT_PACKAGE
-import CocoaLumberjackSwift
-#endif
 
 struct FMNetworkManager {
     static let networkUnavailableCode: Double = 1000
@@ -22,11 +18,11 @@ struct FMNetworkManager {
     static func makeRequest(_ urlRequest: URLRequestConvertible,
                             showLog: Bool = false,
                             completion: @escaping (NetworkResult) -> ()) {
-        DDLogVerbose("URL: \(urlRequest.urlRequest?.url?.absoluteString ?? "")")
+        print("URL: \(urlRequest.urlRequest?.url?.absoluteString ?? "")")
         AF.request(urlRequest).responseJSON { responseObject in
             switch responseObject.result {
             case .success(let value):
-                DDLogVerbose("Response: \(value)")
+                print("Response: \(value)")
                 if let error = error(fromResponseObject: responseObject) {
                     completion(.failure(error))
                 } else {

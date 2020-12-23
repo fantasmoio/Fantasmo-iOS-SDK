@@ -25,6 +25,5 @@ Pod::Spec.new do |s|
   
   s.dependency 'Alamofire', '~> 5.0.0'
   s.dependency 'BrightFutures'
-  s.dependency 'CocoaLumberjack/Swift'
   
 end

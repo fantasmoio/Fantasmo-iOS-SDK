@@ -7,12 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		946085DD25921F06000CA8E8 /* CocoaLumberjackSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085D925921F06000CA8E8 /* CocoaLumberjackSwift.framework */; };
-		946085DE25921F06000CA8E8 /* CocoaLumberjackSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085D925921F06000CA8E8 /* CocoaLumberjackSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		946085DF25921F06000CA8E8 /* BrightFutures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DA25921F06000CA8E8 /* BrightFutures.framework */; };
 		946085E025921F06000CA8E8 /* BrightFutures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DA25921F06000CA8E8 /* BrightFutures.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		946085E125921F06000CA8E8 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DB25921F06000CA8E8 /* CocoaLumberjack.framework */; };
-		946085E225921F06000CA8E8 /* CocoaLumberjack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DB25921F06000CA8E8 /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		946085E325921F06000CA8E8 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; };
 		946085E425921F06000CA8E8 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9468389025921BAF005B1145 /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9468388E25921BAF005B1145 /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -56,8 +52,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				946085DE25921F06000CA8E8 /* CocoaLumberjackSwift.framework in Embed Frameworks */,
-				946085E225921F06000CA8E8 /* CocoaLumberjack.framework in Embed Frameworks */,
 				946085E025921F06000CA8E8 /* BrightFutures.framework in Embed Frameworks */,
 				946085E425921F06000CA8E8 /* Alamofire.framework in Embed Frameworks */,
 			);
@@ -67,9 +61,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		946085D925921F06000CA8E8 /* CocoaLumberjackSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjackSwift.framework; path = Carthage/Build/iOS/CocoaLumberjackSwift.framework; sourceTree = "<group>"; };
 		946085DA25921F06000CA8E8 /* BrightFutures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BrightFutures.framework; path = Carthage/Build/iOS/BrightFutures.framework; sourceTree = "<group>"; };
-		946085DB25921F06000CA8E8 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjack.framework; path = Carthage/Build/iOS/CocoaLumberjack.framework; sourceTree = "<group>"; };
 		946085DC25921F06000CA8E8 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		9468388B25921BAF005B1145 /* FantasmoSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FantasmoSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9468388E25921BAF005B1145 /* FantasmoSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FantasmoSDK.h; sourceTree = "<group>"; };
@@ -112,8 +104,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				946085DD25921F06000CA8E8 /* CocoaLumberjackSwift.framework in Frameworks */,
-				946085E125921F06000CA8E8 /* CocoaLumberjack.framework in Frameworks */,
 				946085DF25921F06000CA8E8 /* BrightFutures.framework in Frameworks */,
 				946085E325921F06000CA8E8 /* Alamofire.framework in Frameworks */,
 			);
@@ -232,8 +222,6 @@
 			children = (
 				946085DC25921F06000CA8E8 /* Alamofire.framework */,
 				946085DA25921F06000CA8E8 /* BrightFutures.framework */,
-				946085DB25921F06000CA8E8 /* CocoaLumberjack.framework */,
-				946085D925921F06000CA8E8 /* CocoaLumberjackSwift.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

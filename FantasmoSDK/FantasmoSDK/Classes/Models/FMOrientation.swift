@@ -6,10 +6,6 @@
 //
 
 import ARKit
-import CocoaLumberjack
-#if SWIFT_PACKAGE
-import CocoaLumberjackSwift
-#endif
 
 // Orientation of the device at moment of image capture.
 public struct FMOrientation:Codable {
@@ -237,14 +233,14 @@ public struct FMOrientation:Codable {
                 }
                 
                 if(firstQuaternion.angularDistance(quaternion) < 10) {
-                    DDLogWarn("Valid quaternion for averaging")
+                    print("Valid quaternion for averaging")
                     numberOfQuaternionsSummedUp += 1.0
                     firstQuaternion.w += quaternion.w
                     firstQuaternion.x += quaternion.x
                     firstQuaternion.y += quaternion.y
                     firstQuaternion.z += quaternion.z
                 } else {
-                    DDLogWarn("Invalid quaternion for averaging")
+                    print("Invalid quaternion for averaging")
                 }
             }
             

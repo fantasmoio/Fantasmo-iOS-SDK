@@ -7,10 +7,6 @@
 import Foundation
 import ARKit
 import UIKit
-import CocoaLumberjack
-#if SWIFT_PACKAGE
-import CocoaLumberjackSwift
-#endif
 
 open class MockData {
 
@@ -37,7 +33,7 @@ open class MockData {
         }
 
         guard jpegData != nil else {
-            DDLogWarn("Error: Could not convert frame to JPEG.")
+            print("Error: Could not convert frame to JPEG.")
             return (nil, nil)
         }
 

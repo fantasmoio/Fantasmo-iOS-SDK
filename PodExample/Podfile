@@ -6,6 +6,6 @@ target 'FantasmoSDK_Example' do
   target 'FantasmoSDK_Tests' do
     inherit! :search_paths
 
-    
+     
   end
 end

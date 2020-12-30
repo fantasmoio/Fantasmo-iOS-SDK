@@ -19,7 +19,8 @@ You can use Carthage to install Fantasmo SDK by adding it to your Cartfile:
 - Carthage is run simply by pasting the following command into Terminal:
 
    `./Carthage.sh update --platform iOS`
-  
+   
+- In the "General" tab, scroll down to the bottom where you will see “Linked Frameworks and Libraries”. With the Xcode project window still available, open a Finder window and navigate to the project directory. In the project directory, open the following folders: “Carthage/Build/iOS”. In the “iOS” folder, you should see "Alamofire.framework", "BrightFutures.framework" and "FantasmoSDK.framework". Drag the framework into the “Linked Frameworks and Libraries” section of project. 
 
 ### Dependencies
 

@@ -12,7 +12,7 @@
 		946085E325921F06000CA8E8 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; platformFilter = ios; };
 		946085E425921F06000CA8E8 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9468389025921BAF005B1145 /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9468388E25921BAF005B1145 /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		946838BE25921BF3005B1145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
+		946838BE25921BF3005B1145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; platformFilter = ios; };
 		946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389B25921BF3005B1145 /* FMLocationManager.swift */; };
 		946838C025921BF3005B1145 /* FantasmoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9468389C25921BF3005B1145 /* FantasmoLoader.m */; };
 		946838C125921BF3005B1145 /* FMUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389D25921BF3005B1145 /* FMUtility.swift */; };
@@ -322,7 +322,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"******* COPY-FRAMEWORK FOR FANTASMO START *****\"\n/usr/local/bin/carthage copy-frameworks\necho \"******* COPY-FRAMEWORK FOR FANTASMO END *****\"\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

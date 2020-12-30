@@ -1,6 +1,0 @@
-framework module Pods_FantasmoSDK_Example {
-  umbrella header "Pods-FantasmoSDK_Example-umbrella.h"
-
-  export *
-  module * { export * }
-}

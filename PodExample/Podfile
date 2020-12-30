@@ -1,11 +1,5 @@
 use_frameworks!
 
-target 'FantasmoSDK_Example' do
+target 'FantasmoDemo' do
   pod 'FantasmoSDK', :path => '../'
-
-  target 'FantasmoSDK_Tests' do
-    inherit! :search_paths
-
-     
-  end
 end

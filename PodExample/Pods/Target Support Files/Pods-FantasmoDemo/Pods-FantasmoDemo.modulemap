@@ -1,6 +1,0 @@
-framework module Pods_FantasmoDemo {
-  umbrella header "Pods-FantasmoDemo-umbrella.h"
-
-  export *
-  module * { export * }
-}

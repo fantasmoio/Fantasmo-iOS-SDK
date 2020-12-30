@@ -1,6 +1,0 @@
-framework module FantasmoSDK {
-  umbrella header "FantasmoSDK-umbrella.h"
-
-  export *
-  module * { export * }
-}

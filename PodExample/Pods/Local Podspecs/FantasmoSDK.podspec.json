@@ -13,7 +13,8 @@
   },
   "source": {
     "git": "https://krishn-fantasmo@github.com/fantasmoio/Fantasmo-iOS-SDK.git",
-    "branch": "master"
+    "branch": "master",
+    "tag": "0.1.6"
   },
   "platforms": {
     "ios": "11.0"

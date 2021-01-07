@@ -233,14 +233,14 @@ public struct FMOrientation:Codable {
                 }
                 
                 if(firstQuaternion.angularDistance(quaternion) < 10) {
-                    print("Valid quaternion for averaging")
+                    debugPrint("Valid quaternion for averaging")
                     numberOfQuaternionsSummedUp += 1.0
                     firstQuaternion.w += quaternion.w
                     firstQuaternion.x += quaternion.x
                     firstQuaternion.y += quaternion.y
                     firstQuaternion.z += quaternion.z
                 } else {
-                    print("Invalid quaternion for averaging")
+                    debugPrint("Invalid quaternion for averaging")
                 }
             }
             

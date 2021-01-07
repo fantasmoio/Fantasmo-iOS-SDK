@@ -42,30 +42,30 @@ class ViewController: UIViewController {
 
 extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("ViewController: didUpdateLocations")
+        debugPrint("ViewController: didUpdateLocations")
     }
 }
 
 extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        //DDLogVerbose("ViewController: didUpdate frame")
+
     }
 }
 
 extension ViewController: FMLocationDelegate {
     func locationManager(didUpdateLocation location: CLLocation, withZones zones: [FMZone]?) {
-        print("ViewController: User location Lat: \(location.coordinate.latitude) Longitude: \(location.coordinate.longitude)")
+        debugPrint("ViewController: User location Lat: \(location.coordinate.latitude) Longitude: \(location.coordinate.longitude)")
         if let zone = zones?.first, zone.zoneType == .parking {
-            print("ViewController: Parking validated!")
+            debugPrint("ViewController: Parking validated!")
         } else {
-            print("ViewController: Parking invalid.")
+            debugPrint("ViewController: Parking invalid.")
         }
     }
     
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {
-        print("ViewController: didFailWithError called")
+        debugPrint("ViewController: didFailWithError called")
         if let metadataError = metadata as? Error {
-            print("ViewController:  Error : \(metadataError.localizedDescription)")
+            debugPrint("ViewController:  Error : \(metadataError.localizedDescription)")
         }
     }
 }

@@ -14,7 +14,7 @@ public class FMLoader: NSObject {
      Loader method for initialize swizzle method.
      */
     @objc public static func swiftyLoad() {
-        print("Fantasmo SDK loaded")
+        debugPrint("Fantasmo SDK loaded")
         
         CLLocationManager.swizzle()
         ARSession.swizzle()

@@ -37,7 +37,7 @@ extension ARSession : ARSessionDelegate {
             let originalMethod = class_getInstanceMethod(self, originalSelector)
             let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
             method_exchangeImplementations (originalMethod!, swizzledMethod!)
-            print("ARSession:swizzle")
+            debugPrint("ARSession:swizzle")
         }()
     }
     
@@ -53,12 +53,10 @@ extension ARSession : ARSessionDelegate {
         //let pitch = frame.camera.eulerAngles[0]
  
         if FMLocationManager.shared.state == .idle {
-            print("ARSession:swizzle didUpdate frame localize called")
             FMLocationManager.shared.localize(frame: frame)
         }
             
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? ARSessionDelegate else {
-            print("ARSession:swizzle didUpdate frame delegate not available")
             return
         }
         

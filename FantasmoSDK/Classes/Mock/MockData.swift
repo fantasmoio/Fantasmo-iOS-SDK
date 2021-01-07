@@ -33,7 +33,7 @@ open class MockData {
         }
 
         guard jpegData != nil else {
-            print("Error: Could not convert frame to JPEG.")
+            debugPrint("Error: Could not convert frame to JPEG.")
             return (nil, nil)
         }
 

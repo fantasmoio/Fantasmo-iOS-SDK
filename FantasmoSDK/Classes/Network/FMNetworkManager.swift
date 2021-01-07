@@ -18,11 +18,11 @@ struct FMNetworkManager {
     static func makeRequest(_ urlRequest: URLRequestConvertible,
                             showLog: Bool = false,
                             completion: @escaping (NetworkResult) -> ()) {
-        print("URL: \(urlRequest.urlRequest?.url?.absoluteString ?? "")")
+        debugPrint("URL: \(urlRequest.urlRequest?.url?.absoluteString ?? "")")
         AF.request(urlRequest).responseJSON { responseObject in
             switch responseObject.result {
             case .success(let value):
-                print("Response: \(value)")
+                debugPrint("Response: \(value)")
                 if let error = error(fromResponseObject: responseObject) {
                     completion(.failure(error))
                 } else {

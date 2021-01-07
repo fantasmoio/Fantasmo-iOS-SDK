@@ -1,5 +1,6 @@
 # Ignoring the pod directory 
 PodExample/Pods/
+PodExample/Podfile.lock
 .DS_Store
 .AppleDouble
 .LSOverride

@@ -39,12 +39,14 @@
 			</array>
 		</dict>
 	</dict>
-    <key>NSCameraUsageDescription</key>
-    <string>App uses camera </string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>App uses location </string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>App uses location </string>
+	<key>NSCameraUsageDescription</key>
+	<string>App uses camera </string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>App uses location </string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>App uses location </string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>App uses location </string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

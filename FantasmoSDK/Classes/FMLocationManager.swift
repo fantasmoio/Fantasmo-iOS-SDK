@@ -82,7 +82,6 @@ open class FMLocationManager {
         
         debugPrint("FMLocationManager connected with delegate: \(delegate)")
         // TODO: Validate token
-        self.isConnected = true
         self.delegate = delegate
     }
     
@@ -92,6 +91,7 @@ open class FMLocationManager {
     /// Starts the generation of updates that report the user’s current location.
     public func startUpdatingLocation() {
         debugPrint("FMLocationManager:startUpdatingLocation")
+        self.isConnected = true
         self.state = .idle
     }
     

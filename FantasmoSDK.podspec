@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.name             = 'FantasmoSDK'
   s.version          = '0.1.14'
   s.summary          = 'Hyper-accurate global positioning for cameras.'
-  s.description      = 'FantasmoSDK description goes here…'
+  s.description      = 'FantasmoSDK provide hyper-accurate global positioning for cameras.'
 
   s.homepage         = 'https://github.com/fantasmoio/Fantasmo-iOS-SDK'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }

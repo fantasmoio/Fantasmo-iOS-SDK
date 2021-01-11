@@ -9,7 +9,7 @@ Supercharge your app with hyper-accurate positioning using just the camera. The 
 ### CocoaPods (iOS 11+)
 CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit https://cocoapods.org/. To integrate Fantasmo SDK into your Xcode project using CocoaPods, specify it in your Podfile:
 
-   `pod 'FantasmoSDK', :git => 'https://github.com/fantasmoio/Fantasmo-iOS-SDK', :branch => 'master'`
+   `pod 'FantasmoSDK'
 
 ### Carthage (iOS 8+, OS X 10.9+)
 

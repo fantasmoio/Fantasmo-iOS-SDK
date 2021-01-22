@@ -17,7 +17,7 @@ You can use Carthage to install Fantasmo SDK by adding it to your Cartfile:
 - Get Carthage by running `brew install carthage`
 - Create a Cartfile using https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile in the same directory where your .xcodeproj or .xcworkspace is and add below dependnacy in it. For example:
 
-   `github "fantasmoio/Fantasmo-iOS-SDK" ~> 0.1.11`
+   `github "fantasmoio/Fantasmo-iOS-SDK" ~> 0.1.15`
 
 - Add Carthage.sh by unzip [Carthage.sh.zip](https://github.com/fantasmoio/Fantasmo-iOS-SDK/files/5754931/Carthage.sh.zip) and place it to same directory where your .xcodeproj or .xcworkspace is.
 - Give edit permission to Carthage.sh by `chmod +x Carthage.sh`

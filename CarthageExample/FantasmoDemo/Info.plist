@@ -18,6 +18,14 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+    <key>NSCameraUsageDescription</key>
+    <string>App uses camera </string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>App uses location </string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>App uses location </string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>App uses location </string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>

@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		946085DF25921F06000CA8E8 /* BrightFutures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DA25921F06000CA8E8 /* BrightFutures.framework */; platformFilter = ios; };
-		946085E325921F06000CA8E8 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; platformFilter = ios; };
+		13D0A3B125BFEA6800652697 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; platformFilter = ios; };
+		13D0A3B225BFEA6800652697 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		13D0A3B425BFEA6A00652697 /* BrightFutures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DA25921F06000CA8E8 /* BrightFutures.framework */; platformFilter = ios; };
+		13D0A3B525BFEA6A00652697 /* BrightFutures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DA25921F06000CA8E8 /* BrightFutures.framework */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		9468389025921BAF005B1145 /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9468388E25921BAF005B1145 /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		946838BE25921BF3005B1145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; platformFilter = ios; };
 		946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389B25921BF3005B1145 /* FMLocationManager.swift */; };
@@ -41,6 +43,21 @@
 		946838DB25921BF3005B1145 /* FMConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838BB25921BF3005B1145 /* FMConfiguration.swift */; };
 		946838DC25921BF3005B1145 /* FMLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838BC25921BF3005B1145 /* FMLoader.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		13D0A3B325BFEA6800652697 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				13D0A3B225BFEA6800652697 /* Alamofire.framework in Embed Frameworks */,
+				13D0A3B525BFEA6A00652697 /* BrightFutures.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		946085DA25921F06000CA8E8 /* BrightFutures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BrightFutures.framework; path = Carthage/Build/iOS/BrightFutures.framework; sourceTree = "<group>"; };
@@ -86,8 +103,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				946085DF25921F06000CA8E8 /* BrightFutures.framework in Frameworks */,
-				946085E325921F06000CA8E8 /* Alamofire.framework in Frameworks */,
+				13D0A3B125BFEA6800652697 /* Alamofire.framework in Frameworks */,
+				13D0A3B425BFEA6A00652697 /* BrightFutures.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +249,7 @@
 				9468388825921BAF005B1145 /* Frameworks */,
 				9468388925921BAF005B1145 /* Resources */,
 				9424F151259CB5F80045B463 /* ShellScript */,
+				13D0A3B325BFEA6800652697 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

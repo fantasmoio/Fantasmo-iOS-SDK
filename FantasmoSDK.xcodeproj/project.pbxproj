@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		13D0A3F525BFF14700652697 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; platformFilter = ios; };
-		13D0A3F625BFF14700652697 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		13D0A3F625BFF14700652697 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		13D0A3F825BFF15500652697 /* BrightFutures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DA25921F06000CA8E8 /* BrightFutures.framework */; platformFilter = ios; };
-		13D0A3F925BFF15500652697 /* BrightFutures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DA25921F06000CA8E8 /* BrightFutures.framework */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		13D0A3F925BFF15500652697 /* BrightFutures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DA25921F06000CA8E8 /* BrightFutures.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9468389025921BAF005B1145 /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9468388E25921BAF005B1145 /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		946838BE25921BF3005B1145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; platformFilter = ios; };
 		946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389B25921BF3005B1145 /* FMLocationManager.swift */; };

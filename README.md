@@ -25,8 +25,22 @@ You can use Carthage to install Fantasmo SDK by adding it to your Cartfile:
 
    `./Carthage.sh update --platform iOS`
    
-- In the "General" tab, scroll down to the bottom where you will see “Linked Frameworks and Libraries”. With the Xcode project window still available, open a Finder window and navigate to the project directory. In the project directory, open the following folders: “Carthage/Build/iOS”. In the “iOS” folder, you should see "Alamofire.framework", "BrightFutures.framework" and "FantasmoSDK.framework". Drag the framework into the “Linked Frameworks and Libraries” section of project. 
+- In the **General** tab, scroll down to the bottom where you will see **Linked Frameworks and Libraries**. With the Xcode project window still available, open a Finder window and navigate to the project directory. In the project directory, open the following folders: **Carthage/Build/iOS**. In the iOS folder, you should see **Alamofire.framework**, **BrightFutures.framework** and **FantasmoSDK.framework**. Drag the framework into the **Linked Frameworks and Libraries** section of project and select **Do Not Embed** under Embed option. 
 
+- On your application targets’ Build Phases settings tab, click the + icon and choose New Run Script Phase. Create a Run Script in which you specify your shell (ex: /bin/sh), add the following contents to the script area below the shell:
+   
+   `/usr/local/bin/carthage copy-frameworks`
+   
+- Add below files in **Input Files** of above Run Script:   
+   `$(SRCROOT)/Carthage/Build/iOS/FantasmoSDK.framework`   
+   `$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework`   
+   `$(SRCROOT)/Carthage/Build/iOS/BrightFutures.framework`
+   
+- Add below files in **Output Files**:   
+   `$(DERIVED_FILE_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework`   
+   `$(DERIVED_FILE_DIR)/$(FRAMEWORKS_FOLDER_PATH)/BrightFutures.framework`   
+   `$(DERIVED_FILE_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FantasmoSDK.framework`
+  
 ### Dependencies
 
 Available via Cocoapods:

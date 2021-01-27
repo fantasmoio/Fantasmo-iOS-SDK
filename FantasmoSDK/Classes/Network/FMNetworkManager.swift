@@ -77,9 +77,6 @@ struct FMNetworkManager {
             "Content-type": "multipart/form-data"
         ]
         
-        debugPrint("url: ", url)
-        debugPrint("params: ", parameters)
-        debugPrint("image data size: ", jpegData.count)
         AF.upload(multipartFormData: { (multipartFormData) in
             for (key, value) in parameters {
                 multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
@@ -89,7 +86,7 @@ struct FMNetworkManager {
             if result.error != nil {
                 onError?(result.error)
             }
-
+            
             onCompletion?(result.response!.statusCode, result.data)
         }
     }

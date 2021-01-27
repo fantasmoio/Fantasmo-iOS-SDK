@@ -322,7 +322,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"******* COPY-FRAMEWORK FOR FANTASMO START *****\"\n/usr/local/bin/carthage copy-frameworks\necho \"******* COPY-FRAMEWORK FOR FANTASMO END *****\"\n";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

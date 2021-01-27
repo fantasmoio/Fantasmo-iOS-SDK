@@ -80,18 +80,18 @@ struct FMNetworkManager {
         debugPrint("url: ", url)
         debugPrint("params: ", parameters)
         debugPrint("image data size: ", jpegData.count)
-//        AF.upload(multipartFormData: { (multipartFormData) in
+        AF.upload(multipartFormData: { (multipartFormData) in
 //            for (key, value) in parameters {
 //                multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
 //            }
-//            multipartFormData.append(jpegData, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
-//        }, to: url, usingThreshold: UInt64.init(), method: .post, headers: headers).response  { (result) in
-//            if result.error != nil {
-//                onError?(result.error)
-//            }
-//
-//            onCompletion?(result.response!.statusCode, result.data)
-//        }
+            multipartFormData.append(jpegData, withName: "image", fileName: "image.jpg", mimeType: "image/jpeg")
+        }, to: url, usingThreshold: UInt64.init(), method: .post, headers: headers).response  { (result) in
+            if result.error != nil {
+                onError?(result.error)
+            }
+
+            onCompletion?(result.response!.statusCode, result.data)
+        }
     }
 }
 

@@ -51,7 +51,6 @@
 		9468389C25921BF3005B1145 /* FantasmoLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FantasmoLoader.m; sourceTree = "<group>"; };
 		9468389D25921BF3005B1145 /* FMUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUtility.swift; sourceTree = "<group>"; };
 		9468389F25921BF3005B1145 /* MockData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
-		946838A225921BF3005B1145 /* FMHTTPRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMHTTPRouter.swift; sourceTree = "<group>"; };
 		946838A325921BF3005B1145 /* FMNetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMNetworkManager.swift; sourceTree = "<group>"; };
 		946838A425921BF3005B1145 /* FMError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMError.swift; sourceTree = "<group>"; };
 		946838A625921BF3005B1145 /* LocalizeResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizeResponse.swift; sourceTree = "<group>"; };
@@ -154,7 +153,6 @@
 		946838A125921BF3005B1145 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				946838A225921BF3005B1145 /* FMHTTPRouter.swift */,
 				946838A325921BF3005B1145 /* FMNetworkManager.swift */,
 				946838A425921BF3005B1145 /* FMError.swift */,
 			);

@@ -13,7 +13,6 @@
 		946838C025921BF3005B1145 /* FantasmoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9468389C25921BF3005B1145 /* FantasmoLoader.m */; };
 		946838C125921BF3005B1145 /* FMUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389D25921BF3005B1145 /* FMUtility.swift */; };
 		946838C225921BF3005B1145 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389F25921BF3005B1145 /* MockData.swift */; };
-		946838C425921BF3005B1145 /* FMHTTPRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A225921BF3005B1145 /* FMHTTPRouter.swift */; };
 		946838C525921BF3005B1145 /* FMNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A325921BF3005B1145 /* FMNetworkManager.swift */; };
 		946838C625921BF3005B1145 /* FMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A425921BF3005B1145 /* FMError.swift */; };
 		946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A625921BF3005B1145 /* LocalizeResponse.swift */; };
@@ -327,7 +326,6 @@
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,
 				946838DB25921BF3005B1145 /* FMConfiguration.swift in Sources */,
 				946838C525921BF3005B1145 /* FMNetworkManager.swift in Sources */,
-				946838C425921BF3005B1145 /* FMHTTPRouter.swift in Sources */,
 				946838D425921BF3005B1145 /* UIImage+Extension.swift in Sources */,
 				946838CD25921BF3005B1145 /* FMPosition.swift in Sources */,
 				946838C625921BF3005B1145 /* FMError.swift in Sources */,

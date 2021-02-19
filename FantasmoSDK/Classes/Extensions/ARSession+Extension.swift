@@ -52,6 +52,8 @@ extension ARSession : ARSessionDelegate {
         
         //let pitch = frame.camera.eulerAngles[0]
  
+        FMLocationManager.shared.calculateAnchorDelta(frame: frame)
+        
         if FMLocationManager.shared.state == .idle {
             FMLocationManager.shared.localize(frame: frame)
         }

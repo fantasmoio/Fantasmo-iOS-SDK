@@ -59,6 +59,7 @@ open class FMLocationManager {
     public private(set) var state = State.idle
     
     private var anchorFrame: ARFrame?
+    public var anchorDelta = simd_float4x4(1)
     private var delegate: FMLocationDelegate?
     
     /// When in simulation mode, mock data is used from the assets directory instead of the live camera feed.
@@ -113,6 +114,13 @@ open class FMLocationManager {
     public func unsetAnchor() {
         debugPrint("FMLocationManager:unsetAnchor")
         self.anchorFrame = nil
+    }
+    
+    internal func calculateAnchorDelta(frame: ARFrame) {
+        if let anchorFrame = anchorFrame {
+            anchorDelta = frame.camera.transform.inverse * anchorFrame.camera.transform
+//            debugPrint(anchorDelta.columns.3.x, anchorDelta.columns.3.y, anchorDelta.columns.3.z)
+        }
     }
     
     
@@ -248,7 +256,7 @@ open class FMLocationManager {
         return ([
             "intrinsics" : intrinsics.toJson(),
             "gravity"    : pose.orientation.toJson(),
-            "capturedAt" :(NSDate().timeIntervalSince1970),
+            "capturedAt" : (NSDate().timeIntervalSince1970),
             "uuid" : UUID().uuidString,
             "coordinate": "{\"longitude\" : \(currentLocation.coordinate.longitude), \"latitude\": \(currentLocation.coordinate.latitude)}"
         ] as [String : Any])

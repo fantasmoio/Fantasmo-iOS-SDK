@@ -174,7 +174,7 @@ open class FMLocationManager {
                                             
                                             self.state = .idle
             
-                                            if let response = response {
+                                            if let response = response, let code = code {
                                                 debugPrint("FMLocationManager:uploadImage response: (\(code)) \(String(data: response, encoding: .utf8)!)")
                                                 do {
                                                     let decoder = JSONDecoder()

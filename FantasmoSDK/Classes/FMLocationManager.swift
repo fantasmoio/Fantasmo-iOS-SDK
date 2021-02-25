@@ -60,6 +60,7 @@ open class FMLocationManager {
     
     private var anchorFrame: ARFrame?
     private var delegate: FMLocationDelegate?
+    private var token: String?
     
     /// When in simulation mode, mock data is used from the assets directory instead of the live camera feed.
     /// This mode is useful for implementation and debugging.
@@ -81,7 +82,8 @@ open class FMLocationManager {
                         delegate: FMLocationDelegate) {
         
         debugPrint("FMLocationManager connected with delegate: \(delegate)")
-        // TODO: Validate token
+        
+        self.token = accessToken
         self.delegate = delegate
     }
     
@@ -166,6 +168,7 @@ open class FMLocationManager {
             
             debugPrint("FMLocationManager:uploadImage")
             FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl,
+                                         token: self.token,
                                          parameters: parameters,
                                          jpegData: image, onCompletion: { (code, response) in
                                             

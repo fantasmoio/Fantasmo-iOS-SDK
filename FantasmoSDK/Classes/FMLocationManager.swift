@@ -149,7 +149,7 @@ open class FMLocationManager {
                 localizeParams = self.getLocalizeParams(frame: frame,
                                                   deviceOrientation: deviceOrientation,
                                                   interfaceOrientation: interfaceOrientation,
-                                                  currentLocation: CLLocationManager.lastLocation ?? CLLocation())
+                                                  currentLocation: FMConfiguration.Location.current)
                 imageData = FMUtility.toJpeg(fromPixelBuffer: frame.capturedImage,
                                              withDeviceOrientation: deviceOrientation)
             }

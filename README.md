@@ -186,3 +186,15 @@ In order to activate simulation mode, set the flag and choose a semantic zone ty
 FMLocationManager.shared.isSimulation = true
 FMLocationManager.shared.simulationZone = .parking
 ```
+
+### Overrides
+
+For testing, the device location can be specified in the Info.plist.
+
+    key: FM_GPS_LAT_LONG
+    value: 25.762586765198417,-80.19404801110545
+
+For _internal development_ testing and demo builds, the API server URL can be specified in the Info.plist. It should _not_ include the URI scheme.
+
+    key: FM_API_BASE_URL
+    value: 192:168:0:1:8090/v1/image.localize

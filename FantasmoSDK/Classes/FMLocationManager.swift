@@ -118,10 +118,10 @@ open class FMLocationManager {
         self.anchorFrame = nil
     }
     
+    /// Calculate the difference between current camera pose and anchored camera pose
     internal func calculateAnchorDelta(frame: ARFrame) {
         if let anchorFrame = anchorFrame {
             anchorDelta = frame.camera.transform.inverse * anchorFrame.camera.transform
-//            debugPrint(anchorDelta.columns.3.x, anchorDelta.columns.3.y, anchorDelta.columns.3.z)
         }
     }
     

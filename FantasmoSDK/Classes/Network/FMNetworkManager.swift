@@ -78,7 +78,7 @@ struct FMNetworkManager {
         ]
         
         if let token = token {
-            headers.add(name: "Authorization", value: "Token \(token)")
+            headers.add(name: "Fantasmo-Key", value: token)
         }
         
         AF.upload(multipartFormData: { (multipartFormData) in

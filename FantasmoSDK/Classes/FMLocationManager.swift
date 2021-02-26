@@ -61,6 +61,7 @@ open class FMLocationManager {
     private var anchorFrame: ARFrame?
     public var anchorDelta = simd_float4x4(1)
     private var delegate: FMLocationDelegate?
+    private var token: String?
     
     /// When in simulation mode, mock data is used from the assets directory instead of the live camera feed.
     /// This mode is useful for implementation and debugging.
@@ -82,7 +83,8 @@ open class FMLocationManager {
                         delegate: FMLocationDelegate) {
         
         debugPrint("FMLocationManager connected with delegate: \(delegate)")
-        // TODO: Validate token
+        
+        self.token = accessToken
         self.delegate = delegate
     }
     
@@ -155,7 +157,7 @@ open class FMLocationManager {
                 localizeParams = self.getLocalizeParams(frame: frame,
                                                   deviceOrientation: deviceOrientation,
                                                   interfaceOrientation: interfaceOrientation,
-                                                  currentLocation: CLLocationManager.lastLocation ?? CLLocation())
+                                                  currentLocation: FMConfiguration.Location.current)
                 imageData = FMUtility.toJpeg(fromPixelBuffer: frame.capturedImage,
                                              withDeviceOrientation: deviceOrientation)
             }
@@ -174,12 +176,13 @@ open class FMLocationManager {
             
             debugPrint("FMLocationManager:uploadImage")
             FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl,
+                                         token: self.token,
                                          parameters: parameters,
                                          jpegData: image, onCompletion: { (code, response) in
                                             
                                             self.state = .idle
             
-                                            if let response = response {
+                                            if let response = response, let code = code {
                                                 debugPrint("FMLocationManager:uploadImage response: (\(code)) \(String(data: response, encoding: .utf8)!)")
                                                 do {
                                                     let decoder = JSONDecoder()

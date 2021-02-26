@@ -71,11 +71,15 @@ struct FMNetworkManager {
     }
     
     // Create method for multipart image uploading
-    static func uploadImage(url:String, parameters: [String : Any], jpegData:Data,
-                            onCompletion: ((Int, Data?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil) {
-        let headers: HTTPHeaders = [
-            "Content-type": "multipart/form-data"
+    static func uploadImage(url: String, token: String?, parameters: [String : Any], jpegData: Data,
+                            onCompletion: ((Int?, Data?) -> Void)? = nil, onError: ((Error?) -> Void)? = nil) {
+        var headers: HTTPHeaders = [
+            "Content-type": "multipart/form-data",
         ]
+        
+        if let token = token {
+            headers.add(name: "Fantasmo-Key", value: token)
+        }
         
         AF.upload(multipartFormData: { (multipartFormData) in
             for (key, value) in parameters {
@@ -87,7 +91,7 @@ struct FMNetworkManager {
                 onError?(result.error)
             }
             
-            onCompletion?(result.response!.statusCode, result.data)
+            onCompletion?(result.response?.statusCode, result.data)
         }
     }
 }

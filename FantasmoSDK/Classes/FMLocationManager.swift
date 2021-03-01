@@ -47,16 +47,16 @@ extension FMLocationDelegate {
 open class FMLocationManager {
     
     public enum State {
-        case stopped
-        case idle
-        case localizing
+        case stopped        // doing nothing
+        case localizing     // localizing
+        case uploading      // uploading image while localizing
     }
     
     
     // MARK: - Properties
     
     public static let shared = FMLocationManager()
-    public private(set) var state = State.idle
+    public private(set) var state = State.stopped
     
     private var anchorFrame: ARFrame?
     public var anchorDelta = simd_float4x4(1)
@@ -95,7 +95,7 @@ open class FMLocationManager {
     public func startUpdatingLocation() {
         debugPrint("FMLocationManager:startUpdatingLocation")
         self.isConnected = true
-        self.state = .idle
+        self.state = .localizing
     }
     
     /// Stops the generation of location updates.
@@ -138,7 +138,7 @@ open class FMLocationManager {
         }
         
         debugPrint("FMLocationManager:localize called with simulation: \(isSimulation)")
-        self.state = .localizing
+        self.state = .uploading
         
         let interfaceOrientation = UIApplication.shared.statusBarOrientation
         let deviceOrientation = UIDevice.current.orientation
@@ -180,7 +180,9 @@ open class FMLocationManager {
                                          parameters: parameters,
                                          jpegData: image, onCompletion: { (code, response) in
                                             
-                                            self.state = .idle
+                                            if self.state != .stopped {
+                                                self.state = .localizing
+                                            }
             
                                             if let response = response, let code = code {
                                                 debugPrint("FMLocationManager:uploadImage response: (\(code)) \(String(data: response, encoding: .utf8)!)")
@@ -225,7 +227,9 @@ open class FMLocationManager {
                                             
                                          })
             { (error) in
-                self.state = .idle
+                if self.state != .stopped {
+                    self.state = .localizing
+                }
                 debugPrint("FMLocationManager:uploadImage didFailWithError \(String(describing: error))")
                 let error: Error = FMError.custom(errorDescription: error?.localizedDescription)
                 self.delegate?.locationManager(didFailWithError: error, errorMetadata:frame)

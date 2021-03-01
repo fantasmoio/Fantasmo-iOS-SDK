@@ -253,6 +253,7 @@ open class FMLocationManager {
                            currentLocation: CLLocation) -> [String : Any]? {
         
         let pose = FMPose(fromTransform: frame.camera.transform)
+        let referenceFrame = FMPose(fromTransform: anchorDelta)
         let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
                                       atScale: Float(FMUtility.Constants.ImageScaleFactor),
                                       withStatusBarOrientation: interfaceOrientation,
@@ -262,7 +263,8 @@ open class FMLocationManager {
         
         return ([
             "intrinsics" : intrinsics.toJson(),
-            "gravity"    : pose.orientation.toJson(),
+            "gravity" : pose.orientation.toJson(),
+            "referenceFrame" : referenceFrame.toJson(),
             "capturedAt" : (NSDate().timeIntervalSince1970),
             "uuid" : UUID().uuidString,
             "coordinate": "{\"longitude\" : \(currentLocation.coordinate.longitude), \"latitude\": \(currentLocation.coordinate.latitude)}"

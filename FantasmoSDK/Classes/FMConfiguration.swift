@@ -39,7 +39,7 @@ internal struct FMConfiguration {
                     print("FMConfiguration using url override: \(override)")
                     return "http://\(override)"
                 } else {
-                    return "http://40.114.114.176:8090/v1/image.localize"
+                    return "https://api.fantasmo.io/v1/image.localize"
                 }
             }
         }

@@ -19,7 +19,7 @@ public struct FMPose:Codable {
     
     // Extracts the position and orientation from an ARKit camera transform matrix and converts
     // from ARKit coordinates (right-handed, Y Up) to OpenCV coordinates (right-handed, Y Down)
-    init(fromTransform transform:simd_float4x4) {
+    public init(fromTransform transform:simd_float4x4) {
         position = FMPosition(fromTransform: transform)
         orientation = FMOrientation(fromTransform: transform)
     }
@@ -40,7 +40,7 @@ public struct FMPose:Codable {
         self.orientation = FMOrientation(pose.orientation)
     }
     
-    func toString() -> String {
+    public func toString() -> String {
         return "Position [\(position.toString())]   Orientation [\(orientation.toString())]   Confidence [\(confidence)]"
     }
     

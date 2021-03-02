@@ -253,7 +253,6 @@ open class FMLocationManager {
                            currentLocation: CLLocation) -> [String : Any]? {
         
         let pose = FMPose(fromTransform: frame.camera.transform)
-        let referenceFrame = FMPose(fromTransform: anchorDelta)
         let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
                                       atScale: Float(FMUtility.Constants.ImageScaleFactor),
                                       withStatusBarOrientation: interfaceOrientation,
@@ -261,13 +260,20 @@ open class FMLocationManager {
                                       withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                       withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
         
-        return ([
+        var params = [
             "intrinsics" : intrinsics.toJson(),
             "gravity" : pose.orientation.toJson(),
-            "referenceFrame" : referenceFrame.toJson(),
             "capturedAt" : (NSDate().timeIntervalSince1970),
             "uuid" : UUID().uuidString,
             "coordinate": "{\"longitude\" : \(currentLocation.coordinate.longitude), \"latitude\": \(currentLocation.coordinate.latitude)}"
-        ] as [String : Any])
+        ] as [String : Any]
+        
+        // calculate and send reference frame if anchoring
+        if anchorFrame != nil {
+            let referenceFrame = FMPose(fromTransform: anchorDelta)
+            params["referenceFrame"] = referenceFrame.toJson()
+        }
+        
+        return params
     }
 }

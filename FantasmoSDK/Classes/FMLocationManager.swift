@@ -129,24 +129,43 @@ open class FMLocationManager {
         // TODO url should be dynamic, based on build scheme"
         
         let session = URLSession.shared
-        let url = URL(string: "https://api.fantasmo.io/v1/parking.in.radius")!
+//        let url = URL(string: "https://api.fantasmo.io/v1/parking.in.radius")!
+        let url = URL(string: "http://40.71.179.204:8090/v1/parking.in.radius")!
         
         // build request
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue(self.token, forHTTPHeaderField: "Fantasmo-Key")
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
         // prepare payload
+        
+        let fieldName1 = "radius"
+        let fieldValue1 = radius
+        
         let coordinate = FMConfiguration.Location.current.coordinate
-        let json = [
-            "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
-            "radius": String(radius)
-        ]
-        let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
+        
+        let fieldName2 = "coordinate"
+        let fieldValue2 = "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}"
+        
+        var data = Data()
+        
+        data.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+        data.append("Content-Disposition: form-data; name=\"\(fieldName1)\"\r\n\r\n".data(using: .utf8)!)
+        data.append("\(fieldValue1)".data(using: .utf8)!)
+        
+        data.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
+        data.append("Content-Disposition: form-data; name=\"\(fieldName2)\"\r\n\r\n".data(using: .utf8)!)
+        data.append("\(fieldValue2)".data(using: .utf8)!)
+        
+        // End the raw http request data, note that there is 2 extra dash ("-") at the end, this is to indicate the end of the data
+        // According to the HTTP 1.1 specification https://tools.ietf.org/html/rfc7230
+        data.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        
         
         // set up task and its completion
-        let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
+        session.uploadTask(with: request, from: data, completionHandler: { data, response, error in
             guard let data = data, let response = response as? HTTPURLResponse else {
                 print("no data")
                 completion(false)
@@ -168,8 +187,7 @@ open class FMLocationManager {
                 print("JSON error: \(error.localizedDescription)")
                 completion(false)
             }
-        }
-        task.resume()
+        }).resume()
     }
     
     

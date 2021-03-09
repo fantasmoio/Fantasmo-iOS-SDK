@@ -59,6 +59,7 @@ open class FMLocationManager {
     public private(set) var state = State.stopped
     
     private var anchorFrame: ARFrame?
+    public var anchorDelta = simd_float4x4(1)
     private var delegate: FMLocationDelegate?
     private var token: String?
     

@@ -118,6 +118,60 @@ open class FMLocationManager {
         self.anchorFrame = nil
     }
     
+    /// Check to see if a given zone is in the provided radius
+    ///
+    /// - Parameter zone: zone to search for
+    /// - Parameter radius: search radius in meters
+    /// - Parameter completion: closure that consumes boolean server result
+    public func isZoneInRadius(_ zone: FMZone.ZoneType, radius: Int, completion: @escaping (Bool)->Void) {
+        // TODO rewrite networking layer to remove dependencies
+        // TODO switch based on zone type
+        // TODO url should be dynamic, based on build scheme"
+        
+        let session = URLSession.shared
+        let url = URL(string: "https://api.fantasmo.io/v1/parking.in.radius")!
+        
+        // build request
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(self.token, forHTTPHeaderField: "Fantasmo-Key")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // prepare payload
+        let coordinate = FMConfiguration.Location.current.coordinate
+        let json = [
+            "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
+            "radius": String(radius)
+        ]
+        let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
+        
+        // set up task and its completion
+        let task = session.uploadTask(with: request, from: jsonData) { data, response, error in
+            guard let data = data, let response = response as? HTTPURLResponse else {
+                print("no data")
+                completion(false)
+                return
+            }
+            
+            print("status: \(response.statusCode)")
+            print("data: \(data)")
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, String>
+                print(json ?? "JSON error")
+                if let result = json?["result"], result == "true" {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            } catch {
+                print("JSON error: \(error.localizedDescription)")
+                completion(false)
+            }
+        }
+        task.resume()
+    }
+    
     
     // MARK: - Internal instance methods
     

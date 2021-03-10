@@ -175,6 +175,19 @@ To return to device localization, simply unset the anchor point.
 FMLocationManager.shared.unsetAnchor()
 ```
 
+### Radius Check
+
+In order to check if a zone, like parking, is within a given radius of the current device location (as provided by CoreLocation) before attempting to localize, use the `isZoneInRadius` method. The method takes a closure which provides a boolean result.
+
+Currently only `.parking` zones are supported.
+
+```swift
+FMLocationManager.shared.isZoneInRadius(.parking, radius: 50) { result in
+  self.isParkingInRadius = result
+}
+```
+
+
 ### Simulation Mode
 
 Since it's not always possible to be onsite for testing, a simulation mode is provided

@@ -82,7 +82,7 @@ public struct FMOrientation:Codable {
         self.w = Float(or.w)
     }
     
-    private func toSimdQuaternion() -> simd_quatf {
+    public func toSimdQuaternion() -> simd_quatf {
         return simd_quatf(ix: self.x, iy: self.y, iz: self.z, r: self.w)
     }
     

@@ -269,8 +269,8 @@ open class FMLocationManager {
         ] as [String : Any]
         
         // calculate and send reference frame if anchoring
-        if anchorFrame != nil {
-            let referenceFrame = FMPose(fromTransform: anchorDelta)
+        if let anchorFrame = anchorFrame {
+            let referenceFrame = FMPose.diffPose(anchorFrame.camera.transform, withRespectTo: frame.camera.transform)
             params["referenceFrame"] = referenceFrame.toJson()
         }
         

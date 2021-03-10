@@ -129,8 +129,7 @@ open class FMLocationManager {
         // TODO url should be dynamic, based on build scheme"
         
         let session = URLSession.shared
-//        let url = URL(string: "https://api.fantasmo.io/v1/parking.in.radius")!
-        let url = URL(string: "http://40.71.179.204:8090/v1/parking.in.radius")!
+        let url = URL(string: "https://api.fantasmo.io/v1/parking.in.radius")!
         
         // build request
         var request = URLRequest(url: url)

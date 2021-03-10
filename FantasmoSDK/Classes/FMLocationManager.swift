@@ -125,6 +125,8 @@ open class FMLocationManager {
     /// - Parameter completion: closure that consumes boolean server result
     public func isZoneInRadius(_ zone: FMZone.ZoneType, radius: Int, completion: @escaping (Bool)->Void) {
         // TODO rewrite networking layer to remove dependencies
+        // as FMNetworkManager does not support multipart forms without an image
+        // and no point in adding it now, as we are removing AlamoFire shortly
         // TODO switch based on zone type
         // TODO url should be dynamic, based on build scheme"
         
@@ -148,6 +150,8 @@ open class FMLocationManager {
         let fieldName2 = "coordinate"
         let fieldValue2 = "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}"
         
+        // package fields as Data
+        
         var data = Data()
         
         data.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
@@ -161,8 +165,7 @@ open class FMLocationManager {
         // End the raw http request data, note that there is 2 extra dash ("-") at the end, this is to indicate the end of the data
         // According to the HTTP 1.1 specification https://tools.ietf.org/html/rfc7230
         data.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-        
-        
+         
         // set up task and its completion
         session.uploadTask(with: request, from: data, completionHandler: { data, response, error in
             guard let data = data, let response = response as? HTTPURLResponse else {

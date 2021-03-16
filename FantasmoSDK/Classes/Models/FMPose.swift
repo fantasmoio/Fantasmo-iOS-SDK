@@ -13,9 +13,9 @@ import ARKit
 public struct FMPose:Codable {
     
     var source = "device"
-    var position:FMPosition
-    var orientation:FMOrientation
-    var confidence = ""
+    public var position:FMPosition
+    public var orientation:FMOrientation
+    public var confidence = ""
     
     // Extracts the position and orientation from an ARKit camera transform matrix and converts
     // from ARKit coordinates (right-handed, Y Up) to OpenCV coordinates (right-handed, Y Down)
@@ -30,7 +30,7 @@ public struct FMPose:Codable {
         self.confidence = confidence
     }
 
-    init() {
+    public init() {
         self.position = FMPosition(0.0, 0.0, 0.0)
         self.orientation = FMOrientation(fromEuler: 0, y: 0, z: 0)
     }

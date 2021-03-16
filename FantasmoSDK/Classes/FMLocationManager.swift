@@ -59,7 +59,7 @@ open class FMLocationManager {
     public private(set) var state = State.stopped
     
     private var anchorFrame: ARFrame?
-    public var anchorDelta = simd_float4x4(1)
+
     private var delegate: FMLocationDelegate?
     private var token: String?
     
@@ -118,10 +118,13 @@ open class FMLocationManager {
         self.anchorFrame = nil
     }
     
-    /// Calculate the difference between current camera pose and anchored camera pose
-    internal func calculateAnchorDelta(frame: ARFrame) {
+
+    /// Calculate the FMPose difference of the anchor frame with respect to the given frame
+    public func anchorDeltaPoseForFrame(_ frame: ARFrame) -> FMPose {
         if let anchorFrame = anchorFrame {
-            anchorDelta = frame.camera.transform.inverse * anchorFrame.camera.transform
+            return FMPose.diffPose(anchorFrame.camera.transform, withRespectTo: frame.camera.transform)
+        } else {
+            return FMPose()
         }
     }
     
@@ -343,9 +346,8 @@ open class FMLocationManager {
         ] as [String : Any]
         
         // calculate and send reference frame if anchoring
-        if let anchorFrame = anchorFrame {
-            let referenceFrame = FMPose.diffPose(anchorFrame.camera.transform, withRespectTo: frame.camera.transform)
-            params["referenceFrame"] = referenceFrame.toJson()
+        if anchorFrame != nil {
+            params["referenceFrame"] = anchorDeltaPoseForFrame(frame).toJson()
         }
         
         return params

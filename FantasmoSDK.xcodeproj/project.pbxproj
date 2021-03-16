@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		946085DF25921F06000CA8E8 /* BrightFutures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DA25921F06000CA8E8 /* BrightFutures.framework */; platformFilter = ios; };
-		946085E025921F06000CA8E8 /* BrightFutures.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DA25921F06000CA8E8 /* BrightFutures.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		946085E325921F06000CA8E8 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; platformFilter = ios; };
-		946085E425921F06000CA8E8 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 946085DC25921F06000CA8E8 /* Alamofire.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9468389025921BAF005B1145 /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9468388E25921BAF005B1145 /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		946838BE25921BF3005B1145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
 		946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389B25921BF3005B1145 /* FMLocationManager.swift */; };
@@ -43,21 +41,6 @@
 		946838DB25921BF3005B1145 /* FMConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838BB25921BF3005B1145 /* FMConfiguration.swift */; };
 		946838DC25921BF3005B1145 /* FMLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838BC25921BF3005B1145 /* FMLoader.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		946085E525921F06000CA8E8 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				946085E025921F06000CA8E8 /* BrightFutures.framework in Embed Frameworks */,
-				946085E425921F06000CA8E8 /* Alamofire.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		946085DA25921F06000CA8E8 /* BrightFutures.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BrightFutures.framework; path = Carthage/Build/iOS/BrightFutures.framework; sourceTree = "<group>"; };
@@ -248,7 +231,6 @@
 				9468388725921BAF005B1145 /* Sources */,
 				9468388825921BAF005B1145 /* Frameworks */,
 				9468388925921BAF005B1145 /* Resources */,
-				9424F151259CB5F80045B463 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -300,31 +282,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		9424F151259CB5F80045B463 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/BrightFutures.framework",
-			);
-			name = "Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
-				"$(DERIVED_FILE_DIR)/$(FRAMEWORKS_FOLDER_PATH)/BrightFutures.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\necho \"******* COPY-FRAMEWORK FOR FANTASMO START *****\"\n/usr/local/bin/carthage copy-frameworks\necho \"******* COPY-FRAMEWORK FOR FANTASMO END *****\"\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9468388725921BAF005B1145 /* Sources */ = {

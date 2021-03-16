@@ -13,9 +13,9 @@ import ARKit
 public struct FMPose:Codable {
     
     var source = "device"
-    var position:FMPosition
-    var orientation:FMOrientation
-    var confidence = ""
+    public var position:FMPosition
+    public var orientation:FMOrientation
+    public var confidence = ""
     
     // Extracts the position and orientation from an ARKit camera transform matrix and converts
     // from ARKit coordinates (right-handed, Y Up) to OpenCV coordinates (right-handed, Y Down)
@@ -30,7 +30,7 @@ public struct FMPose:Codable {
         self.confidence = confidence
     }
 
-    init() {
+    public init() {
         self.position = FMPosition(0.0, 0.0, 0.0)
         self.orientation = FMOrientation(fromEuler: 0, y: 0, z: 0)
     }
@@ -51,10 +51,39 @@ public struct FMPose:Codable {
         return FMPose(position: resultPosition, orientation: resultOrientation)
     }
     
+    // TODO is this even correct? see implementation below
     func diffPose(toPose: FMPose) -> FMPose {
         let diffPosition = self.position - toPose.position
         let diffOrientation = self.orientation.difference(to: toPose.orientation)
         return FMPose(position: diffPosition, orientation: diffOrientation)
+    }
+    
+    static func diffPose(_ anchorTransform: simd_float4x4, withRespectTo cameraTransfrom: simd_float4x4) -> FMPose {
+        // TODO rename and make generic
+        // TODO DRY
+        // TODO get rid of fromTransform constructor shenanigans
+        let anchorPose = FMPose(fromTransform: anchorTransform)
+        let cameraPose = FMPose(fromTransform: cameraTransfrom)
+        
+        var anchorTransformMatrix = simd_float4x4(anchorPose.orientation.toSimdQuaternion().normalized)
+        var cameraTransformMatrix = simd_float4x4(cameraPose.orientation.toSimdQuaternion().normalized)
+        
+        anchorTransformMatrix.columns.3.x = anchorPose.position.x
+        anchorTransformMatrix.columns.3.y = anchorPose.position.y
+        anchorTransformMatrix.columns.3.z = anchorPose.position.z
+        
+        cameraTransformMatrix.columns.3.x = cameraPose.position.x
+        cameraTransformMatrix.columns.3.y = cameraPose.position.y
+        cameraTransformMatrix.columns.3.z = cameraPose.position.z
+        
+        let result = cameraTransformMatrix.inverse * anchorTransformMatrix
+        
+        // all this to skip the FMPose fromTransform constructor which expects ARKit coordinates
+        let resultPoseQuaternion = simd_quatf(result)
+        let resultPoseOrientation = FMOrientation(fromQuaternion: resultPoseQuaternion.real, x: resultPoseQuaternion.vector.x, y: resultPoseQuaternion.vector.y, z: resultPoseQuaternion.vector.z)
+        let resultPosePosition = FMPosition(result.columns.3.x, result.columns.3.y, result.columns.3.z)
+        
+        return FMPose(position: resultPosePosition, orientation: resultPoseOrientation)
     }
     
     mutating func applyTransform(pose: FMPose) {

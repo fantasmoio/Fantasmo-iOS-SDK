@@ -59,7 +59,7 @@ open class FMLocationManager {
     public private(set) var state = State.stopped
     
     private var anchorFrame: ARFrame?
-    public var anchorDelta = simd_float4x4(1)
+
     private var delegate: FMLocationDelegate?
     private var token: String?
     
@@ -116,6 +116,16 @@ open class FMLocationManager {
     public func unsetAnchor() {
         debugPrint("FMLocationManager:unsetAnchor")
         self.anchorFrame = nil
+    }
+    
+
+    /// Calculate the FMPose difference of the anchor frame with respect to the given frame
+    public func anchorDeltaPoseForFrame(_ frame: ARFrame) -> FMPose {
+        if let anchorFrame = anchorFrame {
+            return FMPose.diffPose(anchorFrame.camera.transform, withRespectTo: frame.camera.transform)
+        } else {
+            return FMPose()
+        }
     }
     
     /// Check to see if a given zone is in the provided radius
@@ -327,12 +337,19 @@ open class FMLocationManager {
                                       withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                       withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
         
-        return ([
+        var params = [
             "intrinsics" : intrinsics.toJson(),
-            "gravity"    : pose.orientation.toJson(),
-            "capturedAt" :(NSDate().timeIntervalSince1970),
+            "gravity" : pose.orientation.toJson(),
+            "capturedAt" : (NSDate().timeIntervalSince1970),
             "uuid" : UUID().uuidString,
             "coordinate": "{\"longitude\" : \(currentLocation.coordinate.longitude), \"latitude\": \(currentLocation.coordinate.latitude)}"
-        ] as [String : Any])
+        ] as [String : Any]
+        
+        // calculate and send reference frame if anchoring
+        if anchorFrame != nil {
+            params["referenceFrame"] = anchorDeltaPoseForFrame(frame).toJson()
+        }
+        
+        return params
     }
 }

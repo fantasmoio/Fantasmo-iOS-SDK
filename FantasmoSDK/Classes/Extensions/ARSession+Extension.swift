@@ -51,7 +51,7 @@ extension ARSession : ARSessionDelegate {
         ARSession.lastFrame = frame
         
         //let pitch = frame.camera.eulerAngles[0]
-         
+          
         if FMLocationManager.shared.state == .localizing {
             FMLocationManager.shared.localize(frame: frame)
         }

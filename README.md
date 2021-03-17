@@ -175,6 +175,8 @@ To return to device localization, simply unset the anchor point.
 FMLocationManager.shared.unsetAnchor()
 ```
 
+Anchoring relies on ARKit and is therefore supported by iPhone SE, iPhone 6s, iPhone 6s Plus and newer.
+
 ### Radius Check
 
 In order to check if a zone, like parking, is within a given radius of the current device location (as provided by CoreLocation) before attempting to localize, use the `isZoneInRadius` method. The method takes a closure which provides a boolean result.

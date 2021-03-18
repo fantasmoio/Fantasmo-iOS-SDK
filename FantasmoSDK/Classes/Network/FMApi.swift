@@ -12,7 +12,7 @@ protocol FMApiDelegate {
     var isSimulation: Bool { get }
     var simulationZone: FMZone.ZoneType  { get }
     var token: String? { get }
-    var anchorFrame: ARFrame?
+    var anchorFrame: ARFrame? { get }
 }
 
 class FMApi {
@@ -23,18 +23,18 @@ class FMApi {
     typealias LocalizationResult = (CLLocation, [FMZone]) -> Void
     
     enum FMApiError: Error {
-//        case invalidFrame
+        case invalidFrameImage
     }
     
     func localize(frame: ARFrame,
                   completion: LocalizationResult,
                   error: (Error) -> Void) {
         
-        var data = getgetImageData(frame: frame)
-        var params = getParams(frame: frame,
-                               deviceOrientation: deviceOrientation,
-                               interfaceOrientation: interfaceOrientation,
-                               currentLocation: FMConfiguration.Location.current)
+        guard let data = getImageData(frame: frame) else {
+            error(FMApiError.invalidFrameImage)
+            return
+        }
+        let params = getParams(frame: frame)
         
         let completion: FMRestClient.RestResult = { code, response in
   
@@ -52,6 +52,22 @@ class FMApi {
                         completion: @escaping (Bool) -> Void,
                         error: (Error) -> Void) {
         
+        let coordinate = FMConfiguration.Location.current.coordinate
+        
+        let params = [
+            "radius": String(radius),
+            "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
+        ]
+        
+        let completion: FMRestClient.RestResult = { code, response in
+            
+        }
+        
+        let error: FMRestClient.RestError = { error in
+            
+        }
+        
+        FMRestClient.post(params, token: delegate?.token, completion: completion, error: error)
     }
     
     /// Generate the localize HTTP request parameters.
@@ -60,6 +76,7 @@ class FMApi {
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
     func getParams(frame: ARFrame) -> [String : String] {
+        
         // mock if simulation
         guard delegate == nil || !delegate!.isSimulation else {
             return MockData.params(forZone: delegate!.simulationZone)
@@ -98,8 +115,8 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Prepared localization image
-    
     func getImageData(frame: ARFrame) -> Data? {
+        
         // mock if simulation
         guard delegate == nil || !delegate!.isSimulation else {
             return MockData.imageData(forZone: delegate!.simulationZone)

@@ -119,10 +119,13 @@ open class FMLocationManager {
     }
     
 
-    /// Calculate the FMPose difference of the anchor frame with respect to the given frame
+    /// Calculate the FMPose difference of the anchor frame with respect to the given frame.
+    /// This method is just here for SDK client debugging purposes.
+    /// It is not part of the localization flow.
+    /// - Parameter frame: the current ARFrame
     public func anchorDeltaPoseForFrame(_ frame: ARFrame) -> FMPose {
         if let anchorFrame = anchorFrame {
-            return FMPose.diffPose(anchorFrame.camera.transform, withRespectTo: frame.camera.transform)
+            return anchorFrame.poseWithRespectTo(frame)
         } else {
             return FMPose()
         }

@@ -10,39 +10,39 @@ import UIKit
 
 open class MockData {
 
-
-    /// Generate a simulated localization query using stored images from
-    /// a known location.
+    /// Return a simulated localization images from a known location.
     ///
     /// - Parameters:
     ///   - zone: Type of semantic zone to simulate.
-    ///   - isValid: True if attempt should succeed. False if attempt should fail.
     /// - Returns: Parameters and encoded image data for query.
-    public static func simulateLocalizeRequest(forZone zone: FMZone.ZoneType,
-                                               isValid: Bool) -> (params: [String : Any]?, image: Data?) {
-        var params: [String: Any]?
+    public static func imageData(forZone zone: FMZone.ZoneType) -> Data {
         var jpegData: Data?
-
+        
         switch zone {
         case .parking:
-            params = MockData.parkingMockParameters
             jpegData = UIImage(named: "inParking", in:Bundle(for:MockData.self), compatibleWith: nil)?.toJpeg(compressionQuality: FMUtility.Constants.JpegCompressionRatio)
         default:
-            params = MockData.streetMockParameters
             jpegData = UIImage(named: "onStreet", in:Bundle(for:MockData.self), compatibleWith: nil)?.toJpeg(compressionQuality: FMUtility.Constants.JpegCompressionRatio)
         }
-
-        guard jpegData != nil else {
-            debugPrint("Error: Could not convert frame to JPEG.")
-            return (nil, nil)
-        }
-
-        return (params, jpegData)
+        
+        return jpegData ?? Data()
     }
 
-
+    /// Generate a simulated localization query params from a known location.
+    ///
+    /// - Parameters:
+    ///   - zone: Type of semantic zone to simulate.
+    /// - Returns: Parameters for query.
+    public static func params(forZone zone: FMZone.ZoneType) -> [String : String] {
+        switch zone {
+        case .parking:
+            return Self.parkingMockParameters
+        default:
+            return Self.streetMockParameters
+        }
+    }
     
-    private static var parkingMockParameters: [String: Any] {
+    private static var parkingMockParameters: [String: String] {
 
         let intrinsic = ["fx": 1211.782470703125,
                          "fy": 1211.9073486328125,
@@ -59,10 +59,10 @@ open class MockData {
                 "gravity" : gravity.json,
                 "capturedAt" :(NSDate().timeIntervalSince1970),
                 "uuid" : "C6241E04-974A-4131-8B36-044A11E2C7F0",
-                "coordinate": coordinate.json] as [String : Any]
+                "coordinate": coordinate.json] as [String : String]
     }
 
-    private static var streetMockParameters: [String: Any] {
+    private static var streetMockParameters: [String: String] {
 
         let intrinsic = ["fx": 1036.486083984375,
                          "fy": 1036.486083984375,
@@ -79,6 +79,6 @@ open class MockData {
                 "gravity" : gravity.json,
                 "capturedAt" :(NSDate().timeIntervalSince1970),
                 "uuid" : "A87E55CB-0649-4F87-A42F-8A33970F421E",
-                "coordinate": coordinate.json] as [String : Any]
+                "coordinate": coordinate.json] as [String : String]
     }
 }

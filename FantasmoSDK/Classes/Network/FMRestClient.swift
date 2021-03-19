@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// REST client for communication wiht CPS server
+/// Only supports POST with multipart-form data, as that's what the server needs
 struct FMRestClient {
     
     enum RestClientError: Error {
@@ -15,6 +17,8 @@ struct FMRestClient {
     
     typealias RestResult = (Int?, Data?) -> Void
     typealias RestError = (Error) -> Void
+    
+    // MARK: - internal methods
     
     static func post(_ endpoint: FMApiRouter.ApiEndpoint,
                      parameters: [String : String],
@@ -44,6 +48,8 @@ struct FMRestClient {
         Self.post(data: data, with: request, completion: completion, error: error)
     }
     
+    // MARK: - private methods
+    
     private static func post(data: Data, with request: URLRequest, completion: RestResult? = nil, error: RestError? = nil) {
 
         let session = URLSession.shared
@@ -67,6 +73,8 @@ struct FMRestClient {
         return request
     }
 }
+
+// MARK: - private Data extension
 
 /// Multipart form extension
 private extension Data {

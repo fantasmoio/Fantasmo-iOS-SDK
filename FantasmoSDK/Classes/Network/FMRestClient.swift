@@ -9,31 +9,6 @@ import Foundation
 
 struct FMRestClient {
     
-    static let crlf = "\r\n"
-    static let crlf2x = crlf + crlf
-    static let boundary = "ce8f07c0c2d14f0bbb1e3a96994e0354"
-    
-    struct BoundaryGenerator {
-        enum BoundaryType {
-            case initial, middle, final
-        }
-        
-        static func boundaryData(_ type: BoundaryType) -> Data {
-            let boundaryText: String
-            
-            switch type {
-            case .initial:
-                boundaryText = "--\(boundary)\(crlf)"
-            case .middle:
-                boundaryText = "\(crlf)--\(boundary)\(crlf)"
-            case .final:
-                boundaryText = "\(crlf)--\(boundary)--\(crlf)"
-            }
-            
-            return Data(boundaryText.utf8)
-        }
-    }
-    
     enum RestClientError: Error {
         case badResponse
     }
@@ -88,12 +63,36 @@ struct FMRestClient {
         if let token = token {
             request.setValue(token, forHTTPHeaderField: "Fantasmo-Key")
         }
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue("multipart/form-data; boundary=\(Data.boundary)", forHTTPHeaderField: "Content-Type")
         return request
     }
 }
 
-extension Data {
+/// Multipart form extension
+private extension Data {
+    static let crlf = "\r\n"
+    static let crlf2x = crlf + crlf
+    static let boundary = "ce8f07c0c2d14f0bbb1e3a96994e0354"
+
+    enum BoundaryType {
+        case initial, middle, final
+    }
+    
+    static func boundaryData(_ type: BoundaryType) -> Data {
+        let boundaryText: String
+        
+        switch type {
+        case .initial:
+            boundaryText = "--\(boundary)\(crlf)"
+        case .middle:
+            boundaryText = "\(crlf)--\(boundary)\(crlf)"
+        case .final:
+            boundaryText = "\(crlf)--\(boundary)--\(crlf)"
+        }
+        
+        return Data(boundaryText.utf8)
+    }
+    
     mutating func appendParameters(_ params: [String : String]) {
         for (key, value) in params {
             self.appendParameter(key, value: value)
@@ -101,19 +100,19 @@ extension Data {
     }
     
     mutating func appendParameter(_ name: String, value: String) {
-        self.append(FMRestClient.BoundaryGenerator.boundaryData(.middle))
-        self.append("Content-Disposition: form-data; name=\"\(name)\"\(FMRestClient.crlf2x)".data(using: .utf8)!)
+        self.append(Self.boundaryData(.middle))
+        self.append("Content-Disposition: form-data; name=\"\(name)\"\(Self.crlf2x)".data(using: .utf8)!)
         self.append(value.data(using: .utf8)!)
     }
     
     mutating func appendImage(_ imageData: Data) {
-        self.append(FMRestClient.BoundaryGenerator.boundaryData(.middle))
-        self.append("Content-Disposition: form-data; \"name=image\"; filename=\"image.jpg\"\(FMRestClient.crlf2x)".data(using: .utf8)!)
+        self.append(Self.boundaryData(.middle))
+        self.append("Content-Disposition: form-data; \"name=image\"; filename=\"image.jpg\"\(Self.crlf2x)".data(using: .utf8)!)
         self.append("Content-Type: \"image/jpeg\"".data(using: .utf8)!)
         self.append(imageData)
     }
     
     mutating func appendFinalBoundary() {
-        self.append(FMRestClient.BoundaryGenerator.boundaryData(.final))
+        self.append(Self.boundaryData(.final))
     }
 }

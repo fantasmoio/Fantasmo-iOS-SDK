@@ -43,7 +43,28 @@ class FMApi {
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, response in
-            guard code == 200, let response = response else {
+            
+            // handle invalid response
+            guard let code = code, let response = response else {
+                error(ApiError.invalidServerResponse)
+                return
+            }
+            
+            // handle valid but erroneous response
+            guard !(400...499 ~= code) else {
+                do {
+                    let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: response)
+                    let customError = FMError.custom(errorDescription: errorResponse.message)
+                    error(customError)
+                } catch let jsonError {
+                    print("JSON error: \(jsonError.localizedDescription)")
+                    error(ApiError.invalidServerResponse)
+                }
+                return
+            }
+            
+            // ensure non-error response
+            guard code == 200 else {
                 error(ApiError.invalidServerResponse)
                 return
             }
@@ -115,7 +136,7 @@ class FMApi {
                 }
             } catch let jsonError {
                 print("JSON error: \(jsonError.localizedDescription)")
-                error(jsonError)
+                error(ApiError.invalidServerResponse)
             }
         }
         

@@ -10,6 +10,7 @@ import Foundation
 struct FMRestClient {
     
     static let crlf = "\r\n"
+    static let crlf2x = crlf + crlf
     static let boundary = "ce8f07c0c2d14f0bbb1e3a96994e0354"
     
     struct BoundaryGenerator {
@@ -64,7 +65,7 @@ struct FMRestClient {
         var data = Data()
         data.appendParameters(parameters)
         data.appendFinalBoundary()
-        //TODO: append image
+        data.append(imageData)
         Self.post(data: data, with: request, completion: completion, error: error)
     }
     
@@ -101,8 +102,15 @@ extension Data {
     
     mutating func appendParameter(_ name: String, value: String) {
         self.append(FMRestClient.BoundaryGenerator.boundaryData(.middle))
-        self.append("Content-Disposition: form-data; name=\"\(name)\"\(FMRestClient.crlf)\(FMRestClient.crlf)".data(using: .utf8)!)
+        self.append("Content-Disposition: form-data; name=\"\(name)\"\(FMRestClient.crlf2x)".data(using: .utf8)!)
         self.append(value.data(using: .utf8)!)
+    }
+    
+    mutating func appendImage(_ imageData: Data) {
+        self.append(FMRestClient.BoundaryGenerator.boundaryData(.middle))
+        self.append("Content-Disposition: form-data; \"name=image\"; filename=\"image.jpg\"\(FMRestClient.crlf2x)".data(using: .utf8)!)
+        self.append("Content-Type: \"image/jpeg\"".data(using: .utf8)!)
+        self.append(imageData)
     }
     
     mutating func appendFinalBoundary() {

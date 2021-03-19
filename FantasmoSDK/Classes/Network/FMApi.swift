@@ -24,6 +24,7 @@ class FMApi {
     
     enum ApiError: Error {
         case invalidFrameImage
+        case invalidServerResponse
     }
     
     func localize(frame: ARFrame,
@@ -56,7 +57,7 @@ class FMApi {
     func isZoneInRadius(_ zone: FMZone.ZoneType,
                         radius: Int,
                         completion: @escaping (Bool) -> Void,
-                        error: (Error) -> Void) {
+                        error: @escaping (Error) -> Void) {
         
         let coordinate = FMConfiguration.Location.current.coordinate
         
@@ -65,20 +66,35 @@ class FMApi {
             "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
         ]
         
-        let completion: FMRestClient.RestResult = { code, response in
-            
+        let postCompletion: FMRestClient.RestResult = { code, data in
+            guard let data = data else {
+                error(ApiError.invalidServerResponse)
+                return
+            }
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, String>
+                print(json ?? "JSON error")
+                if let result = json?["result"], result == "true" {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            } catch let jsonError {
+                print("JSON error: \(jsonError.localizedDescription)")
+                error(jsonError)
+            }
         }
         
-        let error: FMRestClient.RestError = { error in
-            
+        let postError: FMRestClient.RestError = { errorResponse in
+            error(errorResponse)
         }
         
         FMRestClient.post(
             .zoneInRadius,
             parameters: params,
             token: delegate?.token,
-            completion: completion,
-            error: error)
+            completion: postCompletion,
+            error: postError)
     }
     
     /// Generate the localize HTTP request parameters.

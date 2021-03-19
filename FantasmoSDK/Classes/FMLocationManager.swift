@@ -44,7 +44,7 @@ extension FMLocationDelegate {
 
 
 /// Start and stop the delivery of camera-based location events.
-open class FMLocationManager {
+open class FMLocationManager: FMApiDelegate {
     
     public enum State {
         case stopped        // doing nothing
@@ -58,10 +58,10 @@ open class FMLocationManager {
     public static let shared = FMLocationManager()
     public private(set) var state = State.stopped
     
-    private var anchorFrame: ARFrame?
+    internal var anchorFrame: ARFrame?
 
     private var delegate: FMLocationDelegate?
-    private var token: String?
+    internal var token: String?
     
     /// When in simulation mode, mock data is used from the assets directory instead of the live camera feed.
     /// This mode is useful for implementation and debugging.
@@ -86,6 +86,8 @@ open class FMLocationManager {
         
         self.token = accessToken
         self.delegate = delegate
+        
+        FMApi.shared.delegate = self
     }
     
     
@@ -137,72 +139,10 @@ open class FMLocationManager {
     /// - Parameter radius: search radius in meters
     /// - Parameter completion: closure that consumes boolean server result
     public func isZoneInRadius(_ zone: FMZone.ZoneType, radius: Int, completion: @escaping (Bool)->Void) {
-        // TODO rewrite networking layer to remove dependencies
-        // as FMNetworkManager does not support multipart forms without an image
-        // and no point in adding it now, as we are removing AlamoFire shortly
-        // TODO switch based on zone type
-        // TODO url should be dynamic, based on build scheme"
-        
-        let session = URLSession.shared
-        let url = URL(string: "https://api.fantasmo.io/v1/parking.in.radius")!
-        
-        // build request
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue(self.token, forHTTPHeaderField: "Fantasmo-Key")
-        let boundary = UUID().uuidString
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        
-        // prepare payload
-        
-        let fieldName1 = "radius"
-        let fieldValue1 = radius
-        
-        let coordinate = FMConfiguration.Location.current.coordinate
-        
-        let fieldName2 = "coordinate"
-        let fieldValue2 = "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}"
-        
-        // package fields as Data
-        
-        var data = Data()
-        
-        data.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-        data.append("Content-Disposition: form-data; name=\"\(fieldName1)\"\r\n\r\n".data(using: .utf8)!)
-        data.append("\(fieldValue1)".data(using: .utf8)!)
-        
-        data.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-        data.append("Content-Disposition: form-data; name=\"\(fieldName2)\"\r\n\r\n".data(using: .utf8)!)
-        data.append("\(fieldValue2)".data(using: .utf8)!)
-        
-        // End the raw http request data, note that there is 2 extra dash ("-") at the end, this is to indicate the end of the data
-        // According to the HTTP 1.1 specification https://tools.ietf.org/html/rfc7230
-        data.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
-         
-        // set up task and its completion
-        session.uploadTask(with: request, from: data, completionHandler: { data, response, error in
-            guard let data = data, let response = response as? HTTPURLResponse else {
-                print("no data")
-                completion(false)
-                return
-            }
-            
-            print("status: \(response.statusCode)")
-            print("data: \(data)")
-            
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, String>
-                print(json ?? "JSON error")
-                if let result = json?["result"], result == "true" {
-                    completion(true)
-                } else {
-                    completion(false)
-                }
-            } catch {
-                print("JSON error: \(error.localizedDescription)")
-                completion(false)
-            }
-        }).resume()
+        FMApi.shared.isZoneInRadius(zone, radius: radius, completion: completion) { error in
+            //TODO: handle errors
+            print(error)
+        }
     }
     
     

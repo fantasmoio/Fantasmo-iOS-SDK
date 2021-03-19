@@ -160,138 +160,28 @@ open class FMLocationManager: FMApiDelegate {
         debugPrint("FMLocationManager:localize called with simulation: \(isSimulation)")
         self.state = .uploading
         
-        let interfaceOrientation = UIApplication.shared.statusBarOrientation
-        let deviceOrientation = UIDevice.current.orientation
-        
-        DispatchQueue.global(qos: .background).async {
-            var localizeParams: [String : Any]?
-            var imageData: Data?
+        // set up completion closure
+        let localizeCompletion: FMApi.LocalizationResult = { location, zones in
+            self.delegate?.locationManager(didUpdateLocation: location, withZones: zones)
             
-            // Use the mock data instead of the ARFrame if we are simulating
-            if self.isSimulation {
-                let mockData = MockData.simulateLocalizeRequest(forZone: self.simulationZone,
-                                                                isValid: true)
-                localizeParams = mockData.params
-                imageData = mockData.image
-            } else {
-                localizeParams = self.getLocalizeParams(frame: frame,
-                                                  deviceOrientation: deviceOrientation,
-                                                  interfaceOrientation: interfaceOrientation,
-                                                  currentLocation: FMConfiguration.Location.current)
-                imageData = FMUtility.toJpeg(fromPixelBuffer: frame.capturedImage,
-                                             withDeviceOrientation: deviceOrientation)
-            }
-            
-            guard let parameters = localizeParams else {
-                debugPrint("FMLocationManager:didFailWithError localizeParams")
-                self.delegate?.locationManager(didFailWithError: FMError.custom(errorDescription: "Invalid request parameters") as Error, errorMetadata: nil)
-                return
-            }
-            
-            guard let image = imageData else {
-                debugPrint("FMLocationManager:didFailWithError imageData")
-                self.delegate?.locationManager(didFailWithError: FMError.custom(errorDescription: "Invalid image frame") as Error, errorMetadata: nil)
-                return
-            }
-            
-            debugPrint("FMLocationManager:uploadImage")
-            FMNetworkManager.uploadImage(url: FMConfiguration.Server.routeUrl,
-                                         token: self.token,
-                                         parameters: parameters,
-                                         jpegData: image, onCompletion: { (code, response) in
-                                            
-                                            if self.state != .stopped {
-                                                self.state = .localizing
-                                            }
-            
-                                            if let response = response, let code = code {
-                                                debugPrint("FMLocationManager:uploadImage response: (\(code)) \(String(data: response, encoding: .utf8)!)")
-                                                do {
-                                                    let decoder = JSONDecoder()
-                                                    
-                                                    switch code {
-                                                    case 200:
-                                                        let localizeResponse = try decoder.decode(LocalizeResponse.self, from: response)
-                                                        let cpsLocation = localizeResponse.location?.coordinate?.getLocation()
-            
-                                                        guard let location = cpsLocation else {
-                                                            debugPrint("FMLocationManager:uploadImage didFailWithError cpsLocation")
-                                                            let error: Error = FMError.custom(errorDescription: "Location not found")
-                                                            self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
-                                                            return
-                                                        }
-                                                    
-                                                        var zones: [FMZone]?
-                                                        if let geofences = localizeResponse.geofences {
-                                                            zones = geofences.map {
-                                                                FMZone(zoneType: FMZone.ZoneType(rawValue: $0.elementType.lowercased()) ?? .unknown, id: $0.elementID.description)
-                                                            }
-                                                        }
-
-                                                        self.delegate?.locationManager(didUpdateLocation: location, withZones: zones)
-                                                    default:
-                                                        let errorResponse = try decoder.decode(ErrorResponse.self, from: response)
-                                                        debugPrint("FMLocationManager:uploadImage didFailWithError: \(errorResponse.message ?? "Unkown error")")
-                                                        let error: Error = FMError.custom(errorDescription: errorResponse.message)
-                                                        self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
-                                                    }
-                                                    
-                                                } catch {
-                                                    debugPrint("FMLocationManager:uploadImage didFailWithError \(error)")
-                                                }
-                                            }
-                                            else {
-                                                debugPrint("FMLocationManager:uploadImage response not received.")
-                                            }
-                                            
-                                         })
-            { (error) in
-                if self.state != .stopped {
-                    self.state = .localizing
-                }
-                debugPrint("FMLocationManager:uploadImage didFailWithError \(String(describing: error))")
-                let error: Error = FMError.custom(errorDescription: error?.localizedDescription)
-                self.delegate?.locationManager(didFailWithError: error, errorMetadata:frame)
+            if self.state != .stopped {
+                self.state = .localizing
             }
         }
-    }
-    
-    
-    /// Generate the localize HTTP request parameters. Can fail if the jpeg
-    /// conversion throws an exception.
-    ///
-    /// - Parameters:
-    ///   - frame: Frame to localize
-    ///   - deviceOrientation: Current device orientation for computing intrinsics
-    ///   - interfaceOrientation: Current interface orientation for computing intrinsics
-    ///   - currentLocation: Current geo location for coarse estimate
-    /// - Returns: Formatted
-    func getLocalizeParams(frame: ARFrame,
-                           deviceOrientation: UIDeviceOrientation,
-                           interfaceOrientation: UIInterfaceOrientation,
-                           currentLocation: CLLocation) -> [String : Any]? {
         
-        let pose = FMPose(fromTransform: frame.camera.transform)
-        let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
-                                      atScale: Float(FMUtility.Constants.ImageScaleFactor),
-                                      withStatusBarOrientation: interfaceOrientation,
-                                      withDeviceOrientation: deviceOrientation,
-                                      withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
-                                      withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
-        
-        var params = [
-            "intrinsics" : intrinsics.toJson(),
-            "gravity" : pose.orientation.toJson(),
-            "capturedAt" : (NSDate().timeIntervalSince1970),
-            "uuid" : UUID().uuidString,
-            "coordinate": "{\"longitude\" : \(currentLocation.coordinate.longitude), \"latitude\": \(currentLocation.coordinate.latitude)}"
-        ] as [String : Any]
-        
-        // calculate and send reference frame if anchoring
-        if anchorFrame != nil {
-            params["referenceFrame"] = anchorDeltaPoseForFrame(frame).toJson()
+        // set up error closure
+        let localizeError: FMApi.ErrorResult = { error in
+//            let errorResponse = try decoder.decode(ErrorResponse.self, from: response)
+//            debugPrint("FMLocationManager:uploadImage didFailWithError: \(errorResponse.message ?? "Unkown error")")
+//            let error: Error = FMError.custom(errorDescription: errorResponse.message)
+//            self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
+            
+            if self.state != .stopped {
+                self.state = .localizing
+            }
         }
         
-        return params
+        // send request
+        FMApi.shared.localize(frame: frame, completion: localizeCompletion, error: localizeError)
     }
 }

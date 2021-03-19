@@ -22,7 +22,7 @@ class FMApi {
     
     typealias LocalizationResult = (CLLocation, [FMZone]) -> Void
     
-    enum FMApiError: Error {
+    enum ApiError: Error {
         case invalidFrameImage
     }
     
@@ -31,7 +31,7 @@ class FMApi {
                   error: (Error) -> Void) {
         
         guard let data = getImageData(frame: frame) else {
-            error(FMApiError.invalidFrameImage)
+            error(ApiError.invalidFrameImage)
             return
         }
         let params = getParams(frame: frame)
@@ -44,7 +44,13 @@ class FMApi {
             
         }
         
-        FMRestClient.post(params, imageData: data, token: delegate?.token, completion: completion, error: error)
+        FMRestClient.post(
+            .localize,
+            parameters: params,
+            imageData: data,
+            token: delegate?.token,
+            completion: completion,
+            error: error)
     }
     
     func isZoneInRadius(_ zone: FMZone.ZoneType,
@@ -67,7 +73,12 @@ class FMApi {
             
         }
         
-        FMRestClient.post(params, token: delegate?.token, completion: completion, error: error)
+        FMRestClient.post(
+            .zoneInRadius,
+            parameters: params,
+            token: delegate?.token,
+            completion: completion,
+            error: error)
     }
     
     /// Generate the localize HTTP request parameters.

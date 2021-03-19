@@ -228,7 +228,6 @@ open class FMLocationManager: FMApiDelegate {
                                                             }
                                                         }
 
-                                                        // TODO - Transform to anchor position if set
                                                         self.delegate?.locationManager(didUpdateLocation: location, withZones: zones)
                                                     default:
                                                         let errorResponse = try decoder.decode(ErrorResponse.self, from: response)

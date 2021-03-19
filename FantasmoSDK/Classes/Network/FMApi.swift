@@ -20,60 +20,94 @@ class FMApi {
     public static let shared = FMApi()
     public var delegate: FMApiDelegate?
     
-    typealias LocalizationResult = (CLLocation, [FMZone]) -> Void
+    typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
+    typealias RadiusResult = (Bool) -> Void
+    typealias ErrorResult = (Error) -> Void
     
     enum ApiError: Error {
         case invalidFrameImage
         case invalidServerResponse
+        case locationNotFound
     }
     
     func localize(frame: ARFrame,
-                  completion: LocalizationResult,
-                  error: (Error) -> Void) {
+                  completion: @escaping LocalizationResult,
+                  error: @escaping ErrorResult) {
         
+        // set up request parameters
         guard let data = getImageData(frame: frame) else {
             error(ApiError.invalidFrameImage)
             return
         }
         let params = getParams(frame: frame)
         
-        let completion: FMRestClient.RestResult = { code, response in
-  
-        }
-        
-        let error: FMRestClient.RestError = { error in
+        // set up completion closure
+        let postCompletion: FMRestClient.RestResult = { code, response in
+            guard code == 200, let response = response else {
+                error(ApiError.invalidServerResponse)
+                return
+            }
             
+            do {
+                // decode server response
+                let localizeResponse = try JSONDecoder().decode(LocalizeResponse.self, from: response)
+                
+                // get location
+                guard let location = localizeResponse.location?.coordinate?.getLocation() else {
+                    error(ApiError.locationNotFound)
+                    return
+                }
+                
+                // get zones
+                var zones: [FMZone]?
+                if let geofences = localizeResponse.geofences {
+                    zones = geofences.map {
+                        FMZone(zoneType: FMZone.ZoneType(rawValue: $0.elementType.lowercased()) ?? .unknown, id: $0.elementID.description)
+                    }
+                }
+                
+                completion(location, zones)
+            } catch {
+                
+            }
         }
         
+        // set up error closure
+        let postError: FMRestClient.RestError = { errorResponse in
+            error(errorResponse)
+        }
+        
+        // send request
         FMRestClient.post(
             .localize,
             parameters: params,
             imageData: data,
             token: delegate?.token,
-            completion: completion,
-            error: error)
+            completion: postCompletion,
+            error: postError)
     }
     
     func isZoneInRadius(_ zone: FMZone.ZoneType,
                         radius: Int,
-                        completion: @escaping (Bool) -> Void,
-                        error: @escaping (Error) -> Void) {
+                        completion: @escaping RadiusResult,
+                        error: @escaping ErrorResult) {
         
+        // set up request parameters
         let coordinate = FMConfiguration.Location.current.coordinate
-        
         let params = [
             "radius": String(radius),
             "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
         ]
         
+        // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
             guard let data = data else {
                 error(ApiError.invalidServerResponse)
                 return
             }
             do {
+                //TODO: user JSONDecoder
                 let json = try JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, String>
-                print(json ?? "JSON error")
                 if let result = json?["result"], result == "true" {
                     completion(true)
                 } else {
@@ -85,10 +119,12 @@ class FMApi {
             }
         }
         
+        // set up error closure
         let postError: FMRestClient.RestError = { errorResponse in
             error(errorResponse)
         }
         
+        // send request
         FMRestClient.post(
             .zoneInRadius,
             parameters: params,

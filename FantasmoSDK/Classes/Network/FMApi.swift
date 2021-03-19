@@ -25,8 +25,8 @@ class FMApi {
     typealias ErrorResult = (Error) -> Void
     
     enum ApiError: Error {
-        case invalidFrameImage
-        case invalidServerResponse
+        case invalidImage
+        case invalidResponse
         case locationNotFound
     }
     
@@ -36,7 +36,7 @@ class FMApi {
         
         // set up request parameters
         guard let data = getImageData(frame: frame) else {
-            error(ApiError.invalidFrameImage)
+            error(ApiError.invalidImage)
             return
         }
         let params = getParams(frame: frame)
@@ -46,7 +46,7 @@ class FMApi {
             
             // handle invalid response
             guard let code = code, let response = response else {
-                error(ApiError.invalidServerResponse)
+                error(ApiError.invalidResponse)
                 return
             }
             
@@ -58,14 +58,14 @@ class FMApi {
                     error(customError)
                 } catch let jsonError {
                     print("JSON error: \(jsonError.localizedDescription)")
-                    error(ApiError.invalidServerResponse)
+                    error(ApiError.invalidResponse)
                 }
                 return
             }
             
             // ensure non-error response
             guard code == 200 else {
-                error(ApiError.invalidServerResponse)
+                error(ApiError.invalidResponse)
                 return
             }
             
@@ -123,7 +123,7 @@ class FMApi {
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
             guard let data = data else {
-                error(ApiError.invalidServerResponse)
+                error(ApiError.invalidResponse)
                 return
             }
             do {
@@ -136,7 +136,7 @@ class FMApi {
                 }
             } catch let jsonError {
                 print("JSON error: \(jsonError.localizedDescription)")
-                error(ApiError.invalidServerResponse)
+                error(ApiError.invalidResponse)
             }
         }
         

@@ -13,7 +13,7 @@ struct FMApiRouter {
         case zoneInRadius = "parking.in.radius"
     }
     
-    static var apiBaseUrl: String {
+    private static var apiBaseUrl: String {
         get {
             if let override = FMConfiguration.stringForInfoKey(.apiBaseUrl) {
                 print("FMConfiguration using url override: \(override)")

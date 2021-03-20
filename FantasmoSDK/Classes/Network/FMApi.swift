@@ -31,6 +31,8 @@ class FMApi {
         case locationNotFound
     }
     
+    // MARK: - internal methods
+    
     /// Localize based on the given image
     ///
     /// - Parameters:
@@ -157,12 +159,14 @@ class FMApi {
             error: postError)
     }
     
+    // MARK: - private methods
+    
     /// Generate the localize HTTP request parameters.
     ///
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    func getParams(frame: ARFrame) -> [String : String] {
+    private func getParams(frame: ARFrame) -> [String : String] {
         
         // mock if simulation
         guard delegate == nil || !delegate!.isSimulation else {
@@ -202,7 +206,7 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Prepared localization image
-    func getImageData(frame: ARFrame) -> Data? {
+    private func getImageData(frame: ARFrame) -> Data? {
         
         // mock if simulation
         guard delegate == nil || !delegate!.isSimulation else {

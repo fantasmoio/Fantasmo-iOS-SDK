@@ -177,7 +177,7 @@ class FMApi {
             "capturedAt" : String(NSDate().timeIntervalSince1970),
             "uuid" : UUID().uuidString,
             "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}"
-        ] as [String : String]
+        ]
         
         // calculate and send reference frame if anchoring
         if let anchorFrame = delegate?.anchorFrame {

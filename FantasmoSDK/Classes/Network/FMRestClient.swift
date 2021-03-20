@@ -43,8 +43,8 @@ struct FMRestClient {
         let request = Self.requestForEndpoint(endpoint, token: token)
         var data = Data()
         data.appendParameters(parameters)
-        data.appendFinalBoundary()
         data.append(imageData)
+        data.appendFinalBoundary()
         Self.post(data: data, with: request, completion: completion, error: error)
     }
     

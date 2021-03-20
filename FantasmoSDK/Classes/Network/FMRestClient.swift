@@ -116,7 +116,7 @@ private extension Data {
     mutating func appendImage(_ imageData: Data) {
         self.append(Self.boundaryData(.middle))
         self.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\(Self.crlf2x)".data(using: .utf8)!)
-        self.append("Content-Type: \"image/jpeg\"\(Self.crlf2x)".data(using: .utf8)!)
+        self.append("Content-Type: image/jpeg\(Self.crlf2x)".data(using: .utf8)!)
         self.append(imageData)
     }
     

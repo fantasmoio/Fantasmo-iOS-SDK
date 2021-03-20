@@ -55,10 +55,14 @@ struct FMRestClient {
         let session = URLSession.shared
         session.uploadTask(with: request, from: data, completionHandler: { data, response, taskError in
             guard let data = data, let response = response as? HTTPURLResponse else {
-                error?(FMError(RestClientError.badResponse, cause: taskError))
+                DispatchQueue.main.async {
+                    error?(FMError(RestClientError.badResponse, cause: taskError))
+                }
                 return
             }
-            completion?(response.statusCode, data)
+            DispatchQueue.main.async {
+                completion?(response.statusCode, data)
+            }
         }).resume()
     }
     

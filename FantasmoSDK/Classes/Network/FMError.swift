@@ -38,12 +38,21 @@ struct FMError: LocalizedError {
 
 extension FMError: CustomStringConvertible {
     var description: String {
-        return "Error: " + type.localizedDescription + " " + (errorDescription ?? "")
+        if let errorDescription = errorDescription {
+            return String(describing: type) + " " + errorDescription
+        } else {
+            return String(describing: type)
+        }
     }
 }
 
 extension FMError: CustomDebugStringConvertible {
     var debugDescription: String {
-        return self.description + cause.debugDescription
+        if let cause = cause {
+            return self.description + " caused by " + String(describing: cause)
+        } else {
+            return self.description
+        }
+        
     }
 }

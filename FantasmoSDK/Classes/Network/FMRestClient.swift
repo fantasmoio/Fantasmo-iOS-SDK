@@ -20,6 +20,14 @@ struct FMRestClient {
     
     // MARK: - internal methods
     
+    /// Post a query to the CPS server
+    ///
+    /// - Parameters:
+    ///   - endpoint: The API endpoint to post to
+    ///   - parameters: Dictionary of form parameters
+    ///   - token: Optional API security token
+    ///   - completion: Completion closure
+    ///   - error: Error closure
     static func post(_ endpoint: FMApiRouter.ApiEndpoint,
                      parameters: [String : String],
                      token: String?,
@@ -32,7 +40,16 @@ struct FMRestClient {
         data.appendFinalBoundary()
         Self.post(data: data, with: request, completion: completion, error: error)
     }
-    
+
+    /// Post a query with an image to the CPS server
+    ///
+    /// - Parameters:
+    ///   - endpoint: The API endpoint to post to
+    ///   - parameters: Dictionary of form parameters
+    ///   - imageData: Image as JPEG data
+    ///   - token: Optional API security token
+    ///   - completion: Completion closure
+    ///   - error: Error closure
     static func post(_ endpoint: FMApiRouter.ApiEndpoint,
                      parameters: [String : String],
                      imageData: Data,
@@ -50,6 +67,13 @@ struct FMRestClient {
     
     // MARK: - private methods
     
+    /// Does the actual work of posting to the CPS server
+    ///
+    /// - Parameters:
+    ///   - data: Multipart-form data to post
+    ///   - request: Request containing server URL, endpoint, and token
+    ///   - completion: Completion closure
+    ///   - error: Error closure
     private static func post(data: Data, with request: URLRequest, completion: RestResult? = nil, error: RestError? = nil) {
 
         let session = URLSession.shared
@@ -65,7 +89,13 @@ struct FMRestClient {
             }
         }).resume()
     }
-    
+
+    /// Generates a request that can be used for posting
+    ///
+    /// - Parameters:
+    ///   - endpoint: The API endpoint to post to
+    ///   - token: Optional API security token
+    /// - Returns: POST request containing server URL, endpoint, token header, and `multipart/from-data` header
     private static func requestForEndpoint(_ endpoint: FMApiRouter.ApiEndpoint, token: String?) -> URLRequest {
         var request = URLRequest(url: FMApiRouter.urlForEndpoint(endpoint))
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
@@ -81,6 +111,7 @@ struct FMRestClient {
 // MARK: - private Data extension
 
 /// Multipart form extension
+/// Provides methods required for preparing data for a `multipart/form-data` transaction
 private extension Data {
     static let crlf = "\r\n"
     static let crlf2x = crlf + crlf

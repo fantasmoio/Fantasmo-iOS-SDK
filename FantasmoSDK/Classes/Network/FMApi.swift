@@ -31,6 +31,12 @@ class FMApi {
         case locationNotFound
     }
     
+    /// Localize based on the given image
+    ///
+    /// - Parameters:
+    ///   - frame: The current ARFrame as given by ARSession
+    ///   - completion: Completion closure
+    ///   - error: Error closure
     func localize(frame: ARFrame,
                   completion: @escaping LocalizationResult,
                   error: @escaping ErrorResult) {
@@ -102,6 +108,14 @@ class FMApi {
             error: postError)
     }
     
+    /// Check if a given zone is within a radius of our location.
+    /// Currently only `parking` is supported.
+    ///
+    /// - Parameters:
+    ///   - zone: The zone to search for
+    ///   - radius: Radius, in meters, within which to search
+    ///   - completion: Completion closure
+    ///   - error: Error closure
     func isZoneInRadius(_ zone: FMZone.ZoneType,
                         radius: Int,
                         completion: @escaping RadiusResult,

@@ -171,8 +171,7 @@ open class FMLocationManager: FMApiDelegate {
         
         // set up error closure
         let localizeError: FMApi.ErrorResult = { error in
-//            debugPrint("FMLocationManager:uploadImage didFailWithError: \(error.message ?? "Unkown error")")
-//            let error: Error = FMError.custom(errorDescription: errorResponse.message)
+            debugPrint("FMLocationManager:localize didFailWithError: \(error)")
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
             
             if self.state != .stopped {

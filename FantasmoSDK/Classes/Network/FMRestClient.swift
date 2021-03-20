@@ -53,9 +53,9 @@ struct FMRestClient {
     private static func post(data: Data, with request: URLRequest, completion: RestResult? = nil, error: RestError? = nil) {
 
         let session = URLSession.shared
-        session.uploadTask(with: request, from: data, completionHandler: { data, response, errorResponse in
+        session.uploadTask(with: request, from: data, completionHandler: { data, response, taskError in
             guard let data = data, let response = response as? HTTPURLResponse else {
-                error?(RestClientError.badResponse)
+                error?(FMError(type: RestClientError.badResponse, cause: taskError))
                 return
             }
             completion?(response.statusCode, data)

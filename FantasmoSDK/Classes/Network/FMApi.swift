@@ -22,9 +22,10 @@ class FMApi {
     
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
     typealias RadiusResult = (Bool) -> Void
-    typealias ErrorResult = (Error) -> Void
+    typealias ErrorResult = (FMError) -> Void
     
     enum ApiError: Error {
+        case errorResponse
         case invalidImage
         case invalidResponse
         case locationNotFound
@@ -36,7 +37,7 @@ class FMApi {
         
         // set up request parameters
         guard let data = getImageData(frame: frame) else {
-            error(ApiError.invalidImage)
+            error(FMError(ApiError.invalidImage))
             return
         }
         let params = getParams(frame: frame)
@@ -46,26 +47,19 @@ class FMApi {
             
             // handle invalid response
             guard let code = code, let response = response else {
-                error(ApiError.invalidResponse)
+                error(FMError(ApiError.invalidResponse))
                 return
             }
             
             // handle valid but erroneous response
             guard !(400...499 ~= code) else {
-                do {
-                    let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: response)
-                    let customError = FMError.custom(errorDescription: errorResponse.message)
-                    error(customError)
-                } catch let jsonError {
-                    print("JSON error: \(jsonError.localizedDescription)")
-                    error(ApiError.invalidResponse)
-                }
+                error(FMError(response))
                 return
             }
             
             // ensure non-error response
             guard code == 200 else {
-                error(ApiError.invalidResponse)
+                error(FMError(ApiError.invalidResponse))
                 return
             }
             
@@ -75,7 +69,7 @@ class FMApi {
                 
                 // get location
                 guard let location = localizeResponse.location?.coordinate?.getLocation() else {
-                    error(ApiError.locationNotFound)
+                    error(FMError(ApiError.locationNotFound))
                     return
                 }
                 
@@ -88,14 +82,14 @@ class FMApi {
                 }
                 
                 completion(location, zones)
-            } catch {
-                
+            } catch let jsonError {
+                error(FMError(ApiError.invalidResponse, cause: jsonError))
             }
         }
         
         // set up error closure
         let postError: FMRestClient.RestError = { errorResponse in
-            error(errorResponse)
+            error(FMError(errorResponse))
         }
         
         // send request
@@ -123,7 +117,7 @@ class FMApi {
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
             guard let data = data else {
-                error(ApiError.invalidResponse)
+                error(FMError(ApiError.invalidResponse))
                 return
             }
             do {
@@ -135,14 +129,13 @@ class FMApi {
                     completion(false)
                 }
             } catch let jsonError {
-                print("JSON error: \(jsonError.localizedDescription)")
-                error(ApiError.invalidResponse)
+                error(FMError(ApiError.invalidResponse, cause: jsonError))
             }
         }
         
         // set up error closure
         let postError: FMRestClient.RestError = { errorResponse in
-            error(errorResponse)
+            error(FMError(errorResponse))
         }
         
         // send request

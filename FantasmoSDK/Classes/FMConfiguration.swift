@@ -29,7 +29,7 @@ internal struct FMConfiguration {
         }
     }
 
-    //TODO: move to location class
+    //TODO: move to location class after cleaning up swizzling
     /**
      Current location
      */

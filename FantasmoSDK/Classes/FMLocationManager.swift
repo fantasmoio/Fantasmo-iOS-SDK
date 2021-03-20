@@ -140,8 +140,8 @@ open class FMLocationManager: FMApiDelegate {
     /// - Parameter completion: closure that consumes boolean server result
     public func isZoneInRadius(_ zone: FMZone.ZoneType, radius: Int, completion: @escaping (Bool)->Void) {
         FMApi.shared.isZoneInRadius(zone, radius: radius, completion: completion) { error in
-            //TODO: handle errors
-            print(error)
+            // For now, clients only care if a zone was found, so an error condition can be treated as a `false` completion
+            completion(false)
         }
     }
     

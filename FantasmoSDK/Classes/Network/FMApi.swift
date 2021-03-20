@@ -49,17 +49,17 @@ class FMApi {
         let params = getParams(frame: frame)
         
         // set up completion closure
-        let postCompletion: FMRestClient.RestResult = { code, response in
+        let postCompletion: FMRestClient.RestResult = { code, data in
             
             // handle invalid response
-            guard let code = code, let response = response else {
+            guard let code = code, let data = data else {
                 error(FMError(ApiError.invalidResponse))
                 return
             }
             
             // handle valid but erroneous response
             guard !(400...499 ~= code) else {
-                error(FMError(response))
+                error(FMError(data))
                 return
             }
             
@@ -71,7 +71,7 @@ class FMApi {
             
             do {
                 // decode server response
-                let localizeResponse = try JSONDecoder().decode(LocalizeResponse.self, from: response)
+                let localizeResponse = try JSONDecoder().decode(LocalizeResponse.self, from: data)
                 
                 // get location
                 guard let location = localizeResponse.location?.coordinate?.getLocation() else {
@@ -135,13 +135,9 @@ class FMApi {
                 return
             }
             do {
-                //TODO: user JSONDecoder
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? Dictionary<String, String>
-                if let result = json?["result"], result == "true" {
-                    completion(true)
-                } else {
-                    completion(false)
-                }
+                // decode server response
+                let radiusResponse = try JSONDecoder().decode(RadiusResponse.self, from: data)
+                completion(radiusResponse.result == "true")
             } catch let jsonError {
                 error(FMError(ApiError.invalidResponse, cause: jsonError))
             }

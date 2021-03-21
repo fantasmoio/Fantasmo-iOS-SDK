@@ -11,14 +11,14 @@ import ARKit
 protocol FMApiDelegate {
     var isSimulation: Bool { get }
     var simulationZone: FMZone.ZoneType  { get }
-    var token: String? { get }
     var anchorFrame: ARFrame? { get }
 }
 
 class FMApi {
     
-    public static let shared = FMApi()
-    public var delegate: FMApiDelegate?
+    static let shared = FMApi()
+    var delegate: FMApiDelegate?
+    var token: String?
     
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
     typealias RadiusResult = (Bool) -> Void
@@ -105,7 +105,7 @@ class FMApi {
             .localize,
             parameters: params,
             imageData: data,
-            token: delegate?.token,
+            token: token,
             completion: postCompletion,
             error: postError)
     }
@@ -154,7 +154,7 @@ class FMApi {
         FMRestClient.post(
             .zoneInRadius,
             parameters: params,
-            token: delegate?.token,
+            token: token,
             completion: postCompletion,
             error: postError)
     }

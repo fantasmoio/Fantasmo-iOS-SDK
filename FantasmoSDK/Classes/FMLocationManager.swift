@@ -61,7 +61,6 @@ open class FMLocationManager: FMApiDelegate {
     internal var anchorFrame: ARFrame?
 
     private var delegate: FMLocationDelegate?
-    internal var token: String?
     
     /// When in simulation mode, mock data is used from the assets directory instead of the live camera feed.
     /// This mode is useful for implementation and debugging.
@@ -70,6 +69,7 @@ open class FMLocationManager: FMApiDelegate {
     public var simulationZone = FMZone.ZoneType.parking
     public var isConnected = false
 
+    
     // MARK: - Lifecycle
     
     private init() {}
@@ -83,13 +83,14 @@ open class FMLocationManager: FMApiDelegate {
                         delegate: FMLocationDelegate) {
         
         debugPrint("FMLocationManager connected with delegate: \(delegate)")
-        
-        self.token = accessToken
+
         self.delegate = delegate
         
+        // set up FMApi
         FMApi.shared.delegate = self
+        FMApi.shared.token = accessToken
     }
-    
+
     
     // MARK: - Public instance methods
     

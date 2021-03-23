@@ -28,23 +28,8 @@ internal struct FMConfiguration {
             return nil
         }
     }
-        
-    /**
-     API base url
-     */
-    struct Server {
-        static var routeUrl: String {
-            get {
-                if let override = FMConfiguration.stringForInfoKey(.apiBaseUrl) {
-                    print("FMConfiguration using url override: \(override)")
-                    return "http://\(override)"
-                } else {
-                    return "https://api.fantasmo.io/v1/image.localize"
-                }
-            }
-        }
-    }
-    
+
+    //TODO: move to location class after cleaning up swizzling
     /**
      Current location
      */

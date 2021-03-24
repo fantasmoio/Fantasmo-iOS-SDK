@@ -31,7 +31,7 @@ public struct FMLog {
         }
     }
     
-    var logLevel = LogLevel.error
+    var logLevel = LogLevel.warning
     
     // MARK: - Internal methods
     

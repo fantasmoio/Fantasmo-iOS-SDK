@@ -63,11 +63,12 @@ open class FMLocationManager: FMApiDelegate {
     private var delegate: FMLocationDelegate?
     
     public var isConnected = false
-    public var logLevel = FMLog.LogLevel.error {
+    public var logLevel = FMLog.LogLevel.warning {
         didSet {
             log.logLevel = logLevel
         }
     }
+
     /// When in simulation mode, mock data is used from the assets directory instead of the live camera feed.
     /// This mode is useful for implementation and debugging.
     public var isSimulation = false

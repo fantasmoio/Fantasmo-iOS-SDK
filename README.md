@@ -178,7 +178,6 @@ FMLocationManager.shared.isZoneInRadius(.parking, radius: 50) { result in
 }
 ```
 
-
 ### Simulation Mode
 
 Since it's not always possible to be onsite for testing, a simulation mode is provided
@@ -189,6 +188,14 @@ In order to activate simulation mode, set the flag and choose a semantic zone ty
 ```swift
 FMLocationManager.shared.isSimulation = true
 FMLocationManager.shared.simulationZone = .parking
+```
+
+### Logging
+
+By default only errors and warnings are logged, but other verbosity levels are available: `debug`, `info`, `warning`, and `error`.
+
+```swift
+FMLocationManager.shared.logLevel = .debug
 ```
 
 ### Overrides

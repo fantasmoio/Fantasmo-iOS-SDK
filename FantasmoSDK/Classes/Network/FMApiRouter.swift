@@ -16,7 +16,7 @@ struct FMApiRouter {
     private static var apiBaseUrl: String {
         get {
             if let override = FMConfiguration.stringForInfoKey(.apiBaseUrl) {
-                log.info("Using url override", parameters: ["override": override])
+                log.warning("Using url override", parameters: ["override": override])
                 return "http://\(override)"
             } else {
                 return "https://api.fantasmo.io/v1/"

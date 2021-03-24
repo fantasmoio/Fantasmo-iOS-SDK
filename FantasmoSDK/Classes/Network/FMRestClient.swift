@@ -35,7 +35,7 @@ struct FMRestClient {
                      error: RestError? = nil) {
         
         let request = Self.requestForEndpoint(endpoint, token: token)
-        log.debug(String(describing: request.url), parameters: parameters)
+        log.info(String(describing: request.url), parameters: parameters)
         
         var data = Data()
         data.appendParameters(parameters)
@@ -61,7 +61,7 @@ struct FMRestClient {
                      error: RestError? = nil) {
         
         let request = Self.requestForEndpoint(endpoint, token: token)
-        log.debug(String(describing: request.url), parameters: parameters)
+        log.info(String(describing: request.url), parameters: parameters)
         
         var data = Data()
         data.appendParameters(parameters)

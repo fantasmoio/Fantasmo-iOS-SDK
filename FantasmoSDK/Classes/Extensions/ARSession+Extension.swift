@@ -37,7 +37,7 @@ extension ARSession : ARSessionDelegate {
             let originalMethod = class_getInstanceMethod(self, originalSelector)
             let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
             method_exchangeImplementations (originalMethod!, swizzledMethod!)
-            debugPrint("ARSession:swizzle")
+            log.debug()
         }()
     }
     

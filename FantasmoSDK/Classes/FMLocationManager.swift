@@ -62,12 +62,17 @@ open class FMLocationManager: FMApiDelegate {
 
     private var delegate: FMLocationDelegate?
     
+    public var isConnected = false
+    public var logLevel = FMLog.LogLevel.error {
+        didSet {
+            log.logLevel = logLevel
+        }
+    }
     /// When in simulation mode, mock data is used from the assets directory instead of the live camera feed.
     /// This mode is useful for implementation and debugging.
     public var isSimulation = false
     /// The zone that will be simulated.
     public var simulationZone = FMZone.ZoneType.parking
-    public var isConnected = false
 
     
     // MARK: - Lifecycle
@@ -82,7 +87,7 @@ open class FMLocationManager: FMApiDelegate {
     public func connect(accessToken: String,
                         delegate: FMLocationDelegate) {
         
-        debugPrint("FMLocationManager connected with delegate: \(delegate)")
+        log.debug(parameters: ["delegate": delegate])
 
         self.delegate = delegate
         
@@ -96,28 +101,28 @@ open class FMLocationManager: FMApiDelegate {
     
     /// Starts the generation of updates that report the user’s current location.
     public func startUpdatingLocation() {
-        debugPrint("FMLocationManager:startUpdatingLocation")
+        log.debug()
         self.isConnected = true
         self.state = .localizing
     }
     
     /// Stops the generation of location updates.
     public func stopUpdatingLocation() {
-        debugPrint("FMLocationManager:stopUpdatingLocation")
+        log.debug()
         self.state = .stopped
     }
     
     /// Set an anchor point. All location updates will now report the
     /// location of the anchor instead of the camera.
     public func setAnchor() {
-        debugPrint("FMLocationManager:setAnchor")
+        log.debug()
         self.anchorFrame = ARSession.lastFrame
     }
     
     /// Unset the anchor point. All location updates will now report the
     /// location of the camera.
     public func unsetAnchor() {
-        debugPrint("FMLocationManager:unsetAnchor")
+        log.debug()
         self.anchorFrame = nil
     }
     
@@ -140,8 +145,10 @@ open class FMLocationManager: FMApiDelegate {
     /// - Parameter radius: search radius in meters
     /// - Parameter completion: closure that consumes boolean server result
     public func isZoneInRadius(_ zone: FMZone.ZoneType, radius: Int, completion: @escaping (Bool)->Void) {
+        log.debug()
         FMApi.shared.isZoneInRadius(zone, radius: radius, completion: completion) { error in
             // For now, clients only care if a zone was found, so an error condition can be treated as a `false` completion
+            log.error(error)
             completion(false)
         }
     }
@@ -158,11 +165,12 @@ open class FMLocationManager: FMApiDelegate {
             return
         }
         
-        debugPrint("FMLocationManager:localize called with simulation: \(isSimulation)")
+        log.debug(parameters: ["simulation": isSimulation])
         self.state = .uploading
         
         // set up completion closure
         let localizeCompletion: FMApi.LocalizationResult = { location, zones in
+            log.debug(parameters: ["location": location, "zones": zones])
             self.delegate?.locationManager(didUpdateLocation: location, withZones: zones)
             
             if self.state != .stopped {
@@ -172,7 +180,7 @@ open class FMLocationManager: FMApiDelegate {
         
         // set up error closure
         let localizeError: FMApi.ErrorResult = { error in
-            debugPrint("FMLocationManager:localize didFailWithError: \(error)")
+            log.error(error)
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
             
             if self.state != .stopped {

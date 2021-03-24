@@ -35,9 +35,12 @@ struct FMRestClient {
                      error: RestError? = nil) {
         
         let request = Self.requestForEndpoint(endpoint, token: token)
+        log.info(String(describing: request.url), parameters: parameters)
+        
         var data = Data()
         data.appendParameters(parameters)
         data.appendFinalBoundary()
+        
         Self.post(data: data, with: request, completion: completion, error: error)
     }
 
@@ -58,10 +61,13 @@ struct FMRestClient {
                      error: RestError? = nil) {
         
         let request = Self.requestForEndpoint(endpoint, token: token)
+        log.info(String(describing: request.url), parameters: parameters)
+        
         var data = Data()
         data.appendParameters(parameters)
         data.appendImage(imageData)
         data.appendFinalBoundary()
+        
         Self.post(data: data, with: request, completion: completion, error: error)
     }
     
@@ -77,10 +83,12 @@ struct FMRestClient {
     private static func post(data: Data, with request: URLRequest, completion: RestResult? = nil, error: RestError? = nil) {
 
         let session = URLSession.shared
-        session.uploadTask(with: request, from: data, completionHandler: { data, response, taskError in
+        session.uploadTask(with: request, from: data, completionHandler: { data, response, uploadError in
             guard let data = data, let response = response as? HTTPURLResponse else {
                 DispatchQueue.main.async {
-                    error?(FMError(RestClientError.badResponse, cause: taskError))
+                    let uploadError = FMError(RestClientError.badResponse, cause: uploadError)
+                    log.error(uploadError)
+                    error?(uploadError)
                 }
                 return
             }

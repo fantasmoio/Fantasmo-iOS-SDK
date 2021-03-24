@@ -35,7 +35,7 @@ extension CLLocationManager : CLLocationManagerDelegate {
             let originalMethod = class_getInstanceMethod(self, originalSelector)
             let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
             method_exchangeImplementations (originalMethod!, swizzledMethod!)
-            debugPrint("CLLocationManager:swizzle")
+            log.debug()
         }()
     }
     
@@ -48,26 +48,26 @@ extension CLLocationManager : CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         CLLocationManager.lastLocation = locations.last
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didUpdateLocations delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didUpdateLocations: locations)
-        debugPrint("CLLocationManager:swizzle didUpdateLocations")
+        log.debug()
     }
     
     /**
      invoked when new headings are available.  Required for delivery of deferred headings.
-
+     
      @param manager Currnet location manager.
      @param heading CLHeading object with updated heading.
      */
     public func locationManager(_ manager: CLLocationManager, didUpdateHeading heading: CLHeading) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didUpdateHeading delegate not available")
-          return
+            log.warning("delegate not available")
+            return
         }
         delegate.locationManager?(manager, didUpdateHeading: heading)
-        debugPrint("CLLocationManager:swizzle didUpdateHeading")
+        log.debug()
     }
     
     /**
@@ -78,11 +78,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didChangeAuthorization status delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didChangeAuthorization: status)
-        debugPrint("CLLocationManager:swizzle didChangeAuthorization status")
+        log.debug()
     }
     
     /**
@@ -93,11 +93,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
     @available(iOS 14.0, *)
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didChangeAuthorization delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManagerDidChangeAuthorization?(manager)
-        debugPrint("CLLocationManager:swizzle didChangeAuthorization")
+        log.debug()
     }
     
     /**
@@ -108,11 +108,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManagerShouldDisplayHeadingCalibration(_ manager: CLLocationManager) -> Bool {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle shouldDisplayHeadingCalibration delegate not available")
+            log.warning("delegate not available")
             return false
         }
         _ = delegate.locationManagerShouldDisplayHeadingCalibration?(manager)
-        debugPrint("CLLocationManager:swizzle shouldDisplayHeadingCalibration")
+        log.debug()
         return true
     }
     
@@ -125,11 +125,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didDetermineState delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didDetermineState: state, for: region)
-        debugPrint("CLLocationManager:swizzle didDetermineState for region")
+        log.debug()
     }
     
     /**
@@ -141,11 +141,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didRangeBeacons delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didRangeBeacons: beacons, in: region)
-        debugPrint("CLLocationManager:swizzle didRangeBeacons")
+        log.debug()
     }
     
     /**
@@ -157,11 +157,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, rangingBeaconsDidFailFor region: CLBeaconRegion, withError error: Error) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle rangingBeaconsDidFailFor delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, rangingBeaconsDidFailFor: region, withError: error)
-        debugPrint("CLLocationManager:swizzle rangingBeaconsDidFailFor")
+        log.debug()
     }
     
     /**
@@ -174,11 +174,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
     @available(iOS 13.0, *)
     public func locationManager(_ manager: CLLocationManager, didRange beacons: [CLBeacon], satisfying beaconConstraint: CLBeaconIdentityConstraint) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle beacons satisfying beaconConstraint delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didRange: beacons, satisfying: beaconConstraint)
-        debugPrint("CLLocationManager:swizzle beacons satisfying beaconConstraint")
+        log.debug()
     }
     
     /**
@@ -191,11 +191,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
     @available(iOS 13.0, *)
     public func locationManager(_ manager: CLLocationManager, didFailRangingFor beaconConstraint: CLBeaconIdentityConstraint, error: Error) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didFailRangingFor delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didFailRangingFor: beaconConstraint, error: error)
-        debugPrint("CLLocationManager:swizzle didFailRangingFor beaconConstraint")
+        log.debug()
     }
     
     /**
@@ -206,11 +206,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didEnterRegion delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didEnterRegion: region)
-        debugPrint("CLLocationManager:swizzle didEnterRegion")
+        log.debug()
     }
     
     /**
@@ -221,11 +221,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didExitRegion delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didExitRegion: region)
-        debugPrint("CLLocationManager:swizzle didExitRegion")
+        log.debug()
     }
     
     /**
@@ -236,11 +236,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didFailWithError delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didFailWithError: error)
-        debugPrint("CLLocationManager:swizzle didFailWithError")
+        log.debug()
     }
     
     /**
@@ -252,11 +252,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle monitoringDidFailFor delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, monitoringDidFailFor: region, withError: error)
-        debugPrint("CLLocationManager:swizzle monitoringDidFailFor")
+        log.debug()
     }
     
     /**
@@ -267,11 +267,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didStartMonitoringForRegion delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didStartMonitoringFor: region)
-        debugPrint("CLLocationManager:swizzle didStartMonitoringForRegion")
+        log.debug()
     }
     
     /**
@@ -281,11 +281,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManagerDidPauseLocationUpdates(_ manager: CLLocationManager) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didPauseLocationUpdates delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManagerDidPauseLocationUpdates?(manager)
-        debugPrint("CLLocationManager:swizzle didPauseLocationUpdates")
+        log.debug()
     }
     
     /**
@@ -295,11 +295,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManagerDidResumeLocationUpdates(_ manager: CLLocationManager) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didResumeLocationUpdates delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManagerDidResumeLocationUpdates?(manager)
-        debugPrint("CLLocationManager:swizzle didResumeLocationUpdates")
+        log.debug()
     }
     
     /**
@@ -310,11 +310,11 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, didFinishDeferredUpdatesWithError error: Error?) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didFinishDeferredUpdatesWithError delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didFinishDeferredUpdatesWithError: error)
-        debugPrint("CLLocationManager:swizzle didFinishDeferredUpdatesWithError")
+        log.debug()
     }
     
     /**
@@ -325,10 +325,10 @@ extension CLLocationManager : CLLocationManagerDelegate {
      */
     public func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
         guard let delegate = objc_getAssociatedObject(self, &AssociatedKeys.delegateState) as? CLLocationManagerDelegate else {
-            debugPrint("CLLocationManager:swizzle didVisit delegate not available")
+            log.warning("delegate not available")
             return
         }
         delegate.locationManager?(manager, didVisit: visit)
-        debugPrint("CLLocationManager:swizzle didVisit")
+        log.debug()
     }
 }

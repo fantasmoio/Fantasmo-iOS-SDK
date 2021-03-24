@@ -19,7 +19,7 @@ extension CGImage {
     func scale(byFactor scale:CGFloat) -> CGImage? {
         
         guard let colorSpace = self.colorSpace else {
-            debugPrint("No color space.")
+            log.warning("No color space.")
             return nil
         }
         
@@ -35,7 +35,7 @@ extension CGImage {
                                 bitmapInfo: self.bitmapInfo.rawValue)
         
         guard let imageContext = context else {
-            debugPrint("No context.")
+            log.warning("No context.")
             return nil
         }
         

@@ -37,7 +37,7 @@ internal struct FMConfiguration {
         static var current: CLLocation {
             get {
                 if let override = FMConfiguration.stringForInfoKey(.gpsLatLong) {
-                    print("FMConfiguration using location override: \(override)")
+                    log.warning("Using location override", parameters: ["override": override])
                     let components = override.components(separatedBy:",")
                     if let latitude = Double(components[0]), let longitude = Double(components[1]) {
                         return CLLocation(latitude: latitude, longitude: longitude)

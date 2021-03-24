@@ -102,9 +102,8 @@ public struct FMLog {
             if !paramsString.isEmpty {
                 paramsString.append("\n")
             }
-            
-            let valueString = "\(String(describing: value))"
-            paramsString.append("\t• \(key): \(valueString == "" ? "N/A" : valueString)")
+
+            paramsString.append("\t• \(key): \(value ?? "")")
         }
         
         return paramsString

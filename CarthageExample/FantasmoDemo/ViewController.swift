@@ -13,14 +13,14 @@ import ARKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var sceneView: ARSCNView!
-    private let clLocationManager = CLLocationManager()
+    private let locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        clLocationManager.delegate = self
-        clLocationManager.requestAlwaysAuthorization()
-        clLocationManager.startUpdatingLocation()
+        locationManager.delegate = self
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
 
         sceneView.delegate = self
         sceneView.session.delegate = self
@@ -43,12 +43,16 @@ class ViewController: UIViewController {
 extension ViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         print("ViewController: didUpdateLocations")
+        
+        // also update the FMLocationManager
+        FMLocationManager.shared.locationManager(manager, didUpdateLocations: locations)
     }
 }
 
 extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        //DDLogVerbose("ViewController: didUpdate frame")
+        // also update the FMLocationManager
+        FMLocationManager.shared.session(session, didUpdate: frame)
     }
 }
 

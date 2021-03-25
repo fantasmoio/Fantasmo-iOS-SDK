@@ -115,6 +115,28 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         FMApi.shared.token = accessToken
     }
 
+    /// Connect to the location service.
+    /// Use this method if your app does not need to receive ARSession or CLLocationManager delegate calls
+    ///
+    /// - Parameters:
+    ///   - accessToken: Token for service authorization.
+    ///   - delegate: Delegate for receiving location events.
+    ///   - session: ARSession to subscribe to as a delegate
+    ///   - locationManger: CLLocationManager to subscribe to as a delegate
+    public func connect(accessToken: String,
+                        delegate: FMLocationDelegate,
+                        session: ARSession? = nil,
+                        locationManager: CLLocationManager? = nil) {
+        
+        log.debug(parameters: [
+                    "delegate": delegate,
+                    "session": session,
+                    "locationManager": locationManager])
+        
+        connect(accessToken: accessToken, delegate: delegate)
+        session?.delegate = self
+        locationManager?.delegate = self
+    }
     
     // MARK: - Public instance methods
     

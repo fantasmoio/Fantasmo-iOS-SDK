@@ -44,7 +44,7 @@ extension FMLocationDelegate {
 
 
 /// Start and stop the delivery of camera-based location events.
-open class FMLocationManager: FMApiDelegate {
+open class FMLocationManager: NSObject, FMApiDelegate {
     
     public enum State {
         case stopped        // doing nothing
@@ -59,7 +59,11 @@ open class FMLocationManager: FMApiDelegate {
     public private(set) var state = State.stopped
     
     internal var anchorFrame: ARFrame?
-
+    
+    // variables set by delegate handling methods
+    private var lastFrame: ARFrame?
+    private var lastLocation: CLLocation?
+    
     private var delegate: FMLocationDelegate?
     
     public var isConnected = false
@@ -75,11 +79,25 @@ open class FMLocationManager: FMApiDelegate {
     /// The zone that will be simulated.
     public var simulationZone = FMZone.ZoneType.parking
 
+    /// Returns most recent location unless an override was set
+    var currentLocation: CLLocation {
+        get {
+            if let override = FMConfiguration.stringForInfoKey(.gpsLatLong) {
+                log.warning("Using location override", parameters: ["override": override])
+                let components = override.components(separatedBy:",")
+                if let latitude = Double(components[0]), let longitude = Double(components[1]) {
+                    return CLLocation(latitude: latitude, longitude: longitude)
+                } else {
+                    return CLLocation()
+                }
+            } else {
+                return lastLocation ?? CLLocation()
+            }
+        }
+    }
     
     // MARK: - Lifecycle
-    
-    private init() {}
-    
+        
     /// Connect to the location service.
     ///
     /// - Parameters:
@@ -117,7 +135,7 @@ open class FMLocationManager: FMApiDelegate {
     /// location of the anchor instead of the camera.
     public func setAnchor() {
         log.debug()
-        self.anchorFrame = ARSession.lastFrame
+        self.anchorFrame = lastFrame
     }
     
     /// Unset the anchor point. All location updates will now report the
@@ -191,5 +209,26 @@ open class FMLocationManager: FMApiDelegate {
         
         // send request
         FMApi.shared.localize(frame: frame, completion: localizeCompletion, error: localizeError)
+    }
+}
+
+// MARK: - ARSessionDelegate
+
+extension FMLocationManager : ARSessionDelegate {
+    private func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        lastFrame = frame
+        
+        if state == .localizing {
+            localize(frame: frame)
+        }
+    }
+}
+
+// MARK: - CLLocationManagerDelegate
+
+extension FMLocationManager : CLLocationManagerDelegate {
+    private func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        lastLocation = locations.last
+        log.debug()
     }
 }

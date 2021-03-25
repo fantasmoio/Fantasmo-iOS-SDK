@@ -90,10 +90,17 @@ import ARKit
 var sceneView: ARSCNView!
 
 override func viewDidLoad() {
+    super.viewDidLoad()
 
-    sceneView.delegate = self
-    sceneView.session.delegate = self
+    // get location updates
+    locationManager.requestAlwaysAuthorization()
+    locationManager.startUpdatingLocation()
 
+    // configure delegation
+    sceneView.session.delegate = FMLocationManager.shared
+    locationManager.delegate = FMLocationManager.shared
+   
+    // connect and start updating
     FMLocationManager.shared.connect(accessToken: "", delegate: self)
     FMLocationManager.shared.startUpdatingLocation()
 }

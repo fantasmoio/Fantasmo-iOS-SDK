@@ -215,7 +215,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 // MARK: - ARSessionDelegate
 
 extension FMLocationManager : ARSessionDelegate {
-    private func session(_ session: ARSession, didUpdate frame: ARFrame) {
+    public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
         
         if state == .localizing {
@@ -227,7 +227,7 @@ extension FMLocationManager : ARSessionDelegate {
 // MARK: - CLLocationManagerDelegate
 
 extension FMLocationManager : CLLocationManagerDelegate {
-    private func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         lastLocation = locations.last
         log.debug()
     }

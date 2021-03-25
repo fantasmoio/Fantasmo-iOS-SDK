@@ -6,13 +6,37 @@ Supercharge your app with hyper-accurate positioning using just the camera. The 
 
 ## Installation
 
-### Dependencies
+### CocoaPods (iOS 11+)
+CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit https://cocoapods.org/. To integrate Fantasmo SDK into your Xcode project using CocoaPods, specify it in your Podfile:
 
-Available via Cocoapods:
+   `pod 'FantasmoSDK'`
 
-- `'Alamofire', '~> 5.0.0'`
-- `'BrightFutures'`
+### Carthage (iOS 8+, OS X 10.9+)
 
+You can use Carthage to install Fantasmo SDK by adding it to your Cartfile:
+- Get Carthage by running `brew install carthage`
+- Create a Cartfile using https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile in the same directory where your .xcodeproj or .xcworkspace is and add below dependnacy in it. For example:
+
+   `github "fantasmoio/Fantasmo-iOS-SDK" ~> 0.1.16`
+
+- Add Carthage.sh by unzip [Carthage.sh.zip](https://github.com/fantasmoio/Fantasmo-iOS-SDK/files/5754931/Carthage.sh.zip) and place it to same directory where your .xcodeproj or .xcworkspace is.
+- Give edit permission to Carthage.sh by `chmod +x Carthage.sh`
+- Carthage is run simply by pasting the following command into Terminal:
+
+   `./Carthage.sh update --platform iOS`
+   
+- In the **General** tab, scroll down to the bottom where you will see **Linked Frameworks and Libraries**. With the Xcode project window still available, open a Finder window and navigate to the project directory. In the project directory, open the following folders: **Carthage/Build/iOS**. In the iOS folder, you should see **FantasmoSDK.framework**. Drag the framework into the **Linked Frameworks and Libraries** section of project and select **Do Not Embed** under Embed option. 
+
+- On your application targets’ Build Phases settings tab, click the + icon and choose New Run Script Phase. Create a Run Script in which you specify your shell (ex: /bin/sh), add the following contents to the script area below the shell:
+   
+   `/usr/local/bin/carthage copy-frameworks`
+   
+- Add below files in **Input Files** of above Run Script:   
+   `$(SRCROOT)/Carthage/Build/iOS/FantasmoSDK.framework`   
+   
+- Add below files in **Output Files**:   
+   `$(DERIVED_FILE_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FantasmoSDK.framework`
+  
 ### Importing
 
 In the near term, the Fantasmo SDK will be provided as a Cocoapod. In the meantime,
@@ -140,6 +164,20 @@ To return to device localization, simply unset the anchor point.
 FMLocationManager.shared.unsetAnchor()
 ```
 
+Anchoring relies on ARKit and is therefore supported by iPhone SE, iPhone 6s, iPhone 6s Plus and newer.
+
+### Radius Check
+
+In order to check if a zone, like parking, is within a given radius of the current device location (as provided by CoreLocation) before attempting to localize, use the `isZoneInRadius` method. The method takes a closure which provides a boolean result.
+
+Currently only `.parking` zones are supported.
+
+```swift
+FMLocationManager.shared.isZoneInRadius(.parking, radius: 50) { result in
+  self.isParkingInRadius = result
+}
+```
+
 ### Simulation Mode
 
 Since it's not always possible to be onsite for testing, a simulation mode is provided
@@ -151,3 +189,23 @@ In order to activate simulation mode, set the flag and choose a semantic zone ty
 FMLocationManager.shared.isSimulation = true
 FMLocationManager.shared.simulationZone = .parking
 ```
+
+### Logging
+
+By default only errors and warnings are logged, but other verbosity levels are available: `debug`, `info`, `warning`, and `error`.
+
+```swift
+FMLocationManager.shared.logLevel = .debug
+```
+
+### Overrides
+
+For testing, the device location can be specified in the Info.plist.
+
+    key: FM_GPS_LAT_LONG
+    value: 25.762586765198417,-80.19404801110545
+
+For _internal development_ testing and demo builds, the API server URL can be specified in the Info.plist. It should _not_ include the URI scheme.
+
+    key: FM_API_BASE_URL
+    value: 192:168:0:1:8090/v1/image.localize

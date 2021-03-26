@@ -7,6 +7,7 @@ Supercharge your app with hyper-accurate positioning using just the camera. The 
 ## Installation
 
 ### CocoaPods (iOS 11+)
+
 CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit https://cocoapods.org/. To integrate Fantasmo SDK into your Xcode project using CocoaPods, specify it in your Podfile:
 
    `pod 'FantasmoSDK'`
@@ -88,6 +89,7 @@ import CoreLocation
 import ARKit
 
 var sceneView: ARSCNView!
+let locationManager = CLLocationManager()
 
 override func viewDidLoad() {
     super.viewDidLoad()
@@ -140,6 +142,7 @@ myLocationManager.delegate = FMLocationManager.shared
 Alternately, you can proxy updates to `FMLocationManager` manually.
 
 ```swift
+// your ARSessionDelegate
 func session(_ session: ARSession, didUpdate frame: ARFrame) {
   // your update code
 
@@ -147,6 +150,7 @@ func session(_ session: ARSession, didUpdate frame: ARFrame) {
   FMLocationManager.shared.session(session, didUpdate: frame)
 }
 
+// your CLLocationManagerDelegate
 func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
   // your update code
 

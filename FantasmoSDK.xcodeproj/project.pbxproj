@@ -10,7 +10,6 @@
 		9468389025921BAF005B1145 /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9468388E25921BAF005B1145 /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		946838BE25921BF3005B1145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
 		946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389B25921BF3005B1145 /* FMLocationManager.swift */; };
-		946838C025921BF3005B1145 /* FantasmoLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9468389C25921BF3005B1145 /* FantasmoLoader.m */; };
 		946838C125921BF3005B1145 /* FMUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389D25921BF3005B1145 /* FMUtility.swift */; };
 		946838C225921BF3005B1145 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389F25921BF3005B1145 /* MockData.swift */; };
 		946838C625921BF3005B1145 /* FMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A425921BF3005B1145 /* FMError.swift */; };
@@ -28,14 +27,10 @@
 		946838D225921BF3005B1145 /* FMPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B125921BF3005B1145 /* FMPose.swift */; };
 		946838D325921BF3005B1145 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B225921BF3005B1145 /* Position.swift */; };
 		946838D425921BF3005B1145 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B425921BF3005B1145 /* UIImage+Extension.swift */; };
-		946838D525921BF3005B1145 /* ARSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B525921BF3005B1145 /* ARSession+Extension.swift */; };
 		946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B625921BF3005B1145 /* Dictionary+Extension.swift */; };
 		946838D725921BF3005B1145 /* Codable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B725921BF3005B1145 /* Codable+Extension.swift */; };
 		946838D825921BF3005B1145 /* CGImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B825921BF3005B1145 /* CGImage+Extension.swift */; };
-		946838D925921BF3005B1145 /* CLLocationManager+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B925921BF3005B1145 /* CLLocationManager+Extension.swift */; };
-		946838DA25921BF3005B1145 /* FantasmoLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 946838BA25921BF3005B1145 /* FantasmoLoader.h */; };
 		946838DB25921BF3005B1145 /* FMConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838BB25921BF3005B1145 /* FMConfiguration.swift */; };
-		946838DC25921BF3005B1145 /* FMLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838BC25921BF3005B1145 /* FMLoader.swift */; };
 		A02646BB260CE44900A7FA6B /* FMApiRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646B8260CE44900A7FA6B /* FMApiRouter.swift */; };
 		A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646B9260CE44900A7FA6B /* FMRestClient.swift */; };
 		A02646BD260CE44900A7FA6B /* FMApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646BA260CE44900A7FA6B /* FMApi.swift */; };
@@ -51,7 +46,6 @@
 		9468389825921BF3005B1145 /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		9468389925921BF3005B1145 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9468389B25921BF3005B1145 /* FMLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLocationManager.swift; sourceTree = "<group>"; };
-		9468389C25921BF3005B1145 /* FantasmoLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FantasmoLoader.m; sourceTree = "<group>"; };
 		9468389D25921BF3005B1145 /* FMUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUtility.swift; sourceTree = "<group>"; };
 		9468389F25921BF3005B1145 /* MockData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		946838A425921BF3005B1145 /* FMError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMError.swift; sourceTree = "<group>"; };
@@ -69,14 +63,10 @@
 		946838B125921BF3005B1145 /* FMPose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMPose.swift; sourceTree = "<group>"; };
 		946838B225921BF3005B1145 /* Position.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 		946838B425921BF3005B1145 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
-		946838B525921BF3005B1145 /* ARSession+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARSession+Extension.swift"; sourceTree = "<group>"; };
 		946838B625921BF3005B1145 /* Dictionary+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
 		946838B725921BF3005B1145 /* Codable+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Codable+Extension.swift"; sourceTree = "<group>"; };
 		946838B825921BF3005B1145 /* CGImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGImage+Extension.swift"; sourceTree = "<group>"; };
-		946838B925921BF3005B1145 /* CLLocationManager+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+Extension.swift"; sourceTree = "<group>"; };
-		946838BA25921BF3005B1145 /* FantasmoLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FantasmoLoader.h; sourceTree = "<group>"; };
 		946838BB25921BF3005B1145 /* FMConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMConfiguration.swift; sourceTree = "<group>"; };
-		946838BC25921BF3005B1145 /* FMLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLoader.swift; sourceTree = "<group>"; };
 		A02646B8260CE44900A7FA6B /* FMApiRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMApiRouter.swift; sourceTree = "<group>"; };
 		A02646B9260CE44900A7FA6B /* FMRestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMRestClient.swift; sourceTree = "<group>"; };
 		A02646BA260CE44900A7FA6B /* FMApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMApi.swift; sourceTree = "<group>"; };
@@ -140,9 +130,6 @@
 				946838A125921BF3005B1145 /* Network */,
 				946838A525921BF3005B1145 /* Models */,
 				946838B325921BF3005B1145 /* Extensions */,
-				946838BC25921BF3005B1145 /* FMLoader.swift */,
-				946838BA25921BF3005B1145 /* FantasmoLoader.h */,
-				9468389C25921BF3005B1145 /* FantasmoLoader.m */,
 				9468389B25921BF3005B1145 /* FMLocationManager.swift */,
 				946838BB25921BF3005B1145 /* FMConfiguration.swift */,
 				9468389D25921BF3005B1145 /* FMUtility.swift */,
@@ -195,9 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */,
-				946838B525921BF3005B1145 /* ARSession+Extension.swift */,
 				946838B825921BF3005B1145 /* CGImage+Extension.swift */,
-				946838B925921BF3005B1145 /* CLLocationManager+Extension.swift */,
 				946838B725921BF3005B1145 /* Codable+Extension.swift */,
 				946838B625921BF3005B1145 /* Dictionary+Extension.swift */,
 				946838B425921BF3005B1145 /* UIImage+Extension.swift */,
@@ -219,7 +204,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				946838DA25921BF3005B1145 /* FantasmoLoader.h in Headers */,
 				9468389025921BAF005B1145 /* FantasmoSDK.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,13 +288,10 @@
 				946838D025921BF3005B1145 /* ErrorResponse.swift in Sources */,
 				946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */,
 				946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */,
-				946838D525921BF3005B1145 /* ARSession+Extension.swift in Sources */,
 				946838D725921BF3005B1145 /* Codable+Extension.swift in Sources */,
-				946838D925921BF3005B1145 /* CLLocationManager+Extension.swift in Sources */,
 				A02646BD260CE44900A7FA6B /* FMApi.swift in Sources */,
 				A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */,
 				946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */,
-				946838DC25921BF3005B1145 /* FMLoader.swift in Sources */,
 				946838CA25921BF3005B1145 /* Geofence.swift in Sources */,
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,
@@ -322,7 +303,6 @@
 				946838D125921BF3005B1145 /* Orientation.swift in Sources */,
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A02646BB260CE44900A7FA6B /* FMApiRouter.swift in Sources */,
-				946838C025921BF3005B1145 /* FantasmoLoader.m in Sources */,
 				946838D825921BF3005B1145 /* CGImage+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

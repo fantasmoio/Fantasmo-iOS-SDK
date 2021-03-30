@@ -7,6 +7,7 @@ Supercharge your app with hyper-accurate positioning using just the camera. The 
 ## Installation
 
 ### CocoaPods (iOS 11+)
+
 CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit https://cocoapods.org/. To integrate Fantasmo SDK into your Xcode project using CocoaPods, specify it in your Podfile:
 
    `pod 'FantasmoSDK'`
@@ -88,12 +89,20 @@ import CoreLocation
 import ARKit
 
 var sceneView: ARSCNView!
+let locationManager = CLLocationManager()
 
 override func viewDidLoad() {
+    super.viewDidLoad()
 
-    sceneView.delegate = self
-    sceneView.session.delegate = self
+    // get location updates
+    locationManager.requestAlwaysAuthorization()
+    locationManager.startUpdatingLocation()
 
+    // configure delegation
+    sceneView.session.delegate = FMLocationManager.shared
+    locationManager.delegate = FMLocationManager.shared
+   
+    // connect and start updating
     FMLocationManager.shared.connect(accessToken: "", delegate: self)
     FMLocationManager.shared.startUpdatingLocation()
 }
@@ -113,11 +122,44 @@ extension ViewController: FMLocationDelegate {
 
 ### Initialization
 
-The location manager is accessed through a shared instance. `ARSessionDelegate` methods are swizzled to the SDK so there is no need to pass a reference.  
+The location manager is accessed through a shared instance.
 
 ```swift
 FMLocationManager.shared.connect(accessToken: "", delegate: self)
 ```
+
+### Delegation
+
+The `FMLocationManager` singleton needs to receive `ARSessionDelegate` and `CLLocationManagerDelegate` updates. You must either set it to be the delegate for your session and location manager, or you must manually call the delegate methods from within your own delegate handlers.
+
+If you do not need session or location updates, you can simply set `FMLocationManager` as their delegate.
+
+```swift
+myView?.session.delegate = FMLocationManager.shared
+myLocationManager.delegate = FMLocationManager.shared
+```
+
+Alternately, you can proxy updates to `FMLocationManager` manually.
+
+```swift
+// your ARSessionDelegate
+func session(_ session: ARSession, didUpdate frame: ARFrame) {
+  // your update code
+
+  // also update the FMLocationManager
+  FMLocationManager.shared.session(session, didUpdate: frame)
+}
+
+// your CLLocationManagerDelegate
+func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+  // your update code
+
+  // also update the FMLocationManager
+  FMLocationManager.shared.locationManager(manager, didUpdateLocations: locations)
+}
+
+```
+
 
 ### Localizing 
 

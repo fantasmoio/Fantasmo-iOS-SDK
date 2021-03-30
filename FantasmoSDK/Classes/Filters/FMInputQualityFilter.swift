@@ -19,7 +19,8 @@ public class FMInputQualityFilter: FMFrameFilter {
     }
     
     let filters: [FMFrameFilter] = [
-        FMAngleFilter()
+        FMAngleFilter(),
+        FMMovementFilter(),
     ]
     
     func accepts(_ frame: ARFrame) -> Bool {

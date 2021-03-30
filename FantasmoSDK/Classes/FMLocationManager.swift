@@ -65,6 +65,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastLocation: CLLocation?
     
     private var delegate: FMLocationDelegate?
+    private var filter = FMInputQualityFilter()
     
     public var isConnected = false
     public var logLevel = FMLog.LogLevel.warning {
@@ -202,7 +203,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     ///
     /// - Parameter frame: Frame to localize.
     internal func localize(frame: ARFrame) {
-        if !isConnected {
+        guard isConnected else {
             return
         }
         
@@ -239,6 +240,10 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
+        
+        guard filter.accepts(frame) else {
+            return
+        }
         
         if state == .localizing {
             localize(frame: frame)

@@ -256,6 +256,5 @@ extension FMLocationManager : ARSessionDelegate {
 extension FMLocationManager : CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         lastLocation = locations.last
-        log.debug()
     }
 }

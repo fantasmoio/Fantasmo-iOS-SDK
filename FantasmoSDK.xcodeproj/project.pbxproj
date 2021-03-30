@@ -39,6 +39,7 @@
 		A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
 		A02647092613633F00A7FA6B /* FMInputQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02647072613633F00A7FA6B /* FMInputQualityFilter.swift */; };
 		A026470A2613633F00A7FA6B /* FMAngleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02647082613633F00A7FA6B /* FMAngleFilter.swift */; };
+		A0264712261364D000A7FA6B /* MovingAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0264711261364D000A7FA6B /* MovingAverage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +78,7 @@
 		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
 		A02647072613633F00A7FA6B /* FMInputQualityFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInputQualityFilter.swift; sourceTree = "<group>"; };
 		A02647082613633F00A7FA6B /* FMAngleFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMAngleFilter.swift; sourceTree = "<group>"; };
+		A0264711261364D000A7FA6B /* MovingAverage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovingAverage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 		9468389A25921BF3005B1145 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A0264710261364BA00A7FA6B /* Utilities */,
 				A02647062613633F00A7FA6B /* Filters */,
 				9468389E25921BF3005B1145 /* Mock */,
 				946838A125921BF3005B1145 /* Network */,
@@ -209,6 +212,14 @@
 				A02647082613633F00A7FA6B /* FMAngleFilter.swift */,
 			);
 			path = Filters;
+			sourceTree = "<group>";
+		};
+		A0264710261364BA00A7FA6B /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A0264711261364D000A7FA6B /* MovingAverage.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -306,6 +317,7 @@
 				946838D725921BF3005B1145 /* Codable+Extension.swift in Sources */,
 				A02646BD260CE44900A7FA6B /* FMApi.swift in Sources */,
 				A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */,
+				A0264712261364D000A7FA6B /* MovingAverage.swift in Sources */,
 				946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */,
 				946838CA25921BF3005B1145 /* Geofence.swift in Sources */,
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,

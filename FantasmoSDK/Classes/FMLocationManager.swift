@@ -57,6 +57,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     public static let shared = FMLocationManager()
     public private(set) var state = State.stopped
+    public var qualityFilter = FMInputQualityFilter()
     
     internal var anchorFrame: ARFrame?
     
@@ -65,7 +66,6 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastLocation: CLLocation?
     
     private var delegate: FMLocationDelegate?
-    private var filter = FMInputQualityFilter()
     
     public var isConnected = false
     public var logLevel = FMLog.LogLevel.warning {
@@ -241,7 +241,7 @@ extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
         
-        guard filter.accepts(frame) else {
+        guard qualityFilter.accepts(frame) else {
             return
         }
         

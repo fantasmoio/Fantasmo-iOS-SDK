@@ -59,6 +59,9 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public private(set) var state = State.stopped
     public var qualityFilter = FMInputQualityFilter()
     
+    // clients can use this mock the localization call
+    public var mockLocalize: ((ARFrame) -> Void)?
+    
     internal var anchorFrame: ARFrame?
     
     // variables set by delegate handling methods
@@ -242,6 +245,11 @@ extension FMLocationManager : ARSessionDelegate {
         lastFrame = frame
         
         guard qualityFilter.accepts(frame) else {
+            return
+        }
+        
+        guard mockLocalize == nil else {
+            mockLocalize?(frame)
             return
         }
         

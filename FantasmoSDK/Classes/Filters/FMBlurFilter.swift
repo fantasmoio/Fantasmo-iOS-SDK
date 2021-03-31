@@ -43,7 +43,7 @@ class FMBlurFilter: FMFrameFilter {
 
         let isBelowThreshold = Double(variance) < varianceThreshold
         let isSuddenDrop = Double(variance) < (averageVariance - suddenDropThreshold)
-        isLowVariance =  isBelowThreshold || isSuddenDrop
+        isLowVariance = isBelowThreshold || isSuddenDrop
         
         if isLowVariance {
             _ = throughputAverager.addSample(value: 0.0)
@@ -53,16 +53,17 @@ class FMBlurFilter: FMFrameFilter {
         
         // if not enough images are passing, pass regardless of variance
         if averageThroughput < 0.25 {
-            _ = throughputAverager.addSample(value: 1.0)
             isBlurry = false
+            
+            log.debug("blurry frame but accepting anyway \(averageThroughput)")
         } else {
             isBlurry = isLowVariance
-        }
-                
-        if isBlurry {
-            log.debug("blurry frame \(averageThroughput)")
-        } else {
-            log.debug("sharp frame \(averageThroughput)")
+            
+            if isBlurry {
+                log.debug("blurry frame \(averageThroughput)")
+            } else {
+                log.debug("sharp frame \(averageThroughput)")
+            }
         }
         
         return !isBlurry

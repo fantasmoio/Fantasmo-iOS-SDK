@@ -21,15 +21,20 @@ public class FMInputQualityFilter: FMFrameFilter {
     let filters: [FMFrameFilter] = [
         FMAngleFilter(),
         FMMovementFilter(),
+        FMBlurFilter(),
     ]
     
     func accepts(_ frame: ARFrame) -> Bool {
+        
+        // run frame through filters
         for filter in filters {
             if !filter.accepts(frame) {
                 _ = throughputAverager.addSample(value: 0.0)
                 return false
             }
         }
+        
+        // success, the frame is acceptable
         _ = throughputAverager.addSample(value: 1.0)
         return true
     }

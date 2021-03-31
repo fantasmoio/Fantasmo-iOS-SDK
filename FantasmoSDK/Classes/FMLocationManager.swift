@@ -59,7 +59,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public private(set) var state = State.stopped
     public var qualityFilter = FMInputQualityFilter()
     
-    // clients can use this mock the localization call
+    // clients can use this to mock the localization call
     public var mockLocalize: ((ARFrame) -> Void)?
     
     internal var anchorFrame: ARFrame?

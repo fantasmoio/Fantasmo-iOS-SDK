@@ -34,7 +34,7 @@ class FMBlurFilter: FMFrameFilter {
         metalCommandQueue = metalDevice?.makeCommandQueue()
     }
     
-    func accepts(_ frame: ARFrame) -> Bool {
+    func accepts(_ frame: ARFrame) -> FMFilterResult {
         variance = calculateVariance(frame: frame)
         _ = varianceAverager.addSample(value: Double(variance))
         
@@ -66,7 +66,7 @@ class FMBlurFilter: FMFrameFilter {
             }
         }
         
-        return !isBlurry
+        return isBlurry ? .rejected(remedy: .slowDown) : .accepted
     }
     
     func calculateVariance(frame: ARFrame) -> Int {

@@ -11,12 +11,12 @@ class FMMovementFilter: FMFrameFilter {
     let threshold: Float = 0.25
     var lastTransform: simd_float4x4 = simd_float4x4(1)
     
-    func accepts(_ frame: ARFrame) -> Bool {
+    func accepts(_ frame: ARFrame) -> FMFilterResult {
         if exceededThreshold(frame.camera.transform) {
             lastTransform = frame.camera.transform
-            return true
+            return .accepted
         } else {
-            return false
+            return .rejected(remedy: .panAround)
         }
     }
     

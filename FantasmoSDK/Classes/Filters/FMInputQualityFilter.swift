@@ -7,11 +7,25 @@
 
 import ARKit
 
-protocol FMFrameFilter {
-    func accepts(_ frame: ARFrame) -> Bool
+enum FMRemedy: String {
+    case tiltUp
+    case tiltDown
+    case slowDown
+    case panAround
 }
 
-public class FMInputQualityFilter: FMFrameFilter {
+enum FMFilterResult: Equatable {
+    case accepted
+    case rejected(remedy: FMRemedy)
+}
+
+protocol FMFrameFilter {
+    func accepts(_ frame: ARFrame) -> FMFilterResult
+}
+
+// MARK:-
+
+public class FMInputQualityFilter {
     
     private var throughputAverager = MovingAverage()
     public var quality: Double {
@@ -28,7 +42,7 @@ public class FMInputQualityFilter: FMFrameFilter {
         
         // run frame through filters
         for filter in filters {
-            if !filter.accepts(frame) {
+            if filter.accepts(frame) != .accepted {
                 _ = throughputAverager.addSample(value: 0.0)
                 return false
             }

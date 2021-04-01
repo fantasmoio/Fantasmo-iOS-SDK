@@ -42,6 +42,7 @@
 		A0264712261364D000A7FA6B /* MovingAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0264711261364D000A7FA6B /* MovingAverage.swift */; };
 		A0A986772613718E0084FDB9 /* FMMovementFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A986762613718E0084FDB9 /* FMMovementFilter.swift */; };
 		A0A9867A2613719E0084FDB9 /* FMBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A986792613719E0084FDB9 /* FMBlurFilter.swift */; };
+		A0A9868B2615B5140084FDB9 /* FMBehaviorDirector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A9868A2615B5140084FDB9 /* FMBehaviorDirector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +84,7 @@
 		A0264711261364D000A7FA6B /* MovingAverage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovingAverage.swift; sourceTree = "<group>"; };
 		A0A986762613718E0084FDB9 /* FMMovementFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMMovementFilter.swift; sourceTree = "<group>"; };
 		A0A986792613719E0084FDB9 /* FMBlurFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMBlurFilter.swift; sourceTree = "<group>"; };
+		A0A9868A2615B5140084FDB9 /* FMBehaviorDirector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMBehaviorDirector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +218,7 @@
 				A02647082613633F00A7FA6B /* FMAngleFilter.swift */,
 				A0A986762613718E0084FDB9 /* FMMovementFilter.swift */,
 				A0A986792613719E0084FDB9 /* FMBlurFilter.swift */,
+				A0A9868A2615B5140084FDB9 /* FMBehaviorDirector.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				946838C825921BF3005B1145 /* FMIntrinsics.swift in Sources */,
 				946838D225921BF3005B1145 /* FMPose.swift in Sources */,
 				A02647092613633F00A7FA6B /* FMInputQualityFilter.swift in Sources */,
+				A0A9868B2615B5140084FDB9 /* FMBehaviorDirector.swift in Sources */,
 				946838CC25921BF3005B1145 /* FMOrientation.swift in Sources */,
 				946838CF25921BF3005B1145 /* Coordinate.swift in Sources */,
 				946838CB25921BF3005B1145 /* FMZone.swift in Sources */,

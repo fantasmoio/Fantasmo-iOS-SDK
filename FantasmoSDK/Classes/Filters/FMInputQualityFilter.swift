@@ -7,7 +7,7 @@
 
 import ARKit
 
-enum FMRemedy: String {
+enum FMRemedy {
     case tiltUp
     case tiltDown
     case slowDown
@@ -39,10 +39,13 @@ public class FMInputQualityFilter {
     ]
     
     var remedies: [FMRemedy: Int] = [:]
-    var topRemedy: FMRemedy {
-        let topRemedy = remedies.sorted { $0.1 < $1.1 }[0].key
-        remedies.removeValue(forKey: topRemedy)
-        return topRemedy
+    var topRemedy: FMRemedy? {
+        if let topRemedy = remedies.sorted(by: { $0.1 < $1.1 }).first?.key {
+            remedies.removeValue(forKey: topRemedy)
+            return topRemedy
+        } else {
+            return nil
+        }
     }
     
     func accepts(_ frame: ARFrame) -> Bool {

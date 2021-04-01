@@ -32,6 +32,7 @@ public class FMInputQualityFilter {
         throughputAverager.average
     }
     
+    // filter collection, in order of increasing computational cost
     let filters: [FMFrameFilter] = [
         FMAngleFilter(),
         FMMovementFilter(),
@@ -41,7 +42,7 @@ public class FMInputQualityFilter {
     var remedies: [FMRemedy: Int] = [:]
     var topRemedy: FMRemedy? {
         if let topRemedy = remedies.sorted(by: { $0.1 < $1.1 }).first?.key {
-            remedies.removeValue(forKey: topRemedy)
+            remedies.removeAll(keepingCapacity: true)
             return topRemedy
         } else {
             return nil

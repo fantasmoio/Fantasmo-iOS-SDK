@@ -210,13 +210,19 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// provides a response via the delegate.
     ///
     /// - Parameter frame: Frame to localize.
-    internal func localize(frame: ARFrame) {
+    private func localize(frame: ARFrame) {
         guard isConnected else {
             return
         }
         
         log.debug(parameters: ["simulation": isSimulation])
-        self.state = .uploading
+        state = .uploading
+        
+        // run mock version of localization if one is set
+        guard mockLocalize == nil else {
+            mockLocalize?(frame)
+            return
+        }
         
         // set up completion closure
         let localizeCompletion: FMApi.LocalizationResult = { location, zones in
@@ -241,6 +247,16 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         // send request
         FMApi.shared.localize(frame: frame, completion: localizeCompletion, error: localizeError)
     }
+    
+    private func localizeDone() {
+        if state != .stopped {
+           state = .localizing
+        }
+    }
+    
+    public func mockLocalizeDone() {
+        localizeDone()
+    }
 }
 
 // MARK: - ARSessionDelegate
@@ -248,19 +264,11 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
+                        
+        guard state == .localizing && qualityFilter.accepts(frame)
+        else { return }
         
-        guard qualityFilter.accepts(frame) else {
-            return
-        }
-        
-        guard mockLocalize == nil else {
-            mockLocalize?(frame)
-            return
-        }
-        
-        if state == .localizing {
-            localize(frame: frame)
-        }
+        localize(frame: frame)
     }
 }
 

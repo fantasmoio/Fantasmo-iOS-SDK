@@ -73,7 +73,6 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastLocation: CLLocation?
     
     private var delegate: FMLocationDelegate?
-    private var behaviorDirector: FMBehaviorDirector?
     
     public var isConnected = false
     public var logLevel = FMLog.LogLevel.warning {
@@ -118,7 +117,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug(parameters: ["delegate": delegate])
 
         self.delegate = delegate
-        self.behaviorDirector = FMBehaviorDirector(filter: qualityFilter, delegate: delegate)
+        qualityFilter.delegate = delegate
         
         // set up FMApi
         FMApi.shared.delegate = self
@@ -155,14 +154,12 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug()
         self.isConnected = true
         self.state = .localizing
-        behaviorDirector?.startDirecting()
     }
     
     /// Stops the generation of location updates.
     public func stopUpdatingLocation() {
         log.debug()
         self.state = .stopped
-        behaviorDirector?.stopDirecting()
     }
     
     /// Set an anchor point. All location updates will now report the

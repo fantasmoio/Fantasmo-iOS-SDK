@@ -32,6 +32,12 @@ public class FMInputQualityFilter {
         throughputAverager.average
     }
     
+    var delegate: FMLocationDelegate?
+    
+    var lastNotificationTime = clock()
+    var throttleThreshold = 2.0
+    var incidenceThreshold = 30
+    
     // filter collection, in order of increasing computational cost
     let filters: [FMFrameFilter] = [
         FMAngleFilter(),
@@ -40,14 +46,6 @@ public class FMInputQualityFilter {
     ]
     
     var remedies: [FMRemedy: Int] = [:]
-    var topRemedy: FMRemedy? {
-        if let topRemedy = remedies.sorted(by: { $0.1 < $1.1 }).first?.key {
-            remedies.removeAll(keepingCapacity: true)
-            return topRemedy
-        } else {
-            return nil
-        }
-    }
     
     func accepts(_ frame: ARFrame) -> Bool {
         
@@ -56,6 +54,7 @@ public class FMInputQualityFilter {
             if case let .rejected(remedy) = filter.accepts(frame) {
                 _ = throughputAverager.addSample(value: 0.0)
                 addRemedy(remedy)
+                notifyIfNeeded(remedy)
                 return false
             }
         }
@@ -65,9 +64,21 @@ public class FMInputQualityFilter {
         return true
     }
     
+    func notifyIfNeeded(_ remedy: FMRemedy) {
+        guard let count = remedies[remedy] else { return }
+        
+        let elapsed = Double(clock() - lastNotificationTime) / Double(CLOCKS_PER_SEC)
+        if elapsed > throttleThreshold && count > incidenceThreshold {
+            delegate?.locationManager(didRequestBehavior: FMBehaviorRequest(remedy))
+            remedies.removeValue(forKey: remedy)
+            lastNotificationTime = clock()
+        }
+    }
+    
     func addRemedy(_ remedy: FMRemedy) {
-        if remedies.keys.contains(remedy) {
-            remedies[remedy]! &+= 1
+        if var count = remedies[remedy] {
+            count &+= 1
+            remedies[remedy] = count
         } else {
             remedies[remedy] = 0
         }

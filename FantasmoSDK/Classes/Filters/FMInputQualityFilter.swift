@@ -7,16 +7,16 @@
 
 import ARKit
 
-enum FMRemedy {
-    case tiltUp
-    case tiltDown
-    case slowDown
-    case panAround
+enum FMFilterRejectionReason {
+    case pitchTooLow
+    case pitchTooHigh
+    case movingTooFast
+    case movingTooLittle
 }
 
 enum FMFilterResult: Equatable {
     case accepted
-    case rejected(remedy: FMRemedy)
+    case rejected(reason: FMFilterRejectionReason)
 }
 
 protocol FMFrameFilter {
@@ -45,16 +45,17 @@ public class FMInputQualityFilter {
         FMBlurFilter(),
     ]
     
-    var remedies: [FMRemedy: Int] = [:]
+    var rejections: [FMFilterRejectionReason: Int] = [:]
     
+    /// run ARFrame through quality filter collection
     func accepts(_ frame: ARFrame) -> Bool {
         
         // run frame through filters
         for filter in filters {
-            if case let .rejected(remedy) = filter.accepts(frame) {
+            if case let .rejected(rejection) = filter.accepts(frame) {
                 _ = throughputAverager.addSample(value: 0.0)
-                addRemedy(remedy)
-                notifyIfNeeded(remedy)
+                addRejection(rejection)
+                notifyIfNeeded(rejection)
                 return false
             }
         }
@@ -64,23 +65,25 @@ public class FMInputQualityFilter {
         return true
     }
     
-    func notifyIfNeeded(_ remedy: FMRemedy) {
-        guard let count = remedies[remedy] else { return }
+    /// notify client when too many rejections occur
+    func notifyIfNeeded(_ rejection: FMFilterRejectionReason) {
+        guard let count = rejections[rejection] else { return }
         
         let elapsed = Double(clock() - lastNotificationTime) / Double(CLOCKS_PER_SEC)
         if elapsed > throttleThreshold && count > incidenceThreshold {
-            delegate?.locationManager(didRequestBehavior: FMBehaviorRequest(remedy))
-            remedies.removeValue(forKey: remedy)
+            delegate?.locationManager(didRequestBehavior: FMBehaviorRequest(rejection))
+            rejections.removeValue(forKey: rejection)
             lastNotificationTime = clock()
         }
     }
     
-    func addRemedy(_ remedy: FMRemedy) {
-        if var count = remedies[remedy] {
+    /// keep track of number of incidences of each filter rejection
+    func addRejection(_ rejection: FMFilterRejectionReason) {
+        if var count = rejections[rejection] {
             count &+= 1
-            remedies[remedy] = count
+            rejections[rejection] = count
         } else {
-            remedies[remedy] = 0
+            rejections[rejection] = 0
         }
     }
 }

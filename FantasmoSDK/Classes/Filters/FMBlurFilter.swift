@@ -66,7 +66,7 @@ class FMBlurFilter: FMFrameFilter {
             }
         }
         
-        return isBlurry ? .rejected(remedy: .slowDown) : .accepted
+        return isBlurry ? .rejected(reason: .movingTooFast) : .accepted
     }
     
     func calculateVariance(frame: ARFrame) -> Int {

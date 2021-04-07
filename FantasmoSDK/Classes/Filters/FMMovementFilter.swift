@@ -16,7 +16,7 @@ class FMMovementFilter: FMFrameFilter {
             lastTransform = frame.camera.transform
             return .accepted
         } else {
-            return .rejected(remedy: .panAround)
+            return .rejected(reason: .movingTooLittle)
         }
     }
     

@@ -13,9 +13,9 @@ class FMAngleFilter: FMFrameFilter {
     func accepts(_ frame: ARFrame) -> FMFilterResult {
         switch frame.camera.eulerAngles.x {
         case _ where frame.camera.eulerAngles.x > radianThreshold:
-            return .rejected(remedy: .tiltDown)
+            return .rejected(reason: .pitchTooHigh)
         case _ where frame.camera.eulerAngles.x < -radianThreshold:
-            return .rejected(remedy: .tiltUp)
+            return .rejected(reason: .pitchTooLow)
         default:
             return .accepted
         }

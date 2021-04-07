@@ -14,17 +14,17 @@ public enum FMBehaviorRequest: String {
     case panSlowly = "Pan more slowly"
 }
 
-/// maps filter FMRemedy to a remedial user behavior
+/// maps filter FMFilterRejectionReason to a remedial user behavior
 extension FMBehaviorRequest {
-    init(_ remedy : FMRemedy) {
-        switch remedy {
-        case .tiltUp:
+    init(_ rejection : FMFilterRejectionReason) {
+        switch rejection {
+        case .pitchTooLow:
             self = .tiltUp
-        case .tiltDown:
+        case .pitchTooHigh:
             self = .tiltDown
-        case .slowDown:
+        case .movingTooFast:
             self = .panSlowly
-        case .panAround:
+        case .movingTooLittle:
             self = .panAround
         }
     }

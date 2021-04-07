@@ -72,7 +72,7 @@ public class FMInputQualityFilter {
         let elapsed = Double(clock() - lastNotificationTime) / Double(CLOCKS_PER_SEC)
         if elapsed > throttleThreshold && count > incidenceThreshold {
             delegate?.locationManager(didRequestBehavior: FMBehaviorRequest(rejection))
-            rejections.removeValue(forKey: rejection)
+            rejections.removeAll(keepingCapacity: true)
             lastNotificationTime = clock()
         }
     }

@@ -8,7 +8,7 @@
 import Foundation
 import ARKit
 
-protocol FMApiDelegate {
+protocol FMApiDelegate: class {
     var isSimulation: Bool { get }
     var simulationZone: FMZone.ZoneType  { get }
     var anchorFrame: ARFrame? { get }
@@ -17,7 +17,7 @@ protocol FMApiDelegate {
 class FMApi {
     
     static let shared = FMApi()
-    var delegate: FMApiDelegate?
+    weak var delegate: FMApiDelegate?
     var token: String?
     private var coordinate: CLLocationCoordinate2D {
         get {

@@ -64,7 +64,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastFrame: ARFrame?
     private var lastLocation: CLLocation?
     
-    private var delegate: FMLocationDelegate?
+    private weak var delegate: FMLocationDelegate?
     
     public var isConnected = false
     public var logLevel = FMLog.LogLevel.warning {

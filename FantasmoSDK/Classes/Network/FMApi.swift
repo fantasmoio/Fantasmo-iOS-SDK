@@ -8,7 +8,7 @@
 import Foundation
 import ARKit
 
-protocol FMApiDelegate {
+protocol FMApiDelegate: class {
     var isSimulation: Bool { get }
     var simulationZone: FMZone.ZoneType  { get }
     var anchorFrame: ARFrame? { get }
@@ -17,8 +17,13 @@ protocol FMApiDelegate {
 class FMApi {
     
     static let shared = FMApi()
-    var delegate: FMApiDelegate?
+    weak var delegate: FMApiDelegate?
     var token: String?
+    private var coordinate: CLLocationCoordinate2D {
+        get {
+            return FMLocationManager.shared.currentLocation.coordinate
+        }
+    }
     
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
     typealias RadiusResult = (Bool) -> Void
@@ -124,7 +129,6 @@ class FMApi {
                         error: @escaping ErrorResult) {
         
         // set up request parameters
-        let coordinate = FMConfiguration.Location.current.coordinate
         let params = [
             "radius": String(radius),
             "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
@@ -184,7 +188,6 @@ class FMApi {
                                       withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                       withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
         
-        let coordinate = FMConfiguration.Location.current.coordinate
         var params = [
             "intrinsics" : intrinsics.toJson(),
             "gravity" : pose.orientation.toJson(),

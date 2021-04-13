@@ -13,23 +13,21 @@ import ARKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var sceneView: ARSCNView!
-    private let clLocationManager = CLLocationManager()
+    private let locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        clLocationManager.delegate = self
-        clLocationManager.requestAlwaysAuthorization()
-        clLocationManager.startUpdatingLocation()
 
-        sceneView.delegate = self
-        sceneView.session.delegate = self
-        
+        // get location updates
+        locationManager.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
+
+        // configure delegation
+        sceneView.session.delegate = FMLocationManager.shared
+        locationManager.delegate = FMLocationManager.shared
+       
+        // connect and start updating
         FMLocationManager.shared.connect(accessToken: "", delegate: self)
-        
-        FMLocationManager.shared.isSimulation = false
-        FMLocationManager.shared.simulationZone = .parking
-        
         FMLocationManager.shared.startUpdatingLocation()
     }
     
@@ -37,18 +35,6 @@ class ViewController: UIViewController {
         super.viewWillAppear(animated)
         let configuration = ARWorldTrackingConfiguration()
         sceneView.session.run(configuration)
-    }
-}
-
-extension ViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        debugPrint("ViewController: didUpdateLocations")
-    }
-}
-
-extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
-    func session(_ session: ARSession, didUpdate frame: ARFrame) {
-
     }
 }
 

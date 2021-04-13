@@ -44,7 +44,7 @@ extension FMLocationDelegate {
 
 
 /// Start and stop the delivery of camera-based location events.
-open class FMLocationManager: FMApiDelegate {
+open class FMLocationManager: NSObject, FMApiDelegate {
     
     public enum State {
         case stopped        // doing nothing
@@ -59,8 +59,12 @@ open class FMLocationManager: FMApiDelegate {
     public private(set) var state = State.stopped
     
     internal var anchorFrame: ARFrame?
-
-    private var delegate: FMLocationDelegate?
+    
+    // variables set by delegate handling methods
+    private var lastFrame: ARFrame?
+    private var lastLocation: CLLocation?
+    
+    private weak var delegate: FMLocationDelegate?
     
     public var isConnected = false
     public var logLevel = FMLog.LogLevel.warning {
@@ -75,11 +79,25 @@ open class FMLocationManager: FMApiDelegate {
     /// The zone that will be simulated.
     public var simulationZone = FMZone.ZoneType.parking
 
+    /// Returns most recent location unless an override was set
+    var currentLocation: CLLocation {
+        get {
+            if let override = FMConfiguration.stringForInfoKey(.gpsLatLong) {
+                log.warning("Using location override", parameters: ["override": override])
+                let components = override.components(separatedBy:",")
+                if let latitude = Double(components[0]), let longitude = Double(components[1]) {
+                    return CLLocation(latitude: latitude, longitude: longitude)
+                } else {
+                    return CLLocation()
+                }
+            } else {
+                return lastLocation ?? CLLocation()
+            }
+        }
+    }
     
     // MARK: - Lifecycle
-    
-    private init() {}
-    
+        
     /// Connect to the location service.
     ///
     /// - Parameters:
@@ -97,6 +115,28 @@ open class FMLocationManager: FMApiDelegate {
         FMApi.shared.token = accessToken
     }
 
+    /// Connect to the location service.
+    /// Use this method if your app does not need to receive ARSession or CLLocationManager delegate calls
+    ///
+    /// - Parameters:
+    ///   - accessToken: Token for service authorization.
+    ///   - delegate: Delegate for receiving location events.
+    ///   - session: ARSession to subscribe to as a delegate
+    ///   - locationManger: CLLocationManager to subscribe to as a delegate
+    public func connect(accessToken: String,
+                        delegate: FMLocationDelegate,
+                        session: ARSession? = nil,
+                        locationManager: CLLocationManager? = nil) {
+        
+        log.debug(parameters: [
+                    "delegate": delegate,
+                    "session": session,
+                    "locationManager": locationManager])
+        
+        connect(accessToken: accessToken, delegate: delegate)
+        session?.delegate = self
+        locationManager?.delegate = self
+    }
     
     // MARK: - Public instance methods
     
@@ -117,7 +157,7 @@ open class FMLocationManager: FMApiDelegate {
     /// location of the anchor instead of the camera.
     public func setAnchor() {
         log.debug()
-        self.anchorFrame = ARSession.lastFrame
+        self.anchorFrame = lastFrame
     }
     
     /// Unset the anchor point. All location updates will now report the
@@ -191,5 +231,26 @@ open class FMLocationManager: FMApiDelegate {
         
         // send request
         FMApi.shared.localize(frame: frame, completion: localizeCompletion, error: localizeError)
+    }
+}
+
+// MARK: - ARSessionDelegate
+
+extension FMLocationManager : ARSessionDelegate {
+    public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        lastFrame = frame
+        
+        if state == .localizing {
+            localize(frame: frame)
+        }
+    }
+}
+
+// MARK: - CLLocationManagerDelegate
+
+extension FMLocationManager : CLLocationManagerDelegate {
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        lastLocation = locations.last
+        log.debug()
     }
 }

@@ -28,26 +28,4 @@ internal struct FMConfiguration {
             return nil
         }
     }
-
-    //TODO: move to location class after cleaning up swizzling
-    /**
-     Current location
-     */
-    struct Location {
-        static var current: CLLocation {
-            get {
-                if let override = FMConfiguration.stringForInfoKey(.gpsLatLong) {
-                    log.warning("Using location override", parameters: ["override": override])
-                    let components = override.components(separatedBy:",")
-                    if let latitude = Double(components[0]), let longitude = Double(components[1]) {
-                        return CLLocation(latitude: latitude, longitude: longitude)
-                    } else {
-                        return CLLocation()
-                    }
-                } else {
-                    return CLLocationManager.lastLocation ?? CLLocation()
-                }
-            }
-        }
-    }
 }

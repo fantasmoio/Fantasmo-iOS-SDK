@@ -34,11 +34,14 @@ public class FMInputQualityFilter {
     
     var delegate: FMLocationDelegate?
     
-    var lastNotificationTime = clock()
+    /// the last time we issued a behavior request
+    var lastRequestTime = clock()
+    /// minimum number of seconds that must elapse between behavior requests
     var throttleThreshold = 2.0
+    /// the number of times a rejection occurs that should prompt a behavior request
     var incidenceThreshold = 30
     
-    // filter collection, in order of increasing computational cost
+    /// filter collection, in order of increasing computational cost
     let filters: [FMFrameFilter] = [
         FMAngleFilter(),
         FMMovementFilter(),
@@ -69,11 +72,11 @@ public class FMInputQualityFilter {
     func notifyIfNeeded(_ rejection: FMFilterRejectionReason) {
         guard let count = rejections[rejection] else { return }
         
-        let elapsed = Double(clock() - lastNotificationTime) / Double(CLOCKS_PER_SEC)
+        let elapsed = Double(clock() - lastRequestTime) / Double(CLOCKS_PER_SEC)
         if elapsed > throttleThreshold && count > incidenceThreshold {
             delegate?.locationManager(didRequestBehavior: FMBehaviorRequest(rejection))
             rejections.removeAll(keepingCapacity: true)
-            lastNotificationTime = clock()
+            lastRequestTime = clock()
         }
     }
     

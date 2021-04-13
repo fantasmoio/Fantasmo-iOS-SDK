@@ -152,28 +152,29 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// Starts the generation of updates that report the user’s current location.
     public func startUpdatingLocation() {
         log.debug()
-        self.isConnected = true
-        self.state = .localizing
+        isConnected = true
+        state = .localizing
+        qualityFilter.startFiltering()
     }
     
     /// Stops the generation of location updates.
     public func stopUpdatingLocation() {
         log.debug()
-        self.state = .stopped
+        state = .stopped
     }
     
     /// Set an anchor point. All location updates will now report the
     /// location of the anchor instead of the camera.
     public func setAnchor() {
         log.debug()
-        self.anchorFrame = lastFrame
+        anchorFrame = lastFrame
     }
     
     /// Unset the anchor point. All location updates will now report the
     /// location of the camera.
     public func unsetAnchor() {
         log.debug()
-        self.anchorFrame = nil
+        anchorFrame = nil
     }
     
 

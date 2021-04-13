@@ -27,12 +27,12 @@ protocol FMFrameFilter {
 
 public class FMInputQualityFilter {
     
-    private var throughputAverager = MovingAverage()
-    public var quality: Double {
-        throughputAverager.average
-    }
-    
     var delegate: FMLocationDelegate?
+    
+    /// the last time a frame was accepted
+    var lastAcceptTime = clock()
+    /// number of seconds after which we force acceptance
+    var acceptanceThreshold = 6.0
     
     /// the last time we issued a behavior request
     var lastRequestTime = clock()
@@ -49,23 +49,37 @@ public class FMInputQualityFilter {
     ]
     
     var rejections: [FMFilterRejectionReason: Int] = [:]
+
+    func startFiltering() {
+        resetAcceptanceClock()
+    }
+
+    func resetAcceptanceClock() {
+        lastAcceptTime = clock()
+    }
     
     /// run ARFrame through quality filter collection
     func accepts(_ frame: ARFrame) -> Bool {
-        
-        // run frame through filters
-        for filter in filters {
-            if case let .rejected(rejection) = filter.accepts(frame) {
-                _ = throughputAverager.addSample(value: 0.0)
-                addRejection(rejection)
-                notifyIfNeeded(rejection)
-                return false
+
+        if !shouldForceAccept() {
+            // run frame through filters
+            for filter in filters {
+                if case let .rejected(rejection) = filter.accepts(frame) {
+                    addRejection(rejection)
+                    notifyIfNeeded(rejection)
+                    return false
+                }
             }
         }
-        
+
         // success, the frame is acceptable
-        _ = throughputAverager.addSample(value: 1.0)
+        resetAcceptanceClock()
         return true
+    }
+    
+    func shouldForceAccept() -> Bool {
+        let elapsed = Double(clock() - lastAcceptTime) / Double(CLOCKS_PER_SEC)
+        return elapsed > acceptanceThreshold
     }
     
     /// notify client when too many rejections occur

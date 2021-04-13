@@ -76,7 +76,8 @@ public class FMInputQualityFilter {
         resetAcceptanceClock()
         return true
     }
-    
+
+    /// if there are a lot of continuous rejections, we force an acceptance
     func shouldForceAccept() -> Bool {
         let elapsed = Double(clock() - lastAcceptTime) / Double(CLOCKS_PER_SEC)
         return elapsed > acceptanceThreshold

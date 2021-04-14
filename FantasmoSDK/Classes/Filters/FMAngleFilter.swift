@@ -8,16 +8,17 @@
 import ARKit
 
 class FMAngleFilter: FMFrameFilter {
-    let radianThreshold = Float.pi / Float(8)
+    private static let maxPitchDeviationInRad = Float.pi / 8
         
     func accepts(_ frame: ARFrame) -> FMFilterResult {
-        switch frame.camera.eulerAngles.x {
-        case _ where frame.camera.eulerAngles.x > radianThreshold:
-            return .rejected(reason: .pitchTooHigh)
-        case _ where frame.camera.eulerAngles.x < -radianThreshold:
-            return .rejected(reason: .pitchTooLow)
-        default:
+        // Angle between XZ-plane of world coordinate system and Z-axis of camera.
+        let cameraPitchAngleInRad = frame.camera.eulerAngles.x
+        
+        if abs(cameraPitchAngleInRad) <= FMAngleFilter.maxPitchDeviationInRad {
             return .accepted
+        } else {
+            let reason: FMFilterRejectionReason = (cameraPitchAngleInRad > 0 ? .pitchTooHigh : .pitchTooLow)
+            return .rejected(reason: reason)
         }
     }
 }

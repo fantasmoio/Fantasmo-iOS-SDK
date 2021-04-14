@@ -43,7 +43,7 @@ public class FMInputQualityFilter {
     
     /// filter collection, in order of increasing computational cost
     let filters: [FMFrameFilter] = [
-        FMAngleFilter(),
+        FMCameraPitchFilter(),
         FMMovementFilter(),
         FMBlurFilter(),
     ]

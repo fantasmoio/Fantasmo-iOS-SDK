@@ -38,7 +38,7 @@
 		A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C2260CE56000A7FA6B /* RadiusResponse.swift */; };
 		A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
 		A02647092613633F00A7FA6B /* FMInputQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02647072613633F00A7FA6B /* FMInputQualityFilter.swift */; };
-		A026470A2613633F00A7FA6B /* FMAngleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02647082613633F00A7FA6B /* FMAngleFilter.swift */; };
+		A026470A2613633F00A7FA6B /* FMCameraPitchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02647082613633F00A7FA6B /* FMCameraPitchFilter.swift */; };
 		A0264712261364D000A7FA6B /* MovingAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0264711261364D000A7FA6B /* MovingAverage.swift */; };
 		A04B0B892626E88E00E5989D /* FMBehaviorRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04B0B882626E88E00E5989D /* FMBehaviorRequest.swift */; };
 		A0A986772613718E0084FDB9 /* FMMovementFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A986762613718E0084FDB9 /* FMMovementFilter.swift */; };
@@ -80,7 +80,7 @@
 		A02646C2260CE56000A7FA6B /* RadiusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusResponse.swift; sourceTree = "<group>"; };
 		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
 		A02647072613633F00A7FA6B /* FMInputQualityFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInputQualityFilter.swift; sourceTree = "<group>"; };
-		A02647082613633F00A7FA6B /* FMAngleFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMAngleFilter.swift; sourceTree = "<group>"; };
+		A02647082613633F00A7FA6B /* FMCameraPitchFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMCameraPitchFilter.swift; sourceTree = "<group>"; };
 		A0264711261364D000A7FA6B /* MovingAverage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovingAverage.swift; sourceTree = "<group>"; };
 		A04B0B882626E88E00E5989D /* FMBehaviorRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBehaviorRequest.swift; sourceTree = "<group>"; };
 		A0A986762613718E0084FDB9 /* FMMovementFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMMovementFilter.swift; sourceTree = "<group>"; };
@@ -215,7 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				A02647072613633F00A7FA6B /* FMInputQualityFilter.swift */,
-				A02647082613633F00A7FA6B /* FMAngleFilter.swift */,
+				A02647082613633F00A7FA6B /* FMCameraPitchFilter.swift */,
 				A04B0B882626E88E00E5989D /* FMBehaviorRequest.swift */,
 				A0A986792613719E0084FDB9 /* FMBlurFilter.swift */,
 				A0A986762613718E0084FDB9 /* FMMovementFilter.swift */,
@@ -333,7 +333,7 @@
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,
 				A0A986772613718E0084FDB9 /* FMMovementFilter.swift in Sources */,
 				A04B0B892626E88E00E5989D /* FMBehaviorRequest.swift in Sources */,
-				A026470A2613633F00A7FA6B /* FMAngleFilter.swift in Sources */,
+				A026470A2613633F00A7FA6B /* FMCameraPitchFilter.swift in Sources */,
 				A0A9867A2613719E0084FDB9 /* FMBlurFilter.swift in Sources */,
 				946838DB25921BF3005B1145 /* FMConfiguration.swift in Sources */,
 				946838D425921BF3005B1145 /* UIImage+Extension.swift in Sources */,

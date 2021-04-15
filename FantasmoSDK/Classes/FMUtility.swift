@@ -6,6 +6,7 @@
 import Foundation
 import UIKit
 
+// TODO: replace "open" access to "public"
 /// Utility class for Fantasmo SDK.
 open class FMUtility {
 

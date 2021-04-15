@@ -10,6 +10,7 @@ import UIKit
 import ARKit
 import CoreLocation
 
+// TODO: make protocol only class-bound replacing `NSObjectProtocol` to `class`
 /// The methods that you use to receive events from an associated
 /// location manager object.
 public protocol FMLocationDelegate : NSObjectProtocol {
@@ -22,7 +23,6 @@ public protocol FMLocationDelegate : NSObjectProtocol {
     func locationManager(didUpdateLocation location: CLLocation,
                          withZones zones: [FMZone]?)
     
-    
     /// Tells the delegate that an error has occurred.
     ///
     /// - Parameters:
@@ -34,7 +34,7 @@ public protocol FMLocationDelegate : NSObjectProtocol {
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
 }
 
-/// Empty implementations of the protocol to allow optional
+/// Empty implementations of the protocol methods to allow optional
 /// implementation for delegates.
 public extension FMLocationDelegate {
     func locationManager(didUpdateLocation location: CLLocation,
@@ -61,7 +61,6 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     public static let shared = FMLocationManager()
     public private(set) var state = State.stopped
-    public var qualityFilter = FMInputQualityFilter()
     
     // clients can use this to mock the localization call
     public var mockLocalize: ((ARFrame) -> Void)?
@@ -86,6 +85,16 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public var isSimulation = false
     /// The zone that will be simulated.
     public var simulationZone = FMZone.ZoneType.parking
+    
+    /// Used to validate frame for sufficient quality before sending to API.
+    private let frameGuard = FMFrameSequenceGuard()
+    
+    /// Throttler for invalid frames.
+    private lazy var frameFailureThrottler = FrameFailureThrottler {
+        [weak self] frameValidationError in
+        let behaviorRequest = frameValidationError.mapToBehaviorRequest()
+        self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
+    }
 
     /// Returns most recent location unless an override was set
     var currentLocation: CLLocation {
@@ -117,7 +126,6 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug(parameters: ["delegate": delegate])
 
         self.delegate = delegate
-        qualityFilter.delegate = delegate
         
         // set up FMApi
         FMApi.shared.delegate = self
@@ -154,7 +162,8 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug()
         isConnected = true
         state = .localizing
-        qualityFilter.startFiltering()
+        frameGuard.prepareForNewFrameSequence()
+        frameFailureThrottler.reset()
     }
     
     /// Stops the generation of location updates.
@@ -176,7 +185,6 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug()
         anchorFrame = nil
     }
-    
 
     /// Calculate the FMPose difference of the anchor frame with respect to the given frame.
     /// This method is just here for SDK client debugging purposes.
@@ -265,11 +273,17 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
-                        
-        guard state == .localizing && qualityFilter.accepts(frame)
-        else { return }
         
-        localize(frame: frame)
+        guard state == .localizing else { return }
+
+        let validationResult = frameGuard.validate(frame)
+    
+        switch validationResult {
+        case .success:
+            localize(frame: frame)
+        case let .failure(error):
+            frameFailureThrottler.onNext(validationError: error)
+        }
     }
 }
 
@@ -280,3 +294,4 @@ extension FMLocationManager : CLLocationManagerDelegate {
         lastLocation = locations.last
     }
 }
+

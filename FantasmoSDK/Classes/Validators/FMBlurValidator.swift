@@ -11,7 +11,7 @@ import MetalPerformanceShaders
 import MetalKit
 import VideoToolbox
 
-class FMBlurFilter: FMFrameFilter {
+class FMBlurValidator: FMFrameValidator {
     
     var variance = 0
     var varianceAverager = MovingAverage()
@@ -34,7 +34,7 @@ class FMBlurFilter: FMFrameFilter {
         metalCommandQueue = metalDevice?.makeCommandQueue()
     }
     
-    func accepts(_ frame: ARFrame) -> FMFilterResult {
+    func validate(_ frame: ARFrame) -> Result<Void, FMFrameValidationError> {
         variance = calculateVariance(frame: frame)
         _ = varianceAverager.addSample(value: Double(variance))
         
@@ -58,7 +58,7 @@ class FMBlurFilter: FMFrameFilter {
             isBlurry = isLowVariance
         }
         
-        return isBlurry ? .rejected(reason: .movingTooFast) : .accepted
+        return isBlurry ? .failure(.movingTooFast) : .success(())
     }
     
     func calculateVariance(frame: ARFrame) -> Int {

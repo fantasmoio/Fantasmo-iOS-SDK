@@ -7,16 +7,16 @@
 
 import ARKit
 
-class FMMovementFilter: FMFrameFilter {
+class FMMovementValidator: FMFrameValidator {
     let threshold: Float = 0.25
     var lastTransform: simd_float4x4 = simd_float4x4(1)
     
-    func accepts(_ frame: ARFrame) -> FMFilterResult {
+    func validate(_ frame: ARFrame) -> Result<Void, FMFrameValidationError> {
         if exceededThreshold(frame.camera.transform) {
             lastTransform = frame.camera.transform
-            return .accepted
+            return .success(())
         } else {
-            return .rejected(reason: .movingTooLittle)
+            return .failure(.movingTooLittle)
         }
     }
     

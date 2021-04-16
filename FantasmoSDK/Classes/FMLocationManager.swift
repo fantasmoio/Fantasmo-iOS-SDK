@@ -163,7 +163,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         isConnected = true
         state = .localizing
         frameGuard.prepareForNewFrameSequence()
-        frameFailureThrottler.reset()
+        frameFailureThrottler.restart()
     }
     
     /// Stops the generation of location updates.
@@ -281,6 +281,7 @@ extension FMLocationManager : ARSessionDelegate {
         switch validationResult {
         case .success:
             localize(frame: frame)
+            frameFailureThrottler.restart()
         case let .failure(error):
             frameFailureThrottler.onNext(validationError: error)
         }

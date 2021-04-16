@@ -7,17 +7,20 @@
 
 import Foundation
 
-/// Kind of throttler for frame validation failure events each of which occurs when a frame turns out to be not acceptable for determining location.
-/// - Note: strictly speaking this class is not throttler because it doesn't guarantee that events  are reported at a regular time interval.
+/// Throttler for frame validation failure events each of which occurs when a frame turns out to be not acceptable for determining location.
+/// Throttling technique corresponds to classic throttling on "leading" edge but very first triggering is omitted and triggering does not happen until
+/// certain number of events have occurred since previous triggering event.
+/// Example of throttling on "leading" edge can be found at https://bit.ly/3dl2RAz
 class FrameFailureThrottler {
     
-    /// Minimum number of seconds that must elapse between invoking `handler`.
+    /// Interval between two
+    /// Minimum number of seconds that must elapse between trigering.
     private let throttleThreshold = 2.0
     
-    /// The number of times a validation error of certain kind occurs before invoking `handler`.
+    /// The number of times a validation error of certain kind occurs before triggering.
     private let incidenceThreshold = 30
     
-    /// The last time we invoked `handler`.
+    /// The last time of triggering.
     private var lastErrorTime = clock()
     
     private var handler: ((FMFrameValidationError) -> Void)
@@ -28,22 +31,26 @@ class FrameFailureThrottler {
         self.handler = handler
     }
     
-    /// Only after accumulating certain number of errors of specific kind `Throttler` invokes `handler` and interval between invocations is not
-    /// less than `throttleThreshold`.
+    /// Throttling technique corresponds to classic throttling on "leading" edge but very first triggering is omitted and triggering does not happen until
+    /// certain number of events have occurred since previous triggering event.
     func onNext(validationError: FMFrameValidationError) {
         let count = (validationErrorToCountDict[validationError] ?? 0) &+ 1
         let elapsed = Double(clock() - lastErrorTime) / Double(CLOCKS_PER_SEC)
         
-        if elapsed >= throttleThreshold, count >= incidenceThreshold {
+        if elapsed > throttleThreshold, count >= incidenceThreshold {
             handler(validationError)
-            lastErrorTime = clock()
-            validationErrorToCountDict.removeAll(keepingCapacity: true)
+            startNewCycle()
         } else {
             validationErrorToCountDict[validationError] = count
         }
     }
     
-    func reset() {
+    func restart() {
+        startNewCycle()
+    }
+    
+    private func startNewCycle() {
+        lastErrorTime = clock()
         validationErrorToCountDict.removeAll(keepingCapacity: true)
     }
     

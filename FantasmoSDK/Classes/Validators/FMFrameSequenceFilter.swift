@@ -8,9 +8,9 @@
 import ARKit
 
 /// Used to determine which frames in sequence of frames can be used for determining location.
-/// All frames  are expected to be passed sequentially to `validate(_)` method keeping their order in sequence.
+/// All frames  are expected to be passed sequentially to `apply(_)` method keeping their order in sequence.
 /// If necessary to start new sequence `prepareForNewFrameSequence()` must be invoked.
-class FMFrameSequenceGuard {
+class FMFrameSequenceFilter {
     
     private var timestampOfPreviousApprovedFrame: TimeInterval?
     
@@ -18,10 +18,10 @@ class FMFrameSequenceGuard {
     private var acceptanceThreshold = 6.0
     
     /// Filter collection, in order of increasing computational cost
-    private let validators: [FMFrameValidator] = [
-        FMCameraPitchValidator(),
-        FMMovementValidator(),
-        FMBlurValidator(),
+    private let rules: [FMFrameSequenceFilterRule] = [
+        FMCameraPitchFilterRule(),
+        FMMovementFilterRule(),
+        FMBlurFilterRule(),
     ]
     
     /// Check whether passed `frame` can be used for determining location.
@@ -29,14 +29,14 @@ class FMFrameSequenceGuard {
     /// frame was passed in too long ago.
     /// If it is needed to start working with new sequence of frames then invoke `prepareForNewFrameSequence()` or create new instance
     /// of this class.
-    func validate(_ frame: ARFrame) -> Result<Void, FMFrameValidationError> {
+    func apply(to frame: ARFrame) -> Result<Void, FMFrameFilterFailure> {
         if shouldForceApprove(frame) {
             timestampOfPreviousApprovedFrame = frame.timestamp
             return .success(())
         }
         
-        for validator in validators {
-            if case let .failure(rejection) = validator.validate(frame) {
+        for validator in rules {
+            if case let .failure(rejection) = validator.check(frame) {
                 return .failure(rejection)
             }
         }
@@ -46,7 +46,7 @@ class FMFrameSequenceGuard {
     }
     
     /// Invoke this method when it is needed to start validating a new sequence of frames.
-    /// Invoking this method will ensure that first frame on the new sequence will not be force approved without any assessing for quality.
+    /// Invoking this method will ensure that first frame on the new sequence will not be force approved without assessing for quality.
     func prepareForNewFrameSequence() {
         timestampOfPreviousApprovedFrame = nil
     }

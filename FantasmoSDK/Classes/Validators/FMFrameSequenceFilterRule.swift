@@ -7,18 +7,18 @@
 
 import ARKit
 
-protocol FMFrameValidator {
-    func validate(_ frame: ARFrame) -> Result<Void, FMFrameValidationError>
+protocol FMFrameSequenceFilterRule {
+    func check(_ frame: ARFrame) -> Result<Void, FMFrameFilterFailure>
 }
 
-enum FMFrameValidationError: Error {
+enum FMFrameFilterFailure: Error {
     case cameraPitchTooLow
     case cameraPitchTooHigh
     case movingTooFast
     case movingTooLittle
 }
 
-extension FMFrameValidationError {
+extension FMFrameFilterFailure {
     func mapToBehaviorRequest() -> FMBehaviorRequest {
         switch self {
         case .cameraPitchTooLow:

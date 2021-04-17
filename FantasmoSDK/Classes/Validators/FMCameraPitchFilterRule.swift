@@ -7,18 +7,18 @@
 
 import ARKit
 
-class FMCameraPitchValidator: FMFrameValidator {
+class FMCameraPitchFilterRule: FMFrameSequenceFilterRule {
     private static let maxPitchDeviationInRad = Float.pi / 8
         
-    func validate(_ frame: ARFrame) -> Result<Void, FMFrameValidationError> {
+    func check(_ frame: ARFrame) -> Result<Void, FMFrameFilterFailure> {
         // Angle between XZ-plane of world coordinate system and Z-axis of camera.
         let cameraPitchAngleInRad = frame.camera.eulerAngles.x
         
-        if abs(cameraPitchAngleInRad) <= FMCameraPitchValidator.maxPitchDeviationInRad {
+        if abs(cameraPitchAngleInRad) <= FMCameraPitchFilterRule.maxPitchDeviationInRad {
             return .success(())
         } else {
-            let reason: FMFrameValidationError = (cameraPitchAngleInRad > 0 ? .cameraPitchTooHigh : .cameraPitchTooLow)
-            return .failure(reason)
+            let failure: FMFrameFilterFailure = (cameraPitchAngleInRad > 0 ? .cameraPitchTooHigh : .cameraPitchTooLow)
+            return .failure(failure)
         }
     }
 }

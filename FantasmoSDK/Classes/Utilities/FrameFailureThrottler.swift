@@ -23,25 +23,25 @@ class FrameFailureThrottler {
     /// The last time of triggering.
     private var lastErrorTime = clock()
     
-    private var handler: ((FMFrameValidationError) -> Void)
-    private var validationErrorToCountDict = [FMFrameValidationError: Int]()
+    private var handler: ((FMFrameFilterFailure) -> Void)
+    private var validationErrorToCountDict = [FMFrameFilterFailure: Int]()
     
     /// - Parameter handler: closure that is invoked in accordance with logic of throttling.
-    init(handler: @escaping (FMFrameValidationError) -> Void) {
+    init(handler: @escaping (FMFrameFilterFailure) -> Void) {
         self.handler = handler
     }
     
     /// Throttling technique corresponds to classic throttling on "leading" edge but very first triggering is omitted and triggering does not happen until
     /// certain number of events have occurred since previous triggering event.
-    func onNext(validationError: FMFrameValidationError) {
-        let count = (validationErrorToCountDict[validationError] ?? 0) &+ 1
+    func onNext(failure: FMFrameFilterFailure) {
+        let count = (validationErrorToCountDict[failure] ?? 0) &+ 1
         let elapsed = Double(clock() - lastErrorTime) / Double(CLOCKS_PER_SEC)
         
         if elapsed > throttleThreshold, count >= incidenceThreshold {
-            handler(validationError)
+            handler(failure)
             startNewCycle()
         } else {
-            validationErrorToCountDict[validationError] = count
+            validationErrorToCountDict[failure] = count
         }
     }
     

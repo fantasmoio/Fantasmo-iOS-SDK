@@ -87,7 +87,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public var simulationZone = FMZone.ZoneType.parking
     
     /// Used to validate frame for sufficient quality before sending to API.
-    private let frameGuard = FMFrameSequenceGuard()
+    private let frameFilter = FMFrameSequenceFilter()
     
     /// Throttler for invalid frames.
     private lazy var frameFailureThrottler = FrameFailureThrottler {
@@ -162,7 +162,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug()
         isConnected = true
         state = .localizing
-        frameGuard.prepareForNewFrameSequence()
+        frameFilter.prepareForNewFrameSequence()
         frameFailureThrottler.restart()
     }
     
@@ -276,14 +276,14 @@ extension FMLocationManager : ARSessionDelegate {
         
         guard state == .localizing else { return }
 
-        let validationResult = frameGuard.validate(frame)
+        let filterResult = frameFilter.apply(to: frame)
     
-        switch validationResult {
+        switch filterResult {
         case .success:
             localize(frame: frame)
             frameFailureThrottler.restart()
         case let .failure(error):
-            frameFailureThrottler.onNext(validationError: error)
+            frameFailureThrottler.onNext(failure: error)
         }
     }
 }

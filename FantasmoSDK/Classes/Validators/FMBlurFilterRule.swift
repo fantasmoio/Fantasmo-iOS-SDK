@@ -11,7 +11,7 @@ import MetalPerformanceShaders
 import MetalKit
 import VideoToolbox
 
-class FMBlurValidator: FMFrameValidator {
+class FMBlurFilterRule: FMFrameSequenceFilterRule {
     
     var variance = 0
     var varianceAverager = MovingAverage()
@@ -34,7 +34,7 @@ class FMBlurValidator: FMFrameValidator {
         metalCommandQueue = metalDevice?.makeCommandQueue()
     }
     
-    func validate(_ frame: ARFrame) -> Result<Void, FMFrameValidationError> {
+    func check(_ frame: ARFrame) -> Result<Void, FMFrameFilterFailure> {
         variance = calculateVariance(frame: frame)
         _ = varianceAverager.addSample(value: Double(variance))
         

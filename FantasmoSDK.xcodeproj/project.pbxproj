@@ -38,13 +38,13 @@
 		A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C2260CE56000A7FA6B /* RadiusResponse.swift */; };
 		A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
 		A0264712261364D000A7FA6B /* MovingAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0264711261364D000A7FA6B /* MovingAverage.swift */; };
-		A30A233B2628F7D5009BAEF0 /* FMMovementValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30A23362628F7D5009BAEF0 /* FMMovementValidator.swift */; };
-		A30A233C2628F7D5009BAEF0 /* FMBlurValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30A23372628F7D5009BAEF0 /* FMBlurValidator.swift */; };
-		A30A233D2628F7D5009BAEF0 /* FMCameraPitchValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30A23382628F7D5009BAEF0 /* FMCameraPitchValidator.swift */; };
-		A30A233E2628F7D5009BAEF0 /* FMFrameValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30A23392628F7D5009BAEF0 /* FMFrameValidator.swift */; };
-		A30A233F2628F7D5009BAEF0 /* FMFrameSequenceGuard.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30A233A2628F7D5009BAEF0 /* FMFrameSequenceGuard.swift */; };
 		A30A23472628F812009BAEF0 /* FMBehaviorRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30A23462628F812009BAEF0 /* FMBehaviorRequest.swift */; };
 		A30A234A2628F830009BAEF0 /* FrameFailureThrottler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30A23492628F830009BAEF0 /* FrameFailureThrottler.swift */; };
+		A321530F262D77DF007666A7 /* FMBlurFilterRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A321530A262D77DF007666A7 /* FMBlurFilterRule.swift */; };
+		A3215310262D77DF007666A7 /* FMCameraPitchFilterRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A321530B262D77DF007666A7 /* FMCameraPitchFilterRule.swift */; };
+		A3215311262D77DF007666A7 /* FMMovementFilterRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A321530C262D77DF007666A7 /* FMMovementFilterRule.swift */; };
+		A3215312262D77DF007666A7 /* FMFrameSequenceFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A321530D262D77DF007666A7 /* FMFrameSequenceFilter.swift */; };
+		A3215313262D77DF007666A7 /* FMFrameSequenceFilterRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A321530E262D77DF007666A7 /* FMFrameSequenceFilterRule.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,13 +82,13 @@
 		A02646C2260CE56000A7FA6B /* RadiusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusResponse.swift; sourceTree = "<group>"; };
 		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
 		A0264711261364D000A7FA6B /* MovingAverage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovingAverage.swift; sourceTree = "<group>"; };
-		A30A23362628F7D5009BAEF0 /* FMMovementValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMovementValidator.swift; sourceTree = "<group>"; };
-		A30A23372628F7D5009BAEF0 /* FMBlurValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBlurValidator.swift; sourceTree = "<group>"; };
-		A30A23382628F7D5009BAEF0 /* FMCameraPitchValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMCameraPitchValidator.swift; sourceTree = "<group>"; };
-		A30A23392628F7D5009BAEF0 /* FMFrameValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMFrameValidator.swift; sourceTree = "<group>"; };
-		A30A233A2628F7D5009BAEF0 /* FMFrameSequenceGuard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMFrameSequenceGuard.swift; sourceTree = "<group>"; };
 		A30A23462628F812009BAEF0 /* FMBehaviorRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBehaviorRequest.swift; sourceTree = "<group>"; };
 		A30A23492628F830009BAEF0 /* FrameFailureThrottler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameFailureThrottler.swift; sourceTree = "<group>"; };
+		A321530A262D77DF007666A7 /* FMBlurFilterRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBlurFilterRule.swift; sourceTree = "<group>"; };
+		A321530B262D77DF007666A7 /* FMCameraPitchFilterRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMCameraPitchFilterRule.swift; sourceTree = "<group>"; };
+		A321530C262D77DF007666A7 /* FMMovementFilterRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMovementFilterRule.swift; sourceTree = "<group>"; };
+		A321530D262D77DF007666A7 /* FMFrameSequenceFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMFrameSequenceFilter.swift; sourceTree = "<group>"; };
+		A321530E262D77DF007666A7 /* FMFrameSequenceFilterRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMFrameSequenceFilterRule.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,8 +142,8 @@
 		9468389A25921BF3005B1145 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A3215309262D77DF007666A7 /* FrameSequenceFilter */,
 				A0264710261364BA00A7FA6B /* Utilities */,
-				A30A23352628F7D5009BAEF0 /* Validators */,
 				9468389E25921BF3005B1145 /* Mock */,
 				946838A125921BF3005B1145 /* Network */,
 				946838A525921BF3005B1145 /* Models */,
@@ -225,17 +225,18 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		A30A23352628F7D5009BAEF0 /* Validators */ = {
+		A3215309262D77DF007666A7 /* FrameSequenceFilter */ = {
 			isa = PBXGroup;
 			children = (
-				A30A23362628F7D5009BAEF0 /* FMMovementValidator.swift */,
-				A30A23372628F7D5009BAEF0 /* FMBlurValidator.swift */,
-				A30A23382628F7D5009BAEF0 /* FMCameraPitchValidator.swift */,
-				A30A23392628F7D5009BAEF0 /* FMFrameValidator.swift */,
-				A30A233A2628F7D5009BAEF0 /* FMFrameSequenceGuard.swift */,
+				A321530A262D77DF007666A7 /* FMBlurFilterRule.swift */,
+				A321530B262D77DF007666A7 /* FMCameraPitchFilterRule.swift */,
+				A321530C262D77DF007666A7 /* FMMovementFilterRule.swift */,
+				A321530D262D77DF007666A7 /* FMFrameSequenceFilter.swift */,
+				A321530E262D77DF007666A7 /* FMFrameSequenceFilterRule.swift */,
 			);
-			path = Validators;
-			sourceTree = "<group>";
+			name = FrameSequenceFilter;
+			path = FantasmoSDK/Classes/FrameSequenceFilter;
+			sourceTree = SOURCE_ROOT;
 		};
 /* End PBXGroup section */
 
@@ -320,36 +321,36 @@
 				A30A234A2628F830009BAEF0 /* FrameFailureThrottler.swift in Sources */,
 				A02646C0260CE46C00A7FA6B /* FMLog.swift in Sources */,
 				946838C825921BF3005B1145 /* FMIntrinsics.swift in Sources */,
+				A3215311262D77DF007666A7 /* FMMovementFilterRule.swift in Sources */,
 				946838D225921BF3005B1145 /* FMPose.swift in Sources */,
 				946838CC25921BF3005B1145 /* FMOrientation.swift in Sources */,
 				946838CF25921BF3005B1145 /* Coordinate.swift in Sources */,
 				946838CB25921BF3005B1145 /* FMZone.swift in Sources */,
 				946838C925921BF3005B1145 /* Location.swift in Sources */,
-				A30A233E2628F7D5009BAEF0 /* FMFrameValidator.swift in Sources */,
+				A3215312262D77DF007666A7 /* FMFrameSequenceFilter.swift in Sources */,
 				946838C225921BF3005B1145 /* MockData.swift in Sources */,
 				946838D025921BF3005B1145 /* ErrorResponse.swift in Sources */,
 				946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */,
 				946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */,
-				A30A233B2628F7D5009BAEF0 /* FMMovementValidator.swift in Sources */,
 				946838D725921BF3005B1145 /* Codable+Extension.swift in Sources */,
 				A02646BD260CE44900A7FA6B /* FMApi.swift in Sources */,
 				A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */,
 				A0264712261364D000A7FA6B /* MovingAverage.swift in Sources */,
-				A30A233D2628F7D5009BAEF0 /* FMCameraPitchValidator.swift in Sources */,
-				A30A233F2628F7D5009BAEF0 /* FMFrameSequenceGuard.swift in Sources */,
 				946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */,
+				A3215313262D77DF007666A7 /* FMFrameSequenceFilterRule.swift in Sources */,
 				946838CA25921BF3005B1145 /* Geofence.swift in Sources */,
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,
 				A30A23472628F812009BAEF0 /* FMBehaviorRequest.swift in Sources */,
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,
 				946838DB25921BF3005B1145 /* FMConfiguration.swift in Sources */,
 				946838D425921BF3005B1145 /* UIImage+Extension.swift in Sources */,
+				A321530F262D77DF007666A7 /* FMBlurFilterRule.swift in Sources */,
 				A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */,
+				A3215310262D77DF007666A7 /* FMCameraPitchFilterRule.swift in Sources */,
 				946838CD25921BF3005B1145 /* FMPosition.swift in Sources */,
 				946838C625921BF3005B1145 /* FMError.swift in Sources */,
 				946838D125921BF3005B1145 /* Orientation.swift in Sources */,
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
-				A30A233C2628F7D5009BAEF0 /* FMBlurValidator.swift in Sources */,
 				A02646BB260CE44900A7FA6B /* FMApiRouter.swift in Sources */,
 				946838D825921BF3005B1145 /* CGImage+Extension.swift in Sources */,
 			);

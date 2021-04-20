@@ -52,10 +52,15 @@ public class FMInputQualityFilter {
 
     func startFiltering() {
         resetAcceptanceClock()
+        resetRejectionCount()
     }
 
-    func resetAcceptanceClock() {
+    private func resetAcceptanceClock() {
         lastAcceptTime = clock()
+    }
+
+    private func resetRejectionCount() {
+        rejections.removeAll(keepingCapacity: true)
     }
     
     /// run ARFrame through quality filter collection
@@ -82,7 +87,7 @@ public class FMInputQualityFilter {
         let elapsed = Double(clock() - lastAcceptTime) / Double(CLOCKS_PER_SEC)
         return elapsed > acceptanceThreshold
     }
-    
+
     /// notify client when too many rejections occur
     func notifyIfNeeded(_ rejection: FMFilterRejectionReason) {
         guard let count = rejections[rejection] else { return }
@@ -90,7 +95,7 @@ public class FMInputQualityFilter {
         let elapsed = Double(clock() - lastRequestTime) / Double(CLOCKS_PER_SEC)
         if elapsed > throttleThreshold && count > incidenceThreshold {
             delegate?.locationManager(didRequestBehavior: FMBehaviorRequest(rejection))
-            rejections.removeAll(keepingCapacity: true)
+            resetRejectionCount()
             lastRequestTime = clock()
         }
     }

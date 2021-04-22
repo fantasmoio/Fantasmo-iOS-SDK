@@ -191,6 +191,31 @@ extension ViewController: FMLocationDelegate {
 }
 ```
 
+### Behaviors
+
+To maximize localization quality, camera input is filtered against common problems. The designated `FMLocationDelegate` will be called with behavior requests intented to alleviate such problems.
+
+```swift
+extension ViewController: FMLocationDelegate {
+    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
+        // Handle behavior update
+    }
+}
+```
+
+The following behaviors are currently requested:
+
+```swift
+public enum FMBehaviorRequest: String {
+    case tiltUp = "Tilt your device up"
+    case tiltDown = "Tilt your device down"
+    case panAround = "Pan around the scene"
+    case panSlowly = "Pan more slowly"
+}
+```
+
+When notified, your application should prompt the user to undertake the remedial behavior. Notifcations are issued at most once per every two seconds. You may use our enum cases to map to your own verbiage or simply rely on our `.rawValue` strings.
+
 ### Anchors
 
 In order to get location updates for an anchor, set the anchor before

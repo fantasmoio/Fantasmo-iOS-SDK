@@ -30,16 +30,20 @@ public protocol FMLocationDelegate : NSObjectProtocol {
     ///   - metadata: Metadata related to the error.
     func locationManager(didFailWithError error: Error,
                          errorMetadata metadata: Any?)
+    
+    func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
 }
 
 /// Empty implementations of the protocol to allow optional
 /// implementation for delegates.
-extension FMLocationDelegate {
+public extension FMLocationDelegate {
     func locationManager(didUpdateLocation location: CLLocation,
                          withZones zones: [FMZone]?) {}
     
     func locationManager(didFailWithError error: Error,
                          errorMetadata metadata: Any?) {}
+    
+    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {}
 }
 
 
@@ -57,6 +61,10 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     public static let shared = FMLocationManager()
     public private(set) var state = State.stopped
+    public var qualityFilter = FMInputQualityFilter()
+    
+    // clients can use this to mock the localization call
+    public var mockLocalize: ((ARFrame) -> Void)?
     
     internal var anchorFrame: ARFrame?
     
@@ -109,6 +117,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug(parameters: ["delegate": delegate])
 
         self.delegate = delegate
+        qualityFilter.delegate = delegate
         
         // set up FMApi
         FMApi.shared.delegate = self
@@ -143,28 +152,29 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// Starts the generation of updates that report the user’s current location.
     public func startUpdatingLocation() {
         log.debug()
-        self.isConnected = true
-        self.state = .localizing
+        isConnected = true
+        state = .localizing
+        qualityFilter.startFiltering()
     }
     
     /// Stops the generation of location updates.
     public func stopUpdatingLocation() {
         log.debug()
-        self.state = .stopped
+        state = .stopped
     }
     
     /// Set an anchor point. All location updates will now report the
     /// location of the anchor instead of the camera.
     public func setAnchor() {
         log.debug()
-        self.anchorFrame = lastFrame
+        anchorFrame = lastFrame
     }
     
     /// Unset the anchor point. All location updates will now report the
     /// location of the camera.
     public func unsetAnchor() {
         log.debug()
-        self.anchorFrame = nil
+        anchorFrame = nil
     }
     
 
@@ -201,13 +211,19 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// provides a response via the delegate.
     ///
     /// - Parameter frame: Frame to localize.
-    internal func localize(frame: ARFrame) {
-        if !isConnected {
+    private func localize(frame: ARFrame) {
+        guard isConnected else {
             return
         }
         
         log.debug(parameters: ["simulation": isSimulation])
-        self.state = .uploading
+        state = .uploading
+        
+        // run mock version of localization if one is set
+        guard mockLocalize == nil else {
+            mockLocalize?(frame)
+            return
+        }
         
         // set up completion closure
         let localizeCompletion: FMApi.LocalizationResult = { location, zones in
@@ -232,6 +248,16 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         // send request
         FMApi.shared.localize(frame: frame, completion: localizeCompletion, error: localizeError)
     }
+    
+    private func localizeDone() {
+        if state != .stopped {
+           state = .localizing
+        }
+    }
+    
+    public func mockLocalizeDone() {
+        localizeDone()
+    }
 }
 
 // MARK: - ARSessionDelegate
@@ -239,10 +265,11 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
+                        
+        guard state == .localizing && qualityFilter.accepts(frame)
+        else { return }
         
-        if state == .localizing {
-            localize(frame: frame)
-        }
+        localize(frame: frame)
     }
 }
 
@@ -251,6 +278,5 @@ extension FMLocationManager : ARSessionDelegate {
 extension FMLocationManager : CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         lastLocation = locations.last
-        log.debug()
     }
 }

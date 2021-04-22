@@ -13,14 +13,14 @@ import VideoToolbox
 
 class FMBlurFilter: FMFrameFilter {
     
-    var variance = 0
+    var variance = 0.0
     var varianceAverager = MovingAverage()
     var averageVariance: Double {
         varianceAverager.average
     }
 
-    var varianceThreshold = 4.0 // empirically determined
-    var suddenDropThreshold = 2.0 // empirically determined
+    var varianceThreshold = 250.0 // empirically determined
+    var suddenDropThreshold = 0.4 // empirically determined
         
     var throughputAverager = MovingAverage(period: 8)
     var averageThroughput: Double {
@@ -41,8 +41,8 @@ class FMBlurFilter: FMFrameFilter {
         var isLowVariance = false
         var isBlurry = false
 
-        let isBelowThreshold = Double(variance) < varianceThreshold
-        let isSuddenDrop = Double(variance) < (averageVariance - suddenDropThreshold)
+        let isBelowThreshold = variance < varianceThreshold
+        let isSuddenDrop = variance < (averageVariance * suddenDropThreshold)
         isLowVariance = isBelowThreshold || isSuddenDrop
         
         if isLowVariance {
@@ -61,47 +61,61 @@ class FMBlurFilter: FMFrameFilter {
         return isBlurry ? .rejected(reason: .movingTooFast) : .accepted
     }
     
-    func calculateVariance(frame: ARFrame) -> Int {
+    func calculateVariance(frame: ARFrame) -> Double {
         guard let metalDevice = metalDevice, let metalCommandBuffer = self.metalCommandQueue?.makeCommandBuffer() else {
             return 0
         }
-        
+
         // Set up shaders
         let laplacian = MPSImageLaplacian(device: metalDevice)
         let meanAndVariance = MPSImageStatisticsMeanAndVariance(device: metalDevice)
-        
+
         // load frame buffer as texture
         let pixelBuffer = frame.capturedImage
         var cgImage: CGImage?
         VTCreateCGImageFromCVPixelBuffer(pixelBuffer, options: nil, imageOut: &cgImage)
         let textureLoader = MTKTextureLoader(device: metalDevice)
         let sourceTexture = try! textureLoader.newTexture(cgImage: cgImage!, options: nil)
-        
+
+        // convert image to black-and-white
+        let srcColorSpace = CGColorSpaceCreateDeviceRGB();
+        let dstColorSpace = CGColorSpaceCreateDeviceGray();
+        let conversionInfo = CGColorConversionInfo(src: srcColorSpace, dst: dstColorSpace);
+        let conversion = MPSImageConversion(device: metalDevice,
+                                            srcAlpha: .alphaIsOne,
+                                            destAlpha: .alphaIsOne,
+                                            backgroundColor: nil,
+                                            conversionInfo: conversionInfo)
+        let grayTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Unorm, width: sourceTexture.width, height: sourceTexture.height, mipmapped: false)
+        grayTextureDescriptor.usage = [.shaderWrite, .shaderRead]
+        let grayTexture = metalDevice.makeTexture(descriptor: grayTextureDescriptor)!
+        conversion.encode(commandBuffer: metalCommandBuffer, sourceTexture: sourceTexture, destinationTexture: grayTexture)
+
         // set up destination texture
-        let laplacianTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: sourceTexture.pixelFormat, width: sourceTexture.width, height: sourceTexture.height, mipmapped: false)
+        let laplacianTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: grayTexture.pixelFormat, width: grayTexture.width, height: grayTexture.height, mipmapped: false)
         laplacianTextureDescriptor.usage = [.shaderWrite, .shaderRead]
-        let lapTex = metalDevice.makeTexture(descriptor: laplacianTextureDescriptor)!
-        
+        let lapTexture = metalDevice.makeTexture(descriptor: laplacianTextureDescriptor)!
+
         // encode the laplacian command
-        laplacian.encode(commandBuffer: metalCommandBuffer, sourceTexture: sourceTexture, destinationTexture: lapTex)
-        
-        // set up destinaction texture
-        let varianceTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: sourceTexture.pixelFormat, width: 2, height: 1, mipmapped: false)
+        laplacian.encode(commandBuffer: metalCommandBuffer, sourceTexture: grayTexture, destinationTexture: lapTexture)
+
+        // set up destination texture
+        let varianceTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r32Float, width: 2, height: 1, mipmapped: false)
         varianceTextureDescriptor.usage = [.shaderWrite, .shaderRead]
         let varianceTexture = metalDevice.makeTexture(descriptor: varianceTextureDescriptor)!
-        
+
         // encode the mean and variance command
-        meanAndVariance.encode(commandBuffer: metalCommandBuffer, sourceTexture: lapTex, destinationTexture: varianceTexture)
-        
+        meanAndVariance.encode(commandBuffer: metalCommandBuffer, sourceTexture: lapTexture, destinationTexture: varianceTexture)
+
         // run the buffer
         metalCommandBuffer.commit()
         metalCommandBuffer.waitUntilCompleted()
-        
+
         // grab results
-        var result = [Int8](repeatElement(0, count: 2))
+        var result = [Float](repeatElement(0, count: 2))
         let region = MTLRegionMake2D(0, 0, 2, 1)
         varianceTexture.getBytes(&result, bytesPerRow: 1 * 2 * 4, from: region, mipmapLevel: 0)
-        
-        return Int(result.last ?? 0)
+
+        return Double(result.last! * 255.0 * 255.0)
     }
 }

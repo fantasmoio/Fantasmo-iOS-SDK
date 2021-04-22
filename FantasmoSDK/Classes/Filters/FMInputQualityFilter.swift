@@ -110,3 +110,27 @@ public class FMInputQualityFilter {
         }
     }
 }
+
+/// Use for internal testing of filters
+public class FMInputQualityFilterTestAdapter {
+    let blurFilter = FMBlurFilter()
+    public var blurVariance: Double {
+        blurFilter.averageVariance
+    }
+
+    public init() {
+
+    }
+
+    public func blurAccepts(_ frame: ARFrame) -> Bool {
+        return accepts(blurFilter, frame: frame)
+    }
+
+    func accepts(_ filter: FMFrameFilter, frame: ARFrame) -> Bool {
+        if case .rejected(_) = filter.accepts(frame) {
+            return false
+        } else {
+            return true
+        }
+    }
+}

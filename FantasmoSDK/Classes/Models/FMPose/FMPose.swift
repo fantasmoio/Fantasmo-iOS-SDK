@@ -8,7 +8,7 @@
 import Foundation
 import simd
 
-public struct FMPose: Codable {
+struct FMPose: Codable {
     public var position: FMPosition
     public var orientation: FMOrientation
     

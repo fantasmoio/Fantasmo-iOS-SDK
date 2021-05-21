@@ -68,13 +68,20 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     internal var anchorFrame: ARFrame?
     
-    // variables set by delegate handling methods
+    // Variables set by delegate handling methods
     private var lastFrame: ARFrame?
     private var lastLocation: CLLocation?
     
     private weak var delegate: FMLocationDelegate?
     
-    public var isConnected = false
+    /// States whether the client code using this manager set up connection with the manager.
+    private var isClientOfManagerConnected = false
+    
+    /// A  boolean value that states whether location updates were started by invoking `startUpdatingLocation()`.
+    public var isLocationUpdateInProgress: Bool {
+        state != .stopped
+    }
+    
     public var logLevel = FMLog.LogLevel.warning {
         didSet {
             log.logLevel = logLevel
@@ -106,16 +113,16 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     // MARK: - Lifecycle
         
-    /// Connect to the location service.
+    /// Set up the connection of the client code with `FMLocationManager`.
+    /// Use this method if your app does not need to receive `ARSession` or `CLLocationManager` delegate calls.
     ///
     /// - Parameters:
     ///   - accessToken: Token for service authorization.
     ///   - delegate: Delegate for receiving location events.
-    public func connect(accessToken: String,
-                        delegate: FMLocationDelegate) {
-        
+    public func connect(accessToken: String, delegate: FMLocationDelegate) {
         log.debug(parameters: ["delegate": delegate])
 
+        isClientOfManagerConnected = true
         self.delegate = delegate
         qualityFilter.delegate = delegate
         
@@ -124,8 +131,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         FMApi.shared.token = accessToken
     }
 
-    /// Connect to the location service.
-    /// Use this method if your app does not need to receive ARSession or CLLocationManager delegate calls
+    /// Set up the connection of the client code with `FMLocationManager`.
     ///
     /// - Parameters:
     ///   - accessToken: Token for service authorization.
@@ -136,12 +142,12 @@ open class FMLocationManager: NSObject, FMApiDelegate {
                         delegate: FMLocationDelegate,
                         session: ARSession? = nil,
                         locationManager: CLLocationManager? = nil) {
-        
         log.debug(parameters: [
                     "delegate": delegate,
                     "session": session,
                     "locationManager": locationManager])
         
+        isClientOfManagerConnected = true
         connect(accessToken: accessToken, delegate: delegate)
         session?.delegate = self
         locationManager?.delegate = self
@@ -151,8 +157,8 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     /// Starts the generation of updates that report the user’s current location.
     public func startUpdatingLocation() {
+        precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
-        isConnected = true
         state = .localizing
         qualityFilter.startFiltering()
     }
@@ -178,15 +184,19 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     }
     
 
-    /// Calculate the FMPose difference of the anchor frame with respect to the given frame.
+    /// Calculates transform of anchor relative to device and in the coordinate system of device (https://apple.co/2R37LJW).
     /// This method is just here for SDK client debugging purposes.
     /// It is not part of the localization flow.
     /// - Parameter frame: the current ARFrame
-    public func anchorDeltaPoseForFrame(_ frame: ARFrame) -> FMPose {
+    public func transformOfAnchorRelativeToDeviceInCsOfDevice(_ frame: ARFrame) -> simd_float4x4? {
         if let anchorFrame = anchorFrame {
-            return anchorFrame.poseWithRespectTo(frame)
+            let transform = frame.transformOfDeviceInWorldCS.calculateRelativeTransformInTheCsOfSelf(
+                of: anchorFrame.transformOfDeviceInWorldCS
+            )
+
+            return transform
         } else {
-            return FMPose()
+            return nil
         }
     }
     
@@ -211,13 +221,13 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// provides a response via the delegate.
     ///
     /// - Parameter frame: Frame to localize.
-    private func localize(frame: ARFrame) {
-        guard isConnected else {
-            return
-        }
+    internal func localize(frame: ARFrame, from session: ARSession) {
+        guard isLocationUpdateInProgress else { return }
         
         log.debug(parameters: ["simulation": isSimulation])
         state = .uploading
+        
+        let deviceOrientation = frame.deviceOrientation(session: session)
         
         // run mock version of localization if one is set
         guard mockLocalize == nil else {
@@ -246,7 +256,10 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         }
         
         // send request
-        FMApi.shared.localize(frame: frame, completion: localizeCompletion, error: localizeError)
+        FMApi.shared.localize(frame: frame,
+                              with: deviceOrientation,
+                              completion: localizeCompletion,
+                              error: localizeError)
     }
     
     private func localizeDone() {
@@ -265,11 +278,11 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
-                        
-        guard state == .localizing && qualityFilter.accepts(frame)
-        else { return }
         
-        localize(frame: frame)
+        guard state == .localizing && qualityFilter.accepts(frame) else {
+            return
+        }
+        localize(frame: frame, from: session)
     }
 }
 

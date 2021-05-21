@@ -42,18 +42,20 @@ class FMApi {
     ///
     /// - Parameters:
     ///   - frame: The current ARFrame as given by ARSession
+    ///   - deviceOrientation: Orientation of device when frame was captured from camera.
     ///   - completion: Completion closure
     ///   - error: Error closure
     func localize(frame: ARFrame,
+                  with deviceOrientation: UIDeviceOrientation,
                   completion: @escaping LocalizationResult,
                   error: @escaping ErrorResult) {
         
         // set up request parameters
-        guard let data = getImageData(frame: frame) else {
+        guard let data = extractDataOfProperlyOrientedImage(of: frame, with: deviceOrientation) else {
             error(FMError(ApiError.invalidImage))
             return
         }
-        let params = getParams(frame: frame)
+        let params = paramsOfLocalizeRequest(for: frame, with: deviceOrientation)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -165,12 +167,12 @@ class FMApi {
     
     // MARK: - private methods
     
-    /// Generate the localize HTTP request parameters.
+    /// Calculate parameters of the "Localize" request for the given `ARFrame`.
     ///
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func getParams(frame: ARFrame) -> [String : String] {
+    private func paramsOfLocalizeRequest(for frame: ARFrame, with deviceOrientation: UIDeviceOrientation) -> [String : String] {
         
         // mock if simulation
         guard delegate == nil || !delegate!.isSimulation else {
@@ -178,9 +180,11 @@ class FMApi {
         }
         
         let interfaceOrientation = UIApplication.shared.statusBarOrientation
-        let deviceOrientation = UIDevice.current.orientation
         
-        let pose = FMPose(fromTransform: frame.camera.transform)
+        let transformOfOpenCvVirtualDeviceInOpenCVWorldCS =
+            frame.transformOfOpenCvVirtualDeviceInOpenCVWorldCS(for: deviceOrientation)
+        let pose = FMPose(transformOfOpenCvVirtualDeviceInOpenCVWorldCS)
+        
         let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
                                       atScale: Float(FMUtility.Constants.ImageScaleFactor),
                                       withStatusBarOrientation: interfaceOrientation,
@@ -198,26 +202,36 @@ class FMApi {
         
         // calculate and send reference frame if anchoring
         if let anchorFrame = delegate?.anchorFrame {
-            params["referenceFrame"] = anchorFrame.poseWithRespectTo(frame).toJson()
+            /// Server uses the following formula for calculating transform of anchor:
+            ///      `openCVAnchorInOpenCVWorldCS = deviceInOpenCVWorldCS * openCVAnchorInOpenCVDeviceCS`
+            let anchorTransformInOpenCVDeviceCS =
+                transformOfOpenCvVirtualDeviceInOpenCVWorldCS.calculateRelativeTransformInTheCsOfSelf(
+                    of: anchorFrame.transformOfOpenCVDeviceInOpenCVWorldCS
+                )
+
+            params["referenceFrame"] = FMPose(anchorTransformInOpenCVDeviceCS).toJson()
         }
         
         return params
     }
     
-    /// Generate the localize HTTP request image data.
+    /// Generate the image data used to perform "localize" HTTP request .
+    /// Image of `frame` is oriented taking into account orientation of camera when taking image. For example, if device was upside-down when
+    /// frame was captured from camera, then resulting image is rotated by 180 degrees. So server always receives properly oriented image
+    /// as if it was captured from properly oriented camera.
     ///
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Prepared localization image
-    private func getImageData(frame: ARFrame) -> Data? {
+    private func extractDataOfProperlyOrientedImage(of frame: ARFrame,
+                                                    with deviceOrientation: UIDeviceOrientation) -> Data? {
         
         // mock if simulation
         guard delegate == nil || !delegate!.isSimulation else {
             return MockData.imageData(forZone: delegate!.simulationZone)
         }
-        
-        let deviceOrientation = UIDevice.current.orientation
-        return FMUtility.toJpeg(fromPixelBuffer: frame.capturedImage,
-                                withDeviceOrientation: deviceOrientation)
+
+        let imageData = FMUtility.toJpeg(pixelBuffer: frame.capturedImage, with: deviceOrientation)
+        return imageData
     }
 }

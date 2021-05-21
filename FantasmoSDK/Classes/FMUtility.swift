@@ -20,7 +20,8 @@ open class FMUtility {
     ///   - pixelBuffer: Pixel buffer to encode.
     ///   - deviceOrientation: Rotate based on orientation.
     /// - Returns: Encoded JPEG image.
-    public static func toJpeg(fromPixelBuffer pixelBuffer: CVPixelBuffer, withDeviceOrientation deviceOrientation: UIDeviceOrientation) -> Data? {
+    public static func toJpeg(pixelBuffer: CVPixelBuffer,
+                              with deviceOrientation: UIDeviceOrientation) -> Data? {
         
         let pixelBufferHeight = CVPixelBufferGetHeight(pixelBuffer)
         let pixelBufferWidth = CVPixelBufferGetWidth(pixelBuffer)
@@ -32,8 +33,10 @@ open class FMUtility {
             return nil
         }
         
-        if let uiImage = UIImage(pixelBuffer: pixelBuffer, scale: Constants.ImageScaleFactor, deviceOrientation: deviceOrientation) {
-            if let jpegData = uiImage.toJpeg(compressionQuality: Constants.JpegCompressionRatio){
+        if let uiImage = UIImage(pixelBuffer: pixelBuffer,
+                                 scale: Constants.ImageScaleFactor,
+                                 deviceOrientation: deviceOrientation) {
+            if let jpegData = uiImage.toJpeg(compressionQuality: Constants.JpegCompressionRatio) {
                 return jpegData
             } else {
                 return nil

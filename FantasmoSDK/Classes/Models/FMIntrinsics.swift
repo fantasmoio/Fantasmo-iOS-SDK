@@ -20,8 +20,8 @@ public struct FMIntrinsics:Codable {
     
     init(fromIntrinsics intrinsics: simd_float3x3,
          atScale scale:Float,
-         withStatusBarOrientation statusBarOrientation:UIInterfaceOrientation,
-         withDeviceOrientation deviceOrientation:UIDeviceOrientation,
+         withStatusBarOrientation statusBarOrientation: UIInterfaceOrientation,
+         withDeviceOrientation deviceOrientation: UIDeviceOrientation,
          withFrameWidth frameWidth: Int,
          withFrameHeight frameHeight: Int) {
         

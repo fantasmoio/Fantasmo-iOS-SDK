@@ -18,7 +18,7 @@ class FMApi {
     
     static let shared = FMApi()
     weak var delegate: FMApiDelegate?
-    var token: String?
+    var apiKey: String?
     private var coordinate: CLLocationCoordinate2D {
         get {
             return FMLocationManager.shared.currentLocation.coordinate
@@ -112,7 +112,7 @@ class FMApi {
             .localize,
             parameters: params,
             imageData: data,
-            token: token,
+            apiKey: apiKey,
             completion: postCompletion,
             error: postError)
     }
@@ -160,7 +160,7 @@ class FMApi {
         FMRestClient.post(
             .zoneInRadius,
             parameters: params,
-            token: token,
+            apiKey: apiKey,
             completion: postCompletion,
             error: postError)
     }

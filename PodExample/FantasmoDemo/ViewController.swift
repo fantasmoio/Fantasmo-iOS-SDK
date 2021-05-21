@@ -26,8 +26,7 @@ class ViewController: UIViewController {
         sceneView.session.delegate = FMLocationManager.shared
         locationManager.delegate = FMLocationManager.shared
        
-        // connect and start updating
-        FMLocationManager.shared.connect(accessToken: "", delegate: self)
+        // start updating
         FMLocationManager.shared.startUpdatingLocation()
     }
     

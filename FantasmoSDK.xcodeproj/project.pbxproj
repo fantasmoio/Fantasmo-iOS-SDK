@@ -34,6 +34,7 @@
 		A02646C0260CE46C00A7FA6B /* FMLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646BF260CE46C00A7FA6B /* FMLog.swift */; };
 		A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C2260CE56000A7FA6B /* RadiusResponse.swift */; };
 		A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
+		A32667CD263EBD9D0052EA8C /* FantasmoSDK.swift in Sources */ = {isa = PBXBuildFile; fileRef = A32667CC263EBD9D0052EA8C /* FantasmoSDK.swift */; };
 		A3BA02D7263919DF00524D66 /* FMInputQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D2263919DF00524D66 /* FMInputQualityFilter.swift */; };
 		A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */; };
 		A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */; };
@@ -80,6 +81,7 @@
 		A02646BF260CE46C00A7FA6B /* FMLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLog.swift; sourceTree = "<group>"; };
 		A02646C2260CE56000A7FA6B /* RadiusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusResponse.swift; sourceTree = "<group>"; };
 		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
+		A32667CC263EBD9D0052EA8C /* FantasmoSDK.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FantasmoSDK.swift; sourceTree = "<group>"; };
 		A3BA02D2263919DF00524D66 /* FMInputQualityFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInputQualityFilter.swift; sourceTree = "<group>"; };
 		A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMovementFilter.swift; sourceTree = "<group>"; };
 		A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBlurFilter.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 		9468389A25921BF3005B1145 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A32667CC263EBD9D0052EA8C /* FantasmoSDK.swift */,
 				9468389E25921BF3005B1145 /* Mock */,
 				A3BA02D1263919DF00524D66 /* Filters */,
 				946838A125921BF3005B1145 /* Network */,
@@ -358,6 +361,7 @@
 				A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */,
 				946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */,
 				946838CA25921BF3005B1145 /* Geofence.swift in Sources */,
+				A32667CD263EBD9D0052EA8C /* FantasmoSDK.swift in Sources */,
 				A3BA02DF263919F300524D66 /* MovingAverage.swift in Sources */,
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,
 				A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */,

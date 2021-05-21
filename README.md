@@ -84,27 +84,48 @@ When a position is found that is in a semantic zone, the server will report the 
 Try out the `Example` project or implement the code below. 
 
 ```swift
+
+// AppDelegate.swift
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        FantasmoSDK.initialize(withApiKey: "some_API_key")
+        
+        return true
+    }
+	
+	...
+}
+
+// ViewController.swift
 import FantasmoSDK
 import CoreLocation 
 import ARKit
 
-var sceneView: ARSCNView!
-let locationManager = CLLocationManager()
+class ViewController: UIViewController {
+	var sceneView: ARSCNView!
+	let locationManager = CLLocationManager()
 
-override func viewDidLoad() {
-    super.viewDidLoad()
+	override func viewDidLoad() {
+	    super.viewDidLoad()
 
-    // get location updates
-    locationManager.requestAlwaysAuthorization()
-    locationManager.startUpdatingLocation()
+	    // get location updates
+	    locationManager.requestAlwaysAuthorization()
+	    locationManager.startUpdatingLocation()
 
-    // configure delegation
-    sceneView.session.delegate = FMLocationManager.shared
-    locationManager.delegate = FMLocationManager.shared
+	    // configure delegation
+	    sceneView.session.delegate = FMLocationManager.shared
+	    locationManager.delegate = FMLocationManager.shared
    
-    // connect and start updating
-    FMLocationManager.shared.connect(accessToken: "", delegate: self)
-    FMLocationManager.shared.startUpdatingLocation()
+	    // connect and start updating
+	    FMLocationManager.shared.setUp(withDelegate: self)
+	    FMLocationManager.shared.startUpdatingLocation()
+	}
+	
+	...
 }
 
 extension ViewController: FMLocationDelegate {

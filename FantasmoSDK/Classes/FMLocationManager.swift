@@ -111,44 +111,33 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         }
     }
     
-    // MARK: - Lifecycle
-        
-    /// Set up the connection of the client code with `FMLocationManager`.
-    /// Use this method if your app does not need to receive `ARSession` or `CLLocationManager` delegate calls.
+    private override init() {
+        super.init()
+        precondition(FMApi.shared.apiKey != nil, "FantasmoSDK.initialize(withApiKey:) was not invoked!")
+        FMApi.shared.delegate = self
+    }
+    
+    // MARK: -
+
+    /// Prepare `FMLocationManager` for work with client code passing delegate and optionally ARSession and CLLocationManager objects.
+    ///
+    /// - Note: If you don't pass ARSession and CLLocationManager objects, then make sure that you invoke
+    ///  `FMLocationManager.session(_:didUpdate)` and `FMLocationManager.locationManager(_:didUpdateLocations)`
+    /// methods from the corresponding methods of `ARSession` and `CLLocationManager` delegates respectively, which is important for proper
+    /// work of the manager.
     ///
     /// - Parameters:
-    ///   - accessToken: Token for service authorization.
-    ///   - delegate: Delegate for receiving location events.
-    public func connect(accessToken: String, delegate: FMLocationDelegate) {
-        log.debug(parameters: ["delegate": delegate])
-
-        isClientOfManagerConnected = true
+    ///   - delegate: delegate for receiving location events.
+    ///   - session: `ARSession` to subscribe to as a delegate
+    ///   - locationManger: `CLLocationManager` to subscribe to as a delegate
+    public func setUp(
+        withDelegate delegate: FMLocationDelegate,
+        session: ARSession? = nil,
+        locationManager: CLLocationManager? = nil
+    ) {
+        log.debug(parameters: ["delegate": delegate, "session": session, "locationManager": locationManager])
         self.delegate = delegate
         qualityFilter.delegate = delegate
-        
-        // set up FMApi
-        FMApi.shared.delegate = self
-        FMApi.shared.token = accessToken
-    }
-
-    /// Set up the connection of the client code with `FMLocationManager`.
-    ///
-    /// - Parameters:
-    ///   - accessToken: Token for service authorization.
-    ///   - delegate: Delegate for receiving location events.
-    ///   - session: ARSession to subscribe to as a delegate
-    ///   - locationManger: CLLocationManager to subscribe to as a delegate
-    public func connect(accessToken: String,
-                        delegate: FMLocationDelegate,
-                        session: ARSession? = nil,
-                        locationManager: CLLocationManager? = nil) {
-        log.debug(parameters: [
-                    "delegate": delegate,
-                    "session": session,
-                    "locationManager": locationManager])
-        
-        isClientOfManagerConnected = true
-        connect(accessToken: accessToken, delegate: delegate)
         session?.delegate = self
         locationManager?.delegate = self
     }
@@ -157,7 +146,6 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     /// Starts the generation of updates that report the user’s current location.
     public func startUpdatingLocation() {
-        precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
         state = .localizing
         qualityFilter.startFiltering()

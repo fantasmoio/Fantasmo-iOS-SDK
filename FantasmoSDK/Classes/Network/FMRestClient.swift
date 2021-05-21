@@ -25,16 +25,16 @@ struct FMRestClient {
     /// - Parameters:
     ///   - endpoint: The API endpoint to post to
     ///   - parameters: Dictionary of form parameters
-    ///   - token: Optional API security token
+    ///   - apiKey: Optional API key that authenticates HTTP requests.
     ///   - completion: Completion closure
     ///   - error: Error closure
     static func post(_ endpoint: FMApiRouter.ApiEndpoint,
                      parameters: [String : String],
-                     token: String?,
+                     apiKey: String?,
                      completion: RestResult? = nil,
                      error: RestError? = nil) {
         
-        let request = Self.requestForEndpoint(endpoint, token: token)
+        let request = Self.requestForEndpoint(endpoint, apiKey: apiKey)
         log.info(String(describing: request.url), parameters: parameters)
         
         var data = Data()
@@ -50,17 +50,17 @@ struct FMRestClient {
     ///   - endpoint: The API endpoint to post to
     ///   - parameters: Dictionary of form parameters
     ///   - imageData: Image as JPEG data
-    ///   - token: Optional API security token
+    ///   - apiKey: Optional API key that authenticates HTTP requests.
     ///   - completion: Completion closure
     ///   - error: Error closure
     static func post(_ endpoint: FMApiRouter.ApiEndpoint,
                      parameters: [String : String],
                      imageData: Data,
-                     token: String?,
+                     apiKey: String?,
                      completion: RestResult? = nil,
                      error: RestError? = nil) {
         
-        let request = Self.requestForEndpoint(endpoint, token: token)
+        let request = Self.requestForEndpoint(endpoint, apiKey: apiKey)
         log.info(String(describing: request.url), parameters: parameters)
         
         var data = Data()
@@ -77,7 +77,7 @@ struct FMRestClient {
     ///
     /// - Parameters:
     ///   - data: Multipart-form data to post
-    ///   - request: Request containing server URL, endpoint, and token
+    ///   - request: Request containing server URL, endpoint, and API key
     ///   - completion: Completion closure
     ///   - error: Error closure
     private static func post(data: Data, with request: URLRequest, completion: RestResult? = nil, error: RestError? = nil) {
@@ -102,14 +102,14 @@ struct FMRestClient {
     ///
     /// - Parameters:
     ///   - endpoint: The API endpoint to post to
-    ///   - token: Optional API security token
-    /// - Returns: POST request containing server URL, endpoint, token header, and `multipart/from-data` header
-    private static func requestForEndpoint(_ endpoint: FMApiRouter.ApiEndpoint, token: String?) -> URLRequest {
+    ///   - apiKey: Optional API key that authenticates HTTP requests.
+    /// - Returns: POST request containing server URL, endpoint, API key header, and `multipart/from-data` header
+    private static func requestForEndpoint(_ endpoint: FMApiRouter.ApiEndpoint, apiKey: String?) -> URLRequest {
         var request = URLRequest(url: FMApiRouter.urlForEndpoint(endpoint))
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         request.httpMethod = "POST"
-        if let token = token {
-            request.setValue(token, forHTTPHeaderField: "Fantasmo-Key")
+        if let apiKey = apiKey {
+            request.setValue(apiKey, forHTTPHeaderField: "Fantasmo-Key")
         }
         request.setValue("multipart/form-data; boundary=\(Data.boundary)", forHTTPHeaderField: "Content-Type")
         return request

@@ -56,7 +56,7 @@ extension simd_float4x4: CustomStringConvertible {
     /// Returns the transform which is obtained after transform from the current OpenCV coordinate system to non-OpenCV coordinate system.
     /// OpenCV coordinate system is turned about X-axis of regular coordinate system by 180°.
     @inline(__always) var inNonOpenCvCS: simd_float4x4 {
-        simd_float4x4.transformOfOpenCVCoordinateSystem * self
+        simd_float4x4.transformOfOpenCVCoordinateSystem.inverse * self
     }
 
     public var description: String {

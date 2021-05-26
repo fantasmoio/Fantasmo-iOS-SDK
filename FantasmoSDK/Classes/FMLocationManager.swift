@@ -77,7 +77,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public var simulationZone = FMZone.ZoneType.parking
 
     /// An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
-    /// Current implementation returns most recent location unless an override was set.
+    /// Current implementation returns most recent location received from CoreLocation unless an override was set.
     var approximateCoordinate: CLLocationCoordinate2D {
         get {
             if let override = FMConfiguration.stringForInfoKey(.gpsLatLong) {

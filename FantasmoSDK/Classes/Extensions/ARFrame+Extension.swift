@@ -10,6 +10,9 @@ import ARKit
 
 public extension ARFrame {
     
+    /// OpenCV coordinate system is turned by 180˚ about X-axis relative to the original coordinate system.
+    private static let transformOfOpenCVCoordinateSystem = simd_float4x4.rotationAboutXAxisByPiRad
+    
     /// Transform of the device in the coordinate system of camera.
     /// For camera CS the X-axis always points along the long axis of the device (from the front camera toward the Home, https://apple.co/3t1Dw33)
     /// For device coordinate system the Y-axis always points along the long axis of the device toward the front camera - https://apple.co/2R37LJW.
@@ -20,7 +23,7 @@ public extension ARFrame {
     /// Transform of the OpenCV device in the coordinate system of camera.
     /// For details about orientation of the coordinate systems see comment to `ARFrame.openCVTransformOfDeviceInWorldCS`
     @inline(__always) private static let transformOfOpenCVDeviceInCameraCS =
-        ARFrame.transformOfDeviceInCameraCS * simd_float4x4.transformOfOpenCVCoordinateSystem
+        ARFrame.transformOfDeviceInCameraCS * transformOfOpenCVCoordinateSystem
     
     /// For camera CS the X-axis always points along the long axis of the device (from the front camera toward the Home, https://apple.co/3t1Dw33)
     /// For device coordinate system the Y-axis always points along the long axis of the device toward the front camera - https://apple.co/2R37LJW.
@@ -78,7 +81,7 @@ public extension ARFrame {
         }
         else {
             let transform =
-                transformOfVirtualDeviceInWorldCS.inOpenCvCS * simd_float4x4.transformOfOpenCVCoordinateSystem
+                transformOfVirtualDeviceInWorldCS.inOpenCvCS * ARFrame.transformOfOpenCVCoordinateSystem
             setAssociatedObject(object: self,
                                 value: transform,
                                 associativeKey: &AssociatedKey.openCVTransformOfVirtualDeviceInWorldCS,

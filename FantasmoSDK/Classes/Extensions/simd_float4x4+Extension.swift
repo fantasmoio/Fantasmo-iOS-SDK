@@ -9,9 +9,8 @@ import simd
 
 extension simd_float4x4: CustomStringConvertible {
     
-    /// OpenCV coordinate system is turned by 180˚ about X-axis relative to the original coordinate system.
-    static let transformOfOpenCVCoordinateSystem = simd_float4x4( simd_quatf(angle: .pi, axis: SIMD3(x: 1, y: 0, z: 0)) )
-    
+    static let rotationAboutXAxisByPiRad = simd_float4x4( simd_quatf(angle: .pi, axis: SIMD3(x: 1, y: 0, z: 0)) )
+
     init(pose: FMPose) {
         self.init( simd_quatf(pose.orientation) )
         self.columns.3.x = pose.position.x
@@ -49,14 +48,14 @@ extension simd_float4x4: CustomStringConvertible {
     /// Returns the transform which is obtained after transform from the current coordinate system to OpenCV coordinate system.
     /// OpenCV coordinate system is turned about X-axis of regular coordinate system by 180°.
     @inline(__always) var inOpenCvCS: simd_float4x4 {
-        simd_float4x4.transformOfOpenCVCoordinateSystem * self
+        simd_float4x4.rotationAboutXAxisByPiRad * self
     }
     
     /// Transform in non-OpenCV coordinate system implying that `self` is given in OpenCV coordinate system.
     /// Returns the transform which is obtained after transform from the current OpenCV coordinate system to non-OpenCV coordinate system.
     /// OpenCV coordinate system is turned about X-axis of regular coordinate system by 180°.
     @inline(__always) var inNonOpenCvCS: simd_float4x4 {
-        simd_float4x4.transformOfOpenCVCoordinateSystem.inverse * self
+        simd_float4x4.rotationAboutXAxisByPiRad * self
     }
 
     public var description: String {

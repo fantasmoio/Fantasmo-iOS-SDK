@@ -16,18 +16,18 @@ public extension ARFrame {
     /// Transform of the device in the coordinate system of camera.
     /// For camera CS the X-axis always points along the long axis of the device (from the front camera toward the Home, https://apple.co/3t1Dw33)
     /// For device coordinate system the Y-axis always points along the long axis of the device toward the front camera - https://apple.co/2R37LJW.
-    @inline(__always) private static let transformOfDeviceInCameraCS = simd_float4x4(
+    private static let transformOfDeviceInCameraCS = simd_float4x4(
         simd_quatf(angle: .pi/2, axis: SIMD3(x: 0, y: 0, z: 1))
     )
 
     /// Transform of the OpenCV device in the coordinate system of camera.
     /// For details about orientation of the coordinate systems see comment to `ARFrame.openCVTransformOfDeviceInWorldCS`
-    @inline(__always) private static let transformOfOpenCVDeviceInCameraCS =
+    private static let transformOfOpenCVDeviceInCameraCS =
         ARFrame.transformOfDeviceInCameraCS * transformOfOpenCVCoordinateSystem
     
     /// For camera CS the X-axis always points along the long axis of the device (from the front camera toward the Home, https://apple.co/3t1Dw33)
     /// For device coordinate system the Y-axis always points along the long axis of the device toward the front camera - https://apple.co/2R37LJW.
-    @inline(__always) var transformOfDeviceInWorldCS: simd_float4x4 {
+    var transformOfDeviceInWorldCS: simd_float4x4 {
         camera.transform * ARFrame.transformOfDeviceInCameraCS
     }
     
@@ -36,7 +36,7 @@ public extension ARFrame {
     /// For example, if device is turned by more than 45° about Z-axis then CS of virtual device is turned by -45° about Z-axis so that its Y-axis is near to
     ///     vertical direction.
     /// For details about orientation of the coordinate systems see comment to `ARFrame.transformOfDeviceInWorldCS`
-    @inline(__always) var transformOfVirtualDeviceInWorldCS: simd_float4x4 {
+    var transformOfVirtualDeviceInWorldCS: simd_float4x4 {
         let angleOfVirtualDeviceCSInCameraCS = self.angleOfVirtualDeviceCSInCameraCS(deviceOrientation)
         
         let quaternionOfVirtualDeviceCSInCameraCS =
@@ -55,7 +55,7 @@ public extension ARFrame {
     /// OpenCV World coordinate system is turned through 180˚ about X-axis of the World CS. It is right-handed with Y-axis directed down and aligned
     /// with gravity.
     /// - Note: result of calculating of `deviceOrientation` is cached, so subsequent invocations of this calculated property are cheap.
-    @inline(__always) var openCVTransformOfDeviceInWorldCS: simd_float4x4 {
+    var openCVTransformOfDeviceInWorldCS: simd_float4x4 {
         if let transform: simd_float4x4 =
             getAssociatedObject(object: self, associativeKey: &AssociatedKey.openCVTransformOfDeviceInWorldCS) {
             return transform
@@ -74,7 +74,7 @@ public extension ARFrame {
     /// Y-axis of the OpenCV virtual device always  approximately coincides with y-axis of the OpenCV world coordinate system and
     /// is always turned about Z-axis of the OpenCV device coordinate system (https://apple.co/2R37LJW) through multiple of 90°.
     /// For details about orientation of the coordinate systems see comment to `ARFrame.openCVTransformOfDeviceInWorldCS`
-    @inline(__always) var openCVTransformOfVirtualDeviceInWorldCS: simd_float4x4 {
+    var openCVTransformOfVirtualDeviceInWorldCS: simd_float4x4 {
         if let transform: simd_float4x4 =
             getAssociatedObject(object: self, associativeKey: &AssociatedKey.openCVTransformOfVirtualDeviceInWorldCS) {
             return transform
@@ -91,7 +91,7 @@ public extension ARFrame {
     }
     
     /// Angle in radians.
-    @inline(__always) private func angleOfVirtualDeviceCSInCameraCS(
+    private func angleOfVirtualDeviceCSInCameraCS(
         _ deviceOrientation: UIDeviceOrientation
     ) -> Float {
         switch deviceOrientation {
@@ -113,7 +113,7 @@ public extension ARFrame {
     /// `UIDevice.endGeneratingDeviceOrientationNotifications()`, which would cause problems for proper functioning of SDK.
     /// - Note: result of calculating of `deviceOrientation` is cached, so subsequent invocations of this calculated property are cheap.
     /// - WARNING: function works only if `ARSession.configuration.worldAlignment != .camera`, otherwise it returns `.portrait`
-    @inline(__always) var deviceOrientation: UIDeviceOrientation {
+    var deviceOrientation: UIDeviceOrientation {
         if let cachedDeviceOrientation: UIDeviceOrientation =
             getAssociatedObject(object: self, associativeKey: &AssociatedKey.deviceOrientation) {
             return cachedDeviceOrientation

@@ -47,14 +47,14 @@ extension simd_float4x4: CustomStringConvertible {
     /// Transform in OpenCV coordinate system.
     /// Returns the transform which is obtained after transform from the current coordinate system to OpenCV coordinate system.
     /// OpenCV coordinate system is turned about X-axis of regular coordinate system by 180°.
-    @inline(__always) var inOpenCvCS: simd_float4x4 {
+    var inOpenCvCS: simd_float4x4 {
         simd_float4x4.rotationAboutXAxisByPiRad * self
     }
     
     /// Transform in non-OpenCV coordinate system implying that `self` is given in OpenCV coordinate system.
     /// Returns the transform which is obtained after transform from the current OpenCV coordinate system to non-OpenCV coordinate system.
     /// OpenCV coordinate system is turned about X-axis of regular coordinate system by 180°.
-    @inline(__always) var inNonOpenCvCS: simd_float4x4 {
+    var inNonOpenCvCS: simd_float4x4 {
         simd_float4x4.rotationAboutXAxisByPiRad * self
     }
 

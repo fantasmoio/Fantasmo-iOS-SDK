@@ -55,7 +55,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public private(set) var state = State.stopped
     public var qualityFilter = FMInputQualityFilter()
     
-    // clients can use this to mock the localization call
+    // Clients can use this to mock the localization call
     public var mockLocalize: ((ARFrame) -> Void)?
     
     /// A  boolean value that states whether location updates were started by invoking `startUpdatingLocation()`.
@@ -219,7 +219,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug(parameters: ["simulation": isSimulation])
         state = .uploading
         
-        // run mock version of localization if one is set
+        // Run mock version of localization if one is set
         guard mockLocalize == nil else {
             mockLocalize?(frame)
             return
@@ -228,7 +228,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         let openCVRelativeAnchorTransform = openCVPoseOfAnchorInVirtualDeviceCS(for: frame)
         let openCVRelativeAnchorPose = openCVRelativeAnchorTransform.map { FMPose($0) }
 
-        // set up completion closure
+        // Set up completion closure
         let localizeCompletion: FMApi.LocalizationResult = { location, zones in
             log.debug(parameters: ["location": location, "zones": zones])
             self.delegate?.locationManager(didUpdateLocation: location, withZones: zones)
@@ -242,7 +242,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
             }
         }
         
-        // set up error closure
+        // Set up error closure
         let localizeError: FMApi.ErrorResult = { error in
             log.error(error)
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)

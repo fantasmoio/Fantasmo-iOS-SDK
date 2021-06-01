@@ -244,7 +244,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         
         // Set up error closure
         let localizeError: FMApi.ErrorResult = { error in
-            log.error(error)
+            log.error("Localization error: \(error)")
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
             
             if self.state != .stopped {

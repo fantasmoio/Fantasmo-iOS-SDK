@@ -8,34 +8,22 @@
 import Foundation
 import ObjectiveC
 
-final class Lifted<T> {
-    let value: T
-    init(_ x: T) {
-        value = x
-    }
-}
-
-private func lift<T>(x: T) -> Lifted<T>  {
-    return Lifted(x)
-}
-
+/// Allows to add associated property of any type to some class in an extension.
+/// It is impossible to add associated property to value type (https://bit.ly/3g3zhzs)
+/// Alternative approach could be https://bit.ly/34CeU7q (in case if there will be any problems with properties of Value types)
 func setAssociatedObject<T>(object: AnyObject,
                             value: T,
-                            associativeKey: UnsafeRawPointer, policy: objc_AssociationPolicy) {
-    if let v = value as? AnyObject {
-        objc_setAssociatedObject(object, associativeKey, v,  policy)
-    }
-    else {
-        objc_setAssociatedObject(object, associativeKey, lift(x: value),  policy)
-    }
+                            associativeKey: UnsafeRawPointer,
+                            policy: objc_AssociationPolicy) {
+    
+    /// `Any` can be bridged to `SwiftValue` (https://bit.ly/3fXIvNX)
+    let v = value as AnyObject
+    objc_setAssociatedObject(object, associativeKey, v, policy)
 }
 
 func getAssociatedObject<T>(object: AnyObject, associativeKey: UnsafeRawPointer) -> T? {
     if let v = objc_getAssociatedObject(object, associativeKey) as? T {
         return v
-    }
-    else if let v = objc_getAssociatedObject(object, associativeKey) as? Lifted<T> {
-        return v.value
     }
     else {
         return nil

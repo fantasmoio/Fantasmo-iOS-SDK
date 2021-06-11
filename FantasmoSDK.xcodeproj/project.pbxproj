@@ -18,13 +18,10 @@
 		946838C925921BF3005B1145 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A825921BF3005B1145 /* Location.swift */; };
 		946838CA25921BF3005B1145 /* Geofence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A925921BF3005B1145 /* Geofence.swift */; };
 		946838CB25921BF3005B1145 /* FMZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AA25921BF3005B1145 /* FMZone.swift */; };
-		946838CC25921BF3005B1145 /* FMOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AB25921BF3005B1145 /* FMOrientation.swift */; };
-		946838CD25921BF3005B1145 /* FMPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AC25921BF3005B1145 /* FMPosition.swift */; };
 		946838CE25921BF3005B1145 /* Pose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AD25921BF3005B1145 /* Pose.swift */; };
 		946838CF25921BF3005B1145 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AE25921BF3005B1145 /* Coordinate.swift */; };
 		946838D025921BF3005B1145 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AF25921BF3005B1145 /* ErrorResponse.swift */; };
 		946838D125921BF3005B1145 /* Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B025921BF3005B1145 /* Orientation.swift */; };
-		946838D225921BF3005B1145 /* FMPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B125921BF3005B1145 /* FMPose.swift */; };
 		946838D325921BF3005B1145 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B225921BF3005B1145 /* Position.swift */; };
 		946838D425921BF3005B1145 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B425921BF3005B1145 /* UIImage+Extension.swift */; };
 		946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B625921BF3005B1145 /* Dictionary+Extension.swift */; };
@@ -37,12 +34,21 @@
 		A02646C0260CE46C00A7FA6B /* FMLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646BF260CE46C00A7FA6B /* FMLog.swift */; };
 		A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C2260CE56000A7FA6B /* RadiusResponse.swift */; };
 		A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
-		A02647092613633F00A7FA6B /* FMInputQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02647072613633F00A7FA6B /* FMInputQualityFilter.swift */; };
-		A026470A2613633F00A7FA6B /* FMAngleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02647082613633F00A7FA6B /* FMAngleFilter.swift */; };
-		A0264712261364D000A7FA6B /* MovingAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0264711261364D000A7FA6B /* MovingAverage.swift */; };
-		A04B0B892626E88E00E5989D /* FMBehaviorRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04B0B882626E88E00E5989D /* FMBehaviorRequest.swift */; };
-		A0A986772613718E0084FDB9 /* FMMovementFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A986762613718E0084FDB9 /* FMMovementFilter.swift */; };
-		A0A9867A2613719E0084FDB9 /* FMBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A986792613719E0084FDB9 /* FMBlurFilter.swift */; };
+		A36BAA49265431A50041E875 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36BAA48265431A50041E875 /* AssociatedObject.swift */; };
+		A36BAA5126553DF10041E875 /* FMLocationManagerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36BAA5026553DF10041E875 /* FMLocationManagerTester.swift */; };
+		A3BA02D7263919DF00524D66 /* FMInputQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D2263919DF00524D66 /* FMInputQualityFilter.swift */; };
+		A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */; };
+		A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */; };
+		A3BA02DA263919DF00524D66 /* FMBehaviorRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D5263919DF00524D66 /* FMBehaviorRequest.swift */; };
+		A3BA02DB263919DF00524D66 /* FMAngleFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D6263919DF00524D66 /* FMAngleFilter.swift */; };
+		A3BA02DF263919F300524D66 /* MovingAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02DE263919F300524D66 /* MovingAverage.swift */; };
+		A3BA03BB263B6C7D00524D66 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03BA263B6C7D00524D66 /* Angle.swift */; };
+		A3BA03C4263B6F0100524D66 /* EulerAngles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03C3263B6F0100524D66 /* EulerAngles.swift */; };
+		A3CB77302636B3D5009625BB /* FMPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB772F2636B3D5009625BB /* FMPose.swift */; };
+		A3CB77342636B496009625BB /* FMPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB77332636B496009625BB /* FMPosition.swift */; };
+		A3CB77372636BDB8009625BB /* FMOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB77362636BDB8009625BB /* FMOrientation.swift */; };
+		A3CB773F263710D2009625BB /* simd_float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */; };
+		A3CB774226372A9B009625BB /* simd_quatf.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB774126372A9B009625BB /* simd_quatf.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,13 +66,10 @@
 		946838A825921BF3005B1145 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		946838A925921BF3005B1145 /* Geofence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Geofence.swift; sourceTree = "<group>"; };
 		946838AA25921BF3005B1145 /* FMZone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMZone.swift; sourceTree = "<group>"; };
-		946838AB25921BF3005B1145 /* FMOrientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMOrientation.swift; sourceTree = "<group>"; };
-		946838AC25921BF3005B1145 /* FMPosition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMPosition.swift; sourceTree = "<group>"; };
 		946838AD25921BF3005B1145 /* Pose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pose.swift; sourceTree = "<group>"; };
 		946838AE25921BF3005B1145 /* Coordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		946838AF25921BF3005B1145 /* ErrorResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
 		946838B025921BF3005B1145 /* Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Orientation.swift; sourceTree = "<group>"; };
-		946838B125921BF3005B1145 /* FMPose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMPose.swift; sourceTree = "<group>"; };
 		946838B225921BF3005B1145 /* Position.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
 		946838B425921BF3005B1145 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		946838B625921BF3005B1145 /* Dictionary+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
@@ -79,12 +82,21 @@
 		A02646BF260CE46C00A7FA6B /* FMLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLog.swift; sourceTree = "<group>"; };
 		A02646C2260CE56000A7FA6B /* RadiusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusResponse.swift; sourceTree = "<group>"; };
 		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
-		A02647072613633F00A7FA6B /* FMInputQualityFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInputQualityFilter.swift; sourceTree = "<group>"; };
-		A02647082613633F00A7FA6B /* FMAngleFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMAngleFilter.swift; sourceTree = "<group>"; };
-		A0264711261364D000A7FA6B /* MovingAverage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovingAverage.swift; sourceTree = "<group>"; };
-		A04B0B882626E88E00E5989D /* FMBehaviorRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBehaviorRequest.swift; sourceTree = "<group>"; };
-		A0A986762613718E0084FDB9 /* FMMovementFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMMovementFilter.swift; sourceTree = "<group>"; };
-		A0A986792613719E0084FDB9 /* FMBlurFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMBlurFilter.swift; sourceTree = "<group>"; };
+		A36BAA48265431A50041E875 /* AssociatedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObject.swift; sourceTree = "<group>"; };
+		A36BAA5026553DF10041E875 /* FMLocationManagerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationManagerTester.swift; sourceTree = "<group>"; };
+		A3BA02D2263919DF00524D66 /* FMInputQualityFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInputQualityFilter.swift; sourceTree = "<group>"; };
+		A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMovementFilter.swift; sourceTree = "<group>"; };
+		A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBlurFilter.swift; sourceTree = "<group>"; };
+		A3BA02D5263919DF00524D66 /* FMBehaviorRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBehaviorRequest.swift; sourceTree = "<group>"; };
+		A3BA02D6263919DF00524D66 /* FMAngleFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMAngleFilter.swift; sourceTree = "<group>"; };
+		A3BA02DE263919F300524D66 /* MovingAverage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovingAverage.swift; sourceTree = "<group>"; };
+		A3BA03BA263B6C7D00524D66 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
+		A3BA03C3263B6F0100524D66 /* EulerAngles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EulerAngles.swift; sourceTree = "<group>"; };
+		A3CB772F2636B3D5009625BB /* FMPose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPose.swift; sourceTree = "<group>"; };
+		A3CB77332636B496009625BB /* FMPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPosition.swift; sourceTree = "<group>"; };
+		A3CB77362636BDB8009625BB /* FMOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMOrientation.swift; sourceTree = "<group>"; };
+		A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "simd_float4x4+Extension.swift"; sourceTree = "<group>"; };
+		A3CB774126372A9B009625BB /* simd_quatf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = simd_quatf.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,11 +150,13 @@
 		9468389A25921BF3005B1145 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				A0264710261364BA00A7FA6B /* Utilities */,
-				A02647062613633F00A7FA6B /* Filters */,
+				A36BAA4F26553DDB0041E875 /* Testing */,
 				9468389E25921BF3005B1145 /* Mock */,
+				A3BA02D1263919DF00524D66 /* Filters */,
 				946838A125921BF3005B1145 /* Network */,
 				946838A525921BF3005B1145 /* Models */,
+				A3BA03B9263B6BA300524D66 /* ValueTypes */,
+				A3BA02DD263919F300524D66 /* Utilities */,
 				946838B325921BF3005B1145 /* Extensions */,
 				9468389B25921BF3005B1145 /* FMLocationManager.swift */,
 				946838BB25921BF3005B1145 /* FMConfiguration.swift */,
@@ -174,12 +188,10 @@
 		946838A525921BF3005B1145 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A3CB772E2636B3BF009625BB /* FMPose */,
 				946838AE25921BF3005B1145 /* Coordinate.swift */,
 				946838AF25921BF3005B1145 /* ErrorResponse.swift */,
 				946838A725921BF3005B1145 /* FMIntrinsics.swift */,
-				946838AB25921BF3005B1145 /* FMOrientation.swift */,
-				946838B125921BF3005B1145 /* FMPose.swift */,
-				946838AC25921BF3005B1145 /* FMPosition.swift */,
 				946838AA25921BF3005B1145 /* FMZone.swift */,
 				946838A925921BF3005B1145 /* Geofence.swift */,
 				946838A625921BF3005B1145 /* LocalizeResponse.swift */,
@@ -200,6 +212,9 @@
 				946838B725921BF3005B1145 /* Codable+Extension.swift */,
 				946838B625921BF3005B1145 /* Dictionary+Extension.swift */,
 				946838B425921BF3005B1145 /* UIImage+Extension.swift */,
+				A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */,
+				A3CB774126372A9B009625BB /* simd_quatf.swift */,
+				A36BAA48265431A50041E875 /* AssociatedObject.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -211,24 +226,51 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A02647062613633F00A7FA6B /* Filters */ = {
+		A36BAA4F26553DDB0041E875 /* Testing */ = {
 			isa = PBXGroup;
 			children = (
-				A02647072613633F00A7FA6B /* FMInputQualityFilter.swift */,
-				A02647082613633F00A7FA6B /* FMAngleFilter.swift */,
-				A04B0B882626E88E00E5989D /* FMBehaviorRequest.swift */,
-				A0A986792613719E0084FDB9 /* FMBlurFilter.swift */,
-				A0A986762613718E0084FDB9 /* FMMovementFilter.swift */,
+				A36BAA5026553DF10041E875 /* FMLocationManagerTester.swift */,
+			);
+			path = Testing;
+			sourceTree = "<group>";
+		};
+		A3BA02D1263919DF00524D66 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				A3BA02D2263919DF00524D66 /* FMInputQualityFilter.swift */,
+				A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */,
+				A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */,
+				A3BA02D5263919DF00524D66 /* FMBehaviorRequest.swift */,
+				A3BA02D6263919DF00524D66 /* FMAngleFilter.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
 		};
-		A0264710261364BA00A7FA6B /* Utilities */ = {
+		A3BA02DD263919F300524D66 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				A0264711261364D000A7FA6B /* MovingAverage.swift */,
+				A3BA02DE263919F300524D66 /* MovingAverage.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A3BA03B9263B6BA300524D66 /* ValueTypes */ = {
+			isa = PBXGroup;
+			children = (
+				A3BA03C3263B6F0100524D66 /* EulerAngles.swift */,
+				A3BA03BA263B6C7D00524D66 /* Angle.swift */,
+			);
+			path = ValueTypes;
+			sourceTree = "<group>";
+		};
+		A3CB772E2636B3BF009625BB /* FMPose */ = {
+			isa = PBXGroup;
+			children = (
+				A3CB772F2636B3D5009625BB /* FMPose.swift */,
+				A3CB77332636B496009625BB /* FMPosition.swift */,
+				A3CB77362636BDB8009625BB /* FMOrientation.swift */,
+			);
+			path = FMPose;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -312,36 +354,42 @@
 			files = (
 				946838C125921BF3005B1145 /* FMUtility.swift in Sources */,
 				A02646C0260CE46C00A7FA6B /* FMLog.swift in Sources */,
+				A3CB773F263710D2009625BB /* simd_float4x4+Extension.swift in Sources */,
 				946838C825921BF3005B1145 /* FMIntrinsics.swift in Sources */,
-				946838D225921BF3005B1145 /* FMPose.swift in Sources */,
-				A02647092613633F00A7FA6B /* FMInputQualityFilter.swift in Sources */,
-				946838CC25921BF3005B1145 /* FMOrientation.swift in Sources */,
+				A36BAA49265431A50041E875 /* AssociatedObject.swift in Sources */,
+				A3CB77302636B3D5009625BB /* FMPose.swift in Sources */,
+				A3CB774226372A9B009625BB /* simd_quatf.swift in Sources */,
+				A3CB77372636BDB8009625BB /* FMOrientation.swift in Sources */,
 				946838CF25921BF3005B1145 /* Coordinate.swift in Sources */,
 				946838CB25921BF3005B1145 /* FMZone.swift in Sources */,
 				946838C925921BF3005B1145 /* Location.swift in Sources */,
 				946838C225921BF3005B1145 /* MockData.swift in Sources */,
 				946838D025921BF3005B1145 /* ErrorResponse.swift in Sources */,
 				946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */,
+				A36BAA5126553DF10041E875 /* FMLocationManagerTester.swift in Sources */,
+				A3CB77342636B496009625BB /* FMPosition.swift in Sources */,
 				946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */,
 				946838D725921BF3005B1145 /* Codable+Extension.swift in Sources */,
 				A02646BD260CE44900A7FA6B /* FMApi.swift in Sources */,
 				A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */,
-				A0264712261364D000A7FA6B /* MovingAverage.swift in Sources */,
 				946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */,
 				946838CA25921BF3005B1145 /* Geofence.swift in Sources */,
+				A3BA02DF263919F300524D66 /* MovingAverage.swift in Sources */,
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,
+				A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */,
+				A3BA02DB263919DF00524D66 /* FMAngleFilter.swift in Sources */,
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,
-				A0A986772613718E0084FDB9 /* FMMovementFilter.swift in Sources */,
-				A04B0B892626E88E00E5989D /* FMBehaviorRequest.swift in Sources */,
-				A026470A2613633F00A7FA6B /* FMAngleFilter.swift in Sources */,
-				A0A9867A2613719E0084FDB9 /* FMBlurFilter.swift in Sources */,
+				A3BA03C4263B6F0100524D66 /* EulerAngles.swift in Sources */,
 				946838DB25921BF3005B1145 /* FMConfiguration.swift in Sources */,
 				946838D425921BF3005B1145 /* UIImage+Extension.swift in Sources */,
+				A3BA02DA263919DF00524D66 /* FMBehaviorRequest.swift in Sources */,
 				A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */,
-				946838CD25921BF3005B1145 /* FMPosition.swift in Sources */,
 				946838C625921BF3005B1145 /* FMError.swift in Sources */,
 				946838D125921BF3005B1145 /* Orientation.swift in Sources */,
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
+				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,
+				A3BA02D7263919DF00524D66 /* FMInputQualityFilter.swift in Sources */,
+				A3BA03BB263B6C7D00524D66 /* Angle.swift in Sources */,
 				A02646BB260CE44900A7FA6B /* FMApiRouter.swift in Sources */,
 				946838D825921BF3005B1145 /* CGImage+Extension.swift in Sources */,
 			);

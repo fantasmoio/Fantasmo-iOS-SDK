@@ -7,14 +7,14 @@
 
 import ARKit
 
-enum FMFilterRejectionReason {
+public enum FMFilterRejectionReason {
     case pitchTooLow
     case pitchTooHigh
     case movingTooFast
     case movingTooLittle
 }
 
-enum FMFilterResult: Equatable {
+public enum FMFilterResult: Equatable {
     case accepted
     case rejected(reason: FMFilterRejectionReason)
 }
@@ -114,7 +114,7 @@ public class FMInputQualityFilter {
 /// Use for internal testing of filters
 public class FMInputQualityFilterTestAdapter {
     let blurFilter = FMBlurFilter()
-    public var blurVariance: Double {
+    public var blurVariance: Float {
         blurFilter.averageVariance
     }
 

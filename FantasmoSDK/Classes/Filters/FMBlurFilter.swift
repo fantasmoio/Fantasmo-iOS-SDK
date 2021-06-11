@@ -13,17 +13,17 @@ import VideoToolbox
 
 class FMBlurFilter: FMFrameFilter {
     
-    var variance = 0.0
+    var variance: Float = 0.0
     var varianceAverager = MovingAverage()
-    var averageVariance: Double {
+    var averageVariance: Float {
         varianceAverager.average
     }
 
-    var varianceThreshold = 250.0 // empirically determined
-    var suddenDropThreshold = 0.4 // empirically determined
+    var varianceThreshold: Float = 250.0 // empirically determined
+    var suddenDropThreshold: Float = 0.4 // empirically determined
         
     var throughputAverager = MovingAverage(period: 8)
-    var averageThroughput: Double {
+    var averageThroughput: Float {
         throughputAverager.average
     }
     
@@ -36,7 +36,7 @@ class FMBlurFilter: FMFrameFilter {
     
     func accepts(_ frame: ARFrame) -> FMFilterResult {
         variance = calculateVariance(frame: frame)
-        _ = varianceAverager.addSample(value: Double(variance))
+        _ = varianceAverager.addSample(value: variance)
         
         var isLowVariance = false
         var isBlurry = false
@@ -61,7 +61,7 @@ class FMBlurFilter: FMFrameFilter {
         return isBlurry ? .rejected(reason: .movingTooFast) : .accepted
     }
     
-    func calculateVariance(frame: ARFrame) -> Double {
+    func calculateVariance(frame: ARFrame) -> Float {
         guard let metalDevice = metalDevice, let metalCommandBuffer = self.metalCommandQueue?.makeCommandBuffer() else {
             return 0
         }
@@ -116,6 +116,6 @@ class FMBlurFilter: FMFrameFilter {
         let region = MTLRegionMake2D(0, 0, 2, 1)
         varianceTexture.getBytes(&result, bytesPerRow: 1 * 2 * 4, from: region, mipmapLevel: 0)
 
-        return Double(result.last! * 255.0 * 255.0)
+        return Float(result.last! * 255.0 * 255.0)
     }
 }

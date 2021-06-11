@@ -80,8 +80,10 @@ struct FMRestClient {
     ///   - request: Request containing server URL, endpoint, and token
     ///   - completion: Completion closure
     ///   - error: Error closure
-    private static func post(data: Data, with request: URLRequest, completion: RestResult? = nil, error: RestError? = nil) {
-
+    private static func post(data: Data,
+                             with request: URLRequest,
+                             completion: RestResult? = nil,
+                             error: RestError? = nil) {
         let session = URLSession.shared
         session.uploadTask(with: request, from: data, completionHandler: { data, response, uploadError in
             guard let data = data, let response = response as? HTTPURLResponse else {

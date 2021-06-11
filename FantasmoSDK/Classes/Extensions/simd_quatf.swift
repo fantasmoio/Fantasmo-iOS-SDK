@@ -14,7 +14,9 @@ extension simd_quatf {
     }
     
     /// Retrieve euler angles from a quaternion matrix.
-    /// Yaw, pitch and roll corresponds to YX'Z'' intrinsic rotations in iOS adopted coordinate system with Y-axis pointed upward..
+    /// Yaw, pitch and roll corresponds to yx'z'' intrinsic rotations in iOS adopted coordinate system for camera with Y-axis pointed upward.
+    /// Ranges:
+    ///     yaw: [−π, π];  pitch: [−π/2, π/2];   roll: [−π, π]
     public var eulerAngles: EulerAngles<Float> {
         get {
             // First we transfer from iOS adopted coordinate system with Y-axis pointed upwards to the usual coordinate

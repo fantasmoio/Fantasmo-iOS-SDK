@@ -7,9 +7,19 @@
 
 import simd
 
-extension simd_float4x4 {
+extension simd_float4x4: CustomStringConvertible {
+    
+    static let rotationAboutXAxisByPiRad = simd_float4x4( simd_quatf(angle: .pi, axis: SIMD3(x: 1, y: 0, z: 0)) )
+
+    init(pose: FMPose) {
+        self.init( simd_quatf(pose.orientation) )
+        self.columns.3.x = pose.position.x
+        self.columns.3.y = pose.position.y
+        self.columns.3.z = pose.position.z
+    }
     
     /// Calculates relative transform of the passed `transform` relative to `self` and in the coordinate system of `self`.
+    /// Coordinate system of self is obtained by applying transform to the current coordinate system.
     /// Having such relative transform the absolute transform of `transform` can be found on formula:
     ///     `transform_inWorldCS = self_inWorldCS * transform_relativeToSelfInCsOfSelf`
     ///
@@ -26,27 +36,37 @@ extension simd_float4x4 {
     ///
     ///     transform_inWorldCS = self_inWorldCS^(-1) * transform
     ///
-    func calculateRelativeTransformInTheCsOfSelf(of transform: simd_float4x4) -> simd_float4x4 {
-        return self.inverse * transform
+    public func calculateRelativeTransformInTheCsOfSelf(of transform: simd_float4x4) -> simd_float4x4 {
+        self.inverse * transform
     }
     
-    init(pose: FMPose) {
-        self.init( simd_quatf(pose.orientation) )
-        self.columns.3.x = pose.position.x
-        self.columns.3.y = pose.position.y
-        self.columns.3.z = pose.position.z
+    public var translation: simd_float3 {
+        simd_make_float3(columns.3)
     }
     
+    /// Transform in OpenCV coordinate system.
+    /// Returns the transform which is obtained after transform from the current coordinate system to OpenCV coordinate system.
+    /// OpenCV coordinate system is turned about X-axis of regular coordinate system by 180°.
+    var inOpenCvCS: simd_float4x4 {
+        simd_float4x4.rotationAboutXAxisByPiRad * self
+    }
+    
+    /// Transform in non-OpenCV coordinate system implying that `self` is given in OpenCV coordinate system.
+    /// Returns the transform which is obtained after transform from the current OpenCV coordinate system to non-OpenCV coordinate system.
+    /// OpenCV coordinate system is turned about X-axis of regular coordinate system by 180°.
+    var inNonOpenCvCS: simd_float4x4 {
+        simd_float4x4.rotationAboutXAxisByPiRad * self
+    }
+
     public var description: String {
         var str = ""
         for i in (0...3) {
             str += "\t"
             for j in (0...3) {
-                str += "\(self[j][i]) "
+                str += String(format: "%10.3f", self[j][i])
             }
             str += "\n"
         }
         return str
     }
-    
 }

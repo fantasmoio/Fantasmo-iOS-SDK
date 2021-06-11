@@ -8,14 +8,14 @@ import Foundation
 import ARKit
 import UIKit
 
-open class MockData {
+class MockData {
 
     /// Return a simulated localization images from a known location.
     ///
     /// - Parameters:
     ///   - zone: Type of semantic zone to simulate.
     /// - Returns: Parameters and encoded image data for query.
-    public static func imageData(forZone zone: FMZone.ZoneType) -> Data {
+    static func imageData(forZone zone: FMZone.ZoneType) -> Data {
         var jpegData: Data?
         
         switch zone {
@@ -33,13 +33,19 @@ open class MockData {
     /// - Parameters:
     ///   - zone: Type of semantic zone to simulate.
     /// - Returns: Parameters for query.
-    public static func params(forZone zone: FMZone.ZoneType) -> [String : String] {
+    static func params(forZone zone: FMZone.ZoneType, relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
+        var params: [String : String]
         switch zone {
         case .parking:
-            return Self.parkingMockParameters
+            params = Self.parkingMockParameters
         default:
-            return Self.streetMockParameters
+            params = Self.streetMockParameters
         }
+        
+        if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
+            params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
+        }
+        return params
     }
     
     private static var parkingMockParameters: [String: String] {

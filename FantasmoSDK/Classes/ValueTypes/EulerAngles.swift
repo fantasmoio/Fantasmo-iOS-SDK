@@ -10,13 +10,16 @@ import simd
 /// Corresponds to yx'z'' intrinsic rotation.
 public struct EulerAngles<Scalar>: CustomStringConvertible where Scalar: SIMDScalar&FloatingPoint&BinaryFloatingPoint {
     
-    /// Corresponds to rotation about internal x'-axis. Given in radians.
+    /// Corresponds to the rotation about internal x'-axis in yx'z'' rotation. Given in radians.
+    /// Valid range is [−π/2, π/2]
     public let pitch: Scalar
     
-    /// Corresponds to rotation about y-axis. Given in radians.
+    /// Corresponds to rotation about y-axis in yx'z'' rotation. Given in radians.
+    /// Valid range is [−π, π]
     public let yaw: Scalar
     
-    /// Corresponding to rotation about internal z''-axis.  Given in radians.
+    /// Corresponding to rotation about internal z''-axis in yx'z'' rotation.  Given in radians.
+    /// Valid range is [−π, π]
     public let roll: Scalar
     
     public init(pitch: Scalar, yaw: Scalar, roll: Scalar) {

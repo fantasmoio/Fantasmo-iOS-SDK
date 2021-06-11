@@ -15,7 +15,7 @@ public class FMMovementFilter: FMFrameFilter {
         self.threshold = threshold
     }
     
-    public func accepts(_ frame: ARFrame) -> FMFilterResult {
+    public func accepts(_ frame: ARFrame) -> FMFrameFilterResult {
         if exceededThreshold(frame.camera.transform) {
             lastTransform = frame.camera.transform
             return .accepted

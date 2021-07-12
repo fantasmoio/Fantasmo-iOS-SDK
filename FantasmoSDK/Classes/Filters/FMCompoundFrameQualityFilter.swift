@@ -41,7 +41,6 @@ class FMCompoundFrameQualityFilter {
     func accepts(_ frame: ARFrame) -> FMFrameFilterResult {
         if shouldForciblyAccept(frame) {
             timestampOLastAcceptedFrame = clock()
-            print("***************************1")
             return .accepted
         }
         
@@ -54,7 +53,6 @@ class FMCompoundFrameQualityFilter {
             }
         }
         
-        print("***************************2")
         timestampOLastAcceptedFrame = clock()
         return .accepted
     }

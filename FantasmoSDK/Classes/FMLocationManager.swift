@@ -12,7 +12,7 @@ import CoreLocation
 
 /// The methods that you use to receive events from an associated
 /// location manager object.
-public protocol FMLocationDelegate: class {
+public protocol FMLocationDelegate: AnyObject {
     
     /// Tells the delegate that new location data is available.
     ///
@@ -102,8 +102,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var qualityFrameFilter = FMCompoundFrameQualityFilter()
     
     /// Throttler allowing to notify delegate of "behaviour request" not too often when qulity of captured frames is too low
-    private lazy var frameFailureThrottler = FrameRejectionThrottler {
-        [weak self] rejectionReason in
+    private lazy var frameFailureThrottler = FrameRejectionThrottler { [weak self] rejectionReason in
         let behaviorRequest = rejectionReason.mapToBehaviorRequest()
         self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
     }

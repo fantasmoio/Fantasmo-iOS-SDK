@@ -44,10 +44,10 @@ class FMApi {
     ///   - approximateLocation: An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
     ///   - completion: Completion closure
     ///   - error: Error closure
-    func localize(frame: ARFrame,
-                  relativeOpenCVAnchorPose: FMPose?,
-                  completion: @escaping LocalizationResult,
-                  error: @escaping ErrorResult) {
+    func sendLocalizationRequest(frame: ARFrame,
+                                 relativeOpenCVAnchorPose: FMPose?,
+                                 completion: @escaping LocalizationResult,
+                                 error: @escaping ErrorResult) {
         
         // set up request parameters
         guard let data = extractDataOfProperlyOrientedImage(of: frame) else {
@@ -115,7 +115,8 @@ class FMApi {
             imageData: data,
             token: token,
             completion: postCompletion,
-            error: postError)
+            error: postError
+        )
     }
     
     /// Check if a given zone is within a radius of our location.
@@ -127,11 +128,11 @@ class FMApi {
     ///   - radius: Radius, in meters, within which to search
     ///   - completion: Completion closure
     ///   - error: Error closure
-    func isZoneInRadius(_ zone: FMZone.ZoneType,
-                        coordinate: CLLocationCoordinate2D,
-                        radius: Int,
-                        completion: @escaping RadiusResult,
-                        error: @escaping ErrorResult) {
+    func sendZoneInRadiusRequest(_ zone: FMZone.ZoneType,
+                                 coordinate: CLLocationCoordinate2D,
+                                 radius: Int,
+                                 completion: @escaping RadiusResult,
+                                 error: @escaping ErrorResult) {
         
         // set up request parameters
         let params = [
@@ -165,9 +166,20 @@ class FMApi {
             parameters: params,
             token: token,
             completion: postCompletion,
-            error: postError)
+            error: postError
+        )
     }
     
+    func sendDeviceCharacteristicsRequest() {
+        let device = Device.current
+        let deviceModel = device.description
+        let deviceOs = "\(device.systemName) \(device.systemVersion)"
+        let fantasmoSdkVersion = Utilities.bundleVersion
+        
+        
+        
+        
+    }
     
     
     // MARK: - private methods

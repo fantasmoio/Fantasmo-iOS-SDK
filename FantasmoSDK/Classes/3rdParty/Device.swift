@@ -973,9 +973,13 @@ public enum Device {
   public var systemName: String? {
     guard isCurrent else { return nil }
     #if os(watchOS)
-    return WKInterfaceDevice.current().systemName
+        return WKInterfaceDevice.current().systemName
     #else
-    return UIDevice.current.systemName
+        if isPad, #available(iOS 13, *), UIDevice.current.systemName == "iOS" {
+            return "iPadOS"
+        } else {
+            return UIDevice.current.systemName
+        }
     #endif
   }
 

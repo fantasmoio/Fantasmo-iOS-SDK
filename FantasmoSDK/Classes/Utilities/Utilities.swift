@@ -9,7 +9,7 @@ import Foundation
 
 struct Utilities {
     
-    static var bundleVersion: String {
+    static var fullBundleVersion: String {
         var version = ""
         if let shortBundleVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             version += shortBundleVersion

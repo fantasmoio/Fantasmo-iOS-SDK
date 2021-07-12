@@ -11,6 +11,7 @@ struct FMApiRouter {
     enum ApiEndpoint: String {
         case localize = "image.localize"
         case zoneInRadius = "parking.in.radius"
+        case deviceCharacteristics
     }
     
     private static var apiBaseUrl: String {

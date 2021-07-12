@@ -54,6 +54,7 @@ class FMApi {
             error(FMError(ApiError.invalidImage))
             return
         }
+        
         let params = paramsOfLocalizeRequest(for: frame,
                                              relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
         
@@ -174,11 +175,21 @@ class FMApi {
         let device = Device.current
         let deviceModel = device.description
         let deviceOs = "\(device.systemName) \(device.systemVersion)"
-        let fantasmoSdkVersion = Utilities.bundleVersion
+        let fantasmoSdkVersion = Utilities.fullBundleVersion
         
+        let params = [
+            "deviceModel" : device.description,                             // "iPhone 12 Pro Max"
+            "deviceOs" : "\(device.systemName) \(device.systemVersion)",    // "iPadOS 14.5"
+            "fantasmoSdkVersion" : Utilities.fullBundleVersion              // "1.1.18(365)
+        ]
         
-        
-        
+//        FMRestClient.post(
+//            .deviceCharacteristics,
+//            parameters: params,
+//            token: token,
+//            completion: postCompletion,
+//            error: postError
+//        )
     }
     
     

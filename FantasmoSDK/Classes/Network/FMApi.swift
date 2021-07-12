@@ -8,7 +8,7 @@
 import Foundation
 import ARKit
 
-protocol FMApiDelegate: class {
+protocol FMApiDelegate: AnyObject {
     var isSimulation: Bool { get }
     var simulationZone: FMZone.ZoneType  { get }
     /// An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.

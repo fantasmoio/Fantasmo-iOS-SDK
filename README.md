@@ -193,7 +193,7 @@ extension ViewController: FMLocationDelegate {
 
 ### Behaviors
 
-To maximize localization quality, camera input is filtered against common problems. The designated `FMLocationDelegate` will be called with behavior requests intented to alleviate such problems.
+To maximize localization quality, camera input is filtered against common problems. The designated `FMLocationDelegate` will be called with behavior requests intended to alleviate such problems.
 
 ```swift
 extension ViewController: FMLocationDelegate {

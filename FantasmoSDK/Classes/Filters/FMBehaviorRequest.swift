@@ -18,9 +18,9 @@ public enum FMBehaviorRequest: String {
 extension FMBehaviorRequest {
     init(_ rejection : FMFilterRejectionReason) {
         switch rejection {
-        case .pitchTooLow:
+        case .cameraPitchTooLow:
             self = .tiltUp
-        case .pitchTooHigh:
+        case .cameraPitchTooHigh:
             self = .tiltDown
         case .movingTooFast:
             self = .panSlowly

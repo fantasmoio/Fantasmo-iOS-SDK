@@ -168,6 +168,16 @@ class FMApi {
             error: postError)
     }
     
+    
+    func send(arKitTrackingStateStatistics: ARKitTrackingStateStatistics) {
+        let trackingStateByReason = arKitTrackingStateStatistics.framesWithLimitedTrackingStateByReason
+        
+        let _ = [
+            "excessiveMotionEventCount" : trackingStateByReason[.excessiveMotion],
+            "lossOfTrackingEventCount" : trackingStateByReason[.insufficientFeatures]
+        ]
+    }
+    
     // MARK: - private methods
     
     /// Calculate parameters of the "Localize" request for the given `ARFrame`.

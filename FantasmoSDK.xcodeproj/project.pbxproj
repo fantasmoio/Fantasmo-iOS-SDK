@@ -34,6 +34,7 @@
 		A02646C0260CE46C00A7FA6B /* FMLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646BF260CE46C00A7FA6B /* FMLog.swift */; };
 		A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C2260CE56000A7FA6B /* RadiusResponse.swift */; };
 		A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
+		A359099F269DE41000A7BF5F /* ARKitTrackingStateStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A359099E269DE41000A7BF5F /* ARKitTrackingStateStatistics.swift */; };
 		A36BAA49265431A50041E875 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36BAA48265431A50041E875 /* AssociatedObject.swift */; };
 		A36BAA5126553DF10041E875 /* FMLocationManagerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36BAA5026553DF10041E875 /* FMLocationManagerTester.swift */; };
 		A3BA02D7263919DF00524D66 /* FMInputQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D2263919DF00524D66 /* FMInputQualityFilter.swift */; };
@@ -82,6 +83,7 @@
 		A02646BF260CE46C00A7FA6B /* FMLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLog.swift; sourceTree = "<group>"; };
 		A02646C2260CE56000A7FA6B /* RadiusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusResponse.swift; sourceTree = "<group>"; };
 		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
+		A359099E269DE41000A7BF5F /* ARKitTrackingStateStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKitTrackingStateStatistics.swift; sourceTree = "<group>"; };
 		A36BAA48265431A50041E875 /* AssociatedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObject.swift; sourceTree = "<group>"; };
 		A36BAA5026553DF10041E875 /* FMLocationManagerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationManagerTester.swift; sourceTree = "<group>"; };
 		A3BA02D2263919DF00524D66 /* FMInputQualityFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInputQualityFilter.swift; sourceTree = "<group>"; };
@@ -259,6 +261,7 @@
 			children = (
 				A3BA03C3263B6F0100524D66 /* EulerAngles.swift */,
 				A3BA03BA263B6C7D00524D66 /* Angle.swift */,
+				A359099E269DE41000A7BF5F /* ARKitTrackingStateStatistics.swift */,
 			);
 			path = ValueTypes;
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 				946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */,
 				946838D725921BF3005B1145 /* Codable+Extension.swift in Sources */,
 				A02646BD260CE44900A7FA6B /* FMApi.swift in Sources */,
+				A359099F269DE41000A7BF5F /* ARKitTrackingStateStatistics.swift in Sources */,
 				A02646C3260CE56000A7FA6B /* RadiusResponse.swift in Sources */,
 				946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */,
 				946838CA25921BF3005B1145 /* Geofence.swift in Sources */,

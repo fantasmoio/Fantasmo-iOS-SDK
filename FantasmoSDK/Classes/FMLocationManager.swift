@@ -105,6 +105,8 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
     
+    private var arKitTrackingStateStatistics = ARKitTrackingStateStatistics()
+    
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
     
@@ -168,6 +170,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug()
         state = .localizing
         qualityFilter.startFiltering()
+        arKitTrackingStateStatistics.reset()
     }
     
     /// Stops the generation of location updates.
@@ -288,6 +291,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
+        arKitTrackingStateStatistics.update(with: frame.camera.trackingState)
         
         guard state == .localizing && qualityFilter.accepts(frame) else {
             return

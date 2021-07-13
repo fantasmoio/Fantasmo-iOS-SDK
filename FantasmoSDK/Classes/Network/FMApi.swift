@@ -172,14 +172,10 @@ class FMApi {
     }
     
     func sendDeviceCharacteristicsRequest() {
-        let device = Device.current
-        let deviceModel = device.description
-        let deviceOs = "\(device.systemName) \(device.systemVersion)"
-        let fantasmoSdkVersion = Utilities.fullBundleVersion
         
         let params = [
-            "deviceModel" : device.description,                             // "iPhone 12 Pro Max"
-            "deviceOs" : "\(device.systemName) \(device.systemVersion)",    // "iPadOS 14.5"
+            "deviceModel" : UIDevice.current.identifier,                            // "iPhone7,1"
+            "deviceOs" : UIDevice.current.system,                           // "iPadOS 14.5"
             "fantasmoSdkVersion" : Utilities.fullBundleVersion              // "1.1.18(365)
         ]
         

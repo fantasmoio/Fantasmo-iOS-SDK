@@ -1,15 +1,17 @@
 //
-//  Utilities.swift
+//  Bundle+Extension.swift
 //  FantasmoSDK
 //
-//  Created by Yauheni Klishevich on 12.07.2021.
+//  Created by Yauheni Klishevich on 13.07.2021.
 //
 
 import Foundation
 
-struct Utilities {
+extension Bundle {
     
-    static var fullBundleVersion: String {
+    /// Returns the full version of a bundle represented by software version accompanied with a build version.
+    /// Example: "1.0.18(365)"
+    static var fullVersion: String {
         var version = ""
         if let shortBundleVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             version += shortBundleVersion

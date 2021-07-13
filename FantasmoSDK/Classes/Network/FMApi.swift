@@ -44,16 +44,17 @@ class FMApi {
     ///   - approximateLocation: An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
     ///   - completion: Completion closure
     ///   - error: Error closure
-    func localize(frame: ARFrame,
-                  relativeOpenCVAnchorPose: FMPose?,
-                  completion: @escaping LocalizationResult,
-                  error: @escaping ErrorResult) {
+    func sendLocalizationRequest(frame: ARFrame,
+                                 relativeOpenCVAnchorPose: FMPose?,
+                                 completion: @escaping LocalizationResult,
+                                 error: @escaping ErrorResult) {
         
         // set up request parameters
         guard let data = extractDataOfProperlyOrientedImage(of: frame) else {
             error(FMError(ApiError.invalidImage))
             return
         }
+        
         let params = paramsOfLocalizeRequest(for: frame,
                                              relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
         
@@ -115,7 +116,8 @@ class FMApi {
             imageData: data,
             token: token,
             completion: postCompletion,
-            error: postError)
+            error: postError
+        )
     }
     
     /// Check if a given zone is within a radius of our location.
@@ -127,11 +129,11 @@ class FMApi {
     ///   - radius: Radius, in meters, within which to search
     ///   - completion: Completion closure
     ///   - error: Error closure
-    func isZoneInRadius(_ zone: FMZone.ZoneType,
-                        coordinate: CLLocationCoordinate2D,
-                        radius: Int,
-                        completion: @escaping RadiusResult,
-                        error: @escaping ErrorResult) {
+    func sendZoneInRadiusRequest(_ zone: FMZone.ZoneType,
+                                 coordinate: CLLocationCoordinate2D,
+                                 radius: Int,
+                                 completion: @escaping RadiusResult,
+                                 error: @escaping ErrorResult) {
         
         // set up request parameters
         let params = [
@@ -165,8 +167,19 @@ class FMApi {
             parameters: params,
             token: token,
             completion: postCompletion,
-            error: postError)
+            error: postError
+        )
     }
+    
+    func sendDeviceCharacteristicsRequest() {
+        let _ = [
+            "deviceModel"        : UIDevice.current.identifier,          // "iPhone7,1"
+            "deviceOs"           : UIDevice.current.system,              // "iPadOS 14.5"
+            "fantasmoSdkVersion" : Bundle.fullVersion                    // "1.1.18(365)
+        ]
+        
+    }
+    
     
     // MARK: - private methods
     

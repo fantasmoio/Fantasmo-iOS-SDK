@@ -7,15 +7,15 @@
 
 import ARKit
 
-class FMAngleFilter: FMFrameFilter {
-    let radianThreshold = Float.pi / Float(8)
+class FMCameraPitchFilter: FMFrameFilter {
+    let radianThreshold = Float.pi / 8
         
-    func accepts(_ frame: ARFrame) -> FMFilterResult {
+    func accepts(_ frame: ARFrame) -> FMFrameFilterResult {
         switch frame.camera.eulerAngles.x {
         case _ where frame.camera.eulerAngles.x > radianThreshold:
-            return .rejected(reason: .pitchTooHigh)
+            return .rejected(reason: .cameraPitchTooHigh)
         case _ where frame.camera.eulerAngles.x < -radianThreshold:
-            return .rejected(reason: .pitchTooLow)
+            return .rejected(reason: .cameraPitchTooLow)
         default:
             return .accepted
         }

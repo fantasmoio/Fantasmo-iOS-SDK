@@ -87,7 +87,7 @@ public struct FMLog {
         line: Int,
         level: LogLevel
     ) -> String {
-        var output = "\(level.decorator) [FM] \(FMLog.dateFormatter.string(from: Date())) "
+        var output = "\(level.decorator) [FM] \(FMLog.dateFormatter.string(from: Date()))"
         
         #if DEBUG
         output.append("[\(sourceFileName(filePath: file)) \(function):\(line)] \(message)")

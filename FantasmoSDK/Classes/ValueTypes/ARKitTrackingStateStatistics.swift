@@ -7,7 +7,7 @@
 
 import ARKit
 
-/// Statistics on frames by the quality of ARKit posion tracking.
+/// Statistics on frames by the quality of ARKit position tracking.
 struct ARKitTrackingStateStatistics {
     
     /// Number of frames captured at the moment when tracking state was `ARFrame.camera.trackingState == .notAvailable`
@@ -31,7 +31,7 @@ struct ARKitTrackingStateStatistics {
         
         switch trackingState {
         case .limited(let reason):
-            framesWithLimitedTrackingStateByReason[reason]! += 1
+            framesWithLimitedTrackingStateByReason[reason] = (framesWithLimitedTrackingStateByReason[reason] ?? 0) + 1
         default:
             break
         }

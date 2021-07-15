@@ -171,16 +171,6 @@ class FMApi {
         )
     }
     
-    func sendDeviceCharacteristicsRequest() {
-        let _ = [
-            "deviceModel"        : UIDevice.current.identifier,          // "iPhone7,1"
-            "deviceOs"           : UIDevice.current.system,              // "iPadOS 14.5"
-            "fantasmoSdkVersion" : Bundle.fullVersion                    // "1.1.18(365)
-        ]
-        
-    }
-    
-    
     // MARK: - private methods
     
     /// Calculate parameters of the "Localize" request for the given `ARFrame`.
@@ -244,5 +234,13 @@ class FMApi {
 
         let imageData = FMUtility.toJpeg(pixelBuffer: frame.capturedImage, with: frame.deviceOrientation)
         return imageData
+    }
+    
+    private func deviceCharacteristics() -> [String : String] {
+        [
+            "deviceModel"        : UIDevice.current.identifier,          // "iPhone7,1"
+            "deviceOs"           : UIDevice.current.system,              // "iPadOS 14.5"
+            "fantasmoSdkVersion" : Bundle.fullVersion                    // "1.1.18(365)
+        ]
     }
 }

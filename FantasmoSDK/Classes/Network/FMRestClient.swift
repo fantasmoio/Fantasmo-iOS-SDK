@@ -18,9 +18,33 @@ struct FMRestClient {
     typealias RestResult = (Int?, Data?) -> Void
     typealias RestError = (Error) -> Void
     
-    // MARK: - Internal methods
+    // MARK: - internal methods
+    
+    /// Post a query to the CPS server
+    ///
+    /// - Parameters:
+    ///   - endpoint: The API endpoint to post to
+    ///   - parameters: Dictionary of form parameters
+    ///   - token: Optional API security token
+    ///   - completion: Completion closure
+    ///   - error: Error closure
+    static func post(_ endpoint: FMApiRouter.ApiEndpoint,
+                     parameters: [String : String],
+                     token: String?,
+                     completion: RestResult? = nil,
+                     error: RestError? = nil) {
+        
+        let request = Self.requestForEndpoint(endpoint, token: token)
+        log.info(String(describing: request.url), parameters: parameters)
+        
+        var data = Data()
+        data.appendParameters(parameters)
+        data.appendFinalBoundary()
+        
+        Self.post(data: data, with: request, completion: completion, error: error)
+    }
 
-    /// Post a query with parameters and an optional image to the CPS server
+    /// Post a query with an image to the CPS server
     ///
     /// - Parameters:
     ///   - endpoint: The API endpoint to post to
@@ -31,18 +55,17 @@ struct FMRestClient {
     ///   - error: Error closure
     static func post(_ endpoint: FMApiRouter.ApiEndpoint,
                      parameters: [String : String],
-                     imageData: Data? = nil,
+                     imageData: Data,
                      token: String?,
                      completion: RestResult? = nil,
                      error: RestError? = nil) {
+        
         let request = Self.requestForEndpoint(endpoint, token: token)
         log.info(String(describing: request.url), parameters: parameters)
         
         var data = Data()
         data.appendParameters(parameters)
-        if let theImageData = imageData {
-            data.appendImage(theImageData)
-        }
+        data.appendImage(imageData)
         data.appendFinalBoundary()
         
         Self.post(data: data, with: request, completion: completion, error: error)

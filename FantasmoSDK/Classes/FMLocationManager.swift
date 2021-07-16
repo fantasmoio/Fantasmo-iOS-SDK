@@ -19,6 +19,7 @@ public protocol FMLocationDelegate: AnyObject {
     /// - Parameters:
     ///   - location: Location of the device (or anchor if set)
     ///   - zones: Semantic zone corresponding to the location
+    /// Default implementation provided.
     func locationManager(didUpdateLocation location: CLLocation, withZones zones: [FMZone]?)
     
     /// Tells the delegate that an error has occurred.
@@ -26,8 +27,13 @@ public protocol FMLocationDelegate: AnyObject {
     /// - Parameters:
     ///   - error: The error reported.
     ///   - metadata: Metadata related to the error.
+    /// Default implementation provided.
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
     
+    /// Notifies delegate of the needed user action to enable localization.
+    /// For example user may holds the device tilted too much, which makes localization impossible. In this case manager will request corresponding
+    /// remedial action (tilt up or down)
+    /// Default implementation provided.
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
 }
 
@@ -112,6 +118,8 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
     
+    private var arKitTrackingStateStatistics = ARKitTrackingStateStatistics()
+    
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
     
@@ -173,6 +181,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
         state = .localizing
+        arKitTrackingStateStatistics.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
     }
@@ -295,6 +304,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
+        arKitTrackingStateStatistics.update(with: frame.camera.trackingState)
         
         guard state == .localizing else { return }
         

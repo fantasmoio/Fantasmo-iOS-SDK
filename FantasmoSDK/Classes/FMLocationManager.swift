@@ -213,7 +213,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// - Parameter completion: closure that consumes boolean server result
     public func isZoneInRadius(_ zone: FMZone.ZoneType, radius: Int, completion: @escaping (Bool)->Void) {
         log.debug()
-        FMApi.shared.isZoneInRadius(
+        FMApi.shared.sendZoneInRadiusRequest(
             zone, coordinate: approximateCoordinate, radius: radius, completion: completion
         ) { error in
             // For now, clients only care if a zone was found, so an error condition can be treated as a `false` completion
@@ -268,10 +268,10 @@ open class FMLocationManager: NSObject, FMApiDelegate {
             }
         }
         
-        FMApi.shared.localize(frame: frame,
-                              relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
-                              completion: localizeCompletion,
-                              error: localizeError)
+        FMApi.shared.sendLocalizationRequest(frame: frame,
+                                             relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
+                                             completion: localizeCompletion,
+                                             error: localizeError)
     }
     
     private func localizeDone() {

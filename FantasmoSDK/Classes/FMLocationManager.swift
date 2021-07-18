@@ -118,7 +118,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
     
-    private var arKitTrackingStateStatistics = ARKitTrackingStateStatistics()
+    private var accumulatedARKitRelatedInfo = AccumulatedARKitRelatedInfo()
     
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
@@ -181,7 +181,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
         state = .localizing
-        arKitTrackingStateStatistics.reset()
+        accumulatedARKitRelatedInfo.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
     }
@@ -304,7 +304,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
-        arKitTrackingStateStatistics.update(with: frame.camera.trackingState)
+        accumulatedARKitRelatedInfo.update(with: frame)
         
         guard state == .localizing else { return }
         

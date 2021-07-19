@@ -8,8 +8,11 @@
 import ARKit
 
 /// Used for injecting into FMLocationManager and getting access to private api for testing purposes.
-public protocol FMLocationManagerTester {
+public protocol FMLocationManagerTester: AnyObject {
     var anchorFrame: ARFrame? { set get }
+    
+    /// `FMLocationManager` will set this property on tester during initialization.
+    var accumulatedARKitRelatedInfo: AccumulatedARKitRelatedInfo! { set get }
     
     /// - Parameter translationOfAnchorInVirtualDeviceCS: Translation of anchor in non-OpenCV coordinate system of virtual device.
     ///     Provided only in "anchoring" mode, otherwise `nil`.

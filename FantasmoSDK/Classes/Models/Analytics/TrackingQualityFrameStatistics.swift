@@ -26,10 +26,10 @@ struct TrackingQualityFrameStatistics {
     
     private(set) var totalNumberOfFrames: Int = 0
     
-    mutating func update(withNextTrackingState trackingState: ARCamera.TrackingState) {
+    mutating func update(with nextTrackingState: ARCamera.TrackingState) {
         totalNumberOfFrames += 1
 
-        if case .limited(let reason) = trackingState {
+        if case .limited(let reason) = nextTrackingState {
             framesWithLimitedTrackingStateByReason[reason] = (framesWithLimitedTrackingStateByReason[reason] ?? 0) + 1
         }
     }

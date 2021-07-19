@@ -12,10 +12,16 @@ import ARKit
 /// To reduce error introduced by noise we use decimation (downsampling without passing through low-pass filter) by an integer factor as the most
 /// simple approach which should yield sufficient accuracy.
 /// More info about downsampling and decimation can be read at https://en.wikipedia.org/wiki/Downsampling_(signal_processing)
-struct TotalDeviceTranslationAccumulator {
+public class TotalDeviceTranslationAccumulator {
     
-    /// Current value of total translation, which is updated as more frames are received.
-    private(set) var totalTranslation: Float = 0.0
+    /// Current value of total translation in meters, which is updated as more frames are passed via `update(`
+    private(set) var totalTranslation: Float = 0.0 {
+        didSet {
+            totalTranslationObservers.forEach { _, closure in
+                closure(totalTranslation)
+            }
+        }
+    }
     
     /// Number of each frame in a frame sequence which should be taken for calculating total device translation.
     private(set) var decimationFactor: UInt = 10
@@ -23,19 +29,20 @@ struct TotalDeviceTranslationAccumulator {
     private var frameCounter: UInt = 0
     private var nextFrameToTake: UInt = 0
     private var previousTranslation: simd_float3!
+    private var totalTranslationObservers = [UUID : ((Float) -> Void)]()
     
-    init(decimationFactor: UInt = 10) {
+    public init(decimationFactor: UInt = 10) {
         self.decimationFactor = decimationFactor
     }
-    
-    mutating func update(forNextFrame frame: ARFrame) {
+
+    func update(with nextFrame: ARFrame) {
         if previousTranslation == nil {
-            previousTranslation = frame.camera.transform.translation
+            previousTranslation = nextFrame.camera.transform.translation
         }
         
         if frameCounter == nextFrameToTake {
-            if case .normal = frame.camera.trackingState {
-                let translation = frame.camera.transform.translation
+            if case .normal = nextFrame.camera.trackingState {
+                let translation = nextFrame.camera.transform.translation
                 totalTranslation += distance(translation, previousTranslation ?? translation)
                 previousTranslation = translation
                 nextFrameToTake += decimationFactor
@@ -48,11 +55,20 @@ struct TotalDeviceTranslationAccumulator {
         frameCounter += 1
     }
     
-    mutating func reset() {
+    func reset() {
         frameCounter = 0
         nextFrameToTake = 0
         previousTranslation = nil
         totalTranslation = 0.0
     }
     
+}
+
+extension TotalDeviceTranslationAccumulator {
+    public func observeTotalTranslation(using closure: @escaping (Float) -> Void) -> ObservationToken {
+        let id = totalTranslationObservers.insert(closure)
+        return ObservationToken { [weak self] in
+            self?.totalTranslationObservers.removeValue(forKey: id)
+        }
+    }
 }

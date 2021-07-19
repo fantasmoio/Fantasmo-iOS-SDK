@@ -131,6 +131,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// This initializer must be used only for testing purposes. Otherwise use singleton object via `shared` static property.
     public init(tester: FMLocationManagerTester? = nil) {
         self.tester = tester
+        self.tester?.accumulatedARKitRelatedInfo = accumulatedARKitRelatedInfo
     }
     
     // MARK: - Lifecycle
@@ -304,16 +305,19 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
-        accumulatedARKitRelatedInfo.update(with: frame)
         
-        guard state == .localizing else { return }
+        if state == .localizing {
+            let filterResult = qualityFrameFilter.accepts(frame)
+            frameFailureThrottler.onNext(frameFilterResult: filterResult)
+            
+            if case .accepted = filterResult {
+                localize(frame: frame, from: session)
+            }
+        }
         
-        let filterResult = qualityFrameFilter.accepts(frame)
-        frameFailureThrottler.onNext(frameFilterResult: filterResult)
-        
-        if case .accepted = filterResult {
-            localize(frame: frame, from: session)
-        }        
+        if state != .stopped {
+            accumulatedARKitRelatedInfo.update(with: frame)
+        }
     }
 }
 

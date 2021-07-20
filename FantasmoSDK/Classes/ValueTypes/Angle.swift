@@ -14,7 +14,7 @@ public struct Angle: CustomStringConvertible, Equatable {
     public static let (pi, π) = (Double.pi, Double.pi)
     
     /// The tau constant, the ratio of a circle's circumference to its radius
-    public static let (tau, τ)  = (2 * pi, 2 * pi)
+    public static let (tau, τ, two_pi)  = (2 * pi, 2 * pi, 2 * pi)
     
     /// The default constructor creates a zero angle
     public init() { _radians = 0 }
@@ -43,6 +43,20 @@ public struct Angle: CustomStringConvertible, Equatable {
     /// Expresses angle in (native) radians
     public var radians: Double { return _radians }
     
+    /// Angle in radians normalized to values between (-pi, +pi]
+    public var normalizeBetweenMinusPiAndPi: Double {
+        let valueBetweenMin2piAnd2pi = _radians.remainder(dividingBy: Angle.two_pi)
+        if valueBetweenMin2piAnd2pi > Angle.pi {
+            return valueBetweenMin2piAnd2pi - Angle.two_pi
+        }
+        else if valueBetweenMin2piAnd2pi <= -Angle.pi {
+            return valueBetweenMin2piAnd2pi + Angle.two_pi
+        }
+        else {
+            return valueBetweenMin2piAnd2pi
+        }
+    }
+    
     /// String convertible support
     public var description: String {
         return "\(degrees)°, \(multiplesOfPi)π, \(radians) rads"
@@ -63,3 +77,5 @@ public struct Angle: CustomStringConvertible, Equatable {
 public func rad2deg<T: FloatingPoint>(_ number: T) -> T {
     return number * 180 / .pi
 }
+
+

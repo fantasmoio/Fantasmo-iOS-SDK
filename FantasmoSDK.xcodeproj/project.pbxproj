@@ -35,6 +35,7 @@
 		A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
 		A30EBE09269F32B200E572FA /* AccumulatedARKitRelatedInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE08269F32B200E572FA /* AccumulatedARKitRelatedInfo.swift */; };
 		A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */; };
+		A31B972126A6DA2100B03F9A /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A31B972026A6DA2100B03F9A /* Array+Extension.swift */; };
 		A354BA6026A4B88300AF2023 /* EulerAngles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03C3263B6F0100524D66 /* EulerAngles.swift */; };
 		A354BA6526A4BFF300AF2023 /* RadiusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */; };
 		A359099A269DAAC300A7BF5F /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3590999269DAAC300A7BF5F /* UIDevice+Extension.swift */; };
@@ -92,6 +93,7 @@
 		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
 		A30EBE08269F32B200E572FA /* AccumulatedARKitRelatedInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccumulatedARKitRelatedInfo.swift; sourceTree = "<group>"; };
 		A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalDeviceTranslationAccumulator.swift; sourceTree = "<group>"; };
+		A31B972026A6DA2100B03F9A /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusResponse.swift; sourceTree = "<group>"; };
 		A3590999269DAAC300A7BF5F /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		A359099C269DBBC100A7BF5F /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				A36BAA48265431A50041E875 /* AssociatedObject.swift */,
 				A3590999269DAAC300A7BF5F /* UIDevice+Extension.swift */,
 				A359099C269DBBC100A7BF5F /* Bundle+Extension.swift */,
+				A31B972026A6DA2100B03F9A /* Array+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -426,6 +429,7 @@
 				A3BA02DF263919F300524D66 /* MovingAverage.swift in Sources */,
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,
 				A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */,
+				A31B972126A6DA2100B03F9A /* Array+Extension.swift in Sources */,
 				A359099A269DAAC300A7BF5F /* UIDevice+Extension.swift in Sources */,
 				A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */,
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,

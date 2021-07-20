@@ -19,12 +19,12 @@ public struct TotalRotationSpread {
     /// Spread for the roll Euler angle
     public var roll: (min: Float, max: Float) = (0, 0)
     
-    mutating func update(with euglerAngles: EulerAngles<Float>) {
-        yaw.min = min(yaw.min, euglerAngles.yaw)
-        yaw.max = max(yaw.max, euglerAngles.yaw)
-        pitch.min = min(pitch.min, euglerAngles.pitch)
-        pitch.max = max(pitch.max, euglerAngles.pitch)
-        roll.min = min(roll.min, euglerAngles.roll)
-        roll.max = max(roll.max, euglerAngles.roll)
+    mutating func update(with eulerAngles: EulerAngles<Float>) {
+        yaw.min = min(yaw.min, eulerAngles.yaw)
+        yaw.max = max(yaw.max, eulerAngles.yaw)
+        pitch.min = min(pitch.min, eulerAngles.pitch)
+        pitch.max = max(pitch.max, eulerAngles.pitch)
+        roll.min = min(roll.min, eulerAngles.roll)
+        roll.max = max(roll.max, eulerAngles.roll)
     }
 }

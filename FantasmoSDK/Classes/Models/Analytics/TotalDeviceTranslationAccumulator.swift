@@ -41,7 +41,7 @@ public class TotalDeviceTranslationAccumulator {
             previousTranslation = nextFrame.camera.transform.translation
         }
         
-        if frameCounter == nextFrameToTake {
+        if frameCounter >= nextFrameToTake { // we use ">=" rather than "==" to be on the safe side
             if case .normal = nextFrame.camera.trackingState {
                 let translation = nextFrame.camera.transform.translation
                 totalTranslation += distance(translation, previousTranslation ?? translation)
@@ -63,13 +63,13 @@ public class TotalDeviceTranslationAccumulator {
         totalTranslation = 0.0
     }
     
-}
-
-extension TotalDeviceTranslationAccumulator {
+    // MARK: - Observering
+    
     public func observeTotalTranslation(using closure: @escaping (Float) -> Void) -> ObservationToken {
         let id = totalTranslationObservers.insert(closure)
         return ObservationToken { [weak self] in
             self?.totalTranslationObservers.removeValue(forKey: id)
         }
     }
+    
 }

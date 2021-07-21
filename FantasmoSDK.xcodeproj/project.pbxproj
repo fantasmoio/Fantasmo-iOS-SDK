@@ -39,7 +39,7 @@
 		A34459EF26A8244F00C96205 /* EulerAngleSpreads.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */; };
 		A34459F126A8246400C96205 /* OrientationAngleSpreadCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459F026A8246400C96205 /* OrientationAngleSpreadCalculator.swift */; };
 		A34459F326A8246900C96205 /* RotationAngleCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459F226A8246900C96205 /* RotationAngleCalculator.swift */; };
-		A34459FB26A8281800C96205 /* TrackingStateFrameStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459FA26A8281800C96205 /* TrackingStateFrameStatistics.swift */; };
+		A3445A0526A896C700C96205 /* TrackingStateFrameStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3445A0326A896B100C96205 /* TrackingStateFrameStatistics.swift */; };
 		A354BA6026A4B88300AF2023 /* EulerAngles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03C3263B6F0100524D66 /* EulerAngles.swift */; };
 		A354BA6526A4BFF300AF2023 /* RadiusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */; };
 		A359099A269DAAC300A7BF5F /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3590999269DAAC300A7BF5F /* UIDevice+Extension.swift */; };
@@ -99,7 +99,7 @@
 		A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EulerAngleSpreads.swift; sourceTree = "<group>"; };
 		A34459F026A8246400C96205 /* OrientationAngleSpreadCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrientationAngleSpreadCalculator.swift; sourceTree = "<group>"; };
 		A34459F226A8246900C96205 /* RotationAngleCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationAngleCalculator.swift; sourceTree = "<group>"; };
-		A34459FA26A8281800C96205 /* TrackingStateFrameStatistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingStateFrameStatistics.swift; sourceTree = "<group>"; };
+		A3445A0326A896B100C96205 /* TrackingStateFrameStatistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingStateFrameStatistics.swift; sourceTree = "<group>"; };
 		A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusResponse.swift; sourceTree = "<group>"; };
 		A3590999269DAAC300A7BF5F /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		A359099C269DBBC100A7BF5F /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
@@ -140,6 +140,7 @@
 				9468388D25921BAF005B1145 /* FantasmoSDK */,
 				9468388C25921BAF005B1145 /* Products */,
 				946838E025921DFE005B1145 /* Frameworks */,
+				A3445A0226A8967300C96205 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -259,7 +260,7 @@
 			children = (
 				A34459F526A8251500C96205 /* Impl */,
 				A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */,
-				A34459FA26A8281800C96205 /* TrackingStateFrameStatistics.swift */,
+				A3445A0326A896B100C96205 /* TrackingStateFrameStatistics.swift */,
 				A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */,
 				A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */,
 			);
@@ -273,6 +274,13 @@
 				A34459F226A8246900C96205 /* RotationAngleCalculator.swift */,
 			);
 			path = Impl;
+			sourceTree = "<group>";
+		};
+		A3445A0226A8967300C96205 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		A36BAA4F26553DDB0041E875 /* Testing */ = {
@@ -413,7 +421,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				946838C125921BF3005B1145 /* FMUtility.swift in Sources */,
-				A34459FB26A8281800C96205 /* TrackingStateFrameStatistics.swift in Sources */,
+				A3445A0526A896C700C96205 /* TrackingStateFrameStatistics.swift in Sources */,
 				A02646C0260CE46C00A7FA6B /* FMLog.swift in Sources */,
 				A3CB773F263710D2009625BB /* simd_float4x4+Extension.swift in Sources */,
 				946838C825921BF3005B1145 /* FMIntrinsics.swift in Sources */,

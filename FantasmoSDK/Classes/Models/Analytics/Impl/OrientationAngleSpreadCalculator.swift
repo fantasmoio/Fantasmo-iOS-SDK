@@ -14,7 +14,7 @@ import ARKit
 /// For pitch in range [-pi/2, pi/2] the spread is calculated as `max_pitch - min_pitch` with such a pecularity that rotating device around X axis
 /// by pi radians will be reported as having pi/2 spread because pitch changes from 0°->90° and then from 90°->0° again owing to the way of how
 /// euler angles are calculated.
-public struct OrientationAngleSpreadCalculator {
+struct OrientationAngleSpreadCalculator {
     
     /// Value of spread for angle in radians and fallling in [0, 2pi]
     var spread: Float {

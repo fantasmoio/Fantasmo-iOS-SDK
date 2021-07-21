@@ -11,7 +11,7 @@ import ARKit
 /// To reset accumulated data and start over you should invoke `reset()`
 public class AccumulatedARKitRelatedInfo {
     
-    private(set) var trackingQualityFrameStatistics = TrackingQualityFrameStatistics()
+    private(set) var trackingQualityFrameStatistics = TrackingStateFrameStatistics()
 
     /// Allows to receive the total translation (distance) that device has moded from the starting moment.
     public private(set) var translationAccumulator = TotalDeviceTranslationAccumulator(decimationFactor: 10)

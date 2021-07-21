@@ -8,7 +8,7 @@
 import ARKit
 
 /// Statistics on frames by the quality of ARKit position tracking.
-struct TrackingQualityFrameStatistics {
+struct TrackingStateFrameStatistics {
     
     /// Number of frames captured at the moment when tracking state was `ARFrame.camera.trackingState == .notAvailable`
     private(set) var framesWithNotAvailableTracking: Int = 0

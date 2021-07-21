@@ -118,7 +118,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
     
-    private var accumulatedARKitRelatedInfo = AccumulatedARKitRelatedInfo()
+    private var accumulatedARKitInfo = AccumulatedARKitInfo()
     
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
@@ -131,7 +131,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// This initializer must be used only for testing purposes. Otherwise use singleton object via `shared` static property.
     public init(tester: FMLocationManagerTester? = nil) {
         self.tester = tester
-        self.tester?.accumulatedARKitRelatedInfo = accumulatedARKitRelatedInfo
+        self.tester?.accumulatedARKitInfo = accumulatedARKitInfo
     }
     
     // MARK: - Lifecycle
@@ -182,7 +182,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
         state = .localizing
-        accumulatedARKitRelatedInfo.reset()
+        accumulatedARKitInfo.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
     }
@@ -316,7 +316,7 @@ extension FMLocationManager : ARSessionDelegate {
         }
         
         if state != .stopped {
-            accumulatedARKitRelatedInfo.update(with: frame)
+            accumulatedARKitInfo.update(with: frame)
         }
     }
 }

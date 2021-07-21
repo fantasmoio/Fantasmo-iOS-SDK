@@ -9,7 +9,7 @@ import ARKit
 
 /// Data struct aggregating ARKit related data accumulated starting from some starting moment.
 /// To reset accumulated data and start over you should invoke `reset()`
-public class AccumulatedARKitRelatedInfo {
+public class AccumulatedARKitInfo {
     
     private(set) var trackingQualityFrameStatistics = TrackingQualityFrameStatistics()
 

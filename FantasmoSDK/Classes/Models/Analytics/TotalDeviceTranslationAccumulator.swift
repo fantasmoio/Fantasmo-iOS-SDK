@@ -24,7 +24,7 @@ public class TotalDeviceTranslationAccumulator {
     }
     
     /// Number of each frame in a frame sequence which should be taken for calculating total device translation.
-    private(set) var decimationFactor: UInt = 10
+    private(set) var decimationFactor: UInt
     
     private var frameCounter: UInt = 0
     private var nextFrameToTake: UInt = 0
@@ -35,6 +35,7 @@ public class TotalDeviceTranslationAccumulator {
         self.decimationFactor = decimationFactor
     }
 
+    /// Every n-th frame is taken, where n = `decimationFactor`. Frames with limited tracking state are omitted.
     func update(with nextFrame: ARFrame) {
         if previousTranslation == nil {
             previousTranslation = nextFrame.camera.transform.translation

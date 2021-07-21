@@ -33,7 +33,7 @@
 		A02646BD260CE44900A7FA6B /* FMApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646BA260CE44900A7FA6B /* FMApi.swift */; };
 		A02646C0260CE46C00A7FA6B /* FMLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646BF260CE46C00A7FA6B /* FMLog.swift */; };
 		A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
-		A30EBE09269F32B200E572FA /* AccumulatedARKitRelatedInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE08269F32B200E572FA /* AccumulatedARKitRelatedInfo.swift */; };
+		A30EBE09269F32B200E572FA /* AccumulatedARKitInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */; };
 		A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */; };
 		A354BA6026A4B88300AF2023 /* EulerAngles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03C3263B6F0100524D66 /* EulerAngles.swift */; };
 		A354BA6526A4BFF300AF2023 /* RadiusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */; };
@@ -90,7 +90,7 @@
 		A02646BA260CE44900A7FA6B /* FMApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMApi.swift; sourceTree = "<group>"; };
 		A02646BF260CE46C00A7FA6B /* FMLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLog.swift; sourceTree = "<group>"; };
 		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
-		A30EBE08269F32B200E572FA /* AccumulatedARKitRelatedInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccumulatedARKitRelatedInfo.swift; sourceTree = "<group>"; };
+		A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccumulatedARKitInfo.swift; sourceTree = "<group>"; };
 		A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalDeviceTranslationAccumulator.swift; sourceTree = "<group>"; };
 		A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusResponse.swift; sourceTree = "<group>"; };
 		A3590999269DAAC300A7BF5F /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
@@ -250,7 +250,7 @@
 		A30EBE0A269F32C400E572FA /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
-				A30EBE08269F32B200E572FA /* AccumulatedARKitRelatedInfo.swift */,
+				A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */,
 				A359099E269DE41000A7BF5F /* TrackingQualityFrameStatistics.swift */,
 				A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */,
 			);
@@ -411,7 +411,7 @@
 				946838C925921BF3005B1145 /* Location.swift in Sources */,
 				946838C225921BF3005B1145 /* MockData.swift in Sources */,
 				946838D025921BF3005B1145 /* ErrorResponse.swift in Sources */,
-				A30EBE09269F32B200E572FA /* AccumulatedARKitRelatedInfo.swift in Sources */,
+				A30EBE09269F32B200E572FA /* AccumulatedARKitInfo.swift in Sources */,
 				946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */,
 				A36BAA5126553DF10041E875 /* FMLocationManagerTester.swift in Sources */,
 				A3CB77342636B496009625BB /* FMPosition.swift in Sources */,

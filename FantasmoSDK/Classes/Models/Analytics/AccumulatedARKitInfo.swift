@@ -11,7 +11,7 @@ import ARKit
 /// To reset accumulated data and start over you should invoke `reset()`
 public class AccumulatedARKitInfo {
     
-    private(set) var trackingQualityFrameStatistics = TrackingQualityFrameStatistics()
+    public private(set) var trackingStateStatistics = TrackingStateFrameStatistics()
 
     /// Allows to receive the total translation (distance) that device has moded from the starting moment.
     public private(set) var translationAccumulator = TotalDeviceTranslationAccumulator(decimationFactor: 10)
@@ -22,7 +22,7 @@ public class AccumulatedARKitInfo {
     public init() {}
     
     func update(with nextFrame: ARFrame) {
-        trackingQualityFrameStatistics.update(with: nextFrame.camera.trackingState)
+        trackingStateStatistics.update(with: nextFrame.camera.trackingState)
         translationAccumulator.update(with: nextFrame)
         
         if case .normal = nextFrame.camera.trackingState {
@@ -31,7 +31,7 @@ public class AccumulatedARKitInfo {
     }
     
     func reset() {
-        trackingQualityFrameStatistics.reset()
+        trackingStateStatistics.reset()
         translationAccumulator.reset()
         rotationSpread = TotalRotationSpread()
     }

@@ -29,7 +29,7 @@ struct RotationAngleCalculator {
             let diff = nextAngle - previousNormalOrientationAngle!
             let normalizedDiff = Float( Angle(radians: Double(diff)).normalizeBetweenMinusPiAndPi )
             
-            if previousLimitedOrientationAngles.isNotEmpty {
+            if !previousLimitedOrientationAngles.isEmpty {
                 let correctedDiff = calculateDiffBasedOnPreviousLimitedAngles(for: nextAngle)
                 rotationAngle! += correctedDiff
                 previousLimitedOrientationAngles.removeAll()

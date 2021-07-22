@@ -57,29 +57,29 @@ public struct TrackingStateFrameStatistics {
 extension TrackingStateFrameStatistics {
     
     /// Percentage of the frames for `ARFrame.camera.trackingState == .normal`
-    public var framesPercentageForNormalTrackingState: Float {
+    public var percentageForNormalTrackingState: Float {
         framesPercentage(for: framesWithNormalTrackingState)
     }
     
     /// Percentage of the frames for `ARFrame.camera.trackingState == .limited`
-    public var framesPercentageForLimitedTrackingState: Float {
+    public var percentageForLimitedTrackingState: Float {
         framesPercentage(for: framesWithLimitedTrackingState)
     }
     
     /// Percentage of the frames for `ARFrame.camera.trackingState == .notAvailable`
-    public var framesPercentageForNotAvailabeTrackingState: Float {
+    public var percentageForNotAvailabeTrackingState: Float {
         framesPercentage(for: framesWithNotAvailableTracking)
     }
     
     /// Percentage of the frames among the `totalNumberOfFrames` for `ARFrame.camera.trackingState == .limited` having
     /// the passed `reason` as a cause of limited position-tracking quality
-    public func framesPercentageForLimitedTrackingState(with reason: ARCamera.TrackingState.Reason) -> Float {
+    public func percentageForLimitedTrackingState(with reason: ARCamera.TrackingState.Reason) -> Float {
         framesPercentage(for:  framesWithLimitedTrackingStateByReason[reason] ?? 0 )
     }
     
     private func framesPercentage(for frameCount: Int) -> Float {
         if totalNumberOfFrames != 0 {
-            return Float(frameCount) / Float(totalNumberOfFrames)
+            return 100 * Float(frameCount) / Float(totalNumberOfFrames)
         }
         else {
             return 0

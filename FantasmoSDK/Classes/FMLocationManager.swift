@@ -178,9 +178,13 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     // MARK: - Public instance methods
     
     /// Starts the generation of updates that report the user’s current location.
-    public func startUpdatingLocation() {
+    /// - Parameter rideID: Ride identifier. Used to keep track of an entire parking session and for billing purposes.
+    ///                      The length of the string must not exceed 64 characters.
+    public func startUpdatingLocation(rideID: String) {
+        precondition(rideID.count <= 64, "The length of the `rideID` argument must not exceed 64!")
         precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
+        
         state = .localizing
         accumulatedARKitInfo.reset()
         qualityFrameFilter.startOrRestartFiltering()
@@ -209,9 +213,9 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     /// Check to see if a given zone is in the provided radius
     ///
-    /// - Parameter zone: zone to search for
-    /// - Parameter radius: search radius in meters
-    /// - Parameter completion: closure that consumes boolean server result
+    /// - Parameter zone: Zone to search for
+    /// - Parameter radius: Search radius in meters
+    /// - Parameter completion: Closure that consumes boolean server result
     public func isZoneInRadius(_ zone: FMZone.ZoneType, radius: Int, completion: @escaping (Bool)->Void) {
         log.debug()
         FMApi.shared.sendZoneInRadiusRequest(

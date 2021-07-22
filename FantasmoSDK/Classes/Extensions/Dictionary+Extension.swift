@@ -17,3 +17,13 @@ extension Dictionary {
         }
     }
 }
+
+extension Dictionary where Key == UUID {
+    
+    /// Used for implementing property observers, when we usually put observation closure into a dictionary under some key.
+    mutating func insert(_ value: Value) -> UUID {
+        let id = UUID()
+        self[id] = value
+        return id
+    }
+}

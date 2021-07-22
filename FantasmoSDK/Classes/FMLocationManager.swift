@@ -118,7 +118,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
     
-    private var arKitTrackingStateStatistics = ARKitTrackingStateStatistics()
+    private var accumulatedARKitInfo = AccumulatedARKitInfo()
     
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
@@ -131,6 +131,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// This initializer must be used only for testing purposes. Otherwise use singleton object via `shared` static property.
     public init(tester: FMLocationManagerTester? = nil) {
         self.tester = tester
+        self.tester?.accumulatedARKitInfo = accumulatedARKitInfo
     }
     
     // MARK: - Lifecycle
@@ -181,7 +182,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
         state = .localizing
-        arKitTrackingStateStatistics.reset()
+        accumulatedARKitInfo.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
     }
@@ -304,16 +305,19 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
-        arKitTrackingStateStatistics.update(with: frame.camera.trackingState)
         
-        guard state == .localizing else { return }
+        if state == .localizing {
+            let filterResult = qualityFrameFilter.accepts(frame)
+            frameFailureThrottler.onNext(frameFilterResult: filterResult)
+            
+            if case .accepted = filterResult {
+                localize(frame: frame, from: session)
+            }
+        }
         
-        let filterResult = qualityFrameFilter.accepts(frame)
-        frameFailureThrottler.onNext(frameFilterResult: filterResult)
-        
-        if case .accepted = filterResult {
-            localize(frame: frame, from: session)
-        }        
+        if state != .stopped {
+            accumulatedARKitInfo.update(with: frame)
+        }
     }
 }
 

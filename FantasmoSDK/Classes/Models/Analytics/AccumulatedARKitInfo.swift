@@ -12,9 +12,14 @@ import ARKit
 public class AccumulatedARKitInfo {
     
     public private(set) var trackingStateStatistics = TrackingStateFrameStatistics()
+    
+    /// Current value of total translation in meters
+    public var totalTranslation: Float {
+        translationAccumulator.totalTranslation
+    }
 
     /// Allows to receive the total translation (distance) that device has moded from the starting moment.
-    public private(set) var translationAccumulator = TotalDeviceTranslationAccumulator(decimationFactor: 10)
+    private(set) var translationAccumulator = TotalDeviceTranslationAccumulator(decimationFactor: 10)
     
     /// Spread of Eugler angles as min and max values for each compoent (that is for yaw, pitch and roll)
     public private(set) var eulerAngleSpreads = EulerAngleSpreads()

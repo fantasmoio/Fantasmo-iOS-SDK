@@ -12,12 +12,17 @@ import ARKit
 public class AccumulatedARKitInfo {
     
     public private(set) var trackingStateStatistics = TrackingStateFrameStatistics()
+    
+    /// Current value of total translation in meters
+    public var totalTranslation: Float {
+        translationAccumulator.totalTranslation
+    }
 
     /// Allows to receive the total translation (distance) that device has moded from the starting moment.
-    public private(set) var translationAccumulator = TotalDeviceTranslationAccumulator(decimationFactor: 10)
+    private(set) var translationAccumulator = TotalDeviceTranslationAccumulator(decimationFactor: 10)
     
     /// Spread of Eugler angles as min and max values for each compoent (that is for yaw, pitch and roll)
-    public private(set) var rotationSpread = TotalRotationSpread()
+    public private(set) var eulerAngleSpreads = EulerAngleSpreads()
     
     public init() {}
     
@@ -26,13 +31,14 @@ public class AccumulatedARKitInfo {
         translationAccumulator.update(with: nextFrame)
         
         if case .normal = nextFrame.camera.trackingState {
-            rotationSpread.update(with: EulerAngles(nextFrame.camera.eulerAngles))
+            let eulerAngles = EulerAngles(nextFrame.camera.eulerAngles)
+            eulerAngleSpreads.update(with: eulerAngles, trackingState: nextFrame.camera.trackingState)
         }
     }
     
     func reset() {
         trackingStateStatistics.reset()
         translationAccumulator.reset()
-        rotationSpread = TotalRotationSpread()
+        eulerAngleSpreads = EulerAngleSpreads()
     }
 }

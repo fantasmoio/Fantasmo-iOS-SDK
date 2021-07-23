@@ -15,7 +15,7 @@ import ARKit
 class FMCompoundFrameQualityFilter {
     
     /// We use `clock()` rathern than `Date()` as it is likely faster. Some hint at this can be found at https://bit.ly/3vExXcZ
-    private var timestampOLastAcceptedFrame: clock_t?
+    private var timestampOfLastAcceptedFrame: clock_t?
     
     /// The number of seconds after which we forcibly accept a frame.
     private var acceptanceThreshold = 6.0
@@ -30,7 +30,7 @@ class FMCompoundFrameQualityFilter {
     /// Invoke this method when it is needed to start validating a new sequence of frames.
     /// Impl details: Invoking this method will ensure that first frame on the new sequence will not be force approved without assessing for quality.
     func startOrRestartFiltering() {
-        timestampOLastAcceptedFrame = nil
+        timestampOfLastAcceptedFrame = nil
     }
     
     /// Indicate whether passed `frame` should be used for the localization.
@@ -40,28 +40,28 @@ class FMCompoundFrameQualityFilter {
     /// of this class.
     func accepts(_ frame: ARFrame) -> FMFrameFilterResult {
         if shouldForciblyAccept(frame) {
-            timestampOLastAcceptedFrame = clock()
+            timestampOfLastAcceptedFrame = clock()
             return .accepted
         }
         
         for filter in filters {
             if case let .rejected(reason) = filter.accepts(frame) {
-                if timestampOLastAcceptedFrame == nil {
-                    timestampOLastAcceptedFrame = clock()
+                if timestampOfLastAcceptedFrame == nil {
+                    timestampOfLastAcceptedFrame = clock()
                 }
                 return .rejected(reason: reason)
             }
         }
         
-        timestampOLastAcceptedFrame = clock()
+        timestampOfLastAcceptedFrame = clock()
         return .accepted
     }
 
     /// If there are a lot of continuous rejections, we force an acceptance
     private func shouldForciblyAccept(_ frame: ARFrame) -> Bool {
-        if let t = timestampOLastAcceptedFrame {
+        if let t = timestampOfLastAcceptedFrame {
             let elapsedTime = Double(clock() - t) / Double(CLOCKS_PER_SEC)
-            return elapsedTime > acceptanceThreshold
+            return (elapsedTime > acceptanceThreshold)
         }
         else {
             return false

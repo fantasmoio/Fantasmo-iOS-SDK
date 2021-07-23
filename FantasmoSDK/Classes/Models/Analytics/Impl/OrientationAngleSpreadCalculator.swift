@@ -16,7 +16,7 @@ import ARKit
 /// euler angles are calculated.
 struct OrientationAngleSpreadCalculator {
     
-    /// Value of spread for angle in radians and fallling in [0, 2pi]
+    /// Value of spread for angle in radians and falling in [0, 2pi]
     var spread: Float {
         Swift.min(Swift.max(max - min, 0), 2 * .pi)
     }

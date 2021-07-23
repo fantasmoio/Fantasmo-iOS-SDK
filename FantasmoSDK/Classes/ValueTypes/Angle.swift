@@ -44,7 +44,7 @@ public struct Angle: CustomStringConvertible, Equatable {
     public var radians: Double { return _radians }
     
     /// Angle in radians normalized to values between (-pi, +pi]
-    public var normalizeBetweenMinusPiAndPi: Double {
+    public var normalizedBetweenMinusPiAndPi: Double {
         let valueBetweenMin2piAnd2pi = _radians.remainder(dividingBy: Angle.two_pi)
         if valueBetweenMin2piAnd2pi > Angle.pi {
             return valueBetweenMin2piAnd2pi - Angle.two_pi

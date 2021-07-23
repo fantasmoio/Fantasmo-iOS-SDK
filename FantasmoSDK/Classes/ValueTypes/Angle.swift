@@ -74,8 +74,12 @@ public struct Angle: CustomStringConvertible, Equatable {
 
 // MARK: - Global functions
 
-public func rad2deg<T: FloatingPoint>(_ number: T) -> T {
-    return number * 180 / .pi
+public func rad2deg<T: FloatingPoint>(_ radians: T) -> T {
+    radians * 180 / .pi
+}
+
+public func deg2rad<T: FloatingPoint>(_ degrees: T) -> T {
+    degrees / 180 * .pi
 }
 
 

@@ -8,13 +8,14 @@
 import ARKit
 
 class FMCameraPitchFilter: FMFrameFilter {
-    let radianThreshold = Float.pi / 8
+    private let maxUpwardTilt: Float = deg2rad(30)
+    private let maxDownwardTilt: Float = deg2rad(65)
         
     func accepts(_ frame: ARFrame) -> FMFrameFilterResult {
-        switch frame.camera.eulerAngles.x {
-        case _ where frame.camera.eulerAngles.x > radianThreshold:
+        switch frame.camera.pitch {
+        case _ where frame.camera.pitch > maxUpwardTilt:
             return .rejected(reason: .cameraPitchTooHigh)
-        case _ where frame.camera.eulerAngles.x < -radianThreshold:
+        case _ where frame.camera.pitch < -maxDownwardTilt:
             return .rejected(reason: .cameraPitchTooLow)
         default:
             return .accepted

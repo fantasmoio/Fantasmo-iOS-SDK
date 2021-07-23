@@ -13,19 +13,3 @@ public enum FMBehaviorRequest: String {
     case panAround = "Pan around the scene"
     case panSlowly = "Pan more slowly"
 }
-
-/// maps filter FMFilterRejectionReason to a remedial user behavior
-extension FMBehaviorRequest {
-    init(_ rejection : FMFilterRejectionReason) {
-        switch rejection {
-        case .cameraPitchTooLow:
-            self = .tiltUp
-        case .cameraPitchTooHigh:
-            self = .tiltDown
-        case .movingTooFast:
-            self = .panSlowly
-        case .movingTooLittle:
-            self = .panAround
-        }
-    }
-}

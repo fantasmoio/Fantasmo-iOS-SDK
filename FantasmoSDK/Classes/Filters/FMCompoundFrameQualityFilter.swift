@@ -22,6 +22,7 @@ class FMCompoundFrameQualityFilter {
     
     /// Filter collection, in order of increasing computational cost
     private let filters: [FMFrameFilter] = [
+        FMTrackingStateFilter(),
         FMCameraPitchFilter(),
         FMMovementFilter(),
         FMBlurFilter(),

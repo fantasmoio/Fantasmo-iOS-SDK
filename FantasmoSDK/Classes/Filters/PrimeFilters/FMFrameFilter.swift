@@ -7,7 +7,7 @@
 
 import ARKit
 
-public enum FMFilterRejectionReason {
+public enum FMFilterRejectionReason: CaseIterable {
     case cameraPitchTooLow
     case cameraPitchTooHigh
     case movingTooFast

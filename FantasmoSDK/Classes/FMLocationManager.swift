@@ -119,6 +119,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private weak var delegate: FMLocationDelegate?
     
     private var accumulatedARKitInfo = AccumulatedARKitInfo()
+    private var frameRejectionStatisticsAccumulator = FrameFilterRejectionStatisticsAccumulator()
     
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
@@ -183,6 +184,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug()
         state = .localizing
         accumulatedARKitInfo.reset()
+        frameRejectionStatisticsAccumulator.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
     }
@@ -308,6 +310,9 @@ extension FMLocationManager : ARSessionDelegate {
         
         if state == .localizing {
             let filterResult = qualityFrameFilter.accepts(frame)
+            if case let .rejected(reason) = filterResult {
+                frameRejectionStatisticsAccumulator.update(with: reason)
+            }
             frameFailureThrottler.onNext(frameFilterResult: filterResult)
             
             if case .accepted = filterResult {

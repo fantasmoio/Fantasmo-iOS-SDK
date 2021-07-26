@@ -12,6 +12,8 @@ public enum FMFilterRejectionReason {
     case cameraPitchTooHigh
     case movingTooFast
     case movingTooLittle
+    /// The scene visible to the camera doesn't contain enough distinguishable features for image-based position tracking.
+    case insufficientFeatures
     
     func mapToBehaviorRequest() -> FMBehaviorRequest {
         switch self {
@@ -23,6 +25,8 @@ public enum FMFilterRejectionReason {
             return .panSlowly
         case .movingTooLittle:
             return .panAround
+        case .insufficientFeatures:
+            return .panAround
         }
     }
 }
@@ -32,7 +36,7 @@ public enum FMFrameFilterResult: Equatable {
     case rejected(reason: FMFilterRejectionReason)
 }
 
-/// Prime filters are original blocks for compound frame filters or can be used alone as standalone filter.
+/// Prime filters are original blocks for a compound frame filter or can be used alone as a standalone filter.
 public protocol FMFrameFilter {
     func accepts(_ frame: ARFrame) -> FMFrameFilterResult
 }

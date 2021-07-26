@@ -10,7 +10,7 @@ import simd
 import ARKit
 
 /// Spread of Euler angles covered by device over a period of time.
-public struct EulerAngleSpreads {
+public struct EulerAngleSpreadsAccumulator {
     
     /// minRotationAngle ∈ [-∞, +∞],  maxRotationAngle ∈ [-∞, +∞], spread ∈ [0, pi]
     public var pitch: (minRotationAngle: Float, maxRotationAngle: Float, spread: Float) {
@@ -31,7 +31,7 @@ public struct EulerAngleSpreads {
     private var yawSpreadCalculator = OrientationAngleSpreadCalculator()
     private var rollSpreadCalculator = OrientationAngleSpreadCalculator()
     
-    mutating func update(with nextEulerAngles: EulerAngles<Float>, trackingState: ARCamera.TrackingState) {
+    mutating func accumulate(nextEulerAngles: EulerAngles<Float>, trackingState: ARCamera.TrackingState) {
         pitchSpreadCalculator.update(with: nextEulerAngles.pitch, trackingState: trackingState)
         yawSpreadCalculator.update(with: nextEulerAngles.yaw, trackingState: trackingState)
         rollSpreadCalculator.update(with: nextEulerAngles.roll, trackingState: trackingState)

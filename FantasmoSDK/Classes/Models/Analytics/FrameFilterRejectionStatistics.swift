@@ -14,7 +14,7 @@ struct FrameFilterRejectionStatisticsAccumulator {
         Dictionary<FMFilterRejectionReason, Int>(initialValueForAllCases: 0)
         
 
-    mutating func update(with filterRejectionReason: FMFilterRejectionReason) {
+    mutating func accumulate(filterRejectionReason: FMFilterRejectionReason) {
         filterRejectionReasonToCountDict[filterRejectionReason]! += 1
     }
     

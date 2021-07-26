@@ -25,10 +25,10 @@ public struct TrackingStateFrameStatistics {
         .initializing: 0,
         .relocalizing: 0,
         .excessiveMotion : 0,
-        .insufficientFeatures : 0,
+        .insufficientFeatures : 0
     ]
     
-    mutating func update(with nextTrackingState: ARCamera.TrackingState) {
+    mutating func accumulate(nextTrackingState: ARCamera.TrackingState) {
         totalNumberOfFrames += 1
         
         switch nextTrackingState {

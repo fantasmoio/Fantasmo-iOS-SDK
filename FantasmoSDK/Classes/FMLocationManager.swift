@@ -311,7 +311,7 @@ extension FMLocationManager : ARSessionDelegate {
         if state == .localizing {
             let filterResult = qualityFrameFilter.accepts(frame)
             if case let .rejected(reason) = filterResult {
-                frameRejectionStatisticsAccumulator.update(with: reason)
+                frameRejectionStatisticsAccumulator.accumulate(filterRejectionReason: reason)
             }
             frameFailureThrottler.onNext(frameFilterResult: filterResult)
             

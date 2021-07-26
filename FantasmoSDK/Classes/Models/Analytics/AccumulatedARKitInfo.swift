@@ -22,23 +22,23 @@ public class AccumulatedARKitInfo {
     private(set) var translationAccumulator = TotalDeviceTranslationAccumulator(decimationFactor: 10)
     
     /// Spread of Eugler angles as min and max values for each compoent (that is for yaw, pitch and roll)
-    public private(set) var eulerAngleSpreads = EulerAngleSpreads()
+    public private(set) var eulerAngleSpreadsAccumulator = EulerAngleSpreadsAccumulator()
     
     public init() {}
     
     func update(with nextFrame: ARFrame) {
-        trackingStateStatistics.update(with: nextFrame.camera.trackingState)
+        trackingStateStatistics.accumulate(nextTrackingState: nextFrame.camera.trackingState)
         translationAccumulator.update(with: nextFrame)
         
         if case .normal = nextFrame.camera.trackingState {
             let eulerAngles = EulerAngles(nextFrame.camera.eulerAngles)
-            eulerAngleSpreads.update(with: eulerAngles, trackingState: nextFrame.camera.trackingState)
+            eulerAngleSpreadsAccumulator.accumulate(nextEulerAngles: eulerAngles, trackingState: nextFrame.camera.trackingState)
         }
     }
     
     func reset() {
         trackingStateStatistics.reset()
         translationAccumulator.reset()
-        eulerAngleSpreads = EulerAngleSpreads()
+        eulerAngleSpreadsAccumulator = EulerAngleSpreadsAccumulator()
     }
 }

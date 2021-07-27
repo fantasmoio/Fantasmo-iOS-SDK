@@ -47,7 +47,7 @@ open class FMUtility {
         }
     }
     
-    public enum Constants {
+    public struct Constants {
         
         /// Compression factor of JPEG encoding, range 0.0 (worse) to 1.0 (best).
         /// Anything below 0.7 severely degrades localization recall and accuracy.

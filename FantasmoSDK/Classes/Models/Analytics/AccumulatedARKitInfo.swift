@@ -11,7 +11,7 @@ import ARKit
 /// To reset accumulated data and start over you should invoke `reset()`
 public class AccumulatedARKitInfo {
     
-    public private(set) var trackingStateStatistics = TrackingStateFrameStatistics()
+    public private(set) var trackingStateStatistics = TrackingStateStatisticsAccumulator()
     
     /// Current value of total translation in meters
     public var totalTranslation: Float {

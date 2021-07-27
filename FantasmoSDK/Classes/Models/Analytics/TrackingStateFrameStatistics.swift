@@ -21,13 +21,10 @@ public struct TrackingStateFrameStatistics {
     public private(set) var framesWithNotAvailableTracking: Int = 0
     
     /// Number of frames captured at the moment when tracking state was `ARFrame.camera.trackingState == .limited`
-    public private(set) var framesWithLimitedTrackingStateByReason: [ARCamera.TrackingState.Reason : Int] = [
-        .initializing: 0,
-        .relocalizing: 0,
-        .excessiveMotion : 0,
-        .insufficientFeatures : 0
-    ]
-    
+    public private(set) var framesWithLimitedTrackingStateByReason = Dictionary<ARCamera.TrackingState.Reason, Int>(
+        initialValueForAllCases: 0
+    )
+
     mutating func accumulate(nextTrackingState: ARCamera.TrackingState) {
         totalNumberOfFrames += 1
         
@@ -45,9 +42,9 @@ public struct TrackingStateFrameStatistics {
     mutating func reset() {
         framesWithNotAvailableTracking = 0
         framesWithLimitedTrackingState = 0
-        framesWithLimitedTrackingStateByReason.forEach { key, _ in
-            framesWithLimitedTrackingStateByReason[key] = 0
-        }
+        framesWithLimitedTrackingStateByReason = Dictionary<ARCamera.TrackingState.Reason, Int>(
+            initialValueForAllCases: 0
+        )
         framesWithNormalTrackingState = 0
         totalNumberOfFrames = 0
     }
@@ -86,4 +83,10 @@ extension TrackingStateFrameStatistics {
         }
     }
     
+}
+
+extension ARCamera.TrackingState.Reason: CaseIterable {
+    public static var allCases: [ARCamera.TrackingState.Reason] {
+        [.initializing, .relocalizing, .excessiveMotion, .insufficientFeatures]
+    }
 }

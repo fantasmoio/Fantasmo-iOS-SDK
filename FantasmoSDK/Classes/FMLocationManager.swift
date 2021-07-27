@@ -274,10 +274,10 @@ open class FMLocationManager: NSObject, FMApiDelegate {
             }
         }
         
-        FMApi.shared.sendLocalizationRequest(frame: frame,
-                                             relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
-                                             completion: localizeCompletion,
-                                             error: localizeError)
+        FMApi.shared.sendLocalizeImageRequest(frame: frame,
+                                              relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
+                                              completion: localizeCompletion,
+                                              error: localizeError)
     }
     
     private func localizeDone() {

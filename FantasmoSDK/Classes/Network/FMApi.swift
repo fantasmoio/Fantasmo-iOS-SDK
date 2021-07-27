@@ -44,10 +44,10 @@ class FMApi {
     ///   - approximateLocation: An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
     ///   - completion: Completion closure
     ///   - error: Error closure
-    func sendLocalizationRequest(frame: ARFrame,
-                                 relativeOpenCVAnchorPose: FMPose?,
-                                 completion: @escaping LocalizationResult,
-                                 error: @escaping ErrorResult) {
+    func sendLocalizeImageRequest(frame: ARFrame,
+                                  relativeOpenCVAnchorPose: FMPose?,
+                                  completion: @escaping LocalizationResult,
+                                  error: @escaping ErrorResult) {
         
         // set up request parameters
         guard let data = extractDataOfProperlyOrientedImage(of: frame) else {
@@ -55,8 +55,8 @@ class FMApi {
             return
         }
         
-        let params = paramsOfLocalizeRequest(for: frame,
-                                             relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
+        let params = paramsOfLocalizeImageRequest(for: frame,
+                                                  relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -178,8 +178,8 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func paramsOfLocalizeRequest(for frame: ARFrame,
-                                         relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
+    private func paramsOfLocalizeImageRequest(for frame: ARFrame,
+                                              relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
         var params = [String : String]()
         
         if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {

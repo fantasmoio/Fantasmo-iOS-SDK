@@ -9,13 +9,13 @@ import Foundation
 
 public struct EulerAngleSpreads: Encodable {
     /// The magnitude of range in which changes were observed for pitch. Valid interval is [0, pi]
-    let pitchSpread: Float
+    public let pitchSpread: Float
     
     /// The magnitude of range in which changes were observed for way. Valid interval is [0, 2pi]
-    let yawSpread: Float
+    public let yawSpread: Float
     
     /// The magnitude of range in which changes were observed for roll. Valid interval is [0, 2pi]
-    let rollSpread: Float
+    public let rollSpread: Float
     
     enum CodingKeys: String, CodingKey {
         case pitchSpread =  "pitch"

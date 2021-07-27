@@ -33,7 +33,7 @@ class MockData {
     /// - Parameters:
     ///   - zone: Type of semantic zone to simulate.
     /// - Returns: Parameters for query.
-    static func params(forZone zone: FMZone.ZoneType, relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
+    static func params(forZone zone: FMZone.ZoneType) -> [String : String] {
         var params: [String : String]
         switch zone {
         case .parking:
@@ -41,10 +41,7 @@ class MockData {
         default:
             params = Self.streetMockParameters
         }
-        
-        if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
-            params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
-        }
+
         return params
     }
     

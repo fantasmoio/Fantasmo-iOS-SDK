@@ -32,8 +32,6 @@ class FMApi {
         case locationNotFound
     }
     
-    // MARK: - internal methods
-    
     /// Localize based on the given image
     ///
     /// - Parameters:
@@ -50,14 +48,14 @@ class FMApi {
                                   completion: @escaping LocalizationResult,
                                   error: @escaping ErrorResult) {
         
-        // set up request parameters
-        guard let data = extractDataOfProperlyOrientedImage(of: frame) else {
+        guard let imageData = extractDataOfProperlyOrientedImage(of: frame) else {
             error(FMError(ApiError.invalidImage))
             return
         }
         
         let params = paramsOfLocalizeImageRequest(for: frame,
-                                                  relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
+                                                  relativeOpenCVAnchorPose: relativeOpenCVAnchorPose,
+                                                  frameBasedInfoAccumulator: frameBasedInfoAccumulator)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -114,7 +112,7 @@ class FMApi {
         FMRestClient.post(
             .localize,
             parameters: params,
-            imageData: data,
+            imageData: imageData,
             token: token,
             completion: postCompletion,
             error: postError
@@ -172,7 +170,7 @@ class FMApi {
         )
     }
     
-    // MARK: - private methods
+    // MARK: - Helpers
     
     /// Calculate parameters of the "Localize" request for the given `ARFrame`.
     ///
@@ -186,11 +184,6 @@ class FMApi {
     ) -> [String : String] {
         
         var params = [String : String]()
-        
-        if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
-            params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
-            params["rotationSpread"] = frameBasedInfoAccumulator.eulerAngleSpreadsAccumulator.spreads.toJson()
-        }
         
         // mock if simulation
         if delegate == nil || !delegate!.isSimulation {
@@ -207,20 +200,27 @@ class FMApi {
             
             let coordinate = delegate!.approximateCoordinate
             
-            params.merge([
-                "intrinsics" : intrinsics.toJson(),
-                "gravity" : pose.orientation.toJson(),
-                "capturedAt" : String(NSDate().timeIntervalSince1970),
-                "uuid" : UUID().uuidString,
-                "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}"
-            ]) { (current, _) in current }
-            
-            return params
+            params["intrinsics"] = intrinsics.toJson()
+            params["gravity"] = pose.orientation.toJson()
+            params["capturedAt"] = String(NSDate().timeIntervalSince1970)
+            params["uuid"] = UUID().uuidString
+            params["coordinate"] = "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}"
         }
         else {
-            return MockData.params(forZone: delegate!.simulationZone,
-                                   relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
+            params = MockData.params(forZone: delegate!.simulationZone)
         }
+        
+        if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
+            params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
+        }
+        
+        params["rotationSpread"] = frameBasedInfoAccumulator.eulerAngleSpreadsAccumulator.spreads.toJson()
+        params["totalTranslation"] = String(frameBasedInfoAccumulator.totalTranslation)
+        params["deviceModel"] = UIDevice.current.identifier    // "iPhone7,1"
+        params["deviceOs"] = UIDevice.current.system           // "iPadOS 14.5"
+        params["sdkVersion"] = Bundle.fullVersion              // "1.1.18(365)
+        
+        return params
     }
     
     /// Generate the image data used to perform "localize" HTTP request .

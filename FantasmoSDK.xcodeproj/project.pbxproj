@@ -35,7 +35,7 @@
 		A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
 		A30EBE09269F32B200E572FA /* FrameBasedInfoAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE08269F32B200E572FA /* FrameBasedInfoAccumulator.swift */; };
 		A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */; };
-		A34459EF26A8244F00C96205 /* EulerAngleSpreads.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */; };
+		A34459EF26A8244F00C96205 /* EulerAngleSpreadsAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459EE26A8244F00C96205 /* EulerAngleSpreadsAccumulator.swift */; };
 		A34459F126A8246400C96205 /* OrientationAngleSpreadCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459F026A8246400C96205 /* OrientationAngleSpreadCalculator.swift */; };
 		A34459F326A8246900C96205 /* RotationAngleCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459F226A8246900C96205 /* RotationAngleCalculator.swift */; };
 		A354BA6026A4B88300AF2023 /* EulerAngles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03C3263B6F0100524D66 /* EulerAngles.swift */; };
@@ -52,6 +52,8 @@
 		A3798CB426B057B8007CB41F /* ARCamera.TrackingState.Reason+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3798CB326B057B8007CB41F /* ARCamera.TrackingState.Reason+Extension.swift */; };
 		A3798CB626B057DF007CB41F /* FMTrackingStateFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3798CB526B057DF007CB41F /* FMTrackingStateFilter.swift */; };
 		A3798CB826B05BAE007CB41F /* ARCamera.TrackingState+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3798CB726B05BAE007CB41F /* ARCamera.TrackingState+Extension.swift */; };
+		A3798CBA26B08212007CB41F /* EulerAngleSpreads.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3798CB926B08212007CB41F /* EulerAngleSpreads.swift */; };
+		A3798CBC26B08AD2007CB41F /* FloatingPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3798CBB26B08AD2007CB41F /* FloatingPoint+Extension.swift */; };
 		A3B57315269C3B2D0089B5F5 /* FrameRejectionThrottler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B57314269C3B2D0089B5F5 /* FrameRejectionThrottler.swift */; };
 		A3B57317269C3B6E0089B5F5 /* FMCompoundFrameQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B57316269C3B6D0089B5F5 /* FMCompoundFrameQualityFilter.swift */; };
 		A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */; };
@@ -100,7 +102,7 @@
 		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
 		A30EBE08269F32B200E572FA /* FrameBasedInfoAccumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameBasedInfoAccumulator.swift; sourceTree = "<group>"; };
 		A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalDeviceTranslationAccumulator.swift; sourceTree = "<group>"; };
-		A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EulerAngleSpreads.swift; sourceTree = "<group>"; };
+		A34459EE26A8244F00C96205 /* EulerAngleSpreadsAccumulator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EulerAngleSpreadsAccumulator.swift; sourceTree = "<group>"; };
 		A34459F026A8246400C96205 /* OrientationAngleSpreadCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrientationAngleSpreadCalculator.swift; sourceTree = "<group>"; };
 		A34459F226A8246900C96205 /* RotationAngleCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationAngleCalculator.swift; sourceTree = "<group>"; };
 		A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusResponse.swift; sourceTree = "<group>"; };
@@ -115,6 +117,8 @@
 		A3798CB326B057B8007CB41F /* ARCamera.TrackingState.Reason+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARCamera.TrackingState.Reason+Extension.swift"; sourceTree = "<group>"; };
 		A3798CB526B057DF007CB41F /* FMTrackingStateFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMTrackingStateFilter.swift; sourceTree = "<group>"; };
 		A3798CB726B05BAE007CB41F /* ARCamera.TrackingState+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARCamera.TrackingState+Extension.swift"; sourceTree = "<group>"; };
+		A3798CB926B08212007CB41F /* EulerAngleSpreads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EulerAngleSpreads.swift; sourceTree = "<group>"; };
+		A3798CBB26B08AD2007CB41F /* FloatingPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FloatingPoint+Extension.swift"; sourceTree = "<group>"; };
 		A3B57314269C3B2D0089B5F5 /* FrameRejectionThrottler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrameRejectionThrottler.swift; sourceTree = "<group>"; };
 		A3B57316269C3B6D0089B5F5 /* FMCompoundFrameQualityFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMCompoundFrameQualityFilter.swift; sourceTree = "<group>"; };
 		A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMovementFilter.swift; sourceTree = "<group>"; };
@@ -256,6 +260,7 @@
 				A359099C269DBBC100A7BF5F /* Bundle+Extension.swift */,
 				A3798CB326B057B8007CB41F /* ARCamera.TrackingState.Reason+Extension.swift */,
 				A3798CB726B05BAE007CB41F /* ARCamera.TrackingState+Extension.swift */,
+				A3798CBB26B08AD2007CB41F /* FloatingPoint+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -274,7 +279,7 @@
 				A30EBE08269F32B200E572FA /* FrameBasedInfoAccumulator.swift */,
 				A3798CB126B0577F007CB41F /* TrackingStateFrameStatisticsAccumulator.swift */,
 				A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */,
-				A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */,
+				A34459EE26A8244F00C96205 /* EulerAngleSpreadsAccumulator.swift */,
 				A3798CA826AEA843007CB41F /* FrameFilterRejectionStatistics.swift */,
 			);
 			path = Analytics;
@@ -329,6 +334,7 @@
 			children = (
 				A3BA03BA263B6C7D00524D66 /* Angle.swift */,
 				A3BA03C3263B6F0100524D66 /* EulerAngles.swift */,
+				A3798CB926B08212007CB41F /* EulerAngleSpreads.swift */,
 			);
 			path = ValueTypes;
 			sourceTree = "<group>";
@@ -451,7 +457,7 @@
 				A3BA88CE26A5E905003E422B /* ObservationToken.swift in Sources */,
 				A34459F326A8246900C96205 /* RotationAngleCalculator.swift in Sources */,
 				946838CB25921BF3005B1145 /* FMZone.swift in Sources */,
-				A34459EF26A8244F00C96205 /* EulerAngleSpreads.swift in Sources */,
+				A34459EF26A8244F00C96205 /* EulerAngleSpreadsAccumulator.swift in Sources */,
 				A3798CB426B057B8007CB41F /* ARCamera.TrackingState.Reason+Extension.swift in Sources */,
 				946838C925921BF3005B1145 /* Location.swift in Sources */,
 				946838C225921BF3005B1145 /* MockData.swift in Sources */,
@@ -480,11 +486,13 @@
 				946838D425921BF3005B1145 /* UIImage+Extension.swift in Sources */,
 				A3BA02DA263919DF00524D66 /* FMBehaviorRequest.swift in Sources */,
 				A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */,
+				A3798CBC26B08AD2007CB41F /* FloatingPoint+Extension.swift in Sources */,
 				946838C625921BF3005B1145 /* FMError.swift in Sources */,
 				946838D125921BF3005B1145 /* Orientation.swift in Sources */,
 				A3798CA926AEA844007CB41F /* FrameFilterRejectionStatistics.swift in Sources */,
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,
+				A3798CBA26B08212007CB41F /* EulerAngleSpreads.swift in Sources */,
 				A3BA03BB263B6C7D00524D66 /* Angle.swift in Sources */,
 				A02646BB260CE44900A7FA6B /* FMApiRouter.swift in Sources */,
 				A359099D269DBBC100A7BF5F /* Bundle+Extension.swift in Sources */,

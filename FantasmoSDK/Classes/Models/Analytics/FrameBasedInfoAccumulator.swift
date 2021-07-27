@@ -8,7 +8,7 @@
 import ARKit
 
 /// Accumulator of statistics on frames and some additional integrated data like total translation (trajectory length) and rotation spread of camera.
-public class FrameBasedInfoAccumulator {
+public final class FrameBasedInfoAccumulator {
     
     /// Accumulator of statistics on the rejections of frame filter.
     private(set) var filterRejectionStatisticsAccumulator = FrameFilterRejectionStatisticsAccumulator()

@@ -46,6 +46,7 @@ class FMApi {
     ///   - error: Error closure
     func sendLocalizeImageRequest(frame: ARFrame,
                                   relativeOpenCVAnchorPose: FMPose?,
+                                  frameBasedInfoAccumulator: FrameBasedInfoAccumulator,
                                   completion: @escaping LocalizationResult,
                                   error: @escaping ErrorResult) {
         
@@ -178,12 +179,17 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func paramsOfLocalizeImageRequest(for frame: ARFrame,
-                                              relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
+    private func paramsOfLocalizeImageRequest(
+        for frame: ARFrame,
+        relativeOpenCVAnchorPose: FMPose?,
+        frameBasedInfoAccumulator: FrameBasedInfoAccumulator
+    ) -> [String : String] {
+        
         var params = [String : String]()
         
         if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
             params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
+            params["rotationSpread"] = frameBasedInfoAccumulator.eulerAngleSpreadsAccumulator.spreads.toJson()
         }
         
         // mock if simulation

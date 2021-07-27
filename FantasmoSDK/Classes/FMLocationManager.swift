@@ -118,8 +118,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
     
-    private var accumulatedARKitInfo = AccumulatedARKitInfo()
-    private var frameRejectionStatisticsAccumulator = FrameFilterRejectionStatisticsAccumulator()
+    private var frameBasedInfoAccumulator = FrameBasedInfoAccumulator()
     
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
@@ -132,7 +131,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// This initializer must be used only for testing purposes. Otherwise use singleton object via `shared` static property.
     public init(tester: FMLocationManagerTester? = nil) {
         self.tester = tester
-        self.tester?.accumulatedARKitInfo = accumulatedARKitInfo
+        self.tester?.frameBasedInfoAccumulator = frameBasedInfoAccumulator
     }
     
     // MARK: - Lifecycle
@@ -186,8 +185,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug()
         
         state = .localizing
-        accumulatedARKitInfo.reset()
-        frameRejectionStatisticsAccumulator.reset()
+        frameBasedInfoAccumulator.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
     }
@@ -310,21 +308,19 @@ open class FMLocationManager: NSObject, FMApiDelegate {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
+        var frameFilterResult: FMFrameFilterResult?
         
         if state == .localizing {
-            let filterResult = qualityFrameFilter.accepts(frame)
-            if case let .rejected(reason) = filterResult {
-                frameRejectionStatisticsAccumulator.accumulate(filterRejectionReason: reason)
-            }
-            frameFailureThrottler.onNext(frameFilterResult: filterResult)
+            frameFilterResult = qualityFrameFilter.accepts(frame)
+            frameFailureThrottler.onNext(frameFilterResult: frameFilterResult!)
             
-            if case .accepted = filterResult {
+            if case .accepted = frameFilterResult {
                 localize(frame: frame, from: session)
             }
         }
         
         if state != .stopped {
-            accumulatedARKitInfo.update(with: frame)
+            frameBasedInfoAccumulator.accumulate(nextFrame: frame, frameQualityFilterResult: frameFilterResult)
         }
     }
 }

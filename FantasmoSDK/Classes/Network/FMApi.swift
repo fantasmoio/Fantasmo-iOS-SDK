@@ -27,7 +27,6 @@ class FMApi {
 
     enum ApiError: Error {
         case errorResponse
-        case invalidImage
         case invalidResponse
         case locationNotFound
     }
@@ -42,39 +41,28 @@ class FMApi {
     ///   - approximateLocation: An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
     ///   - completion: Completion closure
     ///   - error: Error closure
-    func sendLocalizeImageRequest(frame: ARFrame,
-                                  relativeOpenCVAnchorPose: FMPose?,
-                                  frameBasedInfoAccumulator: FrameBasedInfoAccumulator,
+    func sendLocalizeImageRequest(requestObject: LocalizeImageRequest ,
                                   completion: @escaping LocalizationResult,
-                                  error: @escaping ErrorResult) {
-        
-        guard let imageData = extractDataOfProperlyOrientedImage(of: frame) else {
-            error(FMError(ApiError.invalidImage))
-            return
-        }
-        
-        let params = paramsOfLocalizeImageRequest(for: frame,
-                                                  relativeOpenCVAnchorPose: relativeOpenCVAnchorPose,
-                                                  frameBasedInfoAccumulator: frameBasedInfoAccumulator)
+                                  errorClosure: @escaping ErrorResult) {
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
             
             // handle invalid response
             guard let code = code, let data = data else {
-                error(FMError(ApiError.invalidResponse))
+                errorClosure(FMError(ApiError.invalidResponse))
                 return
             }
             
             // handle valid but erroneous response
             guard !(400...499 ~= code) else {
-                error(FMError(data))
+                errorClosure(FMError(data))
                 return
             }
             
             // ensure non-error response
             guard code == 200 else {
-                error(FMError(ApiError.invalidResponse))
+                errorClosure(FMError(ApiError.invalidResponse))
                 return
             }
             
@@ -84,7 +72,7 @@ class FMApi {
                 
                 // get location
                 guard let location = localizeResponse.location?.coordinate?.getLocation() else {
-                    error(FMError(ApiError.locationNotFound))
+                    errorClosure(FMError(ApiError.locationNotFound))
                     return
                 }
                 
@@ -99,24 +87,33 @@ class FMApi {
                 
                 completion(location, zones)
             } catch let jsonError {
-                error(FMError(ApiError.invalidResponse, cause: jsonError))
+                errorClosure(FMError(ApiError.invalidResponse, cause: jsonError))
             }
         }
         
         // set up error closure
         let postError: FMRestClient.RestError = { errorResponse in
-            error(FMError(errorResponse))
+            errorClosure(FMError(errorResponse))
         }
         
-        // send request
-        FMRestClient.post(
-            .localize,
-            parameters: params,
-            imageData: imageData,
-            token: token,
-            completion: postCompletion,
-            error: postError
-        )
+        let urlRequest = requestForEndpoint(.localize, token: token)
+        log.info(String(describing: urlRequest.url), parameters: requestObject.parameters)
+        do {
+            if let multipartFormData = try requestObject.multipartFormData() {
+                FMRestClient.post(
+                    urlRequest: urlRequest,
+                    multipartFormData: multipartFormData,
+                    completion: postCompletion,
+                    errorClosure: postError
+                )
+            }
+            else {
+                // Do nothing, "programming" error
+            }
+        }
+        catch {
+            errorClosure(FMError(error))
+        }
     }
     
     /// Check if a given zone is within a radius of our location.
@@ -156,97 +153,40 @@ class FMApi {
         }
         
         // set up error closure
-        let postError: FMRestClient.RestError = { errorResponse in
+        let postErrorClosure: FMRestClient.RestError = { errorResponse in
             error(FMError(errorResponse))
         }
         
+        let urlRequest = requestForEndpoint(.zoneInRadius, token: token)
+        log.info(String(describing: urlRequest.url), parameters: params)
+        
         // send request
         FMRestClient.post(
-            .zoneInRadius,
+            urlRequest: urlRequest,
             parameters: params,
-            token: token,
             completion: postCompletion,
-            error: postError
+            errorClosure: postErrorClosure
         )
     }
     
     // MARK: - Helpers
     
-    /// Calculate parameters of the "Localize" request for the given `ARFrame`.
+    /// Generates a request that can be used for posting
     ///
     /// - Parameters:
-    ///   - frame: Frame to localize
-    ///   - Returns: Formatted localization parameters
-    private func paramsOfLocalizeImageRequest(
-        for frame: ARFrame,
-        relativeOpenCVAnchorPose: FMPose?,
-        frameBasedInfoAccumulator: FrameBasedInfoAccumulator
-    ) -> [String : String] {
-        
-        var params = [String : String]()
-        
-        // mock if simulation
-        if delegate == nil || !delegate!.isSimulation {
-            let interfaceOrientation = UIApplication.shared.statusBarOrientation
-            
-            let pose = FMPose(frame.openCVTransformOfVirtualDeviceInWorldCS)
-            
-            let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
-                                          atScale: Float(FMUtility.Constants.ImageScaleFactor),
-                                          withStatusBarOrientation: interfaceOrientation,
-                                          withDeviceOrientation: frame.deviceOrientation,
-                                          withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
-                                          withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
-            
-            let coordinate = delegate!.approximateCoordinate
-            
-            params["intrinsics"] = intrinsics.toJson()
-            params["gravity"] = pose.orientation.toJson()
-            params["capturedAt"] = String(NSDate().timeIntervalSince1970)
-            params["uuid"] = UUID().uuidString
-            params["coordinate"] = "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}"
+    ///   - endpoint: The API endpoint to post to
+    ///   - token: Optional API security token
+    /// - Returns: POST request containing server URL, endpoint, token header, and `multipart/from-data` header
+    private func requestForEndpoint(_ endpoint: FMApiRouter.ApiEndpoint, token: String?) -> URLRequest {
+        var request = URLRequest(url: FMApiRouter.urlForEndpoint(endpoint))
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        request.httpMethod = "POST"
+        if let token = token {
+            request.setValue(token, forHTTPHeaderField: "Fantasmo-Key")
         }
-        else {
-            params = MockData.params(forZone: delegate!.simulationZone)
-        }
-        
-        if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
-            params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
-        }
-        
-        params["rotationSpread"] = frameBasedInfoAccumulator.eulerAngleSpreadsAccumulator.spreads.toJson()
-        params["totalTranslation"] = String(frameBasedInfoAccumulator.totalTranslation)
-        params["deviceModel"] = UIDevice.current.identifier    // "iPhone7,1"
-        params["deviceOs"] = UIDevice.current.system           // "iPadOS 14.5"
-        params["sdkVersion"] = Bundle.fullVersion              // "1.1.18(365)
-        
-        return params
+        request.setValue("multipart/form-data; boundary=\(Data.boundary)", forHTTPHeaderField: "Content-Type")
+        return request
     }
     
-    /// Generate the image data used to perform "localize" HTTP request .
-    /// Image of `frame` is oriented taking into account orientation of camera when taking image. For example, if device was upside-down when
-    /// frame was captured from camera, then resulting image is rotated by 180 degrees. So server always receives properly oriented image
-    /// as if it was captured from properly oriented camera.
-    ///
-    /// - Parameters:
-    ///   - frame: Frame to localize
-    ///   - Returns: Prepared localization image
-    private func extractDataOfProperlyOrientedImage(of frame: ARFrame) -> Data? {
-        
-        // mock if simulation
-        guard delegate == nil || !delegate!.isSimulation else {
-            return MockData.imageData(forZone: delegate!.simulationZone)
-        }
-
-        let imageData = FMUtility.toJpeg(pixelBuffer: frame.capturedImage, with: frame.deviceOrientation)
-        return imageData
-    }
-    
-    private func deviceCharacteristics() -> [String : String] {
-        [
-            "deviceModel"        : UIDevice.current.identifier,          // "iPhone7,1"
-            "deviceOs"           : UIDevice.current.system,              // "iPadOS 14.5"
-            "fantasmoSdkVersion" : Bundle.fullVersion                    // "1.1.18(365)
-        ]
-    }
 }
+

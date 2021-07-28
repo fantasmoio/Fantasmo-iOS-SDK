@@ -12,4 +12,5 @@ public enum FMBehaviorRequest: String {
     case tiltDown = "Tilt your device down"
     case panAround = "Pan around the scene"
     case panSlowly = "Pan more slowly"
+    case reportAboutProblem = "Contact support service"
 }

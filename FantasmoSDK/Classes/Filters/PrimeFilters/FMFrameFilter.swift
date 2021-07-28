@@ -14,7 +14,8 @@ public enum FMFilterRejectionReason: CaseIterable {
     case movingTooLittle
     /// The scene visible to the camera doesn't contain enough distinguishable features for image-based position tracking.
     case insufficientFeatures
-    
+    case unknown
+
     func mapToBehaviorRequest() -> FMBehaviorRequest {
         switch self {
         case .cameraPitchTooLow:
@@ -27,6 +28,8 @@ public enum FMFilterRejectionReason: CaseIterable {
             return .panAround
         case .insufficientFeatures:
             return .panAround
+        case .unknown:
+            return .reportAboutProblem
         }
     }
 }

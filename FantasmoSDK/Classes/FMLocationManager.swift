@@ -124,6 +124,12 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// method's `stopUpdatingLocation` counterpart. Used for analytics purposes.
     private var localizationSessionId: UUID?
     
+    /// Session identifier. In a "parking" scenario it may be used to keep track of an entire parking session. The property is used for billing purposes.
+    /// The length of the string must not exceed 64 characters.
+    /// In the case of parking, during the same parking session the user may make several attempts to park, each with a different
+    /// `localizationSessionId`
+    private var sessionId: String?
+    
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
     
@@ -189,7 +195,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         log.debug()
         localizationSessionId = UUID()
         state = .localizing
-        frameBasedInfoAccumulator.reset()
+        frameBasedInfoAccumulator = FrameBasedInfoAccumulator()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
     }
@@ -206,6 +212,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public func setAnchor() {
         log.debug()
         anchorFrame = lastFrame
+        frameBasedInfoAccumulator = FrameBasedInfoAccumulator()
     }
     
     /// Unset the anchor point. All location updates will now report the
@@ -281,7 +288,8 @@ open class FMLocationManager: NSObject, FMApiDelegate {
                                                         relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
                                                         frameBasedInfoAccumulator: frameBasedInfoAccumulator,
                                                         approximateCoordinate: approximateCoordinate,
-                                                        localizationSessionId: localizationSessionId!)
+                                                        localizationSessionId: localizationSessionId!,
+                                                        sessionId: sessionId!)
         
         FMApi.shared.sendLocalizeImageRequest(requestObject: localizeImageRequest,
                                               completion: localizeCompletion,

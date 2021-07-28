@@ -24,6 +24,9 @@ struct LocalizeImageRequest: RestAPIRequest {
     /// See comment to `FMLocationManager.localizationSessionId` for details.
     let localizationSessionId: UUID
     
+    /// See comment to `FMLocationManager.rideId` for details.
+    let sessionId: String
+    
     // MARK: - RestAPIRequest
     
     var relativeURL: String { "image.localize" }
@@ -68,8 +71,15 @@ struct LocalizeImageRequest: RestAPIRequest {
         params["deviceModel"] = UIDevice.current.identifier    // "iPhone7,1"
         params["deviceOs"] = UIDevice.current.system           // "iPadOS 14.5"
         params["sdkVersion"] = Bundle.fullVersion              // "1.1.18(365)
+        params["udid"] = UIDevice.current.identifierForVendor?.uuidString
+
+        params["localizationSessionId"] = localizationSessionId.uuidString
+        params["sessionId"] = sessionId
+        let trackingStateAccumulator = frameBasedInfoAccumulator.trackingStateStatisticsAccumulator
+        params["frameEventCounts"] = ["excessiveTilt" : trackingStateAccumulator  ]
+            String(frameBasedInfoAccumulator.trackingStateStatisticsAccumulator.totalNumberOfFrames)
         
-        params["localizationSessionId"] = localizationSessionId
+        params["insufficientFeatures"] = sessionId
 
         return params
     }

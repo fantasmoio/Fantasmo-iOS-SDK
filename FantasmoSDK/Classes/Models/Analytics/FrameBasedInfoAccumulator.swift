@@ -44,11 +44,4 @@ public final class FrameBasedInfoAccumulator {
             eulerAngleSpreadsAccumulator.accumulate(nextEulerAngles: eulerAngles, trackingState: nextFrame.camera.trackingState)
         }
     }
-    
-    func reset() {
-        filterRejectionStatisticsAccumulator.reset()
-        trackingStateStatisticsAccumulator.reset()
-        translationAccumulator.reset()
-        eulerAngleSpreadsAccumulator = EulerAngleSpreadsAccumulator()
-    }
 }

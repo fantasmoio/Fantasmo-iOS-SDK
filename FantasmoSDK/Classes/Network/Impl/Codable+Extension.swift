@@ -16,7 +16,7 @@ extension Encodable {
                 return jsonString
             }
             else {
-                throw ApiError.requestSerializationFailed(reason: .stringSerializationFailed(encoding: .utf8))
+                return "{}"
             }
         }
         catch {

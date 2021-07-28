@@ -120,6 +120,10 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     private var frameBasedInfoAccumulator = FrameBasedInfoAccumulator()
     
+    /// Identifier of "localization" session. "Localization" session starts from invoking `startUpdatingLocation` and stops with invoking this
+    /// method's `stopUpdatingLocation` counterpart. Used for analytics purposes.
+    private var localizationSessionId: UUID?
+    
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
     
@@ -183,7 +187,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public func startUpdatingLocation(sessionID: String) {
         precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
-        
+        localizationSessionId = UUID()
         state = .localizing
         frameBasedInfoAccumulator.reset()
         qualityFrameFilter.startOrRestartFiltering()
@@ -194,6 +198,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public func stopUpdatingLocation() {
         log.debug()
         state = .stopped
+        localizationSessionId = nil
     }
     
     /// Set an anchor point. All location updates will now report the
@@ -275,7 +280,8 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         let localizeImageRequest = LocalizeImageRequest(frame: frame,
                                                         relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
                                                         frameBasedInfoAccumulator: frameBasedInfoAccumulator,
-                                                        approximateCoordinate: approximateCoordinate)
+                                                        approximateCoordinate: approximateCoordinate,
+                                                        localizationSessionId: localizationSessionId!)
         
         FMApi.shared.sendLocalizeImageRequest(requestObject: localizeImageRequest,
                                               completion: localizeCompletion,

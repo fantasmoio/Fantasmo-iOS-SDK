@@ -21,6 +21,9 @@ struct LocalizeImageRequest: RestAPIRequest {
     /// An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
     let approximateCoordinate: CLLocationCoordinate2D
     
+    /// See comment to `FMLocationManager.localizationSessionId` for details.
+    let localizationSessionId: UUID
+    
     // MARK: - RestAPIRequest
     
     var relativeURL: String { "image.localize" }
@@ -66,6 +69,8 @@ struct LocalizeImageRequest: RestAPIRequest {
         params["deviceOs"] = UIDevice.current.system           // "iPadOS 14.5"
         params["sdkVersion"] = Bundle.fullVersion              // "1.1.18(365)
         
+        params["localizationSessionId"] = localizationSessionId
+
         return params
     }
     

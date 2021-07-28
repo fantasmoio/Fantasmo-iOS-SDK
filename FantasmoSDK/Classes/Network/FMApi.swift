@@ -97,7 +97,7 @@ class FMApi {
         }
         
         let urlRequest = requestForEndpoint(.localize, token: token)
-        log.info(String(describing: urlRequest.url), parameters: requestObject.parameters)
+        log.info(String(describing: urlRequest.url), parameters: try? requestObject.parameters())
         do {
             if let multipartFormData = try requestObject.multipartFormData() {
                 FMRestClient.post(

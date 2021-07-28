@@ -35,10 +35,9 @@ struct LocalizeImageRequest: RestAPIRequest {
         .post
     }
     
-    var parameters: [String : Any]? {
+    func parameters() throws -> [String : Any]? {
         var params = [String : String]()
         
-        // mock if simulation
         if !FMLocationManager.shared.isSimulation {
             let interfaceOrientation = UIApplication.shared.statusBarOrientation
             
@@ -51,8 +50,8 @@ struct LocalizeImageRequest: RestAPIRequest {
                                           withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                           withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
             
-            params["intrinsics"] = (try? intrinsics.toJson()) ?? "{}"
-            params["gravity"] = (try? pose.orientation.toJson()) ?? "{}"
+            params["intrinsics"] = try intrinsics.toJson()
+            params["gravity"] = try pose.orientation.toJson()
             params["capturedAt"] = String(NSDate().timeIntervalSince1970)
             params["uuid"] = UUID().uuidString
             params["coordinate"] =
@@ -63,10 +62,10 @@ struct LocalizeImageRequest: RestAPIRequest {
         }
         
         if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
-            params["referenceFrame"] = (try? relativeOpenCVAnchorPose.toJson()) ?? "{}"
+            params["referenceFrame"] = try relativeOpenCVAnchorPose.toJson()
         }
         
-        params["rotationSpread"] = (try? frameBasedInfoAccumulator.eulerAngleSpreadsAccumulator.spreads.toJson()) ?? "{}"
+        params["rotationSpread"] = try frameBasedInfoAccumulator.eulerAngleSpreadsAccumulator.spreads.toJson()
         params["totalTranslation"] = String(frameBasedInfoAccumulator.totalTranslation)
         params["deviceModel"] = UIDevice.current.identifier    // "iPhone7,1"
         params["deviceOs"] = UIDevice.current.system           // "iPadOS 14.5"
@@ -75,26 +74,40 @@ struct LocalizeImageRequest: RestAPIRequest {
 
         params["localizationSessionId"] = localizationSessionId.uuidString
         params["sessionId"] = sessionId
-        let trackingStateAccumulator = frameBasedInfoAccumulator.trackingStateStatisticsAccumulator
-        params["frameEventCounts"] = ["excessiveTilt" : trackingStateAccumulator  ]
-            String(frameBasedInfoAccumulator.trackingStateStatisticsAccumulator.totalNumberOfFrames)
         
-        params["insufficientFeatures"] = sessionId
+        let trackingStateAccumulator = frameBasedInfoAccumulator.trackingStateStatisticsAccumulator
+        let filterRejectionAccumulator = frameBasedInfoAccumulator.filterRejectionStatisticsAccumulator
+        
+        params["frameEventCounts"] = try [
+            "excessiveTilt" : filterRejectionAccumulator.excessiveTiltRelatedRejectionCount,
+            "excessiveBlur" : filterRejectionAccumulator.filterRejectionReasonCounts[.movingTooFast],
+            "excessiveMotion" : trackingStateAccumulator.trackingStateFrameCounts[.limited(.excessiveMotion)],
+            "insufficientFeatures" : trackingStateAccumulator.trackingStateFrameCounts[.limited(.insufficientFeatures)],
+            "lossOfTracking" : trackingStateAccumulator.trackingStateFrameCounts[.notAvailable],
+            "total" : frameBasedInfoAccumulator.trackingStateStatisticsAccumulator.totalCountOfFrames
+        ].toJson()
 
         return params
     }
     
     func multipartFormData() throws -> MultipartFormData? {
         let multipartFormData = MultipartFormData()
-        if let params = parameters {
-            try multipartFormData.appendParameters(params)
+        
+        do {
+            if let params = try parameters() {
+                try multipartFormData.appendParameters(params)
+            }
         }
+        catch {
+            throw ApiError.multipartConstructionFailed(error: error)
+        }
+        
         let imageData = extractDataOfProperlyOrientedImage(from: frame)
         if let imageData = imageData {
             multipartFormData.append(imageData, withName: "image", fileName: "image.jpg")
         }
         else {
-            throw ApiError.multipartEncodingFailed(reason: .bodyPartDataUnreachable(msg: "Image unaccessible"))
+            throw ApiError.multipartConstructionFailed(msg: "Image unaccessible")
         }
         return multipartFormData
     }

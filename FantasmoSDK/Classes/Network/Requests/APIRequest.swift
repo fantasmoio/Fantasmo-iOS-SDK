@@ -10,10 +10,14 @@ public protocol APIRequest {
     
     var httpMethod: HTTPMethod { get }
     
-    var parameters: [String : Any]? {get}
-    
     /// Default implementation is provided.
     var httpHeaders: [String : String]? { get }
+    
+    /// Parameters of the request that are passed as URL query or in http request body.
+    /// Default value is provided.
+    /// Sometimes when calculating parameters some error may occur and it is needed to pass this error outside, this is why we do not shape
+    /// `parameters` as property.
+    func parameters() throws -> [String : Any]?
     
     /// - throws `ApiError.requestSerializationFailed` in case of failure
     func multipartFormData() throws -> MultipartFormData?
@@ -36,11 +40,11 @@ public extension APIRequest {
         return .get
     }
     
-    var parameters: [String : Any]? {
+    var httpHeaders: [String : String]? {
         return nil
     }
     
-    var httpHeaders: [String : String]? {
+    func parameters() throws -> [String : Any]? {
         return nil
     }
     

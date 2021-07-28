@@ -9,6 +9,7 @@ import Foundation
 
 var log = FMLog()
 
+// TODO: refactor log changing ordering of velels according to there severety in ascending rather than in descending order.
 public struct FMLog {
     
     private static let dateFormatter: DateFormatter = {

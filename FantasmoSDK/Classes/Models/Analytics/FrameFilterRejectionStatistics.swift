@@ -12,7 +12,11 @@ struct FrameFilterRejectionStatisticsAccumulator {
     
     private(set) var filterRejectionReasonCounts =
         Dictionary<FMFilterRejectionReason, Int>(initialValueForAllCases: 0)
-        
+    
+    /// Convenience property for retrieving number of frames which where rejected because of a too high or a too low pitch.
+    var excessiveTiltRelatedRejectionCount: Int {
+        (filterRejectionReasonCounts[.cameraPitchTooHigh] ?? 0) + (filterRejectionReasonCounts[.cameraPitchTooLow] ?? 0)
+    }
 
     mutating func accumulate(filterRejectionReason: FMFilterRejectionReason) {
         filterRejectionReasonCounts[filterRejectionReason]! += 1
@@ -23,4 +27,5 @@ struct FrameFilterRejectionStatisticsAccumulator {
     }
     
 }
+
 

@@ -13,14 +13,14 @@ import ARKit
 ///     `let excessiveMotionFrameCount = trackingStateFrameCounts[.limited(.excessiveMotion)]`
 public struct TrackingStateStatisticsAccumulator {
     
-    public private(set) var totalNumberOfFrames: Int = 0
+    public private(set) var totalCountOfFrames: Int = 0
     
     public private(set) var trackingStateFrameCounts = Dictionary<ARCamera.TrackingState, Int>(
         initialValueForAllCasesAndSubcases: 0
     )
 
     mutating func accumulate(nextTrackingState: ARCamera.TrackingState) {
-        totalNumberOfFrames += 1
+        totalCountOfFrames += 1
         trackingStateFrameCounts[nextTrackingState] = (trackingStateFrameCounts[nextTrackingState] ?? 0) + 1
     }
     
@@ -28,7 +28,7 @@ public struct TrackingStateStatisticsAccumulator {
         trackingStateFrameCounts = Dictionary<ARCamera.TrackingState, Int>(
             initialValueForAllCasesAndSubcases: 0
         )
-        totalNumberOfFrames = 0
+        totalCountOfFrames = 0
     }
     
     /// Frames percentage for the given `trackingState`.
@@ -50,8 +50,8 @@ public struct TrackingStateStatisticsAccumulator {
     }
     
     private func framePercentage(forFrameCount count: Int) -> Float {
-        if totalNumberOfFrames != 0 {
-            return 100 * Float(count) / Float(totalNumberOfFrames)
+        if totalCountOfFrames != 0 {
+            return 100 * Float(count) / Float(totalCountOfFrames)
         }
         else {
             return 0

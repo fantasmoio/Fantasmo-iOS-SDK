@@ -58,11 +58,11 @@ class MockData {
         let coordinate = ["longitude" : 11.572596873561112,
                           "latitude": 48.12844364094412]
 
-        return ["intrinsics" : intrinsic.json,
-                "gravity" : gravity.json,
+        return ["intrinsics" : try! intrinsic.toJson(),
+                "gravity" : try! gravity.toJson(),
                 "capturedAt" : String(NSDate().timeIntervalSince1970),
                 "uuid" : "C6241E04-974A-4131-8B36-044A11E2C7F0",
-                "coordinate": coordinate.json]
+                "coordinate": try! coordinate.toJson()]
     }
 
     private static var streetMockParameters: [String: String] {
@@ -78,10 +78,10 @@ class MockData {
         let coordinate = ["longitude" : 11.572596873561112,
                           "latitude": 48.12844364094412]
 
-        return ["intrinsics" : intrinsic.json,
-                "gravity" : gravity.json,
+        return ["intrinsics" : try! intrinsic.toJson(),
+                "gravity" : try! gravity.toJson(),
                 "capturedAt" : String(NSDate().timeIntervalSince1970),
                 "uuid" : "A87E55CB-0649-4F87-A42F-8A33970F421E",
-                "coordinate": coordinate.json]
+                "coordinate": try! coordinate.toJson()]
     }
 }

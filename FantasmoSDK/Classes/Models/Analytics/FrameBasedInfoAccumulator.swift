@@ -10,12 +10,12 @@ import ARKit
 /// Accumulator of statistics on frames and some additional integrated data like total translation (trajectory length) and rotation spread of camera.
 public final class FrameBasedInfoAccumulator {
     
+    /// Accumulator of statistics on frames by their `ARFrame.camera.trackingState` values.
+    public private(set) var trackingStateStatisticsAccumulator = TrackingStateStatisticsAccumulator()
+    
     /// Accumulator of statistics on the rejections of frame filter.
     private(set) var filterRejectionStatisticsAccumulator = FrameFilterRejectionStatisticsAccumulator()
-    
-    public private(set) var trackingStateStatisticsAccumulator = TrackingStateStatisticsAccumulator()
 
-    
     /// Current value of total translation in meters
     public var totalTranslation: Float {
         translationAccumulator.totalTranslation

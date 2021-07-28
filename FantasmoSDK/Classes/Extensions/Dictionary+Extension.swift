@@ -6,18 +6,6 @@
 
 import Foundation
 
-extension Dictionary {
-    var json: String {
-        let invalidJson = "Not a valid JSON"
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: self, options: [])
-            return String(bytes: jsonData, encoding: String.Encoding.utf8) ?? invalidJson
-        } catch {
-            return invalidJson
-        }
-    }
-}
-
 extension Dictionary where Key == UUID {
     
     /// Used for implementing property observers, when we usually put observation closure into a dictionary under some key.
@@ -36,6 +24,13 @@ extension Dictionary where Key: CaseIterable {
         Key.allCases.forEach { aKey in
             self[aKey] = initialValueForAllCases
         }
+    }
+}
+
+extension Dictionary {
+    /// Returns value for the given `key` or `default` if there is no entry with such a key.
+    func value(for key: Key, default: Value) {
+        
     }
 }
 

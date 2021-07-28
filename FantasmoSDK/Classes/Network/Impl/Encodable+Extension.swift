@@ -6,7 +6,10 @@
 
 import Foundation
 
+private var emptyJsonObject: String = "{}"
+
 extension Encodable {
+    
     /// - throws `ApiError.requestSerializationFailed(reason:)`
     func toJson() throws -> String {
         do {
@@ -16,7 +19,7 @@ extension Encodable {
                 return jsonString
             }
             else {
-                return "{}"
+                return emptyJsonObject
             }
         }
         catch {
@@ -24,3 +27,6 @@ extension Encodable {
         }
     }
 }
+
+
+

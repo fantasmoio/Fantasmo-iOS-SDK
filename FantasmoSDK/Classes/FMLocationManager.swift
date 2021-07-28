@@ -178,10 +178,10 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     // MARK: - Public instance methods
     
     /// Starts the generation of updates that report the user’s current location.
-    /// - Parameter rideID: Ride identifier. Used to keep track of an entire parking session and for billing purposes.
-    ///                      The length of the string must not exceed 64 characters.
-    public func startUpdatingLocation(rideID: String) {
-        precondition(rideID.count <= 64, "The length of the `rideID` argument must not exceed 64!")
+    /// - Parameter sessionID: Ride identifier. Used to keep track of an entire parking session and for billing purposes.
+    ///                 The length of the string must not exceed 64 characters.
+    public func startUpdatingLocation(sessionID: String) {
+        precondition(sessionID.count <= 64, "The length of the `sessionID` argument must not exceed 64!")
         precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
         

@@ -188,12 +188,13 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     // MARK: - Public instance methods
     
     /// Starts the generation of updates that report the user’s current location.
-    /// - Parameter sessionID: Ride identifier. Used to keep track of an entire parking session and for billing purposes.
+    /// - Parameter sessionId: Ride identifier. Used to keep track of an entire parking session and for billing purposes.
     ///                 The max length of the string is 64 characters. In the case of excessive length length is truncated.
-    public func startUpdatingLocation(sessionID: String) {
+    public func startUpdatingLocation(sessionId: String) {
         precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
         localizationSessionId = UUID()
+        self.sessionId = String(sessionId.prefix(64))
         state = .localizing
         frameBasedInfoAccumulator = FrameBasedInfoAccumulator()
         qualityFrameFilter.startOrRestartFiltering()

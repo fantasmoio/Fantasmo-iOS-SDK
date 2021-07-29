@@ -97,7 +97,9 @@ class FMApi {
         }
         
         let urlRequest = requestForEndpoint(.localize, token: token)
-        log.info(String(describing: urlRequest.url), parameters: try? requestObject.parameters())
+        if let paramaters = try? requestObject.parameters(), let params = paramaters {
+            log.info(String(describing: urlRequest.url), parameters: params)
+        }
         do {
             if let multipartFormData = try requestObject.multipartFormData() {
                 FMRestClient.post(
@@ -108,7 +110,7 @@ class FMApi {
                 )
             }
             else {
-                // Do nothing, "programming" error
+                // "programming" error, do nothing
             }
         }
         catch {

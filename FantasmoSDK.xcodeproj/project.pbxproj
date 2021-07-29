@@ -57,6 +57,7 @@
 		A3BA02DF263919F300524D66 /* MovingAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02DE263919F300524D66 /* MovingAverage.swift */; };
 		A3BA03BB263B6C7D00524D66 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03BA263B6C7D00524D66 /* Angle.swift */; };
 		A3BA88CE26A5E905003E422B /* ObservationToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA88CD26A5E905003E422B /* ObservationToken.swift */; };
+		A3C7657C26B29F4F0062E932 /* FMTrackingStateFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3C7657B26B29F4F0062E932 /* FMTrackingStateFilter.swift */; };
 		A3CB77302636B3D5009625BB /* FMPose.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB772F2636B3D5009625BB /* FMPose.swift */; };
 		A3CB77342636B496009625BB /* FMPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB77332636B496009625BB /* FMPosition.swift */; };
 		A3CB77372636BDB8009625BB /* FMOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB77362636BDB8009625BB /* FMOrientation.swift */; };
@@ -117,6 +118,7 @@
 		A3BA03BA263B6C7D00524D66 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		A3BA03C3263B6F0100524D66 /* EulerAngles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EulerAngles.swift; sourceTree = "<group>"; };
 		A3BA88CD26A5E905003E422B /* ObservationToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationToken.swift; sourceTree = "<group>"; };
+		A3C7657B26B29F4F0062E932 /* FMTrackingStateFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMTrackingStateFilter.swift; sourceTree = "<group>"; };
 		A3CB772F2636B3D5009625BB /* FMPose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPose.swift; sourceTree = "<group>"; };
 		A3CB77332636B496009625BB /* FMPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPosition.swift; sourceTree = "<group>"; };
 		A3CB77362636BDB8009625BB /* FMOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMOrientation.swift; sourceTree = "<group>"; };
@@ -339,6 +341,7 @@
 				A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */,
 				A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */,
 				A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */,
+				A3C7657B26B29F4F0062E932 /* FMTrackingStateFilter.swift */,
 				A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */,
 			);
 			path = PrimeFilters;
@@ -450,6 +453,7 @@
 				946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */,
 				946838D725921BF3005B1145 /* Codable+Extension.swift in Sources */,
 				A354BA6026A4B88300AF2023 /* EulerAngles.swift in Sources */,
+				A3C7657C26B29F4F0062E932 /* FMTrackingStateFilter.swift in Sources */,
 				A02646BD260CE44900A7FA6B /* FMApi.swift in Sources */,
 				A35909A0269EE70800A7BF5F /* FMFrameFilter.swift in Sources */,
 				946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */,

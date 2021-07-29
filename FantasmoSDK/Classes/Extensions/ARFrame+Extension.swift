@@ -137,7 +137,6 @@ public extension ARFrame {
                 case ..<(-3.0/4 * .pi):
                     orientation = .landscapeRight
                 default:
-                    assertionFailure("Improper logic!")
                     orientation = .unknown
                 }
             } else if pitch <= -.pi/4 {
@@ -145,7 +144,6 @@ public extension ARFrame {
             } else if pitch >= -.pi/4 {
                 orientation = .faceDown
             } else {
-                assertionFailure("Improper logic!")
                 orientation = .unknown
             }
             

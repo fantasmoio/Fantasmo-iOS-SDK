@@ -89,7 +89,6 @@ struct RotationAngleCalculator {
         for nextOrientationAngle: Float
     ) -> Float {
         var positiveCasesCount = 0
-        assert(previousLimitedOrientationAngles.count > 0, "Does make sense only if there were received limited angles")
         
         previousLimitedOrientationAngles.forEach { limitedAngle in
             let diff = Double(nextOrientationAngle - limitedAngle)

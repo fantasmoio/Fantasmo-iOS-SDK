@@ -23,8 +23,7 @@ struct FMTrackingStateFilter: FMFrameFilter {
                 return .rejected(reason: .movingTooFast)
             case .insufficientFeatures:
                 return .rejected(reason: .insufficientFeatures)
-            @unknown default:
-                assertionFailure("Unknown  ARCamera.TrackingState.Reason case \(reasonOfLimitedState)")
+            default:
                 return .accepted
             }
         case .notAvailable:

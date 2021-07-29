@@ -47,7 +47,7 @@ public extension FMLocationDelegate {
 
 
 /// Start and stop the delivery of camera-based location events.
-open class FMLocationManager: NSObject, FMApiDelegate {
+open class FMLocationManager: NSObject {
     
     public enum State {
         case stopped        // doing nothing
@@ -159,7 +159,6 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         self.delegate = delegate
         
         // set up FMApi
-        FMApi.shared.delegate = self
         FMApi.shared.token = accessToken
     }
 
@@ -225,6 +224,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     /// Check to see if a given zone is in the provided radius
     ///
+    ///
     /// - Parameter zone: Zone to search for
     /// - Parameter radius: Search radius in meters
     /// - Parameter completion: Closure that consumes boolean server result
@@ -285,12 +285,15 @@ open class FMLocationManager: NSObject, FMApiDelegate {
             }
         }
         
-        let localizeImageRequest = LocalizeImageRequest(frame: frame,
-                                                        relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
-                                                        frameBasedInfoAccumulator: frameBasedInfoAccumulator,
-                                                        approximateCoordinate: approximateCoordinate,
-                                                        localizationSessionId: localizationSessionId!,
-                                                        sessionId: sessionId!)
+        let localizeImageRequest = LocalizeImageRequest(
+            frame: frame,
+            relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
+            frameBasedInfoAccumulator: frameBasedInfoAccumulator,
+            approximateCoordinate: approximateCoordinate,
+            localizationSessionId: localizationSessionId!,
+            sessionId: sessionId!,
+            simulationParams: (isSimulation, simulationZone)
+        )
         
         FMApi.shared.sendLocalizeImageRequest(requestObject: localizeImageRequest,
                                               completion: localizeCompletion,

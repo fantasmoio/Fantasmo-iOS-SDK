@@ -18,7 +18,7 @@ public struct FMIntrinsics:Codable {
     var cx:Float
     var cy:Float
     
-    init(fromIntrinsics intrinsics: simd_float3x3,
+    init(intrinsics: simd_float3x3,
          atScale scale:Float,
          withStatusBarOrientation statusBarOrientation: UIInterfaceOrientation,
          withDeviceOrientation deviceOrientation: UIDeviceOrientation,

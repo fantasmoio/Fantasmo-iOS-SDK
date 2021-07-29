@@ -27,6 +27,9 @@ struct LocalizeImageRequest: RestAPIRequest {
     /// See comment to `FMLocationManager.rideId` for details.
     let sessionId: String
     
+    // TODO: refactor constructing better mechanism for simulation
+    let simulationParams: (isSimulation: Bool, simulationZone: FMZone.ZoneType)
+    
     // MARK: - RestAPIRequest
     
     var relativeURL: String { "image.localize" }
@@ -38,12 +41,12 @@ struct LocalizeImageRequest: RestAPIRequest {
     func parameters() throws -> [String : Any]? {
         var params = [String : String]()
         
-        if !FMLocationManager.shared.isSimulation {
+        if !simulationParams.isSimulation {
             let interfaceOrientation = UIApplication.shared.statusBarOrientation
             
             let pose = FMPose(frame.openCVTransformOfVirtualDeviceInWorldCS)
             
-            let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
+            let intrinsics = FMIntrinsics(intrinsics: frame.camera.intrinsics,
                                           atScale: Float(FMUtility.Constants.ImageScaleFactor),
                                           withStatusBarOrientation: interfaceOrientation,
                                           withDeviceOrientation: frame.deviceOrientation,
@@ -58,7 +61,7 @@ struct LocalizeImageRequest: RestAPIRequest {
                 "{\"longitude\" : \(approximateCoordinate.longitude), \"latitude\": \(approximateCoordinate.latitude)}"
         }
         else {
-            params = MockData.params(forZone: FMLocationManager.shared.simulationZone)
+            params = MockData.params(forZone: simulationParams.simulationZone)
         }
         
         if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
@@ -123,8 +126,8 @@ struct LocalizeImageRequest: RestAPIRequest {
     ///   - frame: Frame to localize
     ///   - Returns: Prepared localization image
     private func extractDataOfProperlyOrientedImage(from frame: ARFrame) -> Data? {
-        if FMLocationManager.shared.isSimulation {
-            return MockData.imageData(forZone: FMLocationManager.shared.simulationZone)
+        if simulationParams.isSimulation {
+            return MockData.imageData(forZone: simulationParams.simulationZone)
         }
         else {
             let imageData = FMUtility.toJpeg(pixelBuffer: frame.capturedImage, with: frame.deviceOrientation)

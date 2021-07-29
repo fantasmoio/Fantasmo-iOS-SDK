@@ -8,17 +8,10 @@
 import Foundation
 import ARKit
 
-protocol FMApiDelegate: AnyObject {
-    var isSimulation: Bool { get }
-    var simulationZone: FMZone.ZoneType  { get }
-    /// An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
-    var approximateCoordinate: CLLocationCoordinate2D { get }
-}
 
 class FMApi {
     
     static let shared = FMApi()
-    weak var delegate: FMApiDelegate?
     var token: String?
     
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
@@ -97,7 +90,7 @@ class FMApi {
         }
         
         let urlRequest = requestForEndpoint(.localize, token: token)
-        if let paramaters = try? requestObject.parameters(), let params = paramaters {
+        if let optionalParams = try? requestObject.parameters(), let params = optionalParams {
             log.info(String(describing: urlRequest.url), parameters: params)
         }
         do {

@@ -90,7 +90,8 @@ class FMApi {
         }
         
         let urlRequest = requestForEndpoint(.localize, token: token)
-        if let optionalParams = try? requestObject.parameters(), let params = optionalParams {
+        let params: Optional<[String : Any]?> = try? requestObject.parameters()
+        if let optionalParams = params, let params = optionalParams {
             log.info(String(describing: urlRequest.url), parameters: params)
         }
         do {
@@ -179,7 +180,8 @@ class FMApi {
         if let token = token {
             request.setValue(token, forHTTPHeaderField: "Fantasmo-Key")
         }
-        request.setValue("multipart/form-data; boundary=\(Data.boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue("multipart/form-data; boundary=\(MultipartFormData.specificBoundary)",
+                         forHTTPHeaderField: "Content-Type")
         return request
     }
     

@@ -91,9 +91,7 @@ public extension ARFrame {
     }
     
     /// Angle in radians.
-    private func angleOfVirtualDeviceCSInCameraCS(
-        _ deviceOrientation: UIDeviceOrientation
-    ) -> Float {
+    private func angleOfVirtualDeviceCSInCameraCS(_ deviceOrientation: UIDeviceOrientation) -> Float {
         switch deviceOrientation {
         case .portrait:
             return .pi/2
@@ -164,3 +162,5 @@ public extension ARFrame {
     }
     
 }
+
+

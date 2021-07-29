@@ -10,8 +10,8 @@ public protocol APIRequest {
     
     var httpMethod: HTTPMethod { get }
     
-    /// Default implementation is provided.
-    var httpHeaders: [String : String]? { get }
+    /// Additional http headers that should be added to the headers set by api client.
+    var additionalHttpHeaders: [String : String]? { get }
     
     /// Parameters of the request that are passed as URL query or in http request body.
     /// Default value is provided.
@@ -40,7 +40,7 @@ public extension APIRequest {
         return .get
     }
     
-    var httpHeaders: [String : String]? {
+    var additionalHttpHeaders: [String : String]? {
         return nil
     }
     

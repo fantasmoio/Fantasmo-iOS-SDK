@@ -12,7 +12,6 @@ import Foundation
 extension Data {
     static let crlf = "\r\n"
     static let crlf2x = crlf + crlf
-    static let boundary = "ce8f07c0c2d14f0bbb1e3a96994e0354"
 
     enum BoundaryType {
         case initial, middle, final
@@ -23,11 +22,11 @@ extension Data {
         
         switch type {
         case .initial:
-            boundaryText = "--\(boundary)\(crlf)"
+            boundaryText = "--\(MultipartFormData.specificBoundary)\(crlf)"
         case .middle:
-            boundaryText = "\(crlf)--\(boundary)\(crlf)"
+            boundaryText = "\(crlf)--\(MultipartFormData.specificBoundary)\(crlf)"
         case .final:
-            boundaryText = "\(crlf)--\(boundary)--\(crlf)"
+            boundaryText = "\(crlf)--\(MultipartFormData.specificBoundary)--\(crlf)"
         }
         
         return Data(boundaryText.utf8)

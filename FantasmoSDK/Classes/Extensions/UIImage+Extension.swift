@@ -14,10 +14,10 @@ extension UIImage {
      Init method of image
      
      - Parameter pixelBuffer: PixelBuffer of image.
-     - Parameter scale: Scale of image.
-     - Parameter deviceOrientation: Current orientation of device.
+     - Parameter scaleFactor: The scale factor by which the size of an image should be scaled.
+     - Parameter deviceOrientation: Orientation of device with which image was captured.
      */
-    convenience init?(pixelBuffer: CVPixelBuffer, scale: CGFloat, deviceOrientation: UIDeviceOrientation) {
+    convenience init?(pixelBuffer: CVPixelBuffer, scaleFactor: Float, deviceOrientation: UIDeviceOrientation) {
         
         // Convert to a CGImage
         let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
@@ -28,8 +28,8 @@ extension UIImage {
             return nil
         }
         
-        if (abs(scale - 1.0) > 0.01) {
-            guard let scaledImage = cgImage.scale(byFactor: scale) else {
+        if (abs(scaleFactor - 1.0) > 0.01) {
+            guard let scaledImage = cgImage.scale(byFactor: scaleFactor) else {
                 return nil
             }
             
@@ -50,7 +50,7 @@ extension UIImage {
             self.init(cgImage: cgImage, scale: 1.0, orientation: .down)
             break
         default:
-            //default is portrait
+            // default is portrait
             self.init(cgImage: cgImage, scale: 1.0, orientation: .right)
             break
         }
@@ -59,12 +59,12 @@ extension UIImage {
     /**
      Convert to a jpeg inside an Autorelease Pool to memory performance
      
-     - Parameter compressionQuality:  Compression quality of the image .
+     - Parameter compressionQuality:  Compression quality of the image . Default value is '0.9'. 
      - Returns: NSData of after compress image
      */
-    func toJpeg(compressionQuality: CGFloat) -> Data? {
+    func toJpeg(compressionQuality: Float = Constants.jpegCompressionRatio) -> Data? {
         return autoreleasepool(invoking: { () -> Data? in
-            return self.jpegData(compressionQuality: compressionQuality)
+            return self.jpegData(compressionQuality: CGFloat(compressionQuality))
         })
     }
 }

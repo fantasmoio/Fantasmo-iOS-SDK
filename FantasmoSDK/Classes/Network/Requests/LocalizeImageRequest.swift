@@ -47,11 +47,11 @@ struct LocalizeImageRequest: RestAPIRequest {
             let pose = FMPose(frame.openCVTransformOfVirtualDeviceInWorldCS)
             
             let intrinsics = FMIntrinsics(intrinsics: frame.camera.intrinsics,
-                                          atScale: Float(FMUtility.Constants.ImageScaleFactor),
-                                          withStatusBarOrientation: interfaceOrientation,
-                                          withDeviceOrientation: frame.deviceOrientation,
-                                          withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
-                                          withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
+                                          imageScaleFactor: imageScaleFactor,
+                                          statusBarOrientation: interfaceOrientation,
+                                          deviceOrientation: frame.deviceOrientation,
+                                          frameWidth: CVPixelBufferGetWidth(frame.capturedImage),
+                                          frameHeight: CVPixelBufferGetHeight(frame.capturedImage))
             
             params["intrinsics"] = try intrinsics.toJson()
             params["gravity"] = try pose.orientation.toJson()
@@ -94,7 +94,7 @@ struct LocalizeImageRequest: RestAPIRequest {
     }
     
     func multipartFormData() throws -> MultipartFormData? {
-        let multipartFormData = MultipartFormData()
+        let multipartFormData = MultipartFormData(boundary: MultipartFormData.specificBoundary)
         
         do {
             if let params = try parameters() {
@@ -117,6 +117,9 @@ struct LocalizeImageRequest: RestAPIRequest {
     
     // MARK: - Helpers
     
+    /// Scale factor when encoding an image to JPEG.
+    let imageScaleFactor: Float = 2.0/3
+    
     /// Generate the image data used to perform "localize" HTTP request .
     /// Image of `frame` is oriented taking into account orientation of camera when taking image. For example, if device was upside-down when
     /// frame was captured from camera, then resulting image is rotated by 180 degrees. So server always receives properly oriented image
@@ -130,39 +133,10 @@ struct LocalizeImageRequest: RestAPIRequest {
             return MockData.imageData(forZone: simulationParams.simulationZone)
         }
         else {
-            let imageData = FMUtility.toJpeg(pixelBuffer: frame.capturedImage, with: frame.deviceOrientation)
+            let imageData = frame.toJpeg(withCompression: Constants.jpegCompressionRatio,
+                scaleFactor: imageScaleFactor,
+                deviceOrientation:frame.deviceOrientation)
             return imageData
-        }
-    }
-    
-    
-}
-
-extension MultipartFormData {
-    
-    static var boundary: String { "ce8f07c0c2d14f0bbb1e3a96994e0354" }
-    
-    /// - throws `ApiError.requestSerializationFailed` in case of failure
-    func appendParameters(_ params: [String : Any]) throws {
-        for (key, value) in params {
-            let stringValue: String
-            
-            if let aValue = value as? String {
-                stringValue = aValue
-            }
-            else if let aValue = value as? Encodable {
-                do {
-                    stringValue = try aValue.toJson()
-                }
-                catch {
-                    throw ApiError.requestSerializationFailed(reason: .jsonEncodingFailed(error: error))
-                }
-            }
-            else {
-                let msg = "Parameter with key = \(key) and value = \(value) cannot be added to `MultipartFormData`"
-                throw ApiError.requestSerializationFailed(reason: .jsonEncodingFailed(msg: msg))
-            }
-            append(stringValue.data(using: .utf8)!, withName: key)
         }
     }
     

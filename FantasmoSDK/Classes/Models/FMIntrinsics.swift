@@ -19,11 +19,11 @@ public struct FMIntrinsics:Codable {
     var cy:Float
     
     init(intrinsics: simd_float3x3,
-         atScale scale:Float,
-         withStatusBarOrientation statusBarOrientation: UIInterfaceOrientation,
-         withDeviceOrientation deviceOrientation: UIDeviceOrientation,
-         withFrameWidth frameWidth: Int,
-         withFrameHeight frameHeight: Int) {
+         imageScaleFactor: Float,
+         statusBarOrientation: UIInterfaceOrientation,
+         deviceOrientation: UIDeviceOrientation,
+         frameWidth: Int,
+         frameHeight: Int) {
         
         switch deviceOrientation {
             
@@ -62,9 +62,9 @@ public struct FMIntrinsics:Codable {
             break
         }
         
-        fx *= Float(scale)
-        fy *= Float(scale)
-        cx *= Float(scale)
-        cy *= Float(scale)
+        fx *= Float(imageScaleFactor)
+        fy *= Float(imageScaleFactor)
+        cx *= Float(imageScaleFactor)
+        cy *= Float(imageScaleFactor)
     }
 }

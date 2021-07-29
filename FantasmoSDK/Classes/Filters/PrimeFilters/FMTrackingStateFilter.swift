@@ -13,8 +13,8 @@ struct FMTrackingStateFilter: FMFrameFilter {
         switch frame.camera.trackingState {
         case .normal:
             return .accepted
-        case .limited(let reason):
-            switch reason {
+        case .limited(let reasonOfLimitedState):
+            switch reasonOfLimitedState {
             case .initializing:
                 return .rejected(reason: .movingTooLittle)
             case .relocalizing:
@@ -23,6 +23,9 @@ struct FMTrackingStateFilter: FMFrameFilter {
                 return .rejected(reason: .movingTooFast)
             case .insufficientFeatures:
                 return .rejected(reason: .insufficientFeatures)
+            @unknown default:
+                assertionFailure("Unknown  ARCamera.TrackingState.Reason case \(reasonOfLimitedState)")
+                return .accepted
             }
         case .notAvailable:
             return .rejected(reason: .movingTooLittle)

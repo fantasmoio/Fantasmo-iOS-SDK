@@ -62,12 +62,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     // Clients can use this to mock the localization call
     public var mockLocalize: ((ARFrame) -> Void)?
-    
-    /// A  boolean value that states whether location updates were started by invoking `startUpdatingLocation()`.
-    public var isLocalizingInProgress: Bool {
-        state != .stopped
-    }
-    
+
     public var logLevel = FMLog.LogLevel.warning {
         didSet {
             log.logLevel = logLevel
@@ -117,7 +112,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastFrame: ARFrame?
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
-    
+
     private var accumulatedARKitInfo = AccumulatedARKitInfo()
     private var frameRejectionStatisticsAccumulator = FrameFilterRejectionStatisticsAccumulator()
     
@@ -125,7 +120,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var tester: FMLocationManagerTester?
     
     /// States whether the client code using this manager set up connection with the manager.
-    private var isClientOfManagerConnected = false
+    private var isConnected = false
     
     // MARK: -
     
@@ -146,7 +141,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public func connect(accessToken: String, delegate: FMLocationDelegate) {
         log.debug(parameters: ["delegate": delegate])
 
-        isClientOfManagerConnected = true
+        isConnected = true
         self.delegate = delegate
         
         // set up FMApi
@@ -170,7 +165,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
                     "session": session,
                     "locationManager": locationManager])
         
-        isClientOfManagerConnected = true
+        isConnected = true
         connect(accessToken: accessToken, delegate: delegate)
         session?.delegate = self
         locationManager?.delegate = self
@@ -182,7 +177,6 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     /// - Parameter sessionID: Ride identifier. Used to keep track of an entire parking session and for billing purposes.
     ///                 The max length of the string is 64 characters. In the case of excessive length length is truncated.
     public func startUpdatingLocation(sessionID: String) {
-        precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
         log.debug()
         
         state = .localizing
@@ -236,8 +230,8 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     ///
     /// - Parameter frame: Frame to localize.
     internal func localize(frame: ARFrame, from session: ARSession) {
-        guard isLocalizingInProgress else { return }
-        
+        guard isConnected else { return }
+
         log.debug(parameters: ["simulation": isSimulation])
         state = .uploading
         

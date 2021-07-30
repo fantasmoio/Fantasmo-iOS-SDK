@@ -19,7 +19,7 @@ public class AccumulatedARKitInfo {
     }
 
     /// Allows to receive the total translation (distance) that device has moded from the starting moment.
-    private(set) var translationAccumulator = TotalDeviceTranslationAccumulator(decimationFactor: 10)
+    public private(set) var translationAccumulator = TotalDeviceTranslationAccumulator(decimationFactor: 10)
     
     /// Spread of Eugler angles as min and max values for each compoent (that is for yaw, pitch and roll)
     public private(set) var eulerAngleSpreadsAccumulator = EulerAngleSpreadsAccumulator()

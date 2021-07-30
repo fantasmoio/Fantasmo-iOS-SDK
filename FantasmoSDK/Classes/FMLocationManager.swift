@@ -113,8 +113,11 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
 
+    // Analytics
     private var accumulatedARKitInfo = AccumulatedARKitInfo()
     private var frameRejectionStatisticsAccumulator = FrameFilterRejectionStatisticsAccumulator()
+    private var appSessionId: String? // provided by client
+    private var localizationSessionId: String? // created by SDK
     
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
@@ -174,16 +177,20 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     // MARK: - Public instance methods
     
     /// Starts the generation of updates that report the user’s current location.
-    /// - Parameter sessionID: Ride identifier. Used to keep track of an entire parking session and for billing purposes.
-    ///                 The max length of the string is 64 characters. In the case of excessive length length is truncated.
-    public func startUpdatingLocation(sessionID: String) {
+    /// - Parameter sessionId: Identifier for a unique localization session for use by analytics and billing.
+    ///                 The max length of the string is 64 characters.
+    public func startUpdatingLocation(sessionId: String) {
         log.debug()
-        
-        state = .localizing
+
+        appSessionId = String(sessionId.prefix(64))
+        localizationSessionId = UUID().uuidString
+
         accumulatedARKitInfo.reset()
         frameRejectionStatisticsAccumulator.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
+
+        state = .localizing
     }
     
     /// Stops the generation of location updates.

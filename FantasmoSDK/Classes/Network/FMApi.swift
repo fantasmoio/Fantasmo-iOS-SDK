@@ -11,7 +11,6 @@ import ARKit
 protocol FMApiDelegate: AnyObject {
     var isSimulation: Bool { get }
     var simulationZone: FMZone.ZoneType  { get }
-    /// An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
     var approximateCoordinate: CLLocationCoordinate2D { get }
 }
 
@@ -38,10 +37,7 @@ class FMApi {
     ///
     /// - Parameters:
     ///   - frame: The current ARFrame as given by ARSession
-    ///   - deviceOrientation: Orientation of device when frame was captured from camera.
-    ///   - relativeOpenCVAnchorPose: Pose of anchor coordinate system in virtual device coordinate system and for both following OpenCV
-    ///      conventions
-    ///   - approximateLocation: An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
+    ///   - relativeOpenCVAnchorPose: Pose of anchor coordinate system
     ///   - completion: Completion closure
     ///   - error: Error closure
     func sendLocalizationRequest(frame: ARFrame,
@@ -55,8 +51,7 @@ class FMApi {
             return
         }
         
-        let params = getParams(for: frame,
-                                             relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
+        let params = getParams(for: frame, relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in

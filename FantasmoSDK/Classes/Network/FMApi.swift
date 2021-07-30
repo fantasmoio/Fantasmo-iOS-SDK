@@ -55,7 +55,7 @@ class FMApi {
             return
         }
         
-        let params = paramsOfLocalizeRequest(for: frame,
+        let params = getParams(for: frame,
                                              relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
         
         // set up completion closure
@@ -178,8 +178,7 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func paramsOfLocalizeRequest(for frame: ARFrame,
-                                         relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
+    private func getParams(for frame: ARFrame, relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
         var params = [String : String]()
         
         if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {

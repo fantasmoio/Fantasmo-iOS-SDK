@@ -200,7 +200,13 @@ class FMApi {
                 "gravity" : pose.orientation.toJson(),
                 "capturedAt" : String(NSDate().timeIntervalSince1970),
                 "uuid" : UUID().uuidString,
-                "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}"
+                "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
+
+                // device characteristics
+                "deviceModel": UIDevice.current.identifier,
+                "deviceOs": UIDevice.current.correctedSystemName,
+                "deviceOsVersion": UIDevice.current.systemVersion,
+                "sdkVersion": Bundle.fullVersion,
             ]
 
             // calculate and send reference frame if anchoring
@@ -233,13 +239,5 @@ class FMApi {
 
         let imageData = FMUtility.toJpeg(pixelBuffer: frame.capturedImage, with: frame.deviceOrientation)
         return imageData
-    }
-    
-    private func deviceCharacteristics() -> [String : String] {
-        [
-            "deviceModel"        : UIDevice.current.identifier,          // "iPhone7,1"
-            "deviceOs"           : UIDevice.current.system,              // "iPadOS 14.5"
-            "sdkVersion" : Bundle.fullVersion                    // "1.1.18(365)
-        ]
     }
 }

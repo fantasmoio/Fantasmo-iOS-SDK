@@ -27,11 +27,6 @@ extension UIDevice {
         }
     }
     
-    /// The name and version of the operating system, such as "iOS 14.5"
-    var system: String {
-        String(format: "%@ %@", correctedSystemName, systemVersion)
-    }
-    
     // MARK: - Helpers
     
     private static var cachedIdentifier: String = {

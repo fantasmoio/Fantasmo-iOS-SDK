@@ -179,11 +179,6 @@ class FMApi {
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
     private func getParams(for frame: ARFrame, relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
-        var params = [String : String]()
-        
-        if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
-            params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
-        }
         
         // mock if simulation
         if delegate == nil || !delegate!.isSimulation {
@@ -199,14 +194,19 @@ class FMApi {
                                           withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
             
             let coordinate = delegate!.approximateCoordinate
-            
-            params.merge([
+
+            var params = [
                 "intrinsics" : intrinsics.toJson(),
                 "gravity" : pose.orientation.toJson(),
                 "capturedAt" : String(NSDate().timeIntervalSince1970),
                 "uuid" : UUID().uuidString,
                 "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}"
-            ]) { (current, _) in current }
+            ]
+
+            // calculate and send reference frame if anchoring
+            if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
+                params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
+            }
             
             return params
         }
@@ -239,7 +239,7 @@ class FMApi {
         [
             "deviceModel"        : UIDevice.current.identifier,          // "iPhone7,1"
             "deviceOs"           : UIDevice.current.system,              // "iPadOS 14.5"
-            "fantasmoSdkVersion" : Bundle.fullVersion                    // "1.1.18(365)
+            "sdkVersion" : Bundle.fullVersion                    // "1.1.18(365)
         ]
     }
 }

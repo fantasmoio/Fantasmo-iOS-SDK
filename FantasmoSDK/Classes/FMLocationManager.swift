@@ -111,18 +111,18 @@ open class FMLocationManager: NSObject {
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
 
-    // Analytics
-    private var accumulatedARKitInfo = AccumulatedARKitInfo()
-    private var frameRejectionStatisticsAccumulator = FrameFilterRejectionStatisticsAccumulator()
-    private var appSessionId: String? // provided by client
-    private var localizationSessionId: String? // created by SDK
-    
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
     
     /// States whether the client code using this manager set up connection with the manager.
     private var isConnected = false
-    
+
+    // MARK: - Analytics Properties
+    private var accumulatedARKitInfo = AccumulatedARKitInfo()
+    private var frameEventAccumulator = FrameFilterRejectionStatisticsAccumulator()
+    private var appSessionId: String? // provided by client
+    private var localizationSessionId: String? // created by SDK
+
     // MARK: -
     
     /// This initializer must be used only for testing purposes. Otherwise use singleton object via `shared` static property.
@@ -183,7 +183,7 @@ open class FMLocationManager: NSObject {
         localizationSessionId = UUID().uuidString
 
         accumulatedARKitInfo.reset()
-        frameRejectionStatisticsAccumulator.reset()
+        frameEventAccumulator.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
 
@@ -249,15 +249,30 @@ open class FMLocationManager: NSObject {
         let openCVRelativeAnchorPose = openCVRelativeAnchorTransform.map { FMPose($0) }
 
         // Set up parameters
+
+        let frameEvents = FMFrameEvents(
+            excessiveTilt:
+                (frameEventAccumulator.counts[.pitchTooHigh] ?? 0) +
+                (frameEventAccumulator.counts[.pitchTooLow] ?? 0),
+            excessiveBlur: frameEventAccumulator.counts[.imageTooBlurry] ?? 0,
+            excessiveMotion: frameEventAccumulator.counts[.movingTooFast] ?? 0,
+            insufficientFeatures: frameEventAccumulator.counts[.insufficientFeatures] ?? 0,
+            lossOfTracking: 0, // FIXME
+            total: frameEventAccumulator.total
+        )
+
+        let localizationAnalytics =  FMLocalizationAnalytics(
+            appSessionId: appSessionId,
+            localizationSessionId: localizationSessionId,
+            frameEvents: frameEvents
+        )
+
         let localizationRequest = FMLocalizationRequest(
             isSimulation: isSimulation,
             simulationZone: simulationZone,
             approximateCoordinate: approximateCoordinate,
             relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
-            analytics: FMLocalizationAnalytics(
-                appSessionId: appSessionId,
-                localizationSessionId: localizationSessionId
-            )
+            analytics: localizationAnalytics
         )
 
         // Set up completion closure
@@ -324,7 +339,7 @@ extension FMLocationManager : ARSessionDelegate {
         if state == .localizing {
             let filterResult = qualityFrameFilter.accepts(frame)
             if case let .rejected(reason) = filterResult {
-                frameRejectionStatisticsAccumulator.accumulate(filterRejectionReason: reason)
+                frameEventAccumulator.accumulate(filterRejectionReason: reason)
             }
             frameFailureThrottler.onNext(frameFilterResult: filterResult)
             

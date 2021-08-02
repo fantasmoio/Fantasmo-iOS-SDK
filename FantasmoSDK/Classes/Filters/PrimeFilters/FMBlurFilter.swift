@@ -58,7 +58,7 @@ class FMBlurFilter: FMFrameFilter {
             isBlurry = isLowVariance
         }
         
-        return isBlurry ? .rejected(reason: .movingTooFast) : .accepted
+        return isBlurry ? .rejected(reason: .imageTooBlurry) : .accepted
     }
     
     func calculateVariance(frame: ARFrame) -> Float {

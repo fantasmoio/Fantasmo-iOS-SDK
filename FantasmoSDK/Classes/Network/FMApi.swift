@@ -19,6 +19,16 @@ struct FMLocalizationRequest {
 struct FMLocalizationAnalytics {
     var appSessionId: String?
     var localizationSessionId: String?
+    var frameEvents: FMFrameEvents
+}
+
+struct FMFrameEvents {
+    var excessiveTilt: Int
+    var excessiveBlur: Int
+    var excessiveMotion: Int
+    var insufficientFeatures: Int
+    var lossOfTracking: Int
+    var total: Int
 }
 
 class FMApi {

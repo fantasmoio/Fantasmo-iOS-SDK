@@ -14,9 +14,9 @@ class FMCameraPitchFilter: FMFrameFilter {
     func accepts(_ frame: ARFrame) -> FMFrameFilterResult {
         switch frame.camera.pitch {
         case _ where frame.camera.pitch > maxUpwardTilt:
-            return .rejected(reason: .cameraPitchTooHigh)
+            return .rejected(reason: .pitchTooHigh)
         case _ where frame.camera.pitch < -maxDownwardTilt:
-            return .rejected(reason: .cameraPitchTooLow)
+            return .rejected(reason: .pitchTooLow)
         default:
             return .accepted
         }

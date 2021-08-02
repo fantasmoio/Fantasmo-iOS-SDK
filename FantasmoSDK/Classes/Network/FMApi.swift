@@ -242,8 +242,8 @@ class FMApi {
                 "appSessionId": request.analytics.appSessionId,
                 "localizationSessionId": request.analytics.localizationSessionId,
 
+                // other analytics
                 "frameEventCounts": frameEventCounts.toJson(),
-
                 "totalDistance": String(request.analytics.totalDistance),
                 "rotationSpread": request.analytics.rotationSpread.toJson(),
             ]

@@ -206,6 +206,16 @@ class FMApi {
             
             let coordinate = request.approximateCoordinate
 
+            let events = request.analytics.frameEvents
+            let frameEventCounts = [
+                "excessiveTilt": events.excessiveTilt,
+                "excessiveBlur": events.excessiveBlur,
+                "excessiveMotion": events.excessiveMotion,
+                "insufficientFeatures": events.insufficientFeatures,
+                "lossOfTracking": events.lossOfTracking,
+                "total": events.total,
+            ]
+
             var params = [
                 "intrinsics" : intrinsics.toJson(),
                 "gravity" : pose.orientation.toJson(),
@@ -221,14 +231,16 @@ class FMApi {
 
                 // session identifiers
                 "appSessionId": request.analytics.appSessionId,
-                "localizationSessionId": request.analytics.localizationSessionId
+                "localizationSessionId": request.analytics.localizationSessionId,
+
+                "frameEventCounts": frameEventCounts.toJson(),
             ]
 
             // calculate and send reference frame if anchoring
             if let relativeOpenCVAnchorPose = request.relativeOpenCVAnchorPose {
                 params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
             }
-            
+
             return params
         }
         else {

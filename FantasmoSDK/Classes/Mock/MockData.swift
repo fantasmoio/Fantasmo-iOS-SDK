@@ -15,10 +15,10 @@ class MockData {
     /// - Parameters:
     ///   - zone: Type of semantic zone to simulate.
     /// - Returns: Parameters and encoded image data for query.
-    static func imageData(forZone zone: FMZone.ZoneType) -> Data {
+    static func imageData(_ request: FMLocalizationRequest) -> Data {
         var jpegData: Data?
         
-        switch zone {
+        switch request.simulationZone {
         case .parking:
             jpegData = UIImage(named: "inParking", in:Bundle(for:MockData.self), compatibleWith: nil)?.toJpeg(compressionQuality: FMUtility.Constants.JpegCompressionRatio)
         default:
@@ -33,16 +33,16 @@ class MockData {
     /// - Parameters:
     ///   - zone: Type of semantic zone to simulate.
     /// - Returns: Parameters for query.
-    static func params(forZone zone: FMZone.ZoneType, relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
+    static func params(_ request: FMLocalizationRequest) -> [String : String] {
         var params: [String : String]
-        switch zone {
+        switch request.simulationZone {
         case .parking:
             params = Self.parkingMockParameters
         default:
             params = Self.streetMockParameters
         }
         
-        if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
+        if let relativeOpenCVAnchorPose = request.relativeOpenCVAnchorPose {
             params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
         }
         return params

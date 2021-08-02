@@ -8,16 +8,21 @@
 import Foundation
 import ARKit
 
-protocol FMApiDelegate: AnyObject {
-    var isSimulation: Bool { get }
-    var simulationZone: FMZone.ZoneType  { get }
-    var approximateCoordinate: CLLocationCoordinate2D { get }
+struct FMLocalizationRequest {
+    var isSimulation: Bool
+    var simulationZone: FMZone.ZoneType
+    var approximateCoordinate: CLLocationCoordinate2D
+    var relativeOpenCVAnchorPose: FMPose?
+}
+
+struct FMLocalizationAnalytics {
+    var appSessionId: String
+    var localizationSessionId: String
 }
 
 class FMApi {
     
     static let shared = FMApi()
-    weak var delegate: FMApiDelegate?
     var token: String?
     
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
@@ -41,17 +46,17 @@ class FMApi {
     ///   - completion: Completion closure
     ///   - error: Error closure
     func sendLocalizationRequest(frame: ARFrame,
-                                 relativeOpenCVAnchorPose: FMPose?,
+                                 request: FMLocalizationRequest,
                                  completion: @escaping LocalizationResult,
                                  error: @escaping ErrorResult) {
         
         // set up request parameters
-        guard let data = extractDataOfProperlyOrientedImage(of: frame) else {
+        guard let imageData = imageData(from: frame, request: request) else {
             error(FMError(ApiError.invalidImage))
             return
         }
         
-        let params = getParams(for: frame, relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
+        let params = getParams(for: frame, request: request)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -108,7 +113,7 @@ class FMApi {
         FMRestClient.post(
             .localize,
             parameters: params,
-            imageData: data,
+            imageData: imageData,
             token: token,
             completion: postCompletion,
             error: postError
@@ -173,10 +178,10 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func getParams(for frame: ARFrame, relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
+    private func getParams(for frame: ARFrame, request: FMLocalizationRequest) -> [String : String] {
         
         // mock if simulation
-        if delegate == nil || !delegate!.isSimulation {
+        if !request.isSimulation {
             let interfaceOrientation = UIApplication.shared.statusBarOrientation
             
             let pose = FMPose(frame.openCVTransformOfVirtualDeviceInWorldCS)
@@ -188,7 +193,7 @@ class FMApi {
                                           withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                           withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
             
-            let coordinate = delegate!.approximateCoordinate
+            let coordinate = request.approximateCoordinate
 
             var params = [
                 "intrinsics" : intrinsics.toJson(),
@@ -205,15 +210,14 @@ class FMApi {
             ]
 
             // calculate and send reference frame if anchoring
-            if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
+            if let relativeOpenCVAnchorPose = request.relativeOpenCVAnchorPose {
                 params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
             }
             
             return params
         }
         else {
-            return MockData.params(forZone: delegate!.simulationZone,
-                                   relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
+            return MockData.params(request)
         }
     }
     
@@ -225,11 +229,11 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Prepared localization image
-    private func extractDataOfProperlyOrientedImage(of frame: ARFrame) -> Data? {
+    private func imageData(from frame: ARFrame, request: FMLocalizationRequest) -> Data? {
         
         // mock if simulation
-        guard delegate == nil || !delegate!.isSimulation else {
-            return MockData.imageData(forZone: delegate!.simulationZone)
+        guard !request.isSimulation else {
+            return MockData.imageData(request)
         }
 
         let imageData = FMUtility.toJpeg(pixelBuffer: frame.capturedImage, with: frame.deviceOrientation)

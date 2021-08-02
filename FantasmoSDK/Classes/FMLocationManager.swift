@@ -45,9 +45,7 @@ public extension FMLocationDelegate {
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {}
 }
 
-
-/// Start and stop the delivery of camera-based location events.
-open class FMLocationManager: NSObject, FMApiDelegate {
+open class FMLocationManager: NSObject {
     
     public enum State {
         case stopped        // doing nothing
@@ -148,7 +146,6 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         self.delegate = delegate
         
         // set up FMApi
-        FMApi.shared.delegate = self
         FMApi.shared.token = accessToken
     }
 
@@ -251,6 +248,14 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         let openCVRelativeAnchorTransform = openCVPoseOfAnchorInVirtualDeviceCS(for: frame)
         let openCVRelativeAnchorPose = openCVRelativeAnchorTransform.map { FMPose($0) }
 
+        // Set up parameters
+        let localizationRequest = FMLocalizationRequest(
+            isSimulation: isSimulation,
+            simulationZone: simulationZone,
+            approximateCoordinate: approximateCoordinate,
+            relativeOpenCVAnchorPose: openCVRelativeAnchorPose
+        )
+
         // Set up completion closure
         let localizeCompletion: FMApi.LocalizationResult = { location, zones in
             log.debug(parameters: ["location": location, "zones": zones])
@@ -276,7 +281,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         }
         
         FMApi.shared.sendLocalizationRequest(frame: frame,
-                                             relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
+                                             request: localizationRequest,
                                              completion: localizeCompletion,
                                              error: localizeError)
     }

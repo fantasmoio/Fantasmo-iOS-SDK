@@ -253,7 +253,11 @@ open class FMLocationManager: NSObject {
             isSimulation: isSimulation,
             simulationZone: simulationZone,
             approximateCoordinate: approximateCoordinate,
-            relativeOpenCVAnchorPose: openCVRelativeAnchorPose
+            relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
+            analytics: FMLocalizationAnalytics(
+                appSessionId: appSessionId,
+                localizationSessionId: localizationSessionId
+            )
         )
 
         // Set up completion closure

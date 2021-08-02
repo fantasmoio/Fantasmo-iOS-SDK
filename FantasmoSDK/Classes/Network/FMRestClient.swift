@@ -30,7 +30,7 @@ struct FMRestClient {
     ///   - completion: Completion closure
     ///   - error: Error closure
     static func post(_ endpoint: FMApiRouter.ApiEndpoint,
-                     parameters: [String : String],
+                     parameters: [String : String?],
                      imageData: Data? = nil,
                      token: String?,
                      completion: RestResult? = nil,
@@ -124,9 +124,11 @@ private extension Data {
         return Data(boundaryText.utf8)
     }
     
-    mutating func appendParameters(_ params: [String : String]) {
+    mutating func appendParameters(_ params: [String : String?]) {
         for (key, value) in params {
-            self.appendParameter(key, value: value)
+            if let value = value {
+                self.appendParameter(key, value: value)
+            }
         }
     }
     

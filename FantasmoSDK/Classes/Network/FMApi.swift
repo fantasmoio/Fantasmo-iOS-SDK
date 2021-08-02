@@ -13,11 +13,12 @@ struct FMLocalizationRequest {
     var simulationZone: FMZone.ZoneType
     var approximateCoordinate: CLLocationCoordinate2D
     var relativeOpenCVAnchorPose: FMPose?
+    var analytics: FMLocalizationAnalytics
 }
 
 struct FMLocalizationAnalytics {
-    var appSessionId: String
-    var localizationSessionId: String
+    var appSessionId: String?
+    var localizationSessionId: String?
 }
 
 class FMApi {
@@ -178,7 +179,7 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func getParams(for frame: ARFrame, request: FMLocalizationRequest) -> [String : String] {
+    private func getParams(for frame: ARFrame, request: FMLocalizationRequest) -> [String : String?] {
         
         // mock if simulation
         if !request.isSimulation {
@@ -207,6 +208,10 @@ class FMApi {
                 "deviceOs": UIDevice.current.correctedSystemName,
                 "deviceOsVersion": UIDevice.current.systemVersion,
                 "sdkVersion": Bundle.fullVersion,
+
+                // session identifiers
+                "appSessionId": request.analytics.appSessionId,
+                "localizationSessionId": request.analytics.localizationSessionId
             ]
 
             // calculate and send reference frame if anchoring

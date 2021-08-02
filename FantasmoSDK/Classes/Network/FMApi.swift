@@ -224,6 +224,7 @@ class FMApi {
                 "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
 
                 // device characteristics
+                "udid": UIDevice.current.identifierForVendor?.uuidString,
                 "deviceModel": UIDevice.current.identifier,
                 "deviceOs": UIDevice.current.correctedSystemName,
                 "deviceOsVersion": UIDevice.current.systemVersion,

@@ -20,6 +20,14 @@ struct FMLocalizationAnalytics {
     var appSessionId: String?
     var localizationSessionId: String?
     var frameEvents: FMFrameEvents
+    var rotationSpread: FMRotationSpread
+    var totalDistance: Float
+}
+
+struct FMRotationSpread: Codable {
+    var pitch: Float
+    var yaw: Float
+    var roll: Float
 }
 
 struct FMFrameEvents {
@@ -235,6 +243,9 @@ class FMApi {
                 "localizationSessionId": request.analytics.localizationSessionId,
 
                 "frameEventCounts": frameEventCounts.toJson(),
+
+                "totalDistance": String(request.analytics.totalDistance),
+                "rotationSpread": request.analytics.rotationSpread.toJson(),
             ]
 
             // calculate and send reference frame if anchoring

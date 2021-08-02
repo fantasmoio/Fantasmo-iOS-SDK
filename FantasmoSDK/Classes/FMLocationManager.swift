@@ -261,10 +261,18 @@ open class FMLocationManager: NSObject {
             total: frameEventAccumulator.total
         )
 
+        let rotationSpread = FMRotationSpread(
+            pitch: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.pitch.spread,
+            yaw: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.yaw.spread,
+            roll: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.roll.spread
+        )
+
         let localizationAnalytics =  FMLocalizationAnalytics(
             appSessionId: appSessionId,
             localizationSessionId: localizationSessionId,
-            frameEvents: frameEvents
+            frameEvents: frameEvents,
+            rotationSpread: rotationSpread,
+            totalDistance: accumulatedARKitInfo.totalTranslation
         )
 
         let localizationRequest = FMLocalizationRequest(

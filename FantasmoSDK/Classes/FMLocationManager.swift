@@ -251,7 +251,10 @@ open class FMLocationManager: NSObject {
         // Set up completion closure
         let localizeCompletion: FMApi.LocalizationResult = { location, zones in
             log.debug(parameters: ["location": location, "zones": zones])
-            self.delegate?.locationManager(didUpdateLocation: location, withZones: zones)
+
+            let result = FMLocationResult(location: location, confidence: .high, zones: zones)
+
+            self.delegate?.locationManager(didUpdateLocation: result)
             if let tester = self.tester {
                 let translation = openCVRelativeAnchorTransform?.inNonOpenCvCS.translation
                 tester.locationManagerDidUpdateLocation(location, translationOfAnchorInVirtualDeviceCS: translation)

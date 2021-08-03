@@ -37,7 +37,7 @@ public protocol FMLocationDelegate: AnyObject {
     ///   - location: Location of the device (or anchor if set)
     ///   - zones: Semantic zone corresponding to the location
     /// Default implementation provided.
-    func locationManager(didUpdateLocation location: CLLocation, withZones zones: [FMZone]?)
+    func locationManager(didUpdateLocation location: FMLocationResult)
 
     /// Tells the delegate that an error has occurred.
     ///
@@ -57,7 +57,7 @@ public protocol FMLocationDelegate: AnyObject {
 /// Empty implementations of the protocol to allow optional
 /// implementation for delegates.
 public extension FMLocationDelegate {
-    func locationManager(didUpdateLocation location: CLLocation, withZones zones: [FMZone]?) {}
+    func locationManager(didUpdateLocation location: FMLocationResult) {}
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {}
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {}
 }

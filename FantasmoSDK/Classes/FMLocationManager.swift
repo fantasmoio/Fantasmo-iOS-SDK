@@ -60,6 +60,7 @@ open class FMLocationManager: NSObject {
     private var anchorFrame: ARFrame? {
         didSet {
             tester?.anchorFrame = anchorFrame
+            locationFuser.reset()
         }
     }
     

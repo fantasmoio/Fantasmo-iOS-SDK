@@ -8,17 +8,40 @@
 import Foundation
 import ARKit
 
-protocol FMApiDelegate: AnyObject {
-    var isSimulation: Bool { get }
-    var simulationZone: FMZone.ZoneType  { get }
-    /// An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
-    var approximateCoordinate: CLLocationCoordinate2D { get }
+struct FMLocalizationRequest {
+    var isSimulation: Bool
+    var simulationZone: FMZone.ZoneType
+    var approximateCoordinate: CLLocationCoordinate2D
+    var relativeOpenCVAnchorPose: FMPose?
+    var analytics: FMLocalizationAnalytics
+}
+
+struct FMLocalizationAnalytics {
+    var appSessionId: String?
+    var localizationSessionId: String?
+    var frameEvents: FMFrameEvents
+    var rotationSpread: FMRotationSpread
+    var totalDistance: Float
+}
+
+struct FMRotationSpread: Codable {
+    var pitch: Float
+    var yaw: Float
+    var roll: Float
+}
+
+struct FMFrameEvents {
+    var excessiveTilt: Int
+    var excessiveBlur: Int
+    var excessiveMotion: Int
+    var insufficientFeatures: Int
+    var lossOfTracking: Int
+    var total: Int
 }
 
 class FMApi {
     
     static let shared = FMApi()
-    weak var delegate: FMApiDelegate?
     var token: String?
     
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
@@ -38,25 +61,21 @@ class FMApi {
     ///
     /// - Parameters:
     ///   - frame: The current ARFrame as given by ARSession
-    ///   - deviceOrientation: Orientation of device when frame was captured from camera.
-    ///   - relativeOpenCVAnchorPose: Pose of anchor coordinate system in virtual device coordinate system and for both following OpenCV
-    ///      conventions
-    ///   - approximateLocation: An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
+    ///   - request: Localization request struct
     ///   - completion: Completion closure
     ///   - error: Error closure
     func sendLocalizationRequest(frame: ARFrame,
-                                 relativeOpenCVAnchorPose: FMPose?,
+                                 request: FMLocalizationRequest,
                                  completion: @escaping LocalizationResult,
                                  error: @escaping ErrorResult) {
         
         // set up request parameters
-        guard let data = extractDataOfProperlyOrientedImage(of: frame) else {
+        guard let imageData = imageData(from: frame, request: request) else {
             error(FMError(ApiError.invalidImage))
             return
         }
         
-        let params = paramsOfLocalizeRequest(for: frame,
-                                             relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
+        let params = getParams(for: frame, request: request)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -113,7 +132,7 @@ class FMApi {
         FMRestClient.post(
             .localize,
             parameters: params,
-            imageData: data,
+            imageData: imageData,
             token: token,
             completion: postCompletion,
             error: postError
@@ -178,16 +197,10 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func paramsOfLocalizeRequest(for frame: ARFrame,
-                                         relativeOpenCVAnchorPose: FMPose?) -> [String : String] {
-        var params = [String : String]()
-        
-        if let relativeOpenCVAnchorPose = relativeOpenCVAnchorPose {
-            params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
-        }
+    private func getParams(for frame: ARFrame, request: FMLocalizationRequest) -> [String : String?] {
         
         // mock if simulation
-        if delegate == nil || !delegate!.isSimulation {
+        if !request.isSimulation {
             let interfaceOrientation = UIApplication.shared.statusBarOrientation
             
             let pose = FMPose(frame.openCVTransformOfVirtualDeviceInWorldCS)
@@ -199,21 +212,51 @@ class FMApi {
                                           withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                           withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
             
-            let coordinate = delegate!.approximateCoordinate
-            
-            params.merge([
+            let coordinate = request.approximateCoordinate
+
+            let events = request.analytics.frameEvents
+            let frameEventCounts = [
+                "excessiveTilt": events.excessiveTilt,
+                "excessiveBlur": events.excessiveBlur,
+                "excessiveMotion": events.excessiveMotion,
+                "insufficientFeatures": events.insufficientFeatures,
+                "lossOfTracking": events.lossOfTracking,
+                "total": events.total,
+            ]
+
+            var params = [
                 "intrinsics" : intrinsics.toJson(),
                 "gravity" : pose.orientation.toJson(),
                 "capturedAt" : String(NSDate().timeIntervalSince1970),
                 "uuid" : UUID().uuidString,
-                "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}"
-            ]) { (current, _) in current }
-            
+                "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
+
+                // device characteristics
+                "udid": UIDevice.current.identifierForVendor?.uuidString,
+                "deviceModel": UIDevice.current.identifier,
+                "deviceOs": UIDevice.current.correctedSystemName,
+                "deviceOsVersion": UIDevice.current.systemVersion,
+                "sdkVersion": Bundle.fullVersion,
+
+                // session identifiers
+                "appSessionId": request.analytics.appSessionId,
+                "localizationSessionId": request.analytics.localizationSessionId,
+
+                // other analytics
+                "frameEventCounts": frameEventCounts.toJson(),
+                "totalDistance": String(request.analytics.totalDistance),
+                "rotationSpread": request.analytics.rotationSpread.toJson(),
+            ]
+
+            // calculate and send reference frame if anchoring
+            if let relativeOpenCVAnchorPose = request.relativeOpenCVAnchorPose {
+                params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
+            }
+
             return params
         }
         else {
-            return MockData.params(forZone: delegate!.simulationZone,
-                                   relativeOpenCVAnchorPose: relativeOpenCVAnchorPose)
+            return MockData.params(request)
         }
     }
     
@@ -224,23 +267,16 @@ class FMApi {
     ///
     /// - Parameters:
     ///   - frame: Frame to localize
+    ///   - request: Localization request struct
     ///   - Returns: Prepared localization image
-    private func extractDataOfProperlyOrientedImage(of frame: ARFrame) -> Data? {
+    private func imageData(from frame: ARFrame, request: FMLocalizationRequest) -> Data? {
         
         // mock if simulation
-        guard delegate == nil || !delegate!.isSimulation else {
-            return MockData.imageData(forZone: delegate!.simulationZone)
+        guard !request.isSimulation else {
+            return MockData.imageData(request)
         }
 
         let imageData = FMUtility.toJpeg(pixelBuffer: frame.capturedImage, with: frame.deviceOrientation)
         return imageData
-    }
-    
-    private func deviceCharacteristics() -> [String : String] {
-        [
-            "deviceModel"        : UIDevice.current.identifier,          // "iPhone7,1"
-            "deviceOs"           : UIDevice.current.system,              // "iPadOS 14.5"
-            "fantasmoSdkVersion" : Bundle.fullVersion                    // "1.1.18(365)
-        ]
     }
 }

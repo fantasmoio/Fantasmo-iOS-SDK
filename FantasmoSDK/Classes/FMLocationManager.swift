@@ -45,9 +45,7 @@ public extension FMLocationDelegate {
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {}
 }
 
-
-/// Start and stop the delivery of camera-based location events.
-open class FMLocationManager: NSObject, FMApiDelegate {
+open class FMLocationManager: NSObject {
     
     public enum State {
         case stopped        // doing nothing
@@ -62,12 +60,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     
     // Clients can use this to mock the localization call
     public var mockLocalize: ((ARFrame) -> Void)?
-    
-    /// A  boolean value that states whether location updates were started by invoking `startUpdatingLocation()`.
-    public var isLocalizingInProgress: Bool {
-        state != .stopped
-    }
-    
+
     public var logLevel = FMLog.LogLevel.warning {
         didSet {
             log.logLevel = logLevel
@@ -117,16 +110,19 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     private var lastFrame: ARFrame?
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
-    
-    private var accumulatedARKitInfo = AccumulatedARKitInfo()
-    private var frameRejectionStatisticsAccumulator = FrameFilterRejectionStatisticsAccumulator()
-    
+
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
     
     /// States whether the client code using this manager set up connection with the manager.
-    private var isClientOfManagerConnected = false
-    
+    private var isConnected = false
+
+    // MARK: - Analytics Properties
+    private var accumulatedARKitInfo = AccumulatedARKitInfo()
+    private var frameEventAccumulator = FrameFilterRejectionStatisticsAccumulator()
+    private var appSessionId: String? // provided by client
+    private var localizationSessionId: String? // created by SDK
+
     // MARK: -
     
     /// This initializer must be used only for testing purposes. Otherwise use singleton object via `shared` static property.
@@ -146,11 +142,10 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     public func connect(accessToken: String, delegate: FMLocationDelegate) {
         log.debug(parameters: ["delegate": delegate])
 
-        isClientOfManagerConnected = true
+        isConnected = true
         self.delegate = delegate
         
         // set up FMApi
-        FMApi.shared.delegate = self
         FMApi.shared.token = accessToken
     }
 
@@ -170,7 +165,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
                     "session": session,
                     "locationManager": locationManager])
         
-        isClientOfManagerConnected = true
+        isConnected = true
         connect(accessToken: accessToken, delegate: delegate)
         session?.delegate = self
         locationManager?.delegate = self
@@ -179,17 +174,20 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     // MARK: - Public instance methods
     
     /// Starts the generation of updates that report the user’s current location.
-    /// - Parameter sessionID: Ride identifier. Used to keep track of an entire parking session and for billing purposes.
-    ///                 The max length of the string is 64 characters. In the case of excessive length length is truncated.
-    public func startUpdatingLocation(sessionID: String) {
-        precondition(isClientOfManagerConnected, "Connection to the manager was not set up!")
+    /// - Parameter sessionId: Identifier for a unique localization session for use by analytics and billing.
+    ///                 The max length of the string is 64 characters.
+    public func startUpdatingLocation(sessionId: String) {
         log.debug()
-        
-        state = .localizing
+
+        appSessionId = String(sessionId.prefix(64))
+        localizationSessionId = UUID().uuidString
+
         accumulatedARKitInfo.reset()
-        frameRejectionStatisticsAccumulator.reset()
+        frameEventAccumulator.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
+
+        state = .localizing
     }
     
     /// Stops the generation of location updates.
@@ -236,8 +234,8 @@ open class FMLocationManager: NSObject, FMApiDelegate {
     ///
     /// - Parameter frame: Frame to localize.
     internal func localize(frame: ARFrame, from session: ARSession) {
-        guard isLocalizingInProgress else { return }
-        
+        guard isConnected else { return }
+
         log.debug(parameters: ["simulation": isSimulation])
         state = .uploading
         
@@ -249,6 +247,41 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         
         let openCVRelativeAnchorTransform = openCVPoseOfAnchorInVirtualDeviceCS(for: frame)
         let openCVRelativeAnchorPose = openCVRelativeAnchorTransform.map { FMPose($0) }
+
+        // Set up parameters
+
+        let frameEvents = FMFrameEvents(
+            excessiveTilt:
+                (frameEventAccumulator.counts[.pitchTooHigh] ?? 0) +
+                (frameEventAccumulator.counts[.pitchTooLow] ?? 0),
+            excessiveBlur: frameEventAccumulator.counts[.imageTooBlurry] ?? 0,
+            excessiveMotion: frameEventAccumulator.counts[.movingTooFast] ?? 0,
+            insufficientFeatures: frameEventAccumulator.counts[.insufficientFeatures] ?? 0,
+            lossOfTracking: 0, // FIXME
+            total: frameEventAccumulator.total
+        )
+
+        let rotationSpread = FMRotationSpread(
+            pitch: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.pitch.spread,
+            yaw: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.yaw.spread,
+            roll: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.roll.spread
+        )
+
+        let localizationAnalytics =  FMLocalizationAnalytics(
+            appSessionId: appSessionId,
+            localizationSessionId: localizationSessionId,
+            frameEvents: frameEvents,
+            rotationSpread: rotationSpread,
+            totalDistance: accumulatedARKitInfo.totalTranslation
+        )
+
+        let localizationRequest = FMLocalizationRequest(
+            isSimulation: isSimulation,
+            simulationZone: simulationZone,
+            approximateCoordinate: approximateCoordinate,
+            relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
+            analytics: localizationAnalytics
+        )
 
         // Set up completion closure
         let localizeCompletion: FMApi.LocalizationResult = { location, zones in
@@ -275,7 +308,7 @@ open class FMLocationManager: NSObject, FMApiDelegate {
         }
         
         FMApi.shared.sendLocalizationRequest(frame: frame,
-                                             relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
+                                             request: localizationRequest,
                                              completion: localizeCompletion,
                                              error: localizeError)
     }
@@ -314,7 +347,7 @@ extension FMLocationManager : ARSessionDelegate {
         if state == .localizing {
             let filterResult = qualityFrameFilter.accepts(frame)
             if case let .rejected(reason) = filterResult {
-                frameRejectionStatisticsAccumulator.accumulate(filterRejectionReason: reason)
+                frameEventAccumulator.accumulate(filterRejectionReason: reason)
             }
             frameFailureThrottler.onNext(frameFilterResult: filterResult)
             

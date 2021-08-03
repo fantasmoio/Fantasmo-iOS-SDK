@@ -8,20 +8,20 @@
 import ARKit
 
 public enum FMFilterRejectionReason: CaseIterable {
-    case cameraPitchTooLow
-    case cameraPitchTooHigh
+    case pitchTooLow
+    case pitchTooHigh
+    case imageTooBlurry
     case movingTooFast
     case movingTooLittle
-    /// The scene visible to the camera doesn't contain enough distinguishable features for image-based position tracking.
     case insufficientFeatures
     
     func mapToBehaviorRequest() -> FMBehaviorRequest {
         switch self {
-        case .cameraPitchTooLow:
+        case .pitchTooLow:
             return .tiltUp
-        case .cameraPitchTooHigh:
+        case .pitchTooHigh:
             return.tiltDown
-        case .movingTooFast:
+        case .movingTooFast, .imageTooBlurry:
             return .panSlowly
         case .movingTooLittle:
             return .panAround

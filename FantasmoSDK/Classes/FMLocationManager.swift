@@ -76,6 +76,9 @@ open class FMLocationManager: NSObject {
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
 
+    // Fusion
+    private var locationFuser = LocationFuser()
+
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
     
@@ -88,7 +91,7 @@ open class FMLocationManager: NSObject {
     private var appSessionId: String? // provided by client
     private var localizationSessionId: String? // created by SDK
 
-    // MARK: -
+    // MARK: - Testing
     
     /// This initializer must be used only for testing purposes. Otherwise use singleton object via `shared` static property.
     public init(tester: FMLocationManagerTester? = nil) {
@@ -151,6 +154,7 @@ open class FMLocationManager: NSObject {
         frameEventAccumulator.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
+        locationFuser.reset()
 
         state = .localizing
     }
@@ -252,9 +256,9 @@ open class FMLocationManager: NSObject {
         let localizeCompletion: FMApi.LocalizationResult = { location, zones in
             log.debug(parameters: ["location": location, "zones": zones])
 
-            let result = FMLocationResult(location: location, confidence: .high, zones: zones)
-
+            let result = self.locationFuser.fusedResult(location: location, zones: zones)
             self.delegate?.locationManager(didUpdateLocation: result)
+
             if let tester = self.tester {
                 let translation = openCVRelativeAnchorTransform?.inNonOpenCvCS.translation
                 tester.locationManagerDidUpdateLocation(location, translationOfAnchorInVirtualDeviceCS: translation)

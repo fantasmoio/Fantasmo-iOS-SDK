@@ -61,7 +61,7 @@ class FMApi {
     ///
     /// - Parameters:
     ///   - frame: The current ARFrame as given by ARSession
-    ///   - relativeOpenCVAnchorPose: Pose of anchor coordinate system
+    ///   - request: Localization request struct
     ///   - completion: Completion closure
     ///   - error: Error closure
     func sendLocalizationRequest(frame: ARFrame,
@@ -267,6 +267,7 @@ class FMApi {
     ///
     /// - Parameters:
     ///   - frame: Frame to localize
+    ///   - request: Localization request struct
     ///   - Returns: Prepared localization image
     private func imageData(from frame: ARFrame, request: FMLocalizationRequest) -> Data? {
         

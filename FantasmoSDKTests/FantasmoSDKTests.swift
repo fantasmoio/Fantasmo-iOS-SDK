@@ -19,9 +19,6 @@ class FantasmoSDKTests: XCTestCase {
     }
 
     func testGeometricMedian() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-
         var locations: [CLLocation] = []
         var median = CLLocation()
         var expected = CLLocation()
@@ -67,15 +64,43 @@ class FantasmoSDKTests: XCTestCase {
         XCTAssertLessThan(median.degreeDistance(from: expected), 0.01)
     }
 
+    func testGeometricMedianColinear() throws {
+        var locations: [CLLocation] = []
+        var median = CLLocation()
+        var expected = CLLocation()
+
+        locations = []
+        locations.append(CLLocation(latitude: 0, longitude: 0))
+        locations.append(CLLocation(latitude: 0, longitude: 10))
+        median = CLLocation.geometricMedian(locations)
+        print(median.coordinate)
+
+        expected = CLLocation(latitude: 0, longitude: 5);
+        XCTAssertLessThan(median.degreeDistance(from: expected), 0.01)
+
+        locations.append(CLLocation(latitude: 0, longitude: 20))
+        median = CLLocation.geometricMedian(locations)
+        print(median.coordinate)
+
+        expected = CLLocation(latitude: 0, longitude: 10);
+        XCTAssertLessThan(median.degreeDistance(from: expected), 0.01)
+    }
+
     func testLocationFusion() {
         var fuser = LocationFuser()
-        var coordinate = CLLocationCoordinate2D()
+        var result: FMLocationResult
 
-        coordinate = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 0), zones: nil).location.coordinate
-        print(coordinate)
+        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 0), zones: nil)
+        print(result.location.coordinate)
+        print(result.confidence)
 
-        coordinate = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 10), zones: nil).location.coordinate
-        print(coordinate)
+        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 10), zones: nil)
+        print(result.location.coordinate)
+        print(result.confidence)
+
+        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 20), zones: nil)
+        print(result.location.coordinate)
+        print(result.confidence)
     }
 
 //    func testPerformanceExample() throws {

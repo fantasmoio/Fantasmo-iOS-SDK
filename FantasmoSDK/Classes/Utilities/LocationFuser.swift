@@ -16,6 +16,18 @@ struct LocationFuser {
         results = []
     }
 
+    private func geometricMean(_ results: [CLLocation]) -> CLLocation {
+        var x = 0.0
+        var y = 0.0
+        for result in results {
+            x += result.coordinate.latitude
+            y += result.coordinate.longitude
+        }
+        x /= Double(results.count)
+        y /= Double(results.count)
+        return CLLocation(latitude: x, longitude: y)
+    }
+
     private func geometricMedian(_ results: [CLLocation]) -> CLLocation {
         for _ in results {
             // FIXME calculate median

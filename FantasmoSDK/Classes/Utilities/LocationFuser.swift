@@ -10,30 +10,24 @@ import CoreLocation
 
 struct LocationFuser {
 
-    struct InterimResult {
-        var location: CLLocation
-        var zones: [FMZone]?
-    }
-
-    // TODO maybe just use [CLLocation] here, depending on how we intend to deal with zones
-    var results: [InterimResult] = []
+    var results: [CLLocation] = []
 
     mutating func reset() {
         results = []
     }
 
-    private func geometricMedian(_ results: [InterimResult]) -> CLLocation {
+    private func geometricMedian(_ results: [CLLocation]) -> CLLocation {
         for _ in results {
             // FIXME calculate median
         }
         return CLLocation()
     }
 
-    private func medianOfAbsoluteDistances(_ results: [InterimResult], _ median: CLLocation) -> Double {
+    private func medianOfAbsoluteDistances(_ results: [CLLocation], _ median: CLLocation) -> Double {
         var distances: [Double] = []
 
         for result in results {
-            let distance = abs(result.location.distance(from: median))
+            let distance = abs(result.distance(from: median))
             distances.append(distance)
         }
 
@@ -44,13 +38,13 @@ struct LocationFuser {
         }
     }
 
-    private func classifyInliers(_ results: [InterimResult]) -> [InterimResult] {
+    private func classifyInliers(_ results: [CLLocation]) -> [CLLocation] {
         let median = geometricMedian(results)
         let mad = medianOfAbsoluteDistances(results, median)
 
-        var inliers: [InterimResult] = []
+        var inliers: [CLLocation] = []
         for result in results {
-            let distance = abs(result.location.distance(from: median))
+            let distance = abs(result.distance(from: median))
             if 0.6745 * distance / mad <= 3.5 {
                 inliers.append(result)
             }
@@ -58,7 +52,7 @@ struct LocationFuser {
         return inliers
     }
 
-    private func calculateConfidence(_ results: [InterimResult]) -> FMResultConfidence {
+    private func calculateConfidence(_ results: [CLLocation]) -> FMResultConfidence {
         switch results.count {
         case 1, 2:
             return .low
@@ -70,7 +64,7 @@ struct LocationFuser {
     }
 
     mutating func fusedResult(location: CLLocation, zones: [FMZone]?) -> FMLocationResult {
-        results.append(InterimResult(location: location, zones: zones))
+        results.append(location)
 
         let inliers = classifyInliers(results)
         let median = geometricMedian(inliers)

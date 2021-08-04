@@ -37,6 +37,9 @@
 		A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34626B91D1F00525308 /* LocationFuser.swift */; };
 		A02EA34926B9253900525308 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34826B9253900525308 /* Array+Extension.swift */; };
 		A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */; };
+		A0D0C57326BAB95A00F35448 /* LocationFuser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34626B91D1F00525308 /* LocationFuser.swift */; };
+		A0D0C57426BAB96100F35448 /* FMLocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34426B9154D00525308 /* FMLocationDelegate.swift */; };
+		A0D0C57526BAB96500F35448 /* FMZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AA25921BF3005B1145 /* FMZone.swift */; };
 		A0D5E88A26BA97DA00CE5B1C /* FantasmoSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D5E88926BA97DA00CE5B1C /* FantasmoSDKTests.swift */; };
 		A0D5E88C26BA97DA00CE5B1C /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; };
 		A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */; };
@@ -570,10 +573,13 @@
 			files = (
 				A0D5E89326BA98ED00CE5B1C /* Array+Extension.swift in Sources */,
 				A0D5E89526BAA54300CE5B1C /* FMError.swift in Sources */,
+				A0D0C57426BAB96100F35448 /* FMLocationDelegate.swift in Sources */,
 				A0D5E88A26BA97DA00CE5B1C /* FantasmoSDKTests.swift in Sources */,
 				A0D5E89626BAA56100CE5B1C /* ErrorResponse.swift in Sources */,
 				A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */,
 				A0D5E89426BAA51F00CE5B1C /* FMLog.swift in Sources */,
+				A0D0C57326BAB95A00F35448 /* LocationFuser.swift in Sources */,
+				A0D0C57526BAB96500F35448 /* FMZone.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

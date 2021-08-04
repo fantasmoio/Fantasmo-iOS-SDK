@@ -63,8 +63,19 @@ class FantasmoSDKTests: XCTestCase {
         locations.append(CLLocation(latitude: 15, longitude: 15))
         median = CLLocation.geometricMedian(locations)
         print(median.coordinate)
-        
+
         XCTAssertLessThan(median.degreeDistance(from: expected), 0.01)
+    }
+
+    func testLocationFusion() {
+        var fuser = LocationFuser()
+        var coordinate = CLLocationCoordinate2D()
+
+        coordinate = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 0), zones: nil).location.coordinate
+        print(coordinate)
+
+        coordinate = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 10), zones: nil).location.coordinate
+        print(coordinate)
     }
 
 //    func testPerformanceExample() throws {

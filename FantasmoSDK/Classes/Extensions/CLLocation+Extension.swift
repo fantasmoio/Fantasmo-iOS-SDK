@@ -51,35 +51,35 @@ extension CLLocation {
         }
 
         var converged = false
-        var distances: [Double] = []
+        var sumsOfSquares: [Double] = []
         var iteration = 0
         while !converged && iteration < maxIterations {
             var x = 0.0
             var y = 0.0
-            var denum = 0.0
-            var d = 0.0
+            var denominator = 0.0 // Weiszfeld denominator
+            var sumOfSquares = 0.0
             let medianLocation = CLLocation(latitude: median.latitude, longitude: median.longitude)
             for location in locations {
                 let distance = location.degreeDistance(from: medianLocation)
                 x += location.coordinate.latitude / distance
                 y += location.coordinate.longitude / distance
-                denum += 1.0 / distance
-                d += distance * distance
+                denominator += 1.0 / distance
+                sumOfSquares += distance * distance
             }
-            distances.append(d)
+            sumsOfSquares.append(sumOfSquares)
 
-            if denum == 0 {
+            if denominator == 0 {
                 log.error("Could not compute median!")
                 return CLLocation()
             }
 
             // update our guess for the median
-            median.latitude = x / denum
-            median.longitude = y / denum
+            median.latitude = x / denominator
+            median.longitude = y / denominator
 
             // test convergence
             if iteration > 3 {
-                converged = abs(distances[iteration] - distances[iteration-2]) < 0.1
+                converged = abs(sumsOfSquares[iteration] - sumsOfSquares[iteration-2]) < 0.1
             }
 
             iteration += 1

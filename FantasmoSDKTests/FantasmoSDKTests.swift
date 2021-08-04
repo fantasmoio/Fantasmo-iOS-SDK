@@ -26,12 +26,14 @@ class FantasmoSDKTests: XCTestCase {
         var median = CLLocation()
         var expected = CLLocation()
 
-//        locations.append(CLLocation(latitude: 0, longitude: 0))
-//        median = CLLocation.geometricMedian(locations)
-//        print(median.coordinate)
+        locations.append(CLLocation(latitude: 0, longitude: 0))
+        median = CLLocation.geometricMedian(locations)
+        print(median.coordinate)
 
-//        XCTAssertEqual(median, CLLocation(latitude: 0, longitude: 0))
+        expected = CLLocation(latitude: 0, longitude: 0);
+        XCTAssertLessThan(median.degreeDistance(from: expected), 0.001)
 
+        locations = []
         locations.append(CLLocation(latitude: 10, longitude: 0))
         locations.append(CLLocation(latitude: -10, longitude: 0))
         median = CLLocation.geometricMedian(locations)

@@ -30,6 +30,15 @@ extension CLLocation {
     }
 
     static func geometricMedian(_ locations: [CLLocation], maxIterations: Int = 200) -> CLLocation {
+        guard locations.count > 0 else {
+            log.error("Empty list. Could not compute median!")
+            return CLLocation(latitude: Double.nan, longitude: Double.nan)
+        }
+
+        guard locations.count != 1 else {
+            return locations.first!
+        }
+
         // initialize guess to the centroid
         var median = geometricMean(locations).coordinate
 

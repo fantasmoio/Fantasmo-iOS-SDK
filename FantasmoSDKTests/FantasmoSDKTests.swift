@@ -48,6 +48,23 @@ class FantasmoSDKTests: XCTestCase {
 
         expected = CLLocation(latitude: 0, longitude: 5.77);
         XCTAssertLessThan(median.degreeDistance(from: expected), 0.01)
+
+        locations = []
+        locations.append(CLLocation(latitude: 10, longitude: 10))
+        locations.append(CLLocation(latitude: 20, longitude: 10))
+        locations.append(CLLocation(latitude: 10, longitude: 20))
+        locations.append(CLLocation(latitude: 20, longitude: 20))
+        median = CLLocation.geometricMedian(locations)
+        print(median.coordinate)
+
+        expected = CLLocation(latitude: 15, longitude: 15);
+        XCTAssertLessThan(median.degreeDistance(from: expected), 0.01)
+
+        locations.append(CLLocation(latitude: 15, longitude: 15))
+        median = CLLocation.geometricMedian(locations)
+        print(median.coordinate)
+        
+        XCTAssertLessThan(median.degreeDistance(from: expected), 0.01)
     }
 
 //    func testPerformanceExample() throws {

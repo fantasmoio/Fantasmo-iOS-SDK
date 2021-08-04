@@ -35,7 +35,7 @@ extension CLLocation {
             return CLLocation(latitude: Double.nan, longitude: Double.nan)
         }
 
-        guard locations.count != 1 else {
+        guard locations.count > 1 else {
             return locations.first!
         }
 
@@ -108,6 +108,15 @@ extension CLLocation {
     }
 
     static func classifyInliers(_ locations: [CLLocation]) -> [CLLocation] {
+        guard locations.count > 0 else {
+            log.error("Empty list. Could not classify inliers!")
+            return locations
+        }
+
+        guard locations.count > 1 else {
+            return locations
+        }
+
         let median = geometricMedian(locations)
         let mad = medianOfAbsoluteDistances(locations, median)
 

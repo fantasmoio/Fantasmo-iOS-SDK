@@ -9,6 +9,14 @@ import Foundation
 import CoreLocation
 
 extension CLLocation {
+
+    /// Calculate distance treating lat and long as unitless Cartesian coordinates
+    func degreeDistance(from: CLLocation) -> Double {
+        let dLat = coordinate.latitude - from.coordinate.latitude
+        let dLon = coordinate.longitude - from.coordinate.longitude
+        return sqrt(dLat * dLat + dLon * dLon)
+    }
+
     static func geometricMean(_ locations: [CLLocation]) -> CLLocation {
         var x = 0.0
         var y = 0.0
@@ -43,7 +51,7 @@ extension CLLocation {
             var d = 0.0
             let medianLocation = CLLocation(latitude: median.latitude, longitude: median.longitude)
             for location in locations {
-                let distance = location.distance(from: medianLocation)
+                let distance = location.degreeDistance(from: medianLocation)
                 x += location.coordinate.latitude / distance
                 y += location.coordinate.longitude / distance
                 denum += 1.0 / distance
@@ -79,7 +87,7 @@ extension CLLocation {
         var distances: [Double] = []
 
         for location in locations {
-            let distance = abs(location.distance(from: median))
+            let distance = abs(location.degreeDistance(from: median))
             distances.append(distance)
         }
 
@@ -96,7 +104,7 @@ extension CLLocation {
 
         var inliers: [CLLocation] = []
         for location in locations {
-            let distance = abs(location.distance(from: median))
+            let distance = abs(location.degreeDistance(from: median))
             if 0.6745 * distance / mad <= 3.5 {
                 inliers.append(location)
             }

@@ -10,36 +10,36 @@ import CoreLocation
 
 struct LocationFuser {
 
-    var results: [CLLocation] = []
+    var locations: [CLLocation] = []
 
     mutating func reset() {
-        results = []
+        locations = []
     }
 
-    private func geometricMean(_ results: [CLLocation]) -> CLLocation {
+    private func geometricMean(_ locations: [CLLocation]) -> CLLocation {
         var x = 0.0
         var y = 0.0
-        for result in results {
-            x += result.coordinate.latitude
-            y += result.coordinate.longitude
+        for location in locations {
+            x += location.coordinate.latitude
+            y += location.coordinate.longitude
         }
-        x /= Double(results.count)
-        y /= Double(results.count)
+        x /= Double(locations.count)
+        y /= Double(locations.count)
         return CLLocation(latitude: x, longitude: y)
     }
 
-    private func geometricMedian(_ results: [CLLocation]) -> CLLocation {
-        for _ in results {
+    private func geometricMedian(_ locations: [CLLocation]) -> CLLocation {
+        for _ in locations {
             // FIXME calculate median
         }
         return CLLocation()
     }
 
-    private func medianOfAbsoluteDistances(_ results: [CLLocation], _ median: CLLocation) -> Double {
+    private func medianOfAbsoluteDistances(_ locations: [CLLocation], _ median: CLLocation) -> Double {
         var distances: [Double] = []
 
-        for result in results {
-            let distance = abs(result.distance(from: median))
+        for location in locations {
+            let distance = abs(location.distance(from: median))
             distances.append(distance)
         }
 
@@ -50,22 +50,22 @@ struct LocationFuser {
         }
     }
 
-    private func classifyInliers(_ results: [CLLocation]) -> [CLLocation] {
-        let median = geometricMedian(results)
-        let mad = medianOfAbsoluteDistances(results, median)
+    private func classifyInliers(_ locations: [CLLocation]) -> [CLLocation] {
+        let median = geometricMedian(locations)
+        let mad = medianOfAbsoluteDistances(locations, median)
 
         var inliers: [CLLocation] = []
-        for result in results {
-            let distance = abs(result.distance(from: median))
+        for location in locations {
+            let distance = abs(location.distance(from: median))
             if 0.6745 * distance / mad <= 3.5 {
-                inliers.append(result)
+                inliers.append(location)
             }
         }
         return inliers
     }
 
-    private func calculateConfidence(_ results: [CLLocation]) -> FMResultConfidence {
-        switch results.count {
+    private func calculateConfidence(_ locations: [CLLocation]) -> FMResultConfidence {
+        switch locations.count {
         case 1, 2:
             return .low
         case 3, 4:
@@ -76,11 +76,11 @@ struct LocationFuser {
     }
 
     mutating func fusedResult(location: CLLocation, zones: [FMZone]?) -> FMLocationResult {
-        results.append(location)
+        locations.append(location)
 
-        let inliers = classifyInliers(results)
+        let inliers = classifyInliers(locations)
         let median = geometricMedian(inliers)
-        let confidence = calculateConfidence(results)
+        let confidence = calculateConfidence(locations)
 
         return FMLocationResult(location: median, confidence: confidence, zones: zones)
     }

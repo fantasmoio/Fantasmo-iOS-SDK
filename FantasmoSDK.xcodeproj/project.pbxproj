@@ -37,6 +37,13 @@
 		A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34626B91D1F00525308 /* LocationFuser.swift */; };
 		A02EA34926B9253900525308 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34826B9253900525308 /* Array+Extension.swift */; };
 		A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */; };
+		A0D5E88A26BA97DA00CE5B1C /* FantasmoSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D5E88926BA97DA00CE5B1C /* FantasmoSDKTests.swift */; };
+		A0D5E88C26BA97DA00CE5B1C /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; };
+		A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */; };
+		A0D5E89326BA98ED00CE5B1C /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34826B9253900525308 /* Array+Extension.swift */; };
+		A0D5E89426BAA51F00CE5B1C /* FMLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646BF260CE46C00A7FA6B /* FMLog.swift */; };
+		A0D5E89526BAA54300CE5B1C /* FMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A425921BF3005B1145 /* FMError.swift */; };
+		A0D5E89626BAA56100CE5B1C /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AF25921BF3005B1145 /* ErrorResponse.swift */; };
 		A30EBE09269F32B200E572FA /* AccumulatedARKitInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */; };
 		A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */; };
 		A34459EF26A8244F00C96205 /* EulerAngleSpreads.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */; };
@@ -67,6 +74,16 @@
 		A3CB773F263710D2009625BB /* simd_float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */; };
 		A3CB774226372A9B009625BB /* simd_quatf+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB774126372A9B009625BB /* simd_quatf+Extension.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A0D5E88D26BA97DA00CE5B1C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9468388225921BAF005B1145 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9468388A25921BAF005B1145;
+			remoteInfo = FantasmoSDK;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		9468388B25921BAF005B1145 /* FantasmoSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FantasmoSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +119,9 @@
 		A02EA34626B91D1F00525308 /* LocationFuser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFuser.swift; sourceTree = "<group>"; };
 		A02EA34826B9253900525308 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extension.swift"; sourceTree = "<group>"; };
+		A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FantasmoSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0D5E88926BA97DA00CE5B1C /* FantasmoSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FantasmoSDKTests.swift; sourceTree = "<group>"; };
+		A0D5E88B26BA97DA00CE5B1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccumulatedARKitInfo.swift; sourceTree = "<group>"; };
 		A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalDeviceTranslationAccumulator.swift; sourceTree = "<group>"; };
 		A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EulerAngleSpreads.swift; sourceTree = "<group>"; };
@@ -141,6 +161,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A0D5E88426BA97DA00CE5B1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0D5E88C26BA97DA00CE5B1C /* FantasmoSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -148,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				9468388D25921BAF005B1145 /* FantasmoSDK */,
+				A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */,
 				9468388C25921BAF005B1145 /* Products */,
 				946838E025921DFE005B1145 /* Frameworks */,
 				A3445A0226A8967300C96205 /* Recovered References */,
@@ -158,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				9468388B25921BAF005B1145 /* FantasmoSDK.framework */,
+				A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -266,6 +296,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */ = {
+			isa = PBXGroup;
+			children = (
+				A0D5E88926BA97DA00CE5B1C /* FantasmoSDKTests.swift */,
+				A0D5E88B26BA97DA00CE5B1C /* Info.plist */,
+			);
+			path = FantasmoSDKTests;
 			sourceTree = "<group>";
 		};
 		A30EBE0A269F32C400E572FA /* Analytics */ = {
@@ -388,16 +427,38 @@
 			productReference = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		A0D5E88626BA97DA00CE5B1C /* FantasmoSDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0D5E88F26BA97DA00CE5B1C /* Build configuration list for PBXNativeTarget "FantasmoSDKTests" */;
+			buildPhases = (
+				A0D5E88326BA97DA00CE5B1C /* Sources */,
+				A0D5E88426BA97DA00CE5B1C /* Frameworks */,
+				A0D5E88526BA97DA00CE5B1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A0D5E88E26BA97DA00CE5B1C /* PBXTargetDependency */,
+			);
+			name = FantasmoSDKTests;
+			productName = FantasmoSDKTests;
+			productReference = A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		9468388225921BAF005B1145 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
 					9468388A25921BAF005B1145 = {
 						CreatedOnToolsVersion = 12.2;
+					};
+					A0D5E88626BA97DA00CE5B1C = {
+						CreatedOnToolsVersion = 12.5.1;
 					};
 				};
 			};
@@ -415,6 +476,7 @@
 			projectRoot = "";
 			targets = (
 				9468388A25921BAF005B1145 /* FantasmoSDK */,
+				A0D5E88626BA97DA00CE5B1C /* FantasmoSDKTests */,
 			);
 		};
 /* End PBXProject section */
@@ -425,6 +487,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				946838BE25921BF3005B1145 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0D5E88526BA97DA00CE5B1C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -495,7 +564,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A0D5E88326BA97DA00CE5B1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0D5E89326BA98ED00CE5B1C /* Array+Extension.swift in Sources */,
+				A0D5E89526BAA54300CE5B1C /* FMError.swift in Sources */,
+				A0D5E88A26BA97DA00CE5B1C /* FantasmoSDKTests.swift in Sources */,
+				A0D5E89626BAA56100CE5B1C /* ErrorResponse.swift in Sources */,
+				A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */,
+				A0D5E89426BAA51F00CE5B1C /* FMLog.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A0D5E88E26BA97DA00CE5B1C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9468388A25921BAF005B1145 /* FantasmoSDK */;
+			targetProxy = A0D5E88D26BA97DA00CE5B1C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9468389125921BAF005B1145 /* Debug */ = {
@@ -674,6 +764,44 @@
 			};
 			name = Release;
 		};
+		A0D5E89026BA97DA00CE5B1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8V8339VAMG;
+				INFOPLIST_FILE = FantasmoSDKTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = fantasmo.FantasmoSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A0D5E89126BA97DA00CE5B1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8V8339VAMG;
+				INFOPLIST_FILE = FantasmoSDKTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = fantasmo.FantasmoSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -691,6 +819,15 @@
 			buildConfigurations = (
 				9468389425921BAF005B1145 /* Debug */,
 				9468389525921BAF005B1145 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A0D5E88F26BA97DA00CE5B1C /* Build configuration list for PBXNativeTarget "FantasmoSDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0D5E89026BA97DA00CE5B1C /* Debug */,
+				A0D5E89126BA97DA00CE5B1C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -36,6 +36,7 @@
 		A02EA34526B9154D00525308 /* FMLocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34426B9154D00525308 /* FMLocationDelegate.swift */; };
 		A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34626B91D1F00525308 /* LocationFuser.swift */; };
 		A02EA34926B9253900525308 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34826B9253900525308 /* Array+Extension.swift */; };
+		A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */; };
 		A30EBE09269F32B200E572FA /* AccumulatedARKitInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */; };
 		A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */; };
 		A34459EF26A8244F00C96205 /* EulerAngleSpreads.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */; };
@@ -100,6 +101,7 @@
 		A02EA34426B9154D00525308 /* FMLocationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationDelegate.swift; sourceTree = "<group>"; };
 		A02EA34626B91D1F00525308 /* LocationFuser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFuser.swift; sourceTree = "<group>"; };
 		A02EA34826B9253900525308 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
+		A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extension.swift"; sourceTree = "<group>"; };
 		A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccumulatedARKitInfo.swift; sourceTree = "<group>"; };
 		A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalDeviceTranslationAccumulator.swift; sourceTree = "<group>"; };
 		A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EulerAngleSpreads.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */,
 				A3798CA426AAF52D007CB41F /* ARCamera+Extension.swift */,
 				946838B825921BF3005B1145 /* CGImage+Extension.swift */,
+				A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */,
 				946838B725921BF3005B1145 /* Codable+Extension.swift */,
 				946838B625921BF3005B1145 /* Dictionary+Extension.swift */,
 				946838B425921BF3005B1145 /* UIImage+Extension.swift */,
@@ -481,6 +484,7 @@
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,
 				A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */,
+				A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */,
 				A3BA03BB263B6C7D00524D66 /* Angle.swift in Sources */,
 				A02646BB260CE44900A7FA6B /* FMApiRouter.swift in Sources */,
 				A359099D269DBBC100A7BF5F /* Bundle+Extension.swift in Sources */,

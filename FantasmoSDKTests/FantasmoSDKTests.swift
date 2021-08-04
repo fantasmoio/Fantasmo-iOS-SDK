@@ -89,18 +89,57 @@ class FantasmoSDKTests: XCTestCase {
     func testLocationFusion() {
         var fuser = LocationFuser()
         var result: FMLocationResult
+        var expected = CLLocation()
 
         result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 0), zones: nil)
         print(result.location.coordinate)
         print(result.confidence)
 
+        expected = CLLocation(latitude: 0, longitude: 0);
+        XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
+        XCTAssertEqual(result.confidence, .low)
+
         result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 10), zones: nil)
         print(result.location.coordinate)
         print(result.confidence)
 
+        expected = CLLocation(latitude: 0, longitude: 5);
+        XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
+        XCTAssertEqual(result.confidence, .low)
+
         result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 20), zones: nil)
         print(result.location.coordinate)
         print(result.confidence)
+
+        expected = CLLocation(latitude: 0, longitude: 10);
+        XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
+        XCTAssertEqual(result.confidence, .medium)
+    }
+
+    func testLocationFusionOutliers() {
+        var fuser = LocationFuser()
+        var result: FMLocationResult
+        var expected = CLLocation()
+
+        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 0), zones: nil)
+        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 10), zones: nil)
+        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 20), zones: nil)
+
+        result = fuser.fusedResult(location: CLLocation(latitude: 100, longitude: 20), zones: nil)
+        print(result.location.coordinate)
+        print(result.confidence)
+
+        expected = CLLocation(latitude: 0, longitude: 10);
+        XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
+        XCTAssertEqual(result.confidence, .medium)
+
+        result = fuser.fusedResult(location: CLLocation(latitude: 100, longitude: 20), zones: nil)
+        print(result.location.coordinate)
+        print(result.confidence)
+
+        expected = CLLocation(latitude: 0, longitude: 10);
+        XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
+        XCTAssertEqual(result.confidence, .high)
     }
 
 //    func testPerformanceExample() throws {

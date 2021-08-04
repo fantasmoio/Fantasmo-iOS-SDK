@@ -48,6 +48,7 @@ extension CLLocation {
             $0.coordinate.latitude == median.latitude
         }).isEmpty {
             median.latitude += 0.1
+            median.longitude += 0.1
         }
 
         var converged = false

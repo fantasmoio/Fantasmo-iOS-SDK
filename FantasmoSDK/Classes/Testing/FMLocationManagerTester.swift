@@ -17,5 +17,5 @@ public protocol FMLocationManagerTester: AnyObject {
     /// - Parameter translationOfAnchorInVirtualDeviceCS: Translation of anchor in non-OpenCV coordinate system of virtual device.
     ///     Provided only in "anchoring" mode, otherwise `nil`.
     ///     For details about virtual device see comment to `ARFrame.transformOfVirtualDeviceInWorldCS`
-    func locationManagerDidUpdateLocation(_ location: CLLocation, translationOfAnchorInVirtualDeviceCS: simd_float3?)
+    func locationManager(didUpdateLocation result: FMLocationResult, translationOfAnchorInVirtualDeviceCS: simd_float3?)
 }

@@ -262,7 +262,7 @@ open class FMLocationManager: NSObject {
 
             if let tester = self.tester {
                 let translation = openCVRelativeAnchorTransform?.inNonOpenCvCS.translation
-                tester.locationManagerDidUpdateLocation(location, translationOfAnchorInVirtualDeviceCS: translation)
+                tester.locationManager(didUpdateLocation: result, translationOfAnchorInVirtualDeviceCS: translation)
             }
             
             if self.state != .stopped {

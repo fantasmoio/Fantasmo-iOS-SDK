@@ -108,8 +108,7 @@ override func viewDidLoad() {
 }
 
 extension ViewController: FMLocationDelegate {
-    func locationManager(didUpdateLocation location: CLLocation, 
-                         withZones zones: [FMZone]?) {
+    func locationManager(didUpdateLocation result: FMLocationResult) {
         // Handle location update
     }
     
@@ -175,12 +174,23 @@ To stop location updates:
 FMLocationManager.shared.stopUpdatingLocation()
 ```
 
-Location events are be provided through `FMLocationDelegate`.
+Location events are be provided through `FMLocationDelegate`. Confidence in the location result increases during successive updates. Clients can choose to stop location updates when a desired confidence threshold is reached.
 
 ```swift
+public enum FMResultConfidence {
+    case low
+    case medium
+    case high
+}
+
+public struct FMLocationResult {
+    public var location: CLLocation
+    public var confidence: FMResultConfidence
+    public var zones: [FMZone]?
+}
+
 extension ViewController: FMLocationDelegate {
-    func locationManager(didUpdateLocation location: CLLocation, 
-                         withZones zones: [FMZone]?) {
+    func locationManager(didUpdateLocation result: FMLocationResult) {
         // Handle location update
     }
     

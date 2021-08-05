@@ -12,6 +12,17 @@ public enum FMResultConfidence {
     case low
     case medium
     case high
+
+    public func abbreviation() -> String {
+        switch self {
+        case .low:
+            return "L"
+        case .medium:
+            return "M"
+        case .high:
+            return "H"
+        }
+    }
 }
 
 public struct FMLocationResult {

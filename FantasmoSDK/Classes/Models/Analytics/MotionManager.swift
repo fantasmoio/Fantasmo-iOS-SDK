@@ -11,11 +11,11 @@ import CoreMotion
 /// Encapsulates device motion updates used for getting magnetometer data
 /// If no data is gathered, an all-zero field is return
 class MotionManager {
-    private var motionManager: CMMotionManager {
+    lazy private var motionManager: CMMotionManager = {
         let motionManager = CMMotionManager()
         motionManager.deviceMotionUpdateInterval = 1.0/15.0
         return motionManager
-    }
+    }()
     private(set) var magneticField = MagneticField()
 
     struct MagneticField: Codable {
@@ -26,7 +26,9 @@ class MotionManager {
 
     func restart() {
         magneticField = MagneticField()
-        motionManager.startDeviceMotionUpdates(to: .main) { (motion, error) in
+        motionManager.startDeviceMotionUpdates(
+            using: CMAttitudeReferenceFrame.xArbitraryCorrectedZVertical,
+            to: .main) { (motion, error) in
             if let field = motion?.magneticField.field {
                 self.magneticField = MagneticField(x: field.x, y: field.y, z: field.z)
             }

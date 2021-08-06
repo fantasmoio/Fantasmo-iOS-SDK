@@ -91,6 +91,7 @@ open class FMLocationManager: NSObject {
     private var frameEventAccumulator = FrameFilterRejectionStatisticsAccumulator()
     private var appSessionId: String? // provided by client
     private var localizationSessionId: String? // created by SDK
+    private let motionManager = MotionManager()
 
     // MARK: - Testing
     
@@ -155,6 +156,7 @@ open class FMLocationManager: NSObject {
         frameEventAccumulator.reset()
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
+        motionManager.restart()
         locationFuser.reset()
 
         state = .localizing
@@ -163,6 +165,9 @@ open class FMLocationManager: NSObject {
     /// Stops the generation of location updates.
     public func stopUpdatingLocation() {
         log.debug()
+
+        motionManager.stop()
+
         state = .stopped
     }
     
@@ -227,7 +232,9 @@ open class FMLocationManager: NSObject {
             excessiveBlur: frameEventAccumulator.counts[.imageTooBlurry] ?? 0,
             excessiveMotion: frameEventAccumulator.counts[.movingTooFast] ?? 0,
             insufficientFeatures: frameEventAccumulator.counts[.insufficientFeatures] ?? 0,
-            lossOfTracking: 0, // FIXME
+            lossOfTracking:
+                accumulatedARKitInfo.trackingStateStatistics.framesWithNotAvailableTracking +
+                accumulatedARKitInfo.trackingStateStatistics.framesWithLimitedTrackingState,
             total: frameEventAccumulator.total
         )
 
@@ -242,7 +249,8 @@ open class FMLocationManager: NSObject {
             localizationSessionId: localizationSessionId,
             frameEvents: frameEvents,
             rotationSpread: rotationSpread,
-            totalDistance: accumulatedARKitInfo.totalTranslation
+            totalDistance: accumulatedARKitInfo.totalTranslation,
+            magneticField: motionManager.magneticField
         )
 
         let localizationRequest = FMLocalizationRequest(

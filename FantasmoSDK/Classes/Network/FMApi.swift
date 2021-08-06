@@ -7,6 +7,7 @@
 
 import Foundation
 import ARKit
+import CoreMotion
 
 struct FMLocalizationRequest {
     var isSimulation: Bool
@@ -22,6 +23,7 @@ struct FMLocalizationAnalytics {
     var frameEvents: FMFrameEvents
     var rotationSpread: FMRotationSpread
     var totalDistance: Float
+    var magneticField: MotionManager.MagneticField
 }
 
 struct FMRotationSpread: Codable {
@@ -246,6 +248,7 @@ class FMApi {
                 "frameEventCounts": frameEventCounts.toJson(),
                 "totalDistance": String(request.analytics.totalDistance),
                 "rotationSpread": request.analytics.rotationSpread.toJson(),
+                "magneticData": request.analytics.magneticField.toJson(),
             ]
 
             // calculate and send reference frame if anchoring

@@ -18,7 +18,7 @@ class FMCompoundFrameQualityFilter {
     private var timestampOfLastAcceptedFrame: clock_t?
     
     /// The number of seconds after which we forcibly accept a frame.
-    private var acceptanceThreshold = 6.0
+    private var acceptanceThreshold = 3.0
     
     /// Filter collection, in order of increasing computational cost
     private let filters: [FMFrameFilter] = [

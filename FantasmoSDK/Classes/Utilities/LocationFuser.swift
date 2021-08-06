@@ -8,6 +8,8 @@
 import Foundation
 import CoreLocation
 
+/// Fuses a series of locations using a geometric median calculation that ingores outliers
+/// and provides a confidence value, which grows as more locations are provided.
 struct LocationFuser {
 
     var locations: [CLLocation] = []
@@ -27,7 +29,12 @@ struct LocationFuser {
         }
     }
 
-    mutating func fusedResult(location: CLLocation, zones: [FMZone]?) -> FMLocationResult {
+    /// Returns a new location based on a fusion of previously accumulated locations
+    ///
+    /// - Parameters:
+    ///   - location: New location to be combined with previous observations
+    ///   - zones: Zones at this location
+    mutating func locationFusedWithNew(location: CLLocation, zones: [FMZone]?) -> FMLocationResult {
         locations.append(location)
 
         let inliers = CLLocation.classifyInliers(locations)

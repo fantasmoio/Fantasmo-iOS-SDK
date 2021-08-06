@@ -66,7 +66,7 @@ open class FMLocationManager: NSObject {
     
     private var qualityFrameFilter = FMCompoundFrameQualityFilter()
     
-    /// Throttler allowing to notify delegate of "behaviour request" not too often when qulity of captured frames is too low
+    /// Throttler allowing to notify delegate of "behaviour request" not too often when quality of captured frames is too low
     private lazy var frameFailureThrottler = FrameRejectionThrottler { [weak self] rejectionReason in
         let behaviorRequest = rejectionReason.mapToBehaviorRequest()
         self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
@@ -257,7 +257,7 @@ open class FMLocationManager: NSObject {
         let localizeCompletion: FMApi.LocalizationResult = { location, zones in
             log.debug(parameters: ["location": location, "zones": zones])
 
-            let result = self.locationFuser.fusedResult(location: location, zones: zones)
+            let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
             self.delegate?.locationManager(didUpdateLocation: result)
 
             if let tester = self.tester {

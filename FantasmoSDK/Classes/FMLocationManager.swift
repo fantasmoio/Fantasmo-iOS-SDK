@@ -262,7 +262,9 @@ open class FMLocationManager: NSObject {
             excessiveBlur: frameEventAccumulator.counts[.imageTooBlurry] ?? 0,
             excessiveMotion: frameEventAccumulator.counts[.movingTooFast] ?? 0,
             insufficientFeatures: frameEventAccumulator.counts[.insufficientFeatures] ?? 0,
-            lossOfTracking: 0, // FIXME
+            lossOfTracking:
+                accumulatedARKitInfo.trackingStateStatistics.framesWithNotAvailableTracking +
+                accumulatedARKitInfo.trackingStateStatistics.framesWithLimitedTrackingState,
             total: frameEventAccumulator.total
         )
 

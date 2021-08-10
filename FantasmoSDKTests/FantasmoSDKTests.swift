@@ -116,6 +116,25 @@ class FantasmoSDKTests: XCTestCase {
         XCTAssertEqual(result.confidence, .medium)
     }
 
+    func testInliers() {
+        var locations = [CLLocation]()
+        var inliers: [CLLocation]
+
+        locations.append(CLLocation(latitude: 0, longitude: 0.00))
+        locations.append(CLLocation(latitude: 0, longitude: 0.01))
+        locations.append(CLLocation(latitude: 0, longitude: 0.02))
+        inliers = CLLocation.classifyInliers(locations)
+        XCTAssertEqual(inliers.count, 3)
+
+        locations.append(CLLocation(latitude: 1, longitude: 0.00))
+        inliers = CLLocation.classifyInliers(locations)
+        XCTAssertEqual(inliers.count, 3)
+
+        locations.append(CLLocation(latitude: 1, longitude: 0.00))
+        inliers = CLLocation.classifyInliers(locations)
+        XCTAssertEqual(inliers.count, 3)
+    }
+
     func testLocationFusionOutliers() {
         var fuser = LocationFuser()
         var result: FMLocationResult

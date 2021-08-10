@@ -67,6 +67,11 @@ struct LocationFuser {
         let median = CLLocation.geometricMedian(inliers)
         let confidence = Self.confidence(locations)
 
+        if median.coordinate.latitude == Double.nan || median.coordinate.longitude == Double.nan {
+            log.error("Image fusion error encountered!")
+            return FMLocationResult(location: location, confidence: .low, zones: zones)
+        }
+
         return FMLocationResult(location: median, confidence: confidence, zones: zones)
     }
 }

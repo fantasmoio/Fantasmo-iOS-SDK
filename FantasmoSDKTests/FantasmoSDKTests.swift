@@ -121,23 +121,23 @@ class FantasmoSDKTests: XCTestCase {
         var result: FMLocationResult
         var expected = CLLocation()
 
-        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 0), zones: nil)
-        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 10), zones: nil)
-        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 20), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 0.00), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 0.01), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 0.02), zones: nil)
 
-        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 100, longitude: 20), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 1, longitude: 0), zones: nil)
         print(result.location.coordinate)
         print(result.confidence)
 
-        expected = CLLocation(latitude: 0, longitude: 10);
+        expected = CLLocation(latitude: 0, longitude: 0.01);
         XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
         XCTAssertEqual(result.confidence, .medium)
 
-        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 100, longitude: 20), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 1, longitude: 0), zones: nil)
         print(result.location.coordinate)
         print(result.confidence)
 
-        expected = CLLocation(latitude: 0, longitude: 10);
+        expected = CLLocation(latitude: 0, longitude: 0.01);
         XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
         XCTAssertEqual(result.confidence, .high)
     }

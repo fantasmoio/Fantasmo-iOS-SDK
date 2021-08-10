@@ -91,7 +91,7 @@ class FantasmoSDKTests: XCTestCase {
         var result: FMLocationResult
         var expected = CLLocation()
 
-        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 0), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 0), zones: nil)
         print(result.location.coordinate)
         print(result.confidence)
 
@@ -99,7 +99,7 @@ class FantasmoSDKTests: XCTestCase {
         XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
         XCTAssertEqual(result.confidence, .low)
 
-        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 10), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 10), zones: nil)
         print(result.location.coordinate)
         print(result.confidence)
 
@@ -107,7 +107,7 @@ class FantasmoSDKTests: XCTestCase {
         XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
         XCTAssertEqual(result.confidence, .low)
 
-        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 20), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 20), zones: nil)
         print(result.location.coordinate)
         print(result.confidence)
 
@@ -121,11 +121,11 @@ class FantasmoSDKTests: XCTestCase {
         var result: FMLocationResult
         var expected = CLLocation()
 
-        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 0), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 10), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 0, longitude: 20), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 0), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 10), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 0, longitude: 20), zones: nil)
 
-        result = fuser.fusedResult(location: CLLocation(latitude: 100, longitude: 20), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 100, longitude: 20), zones: nil)
         print(result.location.coordinate)
         print(result.confidence)
 
@@ -133,7 +133,7 @@ class FantasmoSDKTests: XCTestCase {
         XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
         XCTAssertEqual(result.confidence, .medium)
 
-        result = fuser.fusedResult(location: CLLocation(latitude: 100, longitude: 20), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 100, longitude: 20), zones: nil)
         print(result.location.coordinate)
         print(result.confidence)
 
@@ -148,24 +148,24 @@ class FantasmoSDKTests: XCTestCase {
         var expected = CLLocation()
 
         // sample data from 290_FE600-009_2021_04_24T13_50_12_UTC_done
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826571, longitude: 2.327442), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826571, longitude: 2.327438), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826571, longitude: 2.327442), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826571, longitude: 2.327438), zones: nil)
         XCTAssertEqual(result.confidence, .low)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826578, longitude: 2.327439), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826589, longitude: 2.327399), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826578, longitude: 2.327439), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826589, longitude: 2.327399), zones: nil)
         XCTAssertEqual(result.confidence, .medium)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826602, longitude: 2.327396), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826602, longitude: 2.327396), zones: nil)
         XCTAssertEqual(result.confidence, .high)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826588, longitude: 2.327391), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826576, longitude: 2.327437), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826580, longitude: 2.327411), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826581, longitude: 2.327449), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826575, longitude: 2.327381), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826578, longitude: 2.327449), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826599, longitude: 2.327395), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826598, longitude: 2.327391), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826579, longitude: 2.327437), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826578, longitude: 2.327443), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826588, longitude: 2.327391), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826576, longitude: 2.327437), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826580, longitude: 2.327411), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826581, longitude: 2.327449), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826575, longitude: 2.327381), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826578, longitude: 2.327449), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826599, longitude: 2.327395), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826598, longitude: 2.327391), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826579, longitude: 2.327437), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826578, longitude: 2.327443), zones: nil)
 
         print(result.location.coordinate)
         print(result.confidence)
@@ -181,27 +181,27 @@ class FantasmoSDKTests: XCTestCase {
         var expected = CLLocation()
 
         // sample data from 290_FE600-009_2021_04_24T13_50_12_UTC_done
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826571, longitude: 2.327442), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826571, longitude: 2.327438), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826571, longitude: 2.327442), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826571, longitude: 2.327438), zones: nil)
         XCTAssertEqual(result.confidence, .low)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826578, longitude: 2.327439), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826589, longitude: 2.327399), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826578, longitude: 2.327439), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826589, longitude: 2.327399), zones: nil)
         XCTAssertEqual(result.confidence, .medium)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826602, longitude: 2.327396), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826602, longitude: 2.327396), zones: nil)
         XCTAssertEqual(result.confidence, .high)
 
         // fudge some outliers
-        result = fuser.fusedResult(location: CLLocation(latitude: 45, longitude: 2.327391), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 45, longitude: 2.327437), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 45, longitude: 2.327411), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 45, longitude: 2.327391), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 45, longitude: 2.327437), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 45, longitude: 2.327411), zones: nil)
 
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826581, longitude: 2.327449), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826575, longitude: 2.327381), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826578, longitude: 2.327449), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826599, longitude: 2.327395), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826598, longitude: 2.327391), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826579, longitude: 2.327437), zones: nil)
-        result = fuser.fusedResult(location: CLLocation(latitude: 48.826578, longitude: 2.327443), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826581, longitude: 2.327449), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826575, longitude: 2.327381), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826578, longitude: 2.327449), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826599, longitude: 2.327395), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826598, longitude: 2.327391), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826579, longitude: 2.327437), zones: nil)
+        result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826578, longitude: 2.327443), zones: nil)
 
         print(result.location.coordinate)
         print(result.confidence)
@@ -211,11 +211,11 @@ class FantasmoSDKTests: XCTestCase {
         XCTAssertEqual(result.confidence, .high)
     }
 
-//    func testPerformanceExample() throws {
-//        // This is an example of a performance test case.
-//        measure {
-//            // Put the code you want to measure the time of here.
-//        }
-//    }
+    //    func testPerformanceExample() throws {
+    //        // This is an example of a performance test case.
+    //        measure {
+    //            // Put the code you want to measure the time of here.
+    //        }
+    //    }
 
 }

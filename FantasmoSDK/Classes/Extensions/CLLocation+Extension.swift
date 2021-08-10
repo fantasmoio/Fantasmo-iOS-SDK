@@ -47,13 +47,16 @@ extension CLLocation {
             $0.coordinate.longitude == median.longitude &&
             $0.coordinate.latitude == median.latitude
         }).isEmpty {
-            median.latitude += 0.1
-            median.longitude += 0.1
+            // arbitrary, small value. experimentally this is the smallest magnitude that still converges
+            let perturbation = 0.1
+            median.latitude += perturbation
+            median.longitude += perturbation
         }
 
         var converged = false
         var sumsOfSquares: [Double] = []
         var iteration = 0
+        let epsilon = 0.000001 // ≈ 0.11 m, used for convergence test
         while !converged && iteration < maxIterations {
             var x = 0.0
             var y = 0.0
@@ -80,7 +83,7 @@ extension CLLocation {
 
             // test convergence
             if iteration > 3 {
-                converged = abs(sumsOfSquares[iteration] - sumsOfSquares[iteration-2]) < 0.1
+                converged = abs(sumsOfSquares[iteration] - sumsOfSquares[iteration-2]) < epsilon
             }
 
             iteration += 1

@@ -29,6 +29,18 @@ extension CLLocation {
         return CLLocation(latitude: x, longitude: y)
     }
 
+    static func populationVariance(_ locations: [CLLocation]) -> Double? {
+        let count = Double(locations.count)
+        if count == 0 { return nil }
+        let average = geometricMean(locations)
+
+        let numerator = locations.reduce(0) { total, location in
+            total + pow(location.distance(from: average), 2)
+        }
+
+        return numerator / count
+    }
+
     static func geometricMedian(_ locations: [CLLocation], maxIterations: Int = 200) -> CLLocation {
         guard locations.count > 0 else {
             log.error("Empty list. Could not compute median!")

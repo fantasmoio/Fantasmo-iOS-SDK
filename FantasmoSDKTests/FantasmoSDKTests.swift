@@ -150,10 +150,8 @@ class FantasmoSDKTests: XCTestCase {
         // sample data from 290_FE600-009_2021_04_24T13_50_12_UTC_done
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826571, longitude: 2.327442), zones: nil)
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826571, longitude: 2.327438), zones: nil)
-        XCTAssertEqual(result.confidence, .low)
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826578, longitude: 2.327439), zones: nil)
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826589, longitude: 2.327399), zones: nil)
-        XCTAssertEqual(result.confidence, .medium)
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826602, longitude: 2.327396), zones: nil)
         XCTAssertEqual(result.confidence, .high)
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826588, longitude: 2.327391), zones: nil)
@@ -183,10 +181,8 @@ class FantasmoSDKTests: XCTestCase {
         // sample data from 290_FE600-009_2021_04_24T13_50_12_UTC_done
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826571, longitude: 2.327442), zones: nil)
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826571, longitude: 2.327438), zones: nil)
-        XCTAssertEqual(result.confidence, .low)
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826578, longitude: 2.327439), zones: nil)
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826589, longitude: 2.327399), zones: nil)
-        XCTAssertEqual(result.confidence, .medium)
         result = fuser.locationFusedWithNew(location: CLLocation(latitude: 48.826602, longitude: 2.327396), zones: nil)
         XCTAssertEqual(result.confidence, .high)
 
@@ -209,6 +205,48 @@ class FantasmoSDKTests: XCTestCase {
         expected = CLLocation(latitude: 48.82, longitude: 2.32);
         XCTAssertLessThan(result.location.degreeDistance(from: expected), 0.01)
         XCTAssertEqual(result.confidence, .high)
+    }
+
+    func testConfidence() {
+        var locations = [CLLocation]()
+
+        locations.append(CLLocation(latitude: 10, longitude: 10))
+        XCTAssertEqual(LocationFuser.standardDeviationConfidence(locations), .low)
+        XCTAssertEqual(LocationFuser.confidence(locations), .low)
+
+        locations.append(CLLocation(latitude: 10, longitude: 10.000001))
+        XCTAssertEqual(LocationFuser.standardDeviationConfidence(locations), .high)
+        XCTAssertEqual(LocationFuser.confidence(locations), .high)
+
+        locations = [CLLocation]()
+        locations.append(CLLocation(latitude: 10, longitude: 10))
+        locations.append(CLLocation(latitude: 10, longitude: 10.000002))
+        print(locations[0].distance(from: locations[1]))
+        XCTAssertEqual(LocationFuser.standardDeviationConfidence(locations), .high)
+        XCTAssertEqual(LocationFuser.confidence(locations), .high)
+
+        locations = [CLLocation]()
+        locations.append(CLLocation(latitude: 10, longitude: 10))
+        locations.append(CLLocation(latitude: 10, longitude: 10.000004))
+        print(locations[0].distance(from: locations[1]))
+        XCTAssertEqual(LocationFuser.standardDeviationConfidence(locations), .medium)
+        XCTAssertEqual(LocationFuser.confidence(locations), .medium)
+
+        locations = [CLLocation]()
+        locations.append(CLLocation(latitude: 10, longitude: 10))
+        locations.append(CLLocation(latitude: 10, longitude: 10.000010))
+        print(locations[0].distance(from: locations[1]))
+        XCTAssertEqual(LocationFuser.standardDeviationConfidence(locations), .low)
+        XCTAssertEqual(LocationFuser.confidence(locations), .low)
+
+        locations.append(CLLocation(latitude: 10, longitude: 10))
+        XCTAssertEqual(LocationFuser.confidence(locations), .medium) // 3 samples
+
+        locations.append(CLLocation(latitude: 10, longitude: 10))
+        XCTAssertEqual(LocationFuser.confidence(locations), .medium) // 4 samples
+
+        locations.append(CLLocation(latitude: 10, longitude: 10))
+        XCTAssertEqual(LocationFuser.confidence(locations), .high) // 5 samples
     }
 
     //    func testPerformanceExample() throws {

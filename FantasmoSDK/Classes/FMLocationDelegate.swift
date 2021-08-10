@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-public enum FMResultConfidence {
+public enum FMResultConfidence: Comparable {
     case low
     case medium
     case high

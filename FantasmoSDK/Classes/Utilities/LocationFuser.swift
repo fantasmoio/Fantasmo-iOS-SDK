@@ -18,12 +18,38 @@ struct LocationFuser {
         locations = []
     }
 
-    private func calculateConfidence(_ locations: [CLLocation]) -> FMResultConfidence {
+    /// Derives a confidence based on the standard deviation of locations
+    static func standardDeviationConfidence(_ locations: [CLLocation]) -> FMResultConfidence {
+        if locations.count > 1, let variance = CLLocation.populationVariance(locations) {
+            let stdDev = sqrt(variance)
+
+            switch stdDev {
+            case 0..<0.15:
+                // within 15 cm
+                return .high
+            case 0.15..<0.5:
+                // within 50 cm
+                return .medium
+            default:
+                // more than 50 cm
+                return .low
+            }
+        } else {
+            return .low
+        }
+    }
+
+    /// Calculates our confidence based on a series of location measurements.
+    /// If the standard deviation of measurements is sufficiently low, confidence is high.
+    /// Otherwise, confidence increases with the number of samples.
+    static func confidence(_ locations: [CLLocation]) -> FMResultConfidence {
+        let standardDeviationConfidence = Self.standardDeviationConfidence(locations)
+
         switch locations.count {
         case 1, 2:
-            return .low
+            return max(standardDeviationConfidence, .low)
         case 3, 4:
-            return .medium
+            return max(standardDeviationConfidence, .medium)
         default:
             return .high
         }
@@ -39,7 +65,7 @@ struct LocationFuser {
 
         let inliers = CLLocation.classifyInliers(locations)
         let median = CLLocation.geometricMedian(inliers)
-        let confidence = calculateConfidence(locations)
+        let confidence = Self.confidence(locations)
 
         return FMLocationResult(location: median, confidence: confidence, zones: zones)
     }

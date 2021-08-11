@@ -33,6 +33,20 @@
 		A02646BD260CE44900A7FA6B /* FMApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646BA260CE44900A7FA6B /* FMApi.swift */; };
 		A02646C0260CE46C00A7FA6B /* FMLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646BF260CE46C00A7FA6B /* FMLog.swift */; };
 		A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
+		A02EA34526B9154D00525308 /* FMLocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34426B9154D00525308 /* FMLocationDelegate.swift */; };
+		A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34626B91D1F00525308 /* LocationFuser.swift */; };
+		A02EA34926B9253900525308 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34826B9253900525308 /* Array+Extension.swift */; };
+		A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */; };
+		A0D0C57326BAB95A00F35448 /* LocationFuser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34626B91D1F00525308 /* LocationFuser.swift */; };
+		A0D0C57426BAB96100F35448 /* FMLocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34426B9154D00525308 /* FMLocationDelegate.swift */; };
+		A0D0C57526BAB96500F35448 /* FMZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AA25921BF3005B1145 /* FMZone.swift */; };
+		A0D5E88A26BA97DA00CE5B1C /* FantasmoSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D5E88926BA97DA00CE5B1C /* FantasmoSDKTests.swift */; };
+		A0D5E88C26BA97DA00CE5B1C /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; };
+		A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */; };
+		A0D5E89326BA98ED00CE5B1C /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34826B9253900525308 /* Array+Extension.swift */; };
+		A0D5E89426BAA51F00CE5B1C /* FMLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646BF260CE46C00A7FA6B /* FMLog.swift */; };
+		A0D5E89526BAA54300CE5B1C /* FMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A425921BF3005B1145 /* FMError.swift */; };
+		A0D5E89626BAA56100CE5B1C /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AF25921BF3005B1145 /* ErrorResponse.swift */; };
 		A0D0C57726BD086E00F35448 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D0C57626BD086E00F35448 /* MotionManager.swift */; };
 		A30EBE09269F32B200E572FA /* AccumulatedARKitInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */; };
 		A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */; };
@@ -54,7 +68,6 @@
 		A3B57317269C3B6E0089B5F5 /* FMCompoundFrameQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B57316269C3B6D0089B5F5 /* FMCompoundFrameQualityFilter.swift */; };
 		A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */; };
 		A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */; };
-		A3BA02DA263919DF00524D66 /* FMBehaviorRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D5263919DF00524D66 /* FMBehaviorRequest.swift */; };
 		A3BA02DF263919F300524D66 /* MovingAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02DE263919F300524D66 /* MovingAverage.swift */; };
 		A3BA03BB263B6C7D00524D66 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03BA263B6C7D00524D66 /* Angle.swift */; };
 		A3BA88CE26A5E905003E422B /* ObservationToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA88CD26A5E905003E422B /* ObservationToken.swift */; };
@@ -65,6 +78,16 @@
 		A3CB773F263710D2009625BB /* simd_float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */; };
 		A3CB774226372A9B009625BB /* simd_quatf+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB774126372A9B009625BB /* simd_quatf+Extension.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A0D5E88D26BA97DA00CE5B1C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9468388225921BAF005B1145 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9468388A25921BAF005B1145;
+			remoteInfo = FantasmoSDK;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		9468388B25921BAF005B1145 /* FantasmoSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FantasmoSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +119,13 @@
 		A02646BA260CE44900A7FA6B /* FMApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMApi.swift; sourceTree = "<group>"; };
 		A02646BF260CE46C00A7FA6B /* FMLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLog.swift; sourceTree = "<group>"; };
 		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
+		A02EA34426B9154D00525308 /* FMLocationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationDelegate.swift; sourceTree = "<group>"; };
+		A02EA34626B91D1F00525308 /* LocationFuser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFuser.swift; sourceTree = "<group>"; };
+		A02EA34826B9253900525308 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
+		A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extension.swift"; sourceTree = "<group>"; };
+		A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FantasmoSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0D5E88926BA97DA00CE5B1C /* FantasmoSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FantasmoSDKTests.swift; sourceTree = "<group>"; };
+		A0D5E88B26BA97DA00CE5B1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0D0C57626BD086E00F35448 /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccumulatedARKitInfo.swift; sourceTree = "<group>"; };
 		A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalDeviceTranslationAccumulator.swift; sourceTree = "<group>"; };
@@ -115,7 +145,6 @@
 		A3B57316269C3B6D0089B5F5 /* FMCompoundFrameQualityFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMCompoundFrameQualityFilter.swift; sourceTree = "<group>"; };
 		A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMovementFilter.swift; sourceTree = "<group>"; };
 		A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBlurFilter.swift; sourceTree = "<group>"; };
-		A3BA02D5263919DF00524D66 /* FMBehaviorRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBehaviorRequest.swift; sourceTree = "<group>"; };
 		A3BA02DE263919F300524D66 /* MovingAverage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovingAverage.swift; sourceTree = "<group>"; };
 		A3BA03BA263B6C7D00524D66 /* Angle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Angle.swift; sourceTree = "<group>"; };
 		A3BA03C3263B6F0100524D66 /* EulerAngles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EulerAngles.swift; sourceTree = "<group>"; };
@@ -137,6 +166,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A0D5E88426BA97DA00CE5B1C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0D5E88C26BA97DA00CE5B1C /* FantasmoSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -144,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				9468388D25921BAF005B1145 /* FantasmoSDK */,
+				A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */,
 				9468388C25921BAF005B1145 /* Products */,
 				946838E025921DFE005B1145 /* Frameworks */,
 				A3445A0226A8967300C96205 /* Recovered References */,
@@ -154,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				9468388B25921BAF005B1145 /* FantasmoSDK.framework */,
+				A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -190,6 +229,7 @@
 				A3BA02DD263919F300524D66 /* Utilities */,
 				946838B325921BF3005B1145 /* Extensions */,
 				9468389B25921BF3005B1145 /* FMLocationManager.swift */,
+				A02EA34426B9154D00525308 /* FMLocationDelegate.swift */,
 				946838BB25921BF3005B1145 /* FMConfiguration.swift */,
 				9468389D25921BF3005B1145 /* FMUtility.swift */,
 				A02646BF260CE46C00A7FA6B /* FMLog.swift */,
@@ -242,6 +282,7 @@
 				A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */,
 				A3798CA426AAF52D007CB41F /* ARCamera+Extension.swift */,
 				946838B825921BF3005B1145 /* CGImage+Extension.swift */,
+				A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */,
 				946838B725921BF3005B1145 /* Codable+Extension.swift */,
 				946838B625921BF3005B1145 /* Dictionary+Extension.swift */,
 				946838B425921BF3005B1145 /* UIImage+Extension.swift */,
@@ -250,6 +291,7 @@
 				A36BAA48265431A50041E875 /* AssociatedObject.swift */,
 				A3590999269DAAC300A7BF5F /* UIDevice+Extension.swift */,
 				A359099C269DBBC100A7BF5F /* Bundle+Extension.swift */,
+				A02EA34826B9253900525308 /* Array+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -259,6 +301,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */ = {
+			isa = PBXGroup;
+			children = (
+				A0D5E88926BA97DA00CE5B1C /* FantasmoSDKTests.swift */,
+				A0D5E88B26BA97DA00CE5B1C /* Info.plist */,
+			);
+			path = FantasmoSDKTests;
 			sourceTree = "<group>";
 		};
 		A30EBE0A269F32C400E572FA /* Analytics */ = {
@@ -304,7 +355,6 @@
 			children = (
 				A3EEC0892664F203008BCCF2 /* PrimeFilters */,
 				A3B57316269C3B6D0089B5F5 /* FMCompoundFrameQualityFilter.swift */,
-				A3BA02D5263919DF00524D66 /* FMBehaviorRequest.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -315,6 +365,7 @@
 				A3B57314269C3B2D0089B5F5 /* FrameRejectionThrottler.swift */,
 				A3BA02DE263919F300524D66 /* MovingAverage.swift */,
 				A3BA88CD26A5E905003E422B /* ObservationToken.swift */,
+				A02EA34626B91D1F00525308 /* LocationFuser.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -382,16 +433,38 @@
 			productReference = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		A0D5E88626BA97DA00CE5B1C /* FantasmoSDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A0D5E88F26BA97DA00CE5B1C /* Build configuration list for PBXNativeTarget "FantasmoSDKTests" */;
+			buildPhases = (
+				A0D5E88326BA97DA00CE5B1C /* Sources */,
+				A0D5E88426BA97DA00CE5B1C /* Frameworks */,
+				A0D5E88526BA97DA00CE5B1C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A0D5E88E26BA97DA00CE5B1C /* PBXTargetDependency */,
+			);
+			name = FantasmoSDKTests;
+			productName = FantasmoSDKTests;
+			productReference = A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		9468388225921BAF005B1145 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1220;
 				TargetAttributes = {
 					9468388A25921BAF005B1145 = {
 						CreatedOnToolsVersion = 12.2;
+					};
+					A0D5E88626BA97DA00CE5B1C = {
+						CreatedOnToolsVersion = 12.5.1;
 					};
 				};
 			};
@@ -409,6 +482,7 @@
 			projectRoot = "";
 			targets = (
 				9468388A25921BAF005B1145 /* FantasmoSDK */,
+				A0D5E88626BA97DA00CE5B1C /* FantasmoSDKTests */,
 			);
 		};
 /* End PBXProject section */
@@ -419,6 +493,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				946838BE25921BF3005B1145 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A0D5E88526BA97DA00CE5B1C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,6 +530,7 @@
 				A34459EF26A8244F00C96205 /* EulerAngleSpreads.swift in Sources */,
 				946838C925921BF3005B1145 /* Location.swift in Sources */,
 				946838C225921BF3005B1145 /* MockData.swift in Sources */,
+				A02EA34526B9154D00525308 /* FMLocationDelegate.swift in Sources */,
 				946838D025921BF3005B1145 /* ErrorResponse.swift in Sources */,
 				A30EBE09269F32B200E572FA /* AccumulatedARKitInfo.swift in Sources */,
 				946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */,
@@ -468,15 +550,17 @@
 				A359099A269DAAC300A7BF5F /* UIDevice+Extension.swift in Sources */,
 				A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */,
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,
+				A02EA34926B9253900525308 /* Array+Extension.swift in Sources */,
 				946838DB25921BF3005B1145 /* FMConfiguration.swift in Sources */,
 				946838D425921BF3005B1145 /* UIImage+Extension.swift in Sources */,
-				A3BA02DA263919DF00524D66 /* FMBehaviorRequest.swift in Sources */,
 				A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */,
 				946838C625921BF3005B1145 /* FMError.swift in Sources */,
 				946838D125921BF3005B1145 /* Orientation.swift in Sources */,
 				A3798CA926AEA844007CB41F /* FrameFilterRejectionStatistics.swift in Sources */,
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,
+				A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */,
+				A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */,
 				A3BA03BB263B6C7D00524D66 /* Angle.swift in Sources */,
 				A02646BB260CE44900A7FA6B /* FMApiRouter.swift in Sources */,
 				A359099D269DBBC100A7BF5F /* Bundle+Extension.swift in Sources */,
@@ -487,7 +571,31 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A0D5E88326BA97DA00CE5B1C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A0D5E89326BA98ED00CE5B1C /* Array+Extension.swift in Sources */,
+				A0D5E89526BAA54300CE5B1C /* FMError.swift in Sources */,
+				A0D0C57426BAB96100F35448 /* FMLocationDelegate.swift in Sources */,
+				A0D5E88A26BA97DA00CE5B1C /* FantasmoSDKTests.swift in Sources */,
+				A0D5E89626BAA56100CE5B1C /* ErrorResponse.swift in Sources */,
+				A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */,
+				A0D5E89426BAA51F00CE5B1C /* FMLog.swift in Sources */,
+				A0D0C57326BAB95A00F35448 /* LocationFuser.swift in Sources */,
+				A0D0C57526BAB96500F35448 /* FMZone.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A0D5E88E26BA97DA00CE5B1C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9468388A25921BAF005B1145 /* FantasmoSDK */;
+			targetProxy = A0D5E88D26BA97DA00CE5B1C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9468389125921BAF005B1145 /* Debug */ = {
@@ -666,6 +774,44 @@
 			};
 			name = Release;
 		};
+		A0D5E89026BA97DA00CE5B1C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8V8339VAMG;
+				INFOPLIST_FILE = FantasmoSDKTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = fantasmo.FantasmoSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A0D5E89126BA97DA00CE5B1C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 8V8339VAMG;
+				INFOPLIST_FILE = FantasmoSDKTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = fantasmo.FantasmoSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -683,6 +829,15 @@
 			buildConfigurations = (
 				9468389425921BAF005B1145 /* Debug */,
 				9468389525921BAF005B1145 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A0D5E88F26BA97DA00CE5B1C /* Build configuration list for PBXNativeTarget "FantasmoSDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A0D5E89026BA97DA00CE5B1C /* Debug */,
+				A0D5E89126BA97DA00CE5B1C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

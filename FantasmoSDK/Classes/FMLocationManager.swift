@@ -10,41 +10,6 @@ import UIKit
 import ARKit
 import CoreLocation
 
-/// The methods that you use to receive events from an associated
-/// location manager object.
-public protocol FMLocationDelegate: AnyObject {
-    
-    /// Tells the delegate that new location data is available.
-    ///
-    /// - Parameters:
-    ///   - location: Location of the device (or anchor if set)
-    ///   - zones: Semantic zone corresponding to the location
-    /// Default implementation provided.
-    func locationManager(didUpdateLocation location: CLLocation, withZones zones: [FMZone]?)
-    
-    /// Tells the delegate that an error has occurred.
-    ///
-    /// - Parameters:
-    ///   - error: The error reported.
-    ///   - metadata: Metadata related to the error.
-    /// Default implementation provided.
-    func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
-    
-    /// Notifies delegate of the needed user action to enable localization.
-    /// For example user may holds the device tilted too much, which makes localization impossible. In this case manager will request corresponding
-    /// remedial action (tilt up or down)
-    /// Default implementation provided.
-    func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
-}
-
-/// Empty implementations of the protocol to allow optional
-/// implementation for delegates.
-public extension FMLocationDelegate {
-    func locationManager(didUpdateLocation location: CLLocation, withZones zones: [FMZone]?) {}
-    func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {}
-    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {}
-}
-
 open class FMLocationManager: NSObject {
     
     public enum State {
@@ -95,12 +60,13 @@ open class FMLocationManager: NSObject {
     private var anchorFrame: ARFrame? {
         didSet {
             tester?.anchorFrame = anchorFrame
+            locationFuser.reset()
         }
     }
     
     private var qualityFrameFilter = FMCompoundFrameQualityFilter()
     
-    /// Throttler allowing to notify delegate of "behaviour request" not too often when qulity of captured frames is too low
+    /// Throttler allowing to notify delegate of "behaviour request" not too often when quality of captured frames is too low
     private lazy var frameFailureThrottler = FrameRejectionThrottler { [weak self] rejectionReason in
         let behaviorRequest = rejectionReason.mapToBehaviorRequest()
         self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
@@ -110,6 +76,9 @@ open class FMLocationManager: NSObject {
     private var lastFrame: ARFrame?
     private var lastCLLocation: CLLocation?
     private weak var delegate: FMLocationDelegate?
+
+    // Fusion
+    private var locationFuser = LocationFuser()
 
     /// Used for testing private `FMLocationManager`'s API.
     private var tester: FMLocationManagerTester?
@@ -124,7 +93,7 @@ open class FMLocationManager: NSObject {
     private var localizationSessionId: String? // created by SDK
     private let motionManager = MotionManager()
 
-    // MARK: -
+    // MARK: - Testing
     
     /// This initializer must be used only for testing purposes. Otherwise use singleton object via `shared` static property.
     public init(tester: FMLocationManagerTester? = nil) {
@@ -188,6 +157,7 @@ open class FMLocationManager: NSObject {
         qualityFrameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
         motionManager.restart()
+        locationFuser.reset()
 
         state = .localizing
     }
@@ -294,10 +264,13 @@ open class FMLocationManager: NSObject {
         // Set up completion closure
         let localizeCompletion: FMApi.LocalizationResult = { location, zones in
             log.debug(parameters: ["location": location, "zones": zones])
-            self.delegate?.locationManager(didUpdateLocation: location, withZones: zones)
+
+            let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
+            self.delegate?.locationManager(didUpdateLocation: result)
+
             if let tester = self.tester {
                 let translation = openCVRelativeAnchorTransform?.inNonOpenCvCS.translation
-                tester.locationManagerDidUpdateLocation(location, translationOfAnchorInVirtualDeviceCS: translation)
+                tester.locationManager(didUpdateLocation: result, translationOfAnchorInVirtualDeviceCS: translation)
             }
             
             if self.state != .stopped {

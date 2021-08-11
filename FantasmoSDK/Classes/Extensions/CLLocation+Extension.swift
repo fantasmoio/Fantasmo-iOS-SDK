@@ -82,16 +82,16 @@ extension CLLocation {
                 denominator += 1.0 / distance
                 sumOfSquares += distance * distance
 
-                if distance.isNaN || distance == 0 {
-                    log.error("Could not compute median due to distance!")
-                    return CLLocation(latitude: Double.nan, longitude: Double.nan)
+                if distance.isNaN || distance == 0 || denominator.isInfinite || denominator.isNaN {
+                    log.error("Could not compute median due to numerical instability!")
+                    return CLLocation(latitude: median.latitude, longitude: median.longitude)
                 }
             }
             sumsOfSquares.append(sumOfSquares)
 
-            if denominator.isNaN || denominator == 0 {
+            if denominator == 0 {
                 log.error("Could not compute median due to denominator!")
-                return CLLocation(latitude: Double.nan, longitude: Double.nan)
+                return CLLocation(latitude: median.latitude, longitude: median.longitude)
             }
 
             // update our guess for the median

@@ -353,12 +353,12 @@
 		A3BA02D1263919DF00524D66 /* Filters */ = {
 			isa = PBXGroup;
 			children = (
-				A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */,
-				A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */,
 				A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */,
-				A3C7657B26B29F4F0062E932 /* FMTrackingStateFilter.swift */,
 				A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */,
+				A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */,
 				A3B57316269C3B6D0089B5F5 /* FMInputQualityFilter.swift */,
+				A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */,
+				A3C7657B26B29F4F0062E932 /* FMTrackingStateFilter.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";

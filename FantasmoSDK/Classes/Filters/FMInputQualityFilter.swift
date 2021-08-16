@@ -13,7 +13,7 @@ import ARKit
 /// If it is necessary to process a new sequence of frames, then `startOrRestartFiltering()` must be invoked.
 class FMInputQualityFilter: FMFrameFilter {
     
-    private var lastAcceptTime: clock_t?
+    private var lastAcceptTime = clock()
     
     /// The number of seconds after which we forcibly accept a frame.
     private var acceptanceThreshold = 1.0
@@ -28,7 +28,7 @@ class FMInputQualityFilter: FMFrameFilter {
 
     /// Start or restart filtering
     func startOrRestartFiltering() {
-        lastAcceptTime = nil
+        lastAcceptTime = clock()
     }
     
     /// Accepted frames should be used for the localization.
@@ -40,9 +40,6 @@ class FMInputQualityFilter: FMFrameFilter {
         
         for filter in filters {
             if case let .rejected(reason) = filter.accepts(frame) {
-                if lastAcceptTime == nil {
-                    lastAcceptTime = clock()
-                }
                 return .rejected(reason: reason)
             }
         }
@@ -53,13 +50,8 @@ class FMInputQualityFilter: FMFrameFilter {
 
     /// If there are a lot of continuous rejections, we force an acceptance
     private func shouldForceAccept() -> Bool {
-        if let t = lastAcceptTime {
-            let elapsedTime = Double(clock() - t) / Double(CLOCKS_PER_SEC)
-            return (elapsedTime > acceptanceThreshold)
-        }
-        else {
-            return false
-        }
+        let elapsedTime = Double(clock() - lastAcceptTime) / Double(CLOCKS_PER_SEC)
+        return (elapsedTime > acceptanceThreshold)
     }
 }
 

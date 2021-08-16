@@ -10,9 +10,8 @@ import ARKit
 // MARK:-
 
 /// Stateful filter for choosing the frames which are acceptable to localize against.
-/// Frames are expected to be passed sequentially to the `accepts(_:)` method in the proper order.
 /// If it is necessary to process a new sequence of frames, then `startOrRestartFiltering()` must be invoked.
-class FMCompoundFrameQualityFilter {
+class CompoundFilter: FMFrameFilter {
     
     /// We use `clock()` rathern than `Date()` as it is likely faster. Some hint at this can be found at https://bit.ly/3vExXcZ
     private var timestampOfLastAcceptedFrame: clock_t?

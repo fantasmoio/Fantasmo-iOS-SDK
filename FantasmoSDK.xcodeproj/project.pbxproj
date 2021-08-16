@@ -353,6 +353,7 @@
 		A3BA02D1263919DF00524D66 /* Filters */ = {
 			isa = PBXGroup;
 			children = (
+				A3B57314269C3B2D0089B5F5 /* BehaviorRequester.swift */,
 				A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */,
 				A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */,
 				A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */,
@@ -366,7 +367,6 @@
 		A3BA02DD263919F300524D66 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				A3B57314269C3B2D0089B5F5 /* BehaviorRequester.swift */,
 				A3BA02DE263919F300524D66 /* MovingAverage.swift */,
 				A3BA88CD26A5E905003E422B /* ObservationToken.swift */,
 				A02EA34626B91D1F00525308 /* LocationFuser.swift */,

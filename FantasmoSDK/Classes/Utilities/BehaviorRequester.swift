@@ -1,5 +1,5 @@
 //
-//  FrameValidationThrotler.swift
+//  BehaviorRequester.swift
 //  FantasmoSDK
 //
 //  Created by Yauheni Klishevich on 15.04.2021.
@@ -7,22 +7,15 @@
 
 import Foundation
 
-/// Throttler for "frame rejection" events each of which occurs when a frame turns out to be not acceptable for a localization.
-/// Throttling technique corresponds to classic throttling on "leading" edge but very first triggering is omitted and triggering does not happen until
-/// certain number of events have occurred since previous triggering event.
-/// Example of throttling on "leading" edge can be found at https://bit.ly/3dl2RAz
-/// When starting to capture a new frame sequence it is needed to invoke `restart()`
-class FrameRejectionThrottler {
+class BehaviorRequester {
     
     /// Minimum number of seconds that must elapse between trigering events.
     private let throttleThreshold = 2.0
     
-    /// The number of times the rejection must occurs before triggering.
+    /// The number of times the rejection must occur before triggering.
     private let incidenceThreshold = 30
-    
-    /// We use `clock()` rathern than `Date()` as it is likely faster. Some hint at this can be found at https://bit.ly/3vExXcZ
+
     private var lastTimeOfTriggering = clock()
-    
     private var handler: ((FMFilterRejectionReason) -> Void)
     private var rejectionToCountDict = [FMFilterRejectionReason : Int]()
     private var lastFrameFilterResult: FMFrameFilterResult?
@@ -35,7 +28,7 @@ class FrameRejectionThrottler {
     /// Throttling technique corresponds to classic throttling on "leading" edge but very first triggering is omitted and triggering does not happen until
     /// certain number of events have occurred since previous triggering event.
     /// Filter is restart at every `frameFilterResult == .accepted`
-    func onNext(frameFilterResult: FMFrameFilterResult) {
+    func processResult(_ frameFilterResult: FMFrameFilterResult) {
         switch frameFilterResult {
         case .accepted:
             rejectionToCountDict.removeAll(keepingCapacity: true)

@@ -64,7 +64,7 @@ open class FMLocationManager: NSObject {
         }
     }
     
-    private var frameFilter = CompoundFilter()
+    private var frameFilter = FMInputQualityFilter()
     
     /// Throttler allowing to notify delegate of "behaviour request" not too often when quality of captured frames is too low
     private lazy var frameFailureThrottler = FrameRejectionThrottler { [weak self] rejectionReason in

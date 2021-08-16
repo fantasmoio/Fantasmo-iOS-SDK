@@ -11,7 +11,7 @@ import ARKit
 
 /// Stateful filter for choosing the frames which are acceptable to localize against.
 /// If it is necessary to process a new sequence of frames, then `startOrRestartFiltering()` must be invoked.
-class CompoundFilter: FMFrameFilter {
+class FMInputQualityFilter: FMFrameFilter {
     
     /// We use `clock()` rathern than `Date()` as it is likely faster. Some hint at this can be found at https://bit.ly/3vExXcZ
     private var timestampOfLastAcceptedFrame: clock_t?

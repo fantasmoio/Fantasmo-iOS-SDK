@@ -154,7 +154,7 @@ open class FMLocationManager: NSObject {
 
         accumulatedARKitInfo.reset()
         frameEventAccumulator.reset()
-        frameFilter.startOrRestartFiltering()
+        frameFilter.restart()
         frameFailureThrottler.restart()
         motionManager.restart()
         locationFuser.reset()

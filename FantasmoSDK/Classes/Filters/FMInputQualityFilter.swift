@@ -27,7 +27,7 @@ class FMInputQualityFilter: FMFrameFilter {
     ]
 
     /// Start or restart filtering
-    func startOrRestartFiltering() {
+    func restart() {
         lastAcceptTime = clock()
     }
     

@@ -16,38 +16,34 @@ class BehaviorRequester {
     private let incidenceThreshold = 30
 
     private var lastTimeOfTriggering = clock()
-    private var handler: ((FMFilterRejectionReason) -> Void)
-    private var rejectionToCountDict = [FMFilterRejectionReason : Int]()
+    private var requestHandler: ((FMBehaviorRequest) -> Void)
+    private var rejectionCounts = [FMFilterRejectionReason : Int]()
     private var lastFrameFilterResult: FMFrameFilterResult?
-    
-    /// - Parameter handler: closure that is invoked in accordance with logic of throttling. See the comment to the class for more details.
-    init(handler: @escaping (FMFilterRejectionReason) -> Void) {
-        self.handler = handler
+
+    init(handler: @escaping (FMBehaviorRequest) -> Void) {
+        self.requestHandler = handler
     }
     
-    /// Throttling technique corresponds to classic throttling on "leading" edge but very first triggering is omitted and triggering does not happen until
-    /// certain number of events have occurred since previous triggering event.
-    /// Filter is restart at every `frameFilterResult == .accepted`
     func processResult(_ frameFilterResult: FMFrameFilterResult) {
         switch frameFilterResult {
         case .accepted:
-            rejectionToCountDict.removeAll(keepingCapacity: true)
+            rejectionCounts.removeAll(keepingCapacity: true)
         case .rejected(let rejectionReason):
-            let count = (rejectionToCountDict[rejectionReason] ?? 0) &+ 1
+            let count = (rejectionCounts[rejectionReason] ?? 0) &+ 1
             
             if count == 1, case .accepted = lastFrameFilterResult {
                 lastTimeOfTriggering = clock()
-                rejectionToCountDict[rejectionReason] = count
+                rejectionCounts[rejectionReason] = count
             }
             else {
                 let elapsed = Double(clock() - lastTimeOfTriggering) / Double(CLOCKS_PER_SEC)
                 
                 if elapsed > throttleThreshold, count >= incidenceThreshold {
-                    handler(rejectionReason)
+                    requestHandler(rejectionReason.mapToBehaviorRequest())
                     startNewCycle()
                 }
                 else {
-                    rejectionToCountDict[rejectionReason] = count
+                    rejectionCounts[rejectionReason] = count
                 }
             }
         }
@@ -60,7 +56,7 @@ class BehaviorRequester {
     
     private func startNewCycle() {
         lastTimeOfTriggering = clock()
-        rejectionToCountDict.removeAll(keepingCapacity: true)
+        rejectionCounts.removeAll(keepingCapacity: true)
     }
 
 }

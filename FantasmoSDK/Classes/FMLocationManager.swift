@@ -66,8 +66,7 @@ open class FMLocationManager: NSObject {
     
     private var frameFilter = FMInputQualityFilter()
     
-    private lazy var behaviorRequester = BehaviorRequester { [weak self] rejectionReason in
-        let behaviorRequest = rejectionReason.mapToBehaviorRequest()
+    private lazy var behaviorRequester = BehaviorRequester { [weak self] behaviorRequest in
         self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
     }
     

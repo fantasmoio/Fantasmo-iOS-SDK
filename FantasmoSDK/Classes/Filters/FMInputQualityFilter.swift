@@ -33,7 +33,7 @@ class FMInputQualityFilter: FMFrameFilter {
     
     /// Accepted frames should be used for the localization.
     func accepts(_ frame: ARFrame) -> FMFrameFilterResult {
-        if shouldForciblyAccept(frame) {
+        if shouldForceAccept() {
             lastAcceptTime = clock()
             return .accepted
         }
@@ -52,7 +52,7 @@ class FMInputQualityFilter: FMFrameFilter {
     }
 
     /// If there are a lot of continuous rejections, we force an acceptance
-    private func shouldForciblyAccept(_ frame: ARFrame) -> Bool {
+    private func shouldForceAccept() -> Bool {
         if let t = lastAcceptTime {
             let elapsedTime = Double(clock() - t) / Double(CLOCKS_PER_SEC)
             return (elapsedTime > acceptanceThreshold)

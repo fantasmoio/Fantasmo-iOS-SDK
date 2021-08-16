@@ -64,7 +64,7 @@ open class FMLocationManager: NSObject {
         }
     }
     
-    private var qualityFrameFilter = FMCompoundFrameQualityFilter()
+    private var frameFilter = FMCompoundFrameQualityFilter()
     
     /// Throttler allowing to notify delegate of "behaviour request" not too often when quality of captured frames is too low
     private lazy var frameFailureThrottler = FrameRejectionThrottler { [weak self] rejectionReason in
@@ -154,7 +154,7 @@ open class FMLocationManager: NSObject {
 
         accumulatedARKitInfo.reset()
         frameEventAccumulator.reset()
-        qualityFrameFilter.startOrRestartFiltering()
+        frameFilter.startOrRestartFiltering()
         frameFailureThrottler.restart()
         motionManager.restart()
         locationFuser.reset()
@@ -326,7 +326,7 @@ extension FMLocationManager : ARSessionDelegate {
         lastFrame = frame
         
         if state == .localizing {
-            let filterResult = qualityFrameFilter.accepts(frame)
+            let filterResult = frameFilter.accepts(frame)
             if case let .rejected(reason) = filterResult {
                 frameEventAccumulator.accumulate(filterRejectionReason: reason)
             }

@@ -97,6 +97,7 @@ open class FMLocationManager: NSObject {
     public init(tester: FMLocationManagerTester? = nil) {
         self.tester = tester
         self.tester?.accumulatedARKitInfo = accumulatedARKitInfo
+        self.tester?.frameEventAccumulator = frameEventAccumulator
     }
     
     // MARK: - Lifecycle

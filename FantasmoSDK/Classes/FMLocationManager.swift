@@ -67,7 +67,10 @@ open class FMLocationManager: NSObject {
     private var frameFilter = FMInputQualityFilter()
     
     private lazy var behaviorRequester = BehaviorRequester { [weak self] behaviorRequest in
-        self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
+        // in testing mode, request behaviors even when stopped
+        if self?.tester != nil || self?.state != .stopped {
+            self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
+        }
     }
     
     // Variables set by delegate handling methods
@@ -323,21 +326,19 @@ open class FMLocationManager: NSObject {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
-        
-        if state == .localizing {
-            let filterResult = frameFilter.accepts(frame)
-            if case let .rejected(reason) = filterResult {
-                frameEventAccumulator.accumulate(filterRejectionReason: reason)
-            }
-            behaviorRequester.processResult(filterResult)
-            
-            if case .accepted = filterResult {
+
+        guard state == .localizing || tester != nil else { return }
+
+        let filterResult = frameFilter.accepts(frame)
+        behaviorRequester.processResult(filterResult)
+        accumulatedARKitInfo.update(with: frame)
+
+        if case let .rejected(reason) = filterResult {
+            frameEventAccumulator.accumulate(filterRejectionReason: reason)
+        } else {
+            if state == .localizing {
                 localize(frame: frame, from: session)
             }
-        }
-        
-        if state != .stopped {
-            accumulatedARKitInfo.update(with: frame)
         }
     }
 }

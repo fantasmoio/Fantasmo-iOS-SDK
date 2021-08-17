@@ -10,7 +10,7 @@ import Foundation
 /// Accumulator of the statistics on the number of the several types of frame filter rejections.
 public struct FrameFilterRejectionStatisticsAccumulator {
     
-    private(set) var counts =
+    public private(set) var counts =
         Dictionary<FMFilterRejectionReason, Int>(initialValueForAllCases: 0)
         
     var total: Int {

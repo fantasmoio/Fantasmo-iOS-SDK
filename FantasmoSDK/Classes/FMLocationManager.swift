@@ -327,7 +327,7 @@ extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
 
-        guard state == .localizing || tester != nil else { return }
+        guard state != .stopped || tester != nil else { return }
 
         let filterResult = frameFilter.accepts(frame)
         behaviorRequester.processResult(filterResult)

@@ -11,6 +11,10 @@ import MetalPerformanceShaders
 import MetalKit
 import VideoToolbox
 
+/// Rejects low variance images. Because an absolute threshold is not always
+/// appropriate, also rejects frames that have a lower than average variance.
+/// In a low-feature situation where variance continues to be low, the filter
+/// effectively deactivates so that some frames will still get through.
 class FMBlurFilter: FMFrameFilter {
     
     var variance: Float = 0.0

@@ -8,7 +8,7 @@
 import ARKit
 
 public class FMMovementFilter: FMFrameFilter {
-    let threshold: Float = 0.25
+    let threshold: Float = 0.001
     var lastTransform: simd_float4x4 = simd_float4x4(1)
 
     public func accepts(_ frame: ARFrame) -> FMFrameFilterResult {

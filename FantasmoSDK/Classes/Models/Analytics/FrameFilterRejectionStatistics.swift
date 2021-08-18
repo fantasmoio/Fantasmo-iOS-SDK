@@ -8,20 +8,20 @@
 import Foundation
 
 /// Accumulator of the statistics on the number of the several types of frame filter rejections.
-struct FrameFilterRejectionStatisticsAccumulator {
+public class FrameFilterRejectionStatisticsAccumulator {
     
-    private(set) var counts =
+    public private(set) var counts =
         Dictionary<FMFilterRejectionReason, Int>(initialValueForAllCases: 0)
         
     var total: Int {
         counts.values.reduce(0, +)
     }
 
-    mutating func accumulate(filterRejectionReason: FMFilterRejectionReason) {
+    func accumulate(filterRejectionReason: FMFilterRejectionReason) {
         counts[filterRejectionReason]! += 1
     }
     
-    mutating func reset() {
+    func reset() {
         counts = Dictionary<FMFilterRejectionReason, Int>(initialValueForAllCases: 0)
     }
     

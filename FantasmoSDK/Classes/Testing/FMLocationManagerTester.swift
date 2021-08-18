@@ -11,8 +11,9 @@ import ARKit
 public protocol FMLocationManagerTester: AnyObject {
     var anchorFrame: ARFrame? { set get }
     
-    /// `FMLocationManager` will set this property on tester during initialization.
+    /// `FMLocationManager` will set these during initialization.
     var accumulatedARKitInfo: AccumulatedARKitInfo! { set get }
+    var frameEventAccumulator: FrameFilterRejectionStatisticsAccumulator! { set get }
     
     /// - Parameter translationOfAnchorInVirtualDeviceCS: Translation of anchor in non-OpenCV coordinate system of virtual device.
     ///     Provided only in "anchoring" mode, otherwise `nil`.

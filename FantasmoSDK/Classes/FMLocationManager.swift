@@ -64,12 +64,13 @@ open class FMLocationManager: NSObject {
         }
     }
     
-    private var qualityFrameFilter = FMCompoundFrameQualityFilter()
+    private var frameFilter = FMInputQualityFilter()
     
-    /// Throttler allowing to notify delegate of "behaviour request" not too often when quality of captured frames is too low
-    private lazy var frameFailureThrottler = FrameRejectionThrottler { [weak self] rejectionReason in
-        let behaviorRequest = rejectionReason.mapToBehaviorRequest()
-        self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
+    private lazy var behaviorRequester = BehaviorRequester { [weak self] behaviorRequest in
+        // in testing mode, request behaviors even when stopped
+        if self?.tester != nil || self?.state != .stopped {
+            self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
+        }
     }
     
     // Variables set by delegate handling methods
@@ -99,6 +100,7 @@ open class FMLocationManager: NSObject {
     public init(tester: FMLocationManagerTester? = nil) {
         self.tester = tester
         self.tester?.accumulatedARKitInfo = accumulatedARKitInfo
+        self.tester?.frameEventAccumulator = frameEventAccumulator
     }
     
     // MARK: - Lifecycle
@@ -154,8 +156,8 @@ open class FMLocationManager: NSObject {
 
         accumulatedARKitInfo.reset()
         frameEventAccumulator.reset()
-        qualityFrameFilter.startOrRestartFiltering()
-        frameFailureThrottler.restart()
+        frameFilter.restart()
+        behaviorRequester.restart()
         motionManager.restart()
         locationFuser.reset()
 
@@ -324,21 +326,19 @@ open class FMLocationManager: NSObject {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
-        
-        if state == .localizing {
-            let filterResult = qualityFrameFilter.accepts(frame)
-            if case let .rejected(reason) = filterResult {
-                frameEventAccumulator.accumulate(filterRejectionReason: reason)
-            }
-            frameFailureThrottler.onNext(frameFilterResult: filterResult)
-            
-            if case .accepted = filterResult {
+
+        guard state != .stopped || tester != nil else { return }
+
+        let filterResult = frameFilter.accepts(frame)
+        behaviorRequester.processResult(filterResult)
+        accumulatedARKitInfo.update(with: frame)
+
+        if case let .rejected(reason) = filterResult {
+            frameEventAccumulator.accumulate(filterRejectionReason: reason)
+        } else {
+            if state == .localizing {
                 localize(frame: frame, from: session)
             }
-        }
-        
-        if state != .stopped {
-            accumulatedARKitInfo.update(with: frame)
         }
     }
 }

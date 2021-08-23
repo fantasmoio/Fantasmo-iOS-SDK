@@ -15,6 +15,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var sceneView: ARSCNView!
     private let locationManager = CLLocationManager()
 
+    // fill this in with a valid token
+    let FANTASMO_ACCESS_TOKEN = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,8 +30,8 @@ class ViewController: UIViewController {
         locationManager.delegate = FMLocationManager.shared
        
         // connect and start updating
-        FMLocationManager.shared.connect(accessToken: "", delegate: self)
-        FMLocationManager.shared.startUpdatingLocation()
+        FMLocationManager.shared.connect(accessToken: FANTASMO_ACCESS_TOKEN, delegate: self)
+        FMLocationManager.shared.startUpdatingLocation(sessionId: UUID().uuidString)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,13 +42,24 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: FMLocationDelegate {
-    func locationManager(didUpdateLocation location: CLLocation, withZones zones: [FMZone]?) {
+    func locationManager(didUpdateLocation result: FMLocationResult) {
+        let location = result.location
+        let confidence = result.confidence
+        let zones = result.zones
+
         debugPrint("ViewController: User location Lat: \(location.coordinate.latitude) Longitude: \(location.coordinate.longitude)")
+        debugPrint("Confidence: \(confidence)")
+
         if let zone = zones?.first, zone.zoneType == .parking {
             debugPrint("ViewController: Parking validated!")
         } else {
             debugPrint("ViewController: Parking invalid.")
         }
+    }
+
+    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
+        let behavioralRemedy = behavior.rawValue
+        debugPrint(behavioralRemedy)
     }
     
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {

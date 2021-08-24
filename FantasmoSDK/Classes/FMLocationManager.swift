@@ -137,7 +137,6 @@ open class FMLocationManager: NSObject {
                     "session": session,
                     "locationManager": locationManager])
         
-        isConnected = true
         connect(accessToken: accessToken, delegate: delegate)
         session?.delegate = self
         locationManager?.delegate = self

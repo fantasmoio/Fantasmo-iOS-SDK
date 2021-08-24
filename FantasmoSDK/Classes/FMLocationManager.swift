@@ -105,8 +105,7 @@ open class FMLocationManager: NSObject {
     
     // MARK: - Lifecycle
         
-    /// Set up the connection of the client code with `FMLocationManager`.
-    /// Use this method if your app does not need to receive `ARSession` or `CLLocationManager` delegate calls.
+    /// Connect to the location service.
     ///
     /// - Parameters:
     ///   - accessToken: Token for service authorization.
@@ -121,7 +120,8 @@ open class FMLocationManager: NSObject {
         FMApi.shared.token = accessToken
     }
 
-    /// Set up the connection of the client code with `FMLocationManager`.
+    /// Connect to the location service.
+    /// Use this method if your app does not need to receive `ARSession` or `CLLocationManager` delegate calls
     ///
     /// - Parameters:
     ///   - accessToken: Token for service authorization.

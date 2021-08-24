@@ -12,6 +12,7 @@ import ARKit
 public class AccumulatedARKitInfo {
     
     public private(set) var trackingStateStatistics = TrackingStateFrameStatistics()
+    public private(set) var elapsedFrames = 0
     
     /// Current value of total translation in meters
     public var totalTranslation: Float {
@@ -27,6 +28,7 @@ public class AccumulatedARKitInfo {
     public init() {}
     
     func update(with nextFrame: ARFrame) {
+        elapsedFrames += 1
         trackingStateStatistics.accumulate(nextTrackingState: nextFrame.camera.trackingState)
         translationAccumulator.update(with: nextFrame)
         
@@ -37,6 +39,7 @@ public class AccumulatedARKitInfo {
     }
     
     func reset() {
+        elapsedFrames = 0
         trackingStateStatistics.reset()
         translationAccumulator.reset()
         eulerAngleSpreadsAccumulator = EulerAngleSpreadsAccumulator()

@@ -237,7 +237,7 @@ open class FMLocationManager: NSObject {
             lossOfTracking:
                 accumulatedARKitInfo.trackingStateStatistics.framesWithNotAvailableTracking +
                 accumulatedARKitInfo.trackingStateStatistics.framesWithLimitedTrackingState,
-            total: frameEventAccumulator.total
+            total: accumulatedARKitInfo.elapsedFrames
         )
 
         let rotationSpread = FMRotationSpread(

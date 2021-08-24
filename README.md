@@ -108,8 +108,7 @@ override func viewDidLoad() {
 }
 
 extension ViewController: FMLocationDelegate {
-    func locationManager(didUpdateLocation location: CLLocation, 
-                         withZones zones: [FMZone]?) {
+    func locationManager(didUpdateLocation result: FMLocationResult) {
         // Handle location update
     }
     
@@ -175,12 +174,23 @@ To stop location updates:
 FMLocationManager.shared.stopUpdatingLocation()
 ```
 
-Location events are be provided through `FMLocationDelegate`.
+Location events are be provided through `FMLocationDelegate`. Confidence in the location result increases during successive updates. Clients can choose to stop location updates when a desired confidence threshold is reached.
 
 ```swift
+public enum FMResultConfidence {
+    case low
+    case medium
+    case high
+}
+
+public struct FMLocationResult {
+    public var location: CLLocation
+    public var confidence: FMResultConfidence
+    public var zones: [FMZone]?
+}
+
 extension ViewController: FMLocationDelegate {
-    func locationManager(didUpdateLocation location: CLLocation, 
-                         withZones zones: [FMZone]?) {
+    func locationManager(didUpdateLocation result: FMLocationResult) {
         // Handle location update
     }
     
@@ -190,6 +200,31 @@ extension ViewController: FMLocationDelegate {
     }
 }
 ```
+
+### Behaviors
+
+To maximize localization quality, camera input is filtered against common problems. The designated `FMLocationDelegate` will be called with behavior requests intended to alleviate such problems.
+
+```swift
+extension ViewController: FMLocationDelegate {
+    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
+        // Handle behavior update
+    }
+}
+```
+
+The following behaviors are currently requested:
+
+```swift
+public enum FMBehaviorRequest: String {
+    case tiltUp = "Tilt your device up"
+    case tiltDown = "Tilt your device down"
+    case panAround = "Pan around the scene"
+    case panSlowly = "Pan more slowly"
+}
+```
+
+When notified, your application should prompt the user to undertake the remedial behavior. Notifcations are issued at most once per every two seconds. You may use our enum cases to map to your own verbiage or simply rely on our `.rawValue` strings.
 
 ### Anchors
 

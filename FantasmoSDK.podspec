@@ -7,18 +7,18 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'FantasmoSDK'
-  s.version          = '0.1.18'
-  s.summary          = 'Hyper-accurate global positioning for cameras.'
-  s.description      = 'FantasmoSDK provide hyper-accurate global positioning for cameras.'
+  s.name             		= 'FantasmoSDK'
+  s.version          		= '1.0.0'
+  s.summary          		= 'Hyper-accurate global positioning for cameras.'
+  s.description      		= 'FantasmoSDK provide hyper-accurate global positioning for cameras.'
 
-  s.homepage         = 'https://github.com/fantasmoio/Fantasmo-iOS-SDK'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'krishn' => 'krishn@github.io' }
-  s.source           = { :git => 'https://krishn-fantasmo@github.com/fantasmoio/Fantasmo-iOS-SDK.git', :branch => 'master', :tag => s.version.to_s }
+  s.homepage         		= 'https://github.com/fantasmoio/Fantasmo-iOS-SDK'
+  s.license          		= { :type => 'MIT', :file => 'LICENSE' }
+  s.author           		= { 'krishn' => 'krishn@github.io' }
+  s.source           		= { :git => 'https://krishn-fantasmo@github.com/fantasmoio/Fantasmo-iOS-SDK.git', :branch => 'master', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '11.0'
-  s.swift_version    = '4.2'
+  s.ios.deployment_target 	= '12.0'
+  s.swift_version    		= '5'
 
   s.source_files = 'FantasmoSDK/Classes/**/*.{h,m,swift}'
   s.resources = 'FantasmoSDK/Assets/**'

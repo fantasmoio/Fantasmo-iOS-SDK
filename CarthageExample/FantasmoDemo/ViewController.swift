@@ -15,24 +15,25 @@ class ViewController: UIViewController {
     @IBOutlet weak var sceneView: ARSCNView!
     private let locationManager = CLLocationManager()
 
+    // fill this in with a valid token
+    let FANTASMO_ACCESS_TOKEN = ""
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        locationManager.delegate = self
+
+        // get location updates
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
 
-        sceneView.delegate = self
-        sceneView.session.delegate = self
-        
-        FMLocationManager.shared.connect(accessToken: "", delegate: self)
-        
-        FMLocationManager.shared.isSimulation = false
-        FMLocationManager.shared.simulationZone = .parking
-        
-        FMLocationManager.shared.startUpdatingLocation()
+        // configure delegation
+        sceneView.session.delegate = FMLocationManager.shared
+        locationManager.delegate = FMLocationManager.shared
+
+        // connect and start updating
+        FMLocationManager.shared.connect(accessToken: FANTASMO_ACCESS_TOKEN, delegate: self)
+        FMLocationManager.shared.startUpdatingLocation(sessionId: UUID().uuidString)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let configuration = ARWorldTrackingConfiguration()
@@ -40,36 +41,31 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("ViewController: didUpdateLocations")
-        
-        // also update the FMLocationManager
-        FMLocationManager.shared.locationManager(manager, didUpdateLocations: locations)
-    }
-}
-
-extension ViewController: ARSessionDelegate, ARSCNViewDelegate {
-    func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        // also update the FMLocationManager
-        FMLocationManager.shared.session(session, didUpdate: frame)
-    }
-}
-
 extension ViewController: FMLocationDelegate {
-    func locationManager(didUpdateLocation location: CLLocation, withZones zones: [FMZone]?) {
-        print("ViewController: User location Lat: \(location.coordinate.latitude) Longitude: \(location.coordinate.longitude)")
+    func locationManager(didUpdateLocation result: FMLocationResult) {
+        let location = result.location
+        let confidence = result.confidence
+        let zones = result.zones
+
+        debugPrint("ViewController: User location Lat: \(location.coordinate.latitude) Longitude: \(location.coordinate.longitude)")
+        debugPrint("Confidence: \(confidence)")
+
         if let zone = zones?.first, zone.zoneType == .parking {
-            print("ViewController: Parking validated!")
+            debugPrint("ViewController: Parking validated!")
         } else {
-            print("ViewController: Parking invalid.")
+            debugPrint("ViewController: Parking invalid.")
         }
     }
-    
+
+    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
+        let behavioralRemedy = behavior.rawValue
+        debugPrint(behavioralRemedy)
+    }
+
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {
-        print("ViewController: didFailWithError called")
+        debugPrint("ViewController: didFailWithError called")
         if let metadataError = metadata as? Error {
-            print("ViewController:  Error : \(metadataError.localizedDescription)")
+            debugPrint("ViewController:  Error : \(metadataError.localizedDescription)")
         }
     }
 }

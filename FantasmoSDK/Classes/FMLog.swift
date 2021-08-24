@@ -11,6 +11,13 @@ var log = FMLog()
 
 public struct FMLog {
     
+    private static let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss.SSSZZZ"
+        return dateFormatter
+    }()
+    
     public enum LogLevel: Comparable {
         case debug
         case info
@@ -80,12 +87,12 @@ public struct FMLog {
         line: Int,
         level: LogLevel
     ) -> String {
-        var output = "\(level.decorator) [FM] "
+        var output = "\(level.decorator) [FM] \(FMLog.dateFormatter.string(from: Date()))"
         
         #if DEBUG
         output.append("[\(sourceFileName(filePath: file)) \(function):\(line)] \(message)")
         #else
-        output.append(message)
+            output.append(message)
         #endif
         
         if let parameters = parameters {

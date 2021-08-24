@@ -19,43 +19,19 @@ struct FMRestClient {
     typealias RestError = (Error) -> Void
     
     // MARK: - internal methods
-    
-    /// Post a query to the CPS server
-    ///
-    /// - Parameters:
-    ///   - endpoint: The API endpoint to post to
-    ///   - parameters: Dictionary of form parameters
-    ///   - token: Optional API security token
-    ///   - completion: Completion closure
-    ///   - error: Error closure
-    static func post(_ endpoint: FMApiRouter.ApiEndpoint,
-                     parameters: [String : String],
-                     token: String?,
-                     completion: RestResult? = nil,
-                     error: RestError? = nil) {
-        
-        let request = Self.requestForEndpoint(endpoint, token: token)
-        log.info(String(describing: request.url), parameters: parameters)
-        
-        var data = Data()
-        data.appendParameters(parameters)
-        data.appendFinalBoundary()
-        
-        Self.post(data: data, with: request, completion: completion, error: error)
-    }
 
-    /// Post a query with an image to the CPS server
+    /// Post a query with an optional image to the CPS server
     ///
     /// - Parameters:
     ///   - endpoint: The API endpoint to post to
     ///   - parameters: Dictionary of form parameters
-    ///   - imageData: Image as JPEG data
+    ///   - imageData: Image as JPEG data that should be added to the body of the request along with passed `parameters`
     ///   - token: Optional API security token
     ///   - completion: Completion closure
     ///   - error: Error closure
     static func post(_ endpoint: FMApiRouter.ApiEndpoint,
-                     parameters: [String : String],
-                     imageData: Data,
+                     parameters: [String : String?],
+                     imageData: Data? = nil,
                      token: String?,
                      completion: RestResult? = nil,
                      error: RestError? = nil) {
@@ -65,14 +41,16 @@ struct FMRestClient {
         
         var data = Data()
         data.appendParameters(parameters)
-        data.appendImage(imageData)
+        if let imageData = imageData {
+            data.appendImage(imageData)
+        }
         data.appendFinalBoundary()
         
         Self.post(data: data, with: request, completion: completion, error: error)
     }
     
     // MARK: - private methods
-    
+
     /// Does the actual work of posting to the CPS server
     ///
     /// - Parameters:
@@ -80,8 +58,10 @@ struct FMRestClient {
     ///   - request: Request containing server URL, endpoint, and token
     ///   - completion: Completion closure
     ///   - error: Error closure
-    private static func post(data: Data, with request: URLRequest, completion: RestResult? = nil, error: RestError? = nil) {
-
+    private static func post(data: Data,
+                             with request: URLRequest,
+                             completion: RestResult? = nil,
+                             error: RestError? = nil) {
         let session = URLSession.shared
         session.uploadTask(with: request, from: data, completionHandler: { data, response, uploadError in
             guard let data = data, let response = response as? HTTPURLResponse else {
@@ -144,9 +124,11 @@ private extension Data {
         return Data(boundaryText.utf8)
     }
     
-    mutating func appendParameters(_ params: [String : String]) {
+    mutating func appendParameters(_ params: [String : String?]) {
         for (key, value) in params {
-            self.appendParameter(key, value: value)
+            if let value = value {
+                self.appendParameter(key, value: value)
+            }
         }
     }
     

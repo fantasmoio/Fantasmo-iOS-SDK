@@ -1,5 +1,0 @@
-use_frameworks!
-
-target 'FantasmoDemo' do
-  pod 'FantasmoSDK', :path => '../'
-end

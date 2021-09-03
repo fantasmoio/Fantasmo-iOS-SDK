@@ -27,6 +27,17 @@ class MockData {
         
         return jpegData ?? Data()
     }
+    
+    static func imageResolution(_ request: FMLocalizationRequest) -> CGSize {
+        var imageResolution: CGSize?
+        switch request.simulationZone {
+        case .parking:
+            imageResolution = UIImage(named: "inParking", in:Bundle(for:MockData.self), compatibleWith: nil)?.size
+        default:
+            imageResolution = UIImage(named: "onStreet", in:Bundle(for:MockData.self), compatibleWith: nil)?.size
+        }
+        return imageResolution ?? CGSize()
+    }
 
     /// Generate a simulated localization query params from a known location.
     ///

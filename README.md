@@ -104,12 +104,16 @@ override func viewDidLoad() {
    
     // connect and start updating
     FMLocationManager.shared.connect(accessToken: "", delegate: self)
-    FMLocationManager.shared.startUpdatingLocation()
+    FMLocationManager.shared.startUpdatingLocation(sessionId: UUID().uuidString)
 }
 
 extension ViewController: FMLocationDelegate {
     func locationManager(didUpdateLocation result: FMLocationResult) {
         // Handle location update
+    }
+
+    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
+        // Handle behavior request
     }
     
     func locationManager(didFailWithError error: Error, 
@@ -164,10 +168,12 @@ func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:
 
 To start location updates:
 ```swift
-FMLocationManager.shared.startUpdatingLocation()
+FMLocationManager.shared.startUpdatingLocation(sessionId: "")
 ```
 
-Images frames will be continuously captured and sent to the server for localization. 
+Frames will be continuously captured and sent to the server for localization. Filtering logic in the SDK will automatically select the best frames, and it will issue requests to the user to help improve the incoming images.
+
+The `sessionId` parameter will allow you to associate the location updates with your own session identifier. Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking session might involve multiple localization attempts. For analytics and billing purposes, this identifier allows you to link a set of attempts with a single parking session.
 
 To stop location updates:
 ```swift

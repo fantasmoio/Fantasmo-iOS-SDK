@@ -14,12 +14,18 @@ extension Bundle {
     /// Example: "1.0.18 (365)"
     static var fullVersion: String {
         var version = ""
-        if let shortBundleVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+
+        // we want the SDK bundle, not the host `main` bundle
+        let bundle = Bundle(for: FMLocationManager.self)
+
+        if let shortBundleVersion = bundle.infoDictionary?["CFBundleShortVersionString"] as? String {
             version += shortBundleVersion
         }
-        if let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+
+        if let buildVersion = bundle.infoDictionary?["CFBundleVersion"] as? String {
             version += " (" + buildVersion + ")"
         }
+
         return version
     }
     

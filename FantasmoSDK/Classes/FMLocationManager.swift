@@ -264,7 +264,7 @@ open class FMLocationManager: NSObject {
         
         // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second
         guard CLLocationCoordinate2DIsValid(approximateCoordinate) else {
-            self.delegate?.locationManager(didFailWithError: FMError.ErrorType.errorResponse, errorMetadata: nil)
+            self.delegate?.locationManager(didFailWithError: FMError(FMError.ErrorType.errorResponse, errorDescription:"No valid CLLocation coordinates"), errorMetadata: nil)
             self.state = .paused
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.state = .localizing

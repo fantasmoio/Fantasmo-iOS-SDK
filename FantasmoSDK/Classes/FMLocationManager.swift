@@ -52,7 +52,7 @@ open class FMLocationManager: NSObject {
                     return CLLocationCoordinate2D()
                 }
             } else {
-                return lastCLLocation?.coordinate ?? CLLocationCoordinate2D()
+                return lastCLLocation?.coordinate ?? kCLLocationCoordinate2DInvalid
             }
         }
     }
@@ -202,6 +202,13 @@ open class FMLocationManager: NSObject {
         }
     }
     
+    /// Update the user's location, use instead of CLLocationManagerDelegate
+    ///
+    /// - Parameter location: current user location
+    
+    public func updateLocation(_ location: CLLocation) {
+        lastCLLocation = location
+    }
     
     // MARK: - Internal instance methods
     
@@ -253,7 +260,19 @@ open class FMLocationManager: NSObject {
             totalDistance: accumulatedARKitInfo.totalTranslation,
             magneticField: motionManager.magneticField
         )
-
+        
+        // If no valid apprximate coordinate is found, throw an error and stop updating location for 1 second
+        guard CLLocationCoordinate2DIsValid(approximateCoordinate) else {
+            self.delegate?.locationManager(didFailWithError: FMError.ErrorType.errorResponse, errorMetadata: nil)
+            self.stopUpdatingLocation()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                if let sessionId = self.appSessionId {
+                    self.startUpdatingLocation(sessionId: sessionId)
+                }
+            }
+            return
+        }
+        
         let localizationRequest = FMLocalizationRequest(
             isSimulation: isSimulation,
             simulationZone: simulationZone,

@@ -16,7 +16,8 @@ open class FMLocationManager: NSObject {
         case stopped        // doing nothing
         case localizing     // localizing
         case uploading      // uploading image while localizing
-    }
+        case paused         // paused
+   }
     
     // MARK: - Properties
     
@@ -261,14 +262,12 @@ open class FMLocationManager: NSObject {
             magneticField: motionManager.magneticField
         )
         
-        // If no valid apprximate coordinate is found, throw an error and stop updating location for 1 second
+        // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second
         guard CLLocationCoordinate2DIsValid(approximateCoordinate) else {
             self.delegate?.locationManager(didFailWithError: FMError.ErrorType.errorResponse, errorMetadata: nil)
-            self.stopUpdatingLocation()
+            self.state = .paused
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if let sessionId = self.appSessionId {
-                    self.startUpdatingLocation(sessionId: sessionId)
-                }
+                self.state = .localizing
             }
             return
         }

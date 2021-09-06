@@ -12,6 +12,8 @@ CocoaPods is a dependency manager for Cocoa projects. For usage and installation
 
    `pod 'FantasmoSDK'`
 
+Your Podfile should also include the line `use_frameworks!` at the top
+
 ### Carthage (iOS 8+, OS X 10.9+)
 
 You can use Carthage to install Fantasmo SDK by adding it to your Cartfile:

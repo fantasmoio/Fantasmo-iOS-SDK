@@ -133,12 +133,15 @@ FMLocationManager.shared.connect(accessToken: "", delegate: self)
 
 ### Delegation
 
-The `FMLocationManager` singleton needs to receive `ARSessionDelegate` and `CLLocationManagerDelegate` updates. You must either set it to be the delegate for your session and location manager, or you must manually call the delegate methods from within your own delegate handlers.
+The `FMLocationManager` singleton needs to receive `ARSessionDelegate` updates, and either needs to receive `CLLocationManagerDelegate` updates or be provided `CLLocation` data by your code. You must either set it to be the delegate for your session and location manager, or you must manually call the delegate methods from within your own delegate handlers.
 
 If you do not need session or location updates, you can simply set `FMLocationManager` as their delegate.
 
 ```swift
 myView?.session.delegate = FMLocationManager.shared
+```
+and if you do not want to provide your own `CLLocation` updates
+```swift
 myLocationManager.delegate = FMLocationManager.shared
 ```
 
@@ -157,12 +160,17 @@ func session(_ session: ARSession, didUpdate frame: ARFrame) {
 func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
   // your update code
 
-  // also update the FMLocationManager
+  // also update the FMLocationManager if needed
   FMLocationManager.shared.locationManager(manager, didUpdateLocations: locations)
 }
 
 ```
+If you want to provide your own location data instead of `CLLocationManager`, you can provide your own `CLLocation` updates with:
+```swift
+FMLocationManager.shared.updateLocation(_ location: CLLocation)
+```
 
+If the SDK does not receive `CLLocation` updates either from `CLLocationManager` or from `FMLocationManager.shared.updateLocation`, it will return an error when trying to localize and the thread will go to sleep for one second while waiting for an update.
 
 ### Localizing 
 

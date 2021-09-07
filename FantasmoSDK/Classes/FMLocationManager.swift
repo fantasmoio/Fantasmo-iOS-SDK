@@ -16,7 +16,8 @@ open class FMLocationManager: NSObject {
         case stopped        // doing nothing
         case localizing     // localizing
         case uploading      // uploading image while localizing
-    }
+        case paused         // paused
+   }
     
     // MARK: - Properties
     
@@ -52,7 +53,7 @@ open class FMLocationManager: NSObject {
                     return CLLocationCoordinate2D()
                 }
             } else {
-                return lastCLLocation?.coordinate ?? CLLocationCoordinate2D()
+                return lastCLLocation?.coordinate ?? kCLLocationCoordinate2DInvalid
             }
         }
     }
@@ -202,6 +203,13 @@ open class FMLocationManager: NSObject {
         }
     }
     
+    /// Update the user's location, use instead of CLLocationManagerDelegate
+    ///
+    /// - Parameter location: current user location
+    
+    public func updateLocation(_ location: CLLocation) {
+        lastCLLocation = location
+    }
     
     // MARK: - Internal instance methods
     
@@ -253,7 +261,17 @@ open class FMLocationManager: NSObject {
             totalDistance: accumulatedARKitInfo.totalTranslation,
             magneticField: motionManager.magneticField
         )
-
+        
+        // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second
+        guard CLLocationCoordinate2DIsValid(approximateCoordinate) else {
+            self.delegate?.locationManager(didFailWithError: FMError(FMError.ErrorType.errorResponse, errorDescription:"No valid CLLocation coordinates"), errorMetadata: nil)
+            self.state = .paused
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.state = .localizing
+            }
+            return
+        }
+        
         let localizationRequest = FMLocalizationRequest(
             isSimulation: isSimulation,
             simulationZone: simulationZone,

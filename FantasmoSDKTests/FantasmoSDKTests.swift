@@ -313,9 +313,31 @@ class FantasmoSDKTests: XCTestCase {
     
     func testBlurFilter() {
         let filter = FMBlurFilter()
-        let onStreet = UIImage(named: "onStreet", in: Bundle(for: type(of: self)), compatibleWith: nil)
-        let onStreetFrame = MockFrame(capturedImage: onStreet!.pixelBuffer()!)
-        XCTAssertEqual(filter.accepts(onStreetFrame), .accepted)
+        let dayScan = UIImage(named: "dayScan", in: Bundle(for: type(of: self)), compatibleWith: nil)
+        let dayScanFrame = MockFrame(capturedImage: dayScan!.pixelBuffer()!)
+        let nightScan = UIImage(named: "nightScan", in: Bundle(for: type(of: self)), compatibleWith: nil)
+        let nightScanFrame = MockFrame(capturedImage: nightScan!.pixelBuffer()!)
+        
+        // nighttime passes twice because of no throughput
+        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
+        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
+        // daytime passes because it has enough variance
+        XCTAssertEqual(filter.accepts(dayScanFrame), .accepted)
+        XCTAssertEqual(filter.accepts(dayScanFrame), .accepted)
+        XCTAssertEqual(filter.accepts(dayScanFrame), .accepted)
+        XCTAssertEqual(filter.accepts(dayScanFrame), .accepted)
+        // nighttime is rejected 6 times because it is too blurry and the throughput is superior to 0.25 on the last 8 frames
+        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
+        // on the 7th nighttime picture in a row, throughput gets back under 0.25 and it passes again
+        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
+        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
+        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
+        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
     }
     //    func testPerformanceExample() throws {
     //        // This is an example of a performance test case.

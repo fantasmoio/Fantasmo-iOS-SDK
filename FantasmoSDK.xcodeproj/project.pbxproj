@@ -19,12 +19,11 @@
 		4064380526E79C8100B38B45 /* MockCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4064380226E79C7A00B38B45 /* MockCamera.swift */; };
 		4064380626E7A70E00B38B45 /* FMCameraPitchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */; };
 		4064380726E7A76A00B38B45 /* Angle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03BA263B6C7D00524D66 /* Angle.swift */; };
-		4064380826E7AAFB00B38B45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
 		4064380926E7ABA600B38B45 /* FMBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */; };
 		4064380A26E7AC8B00B38B45 /* MovingAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02DE263919F300524D66 /* MovingAverage.swift */; };
 		4064380C26E7B1B100B38B45 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4064380B26E7B1B100B38B45 /* UIImage+Extension.swift */; };
+		40EA810526E7C6A8002E96A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
 		9468389025921BAF005B1145 /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9468388E25921BAF005B1145 /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		946838BE25921BF3005B1145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
 		946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389B25921BF3005B1145 /* FMLocationManager.swift */; };
 		946838C125921BF3005B1145 /* FMUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389D25921BF3005B1145 /* FMUtility.swift */; };
 		946838C225921BF3005B1145 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389F25921BF3005B1145 /* MockData.swift */; };
@@ -510,7 +509,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				946838BE25921BF3005B1145 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +516,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40EA810526E7C6A8002E96A6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

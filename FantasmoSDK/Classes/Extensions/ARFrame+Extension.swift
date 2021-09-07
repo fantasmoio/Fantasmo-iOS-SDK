@@ -8,7 +8,10 @@
 import ARKit
 
 
-public extension ARFrame {
+extension ARFrame: FMFrame {
+    var fmCamera: FMCamera {
+        return self.camera
+    }
     
     /// OpenCV coordinate system is turned by 180˚ about X-axis relative to the original coordinate system.
     private static let transformOfOpenCVCoordinateSystem = simd_float4x4.rotationAboutXAxisByPiRad

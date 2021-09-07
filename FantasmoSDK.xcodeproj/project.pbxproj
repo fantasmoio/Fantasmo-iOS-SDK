@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		406437F826E7718700B38B45 /* FMMovementFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */; };
+		406437F926E7719B00B38B45 /* FMFrameFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */; };
+		406437FB26E7864300B38B45 /* FMFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FA26E7864300B38B45 /* FMFrame.swift */; };
+		406437FC26E7864300B38B45 /* FMFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FA26E7864300B38B45 /* FMFrame.swift */; };
+		406437FE26E787A300B38B45 /* FMCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FD26E787A200B38B45 /* FMCamera.swift */; };
+		406437FF26E787A300B38B45 /* FMCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FD26E787A200B38B45 /* FMCamera.swift */; };
 		9468389025921BAF005B1145 /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9468388E25921BAF005B1145 /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		946838BE25921BF3005B1145 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
 		946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389B25921BF3005B1145 /* FMLocationManager.swift */; };
@@ -90,6 +96,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		406437FA26E7864300B38B45 /* FMFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrame.swift; sourceTree = "<group>"; };
+		406437FD26E787A200B38B45 /* FMCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCamera.swift; sourceTree = "<group>"; };
 		9468388B25921BAF005B1145 /* FantasmoSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FantasmoSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9468388E25921BAF005B1145 /* FantasmoSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FantasmoSDK.h; sourceTree = "<group>"; };
 		9468388F25921BAF005B1145 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -272,6 +280,8 @@
 				946838AD25921BF3005B1145 /* Pose.swift */,
 				946838B225921BF3005B1145 /* Position.swift */,
 				A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */,
+				406437FA26E7864300B38B45 /* FMFrame.swift */,
+				406437FD26E787A200B38B45 /* FMCamera.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -539,6 +549,7 @@
 				A3BA02DF263919F300524D66 /* MovingAverage.swift in Sources */,
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,
 				A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */,
+				406437FE26E787A300B38B45 /* FMCamera.swift in Sources */,
 				A359099A269DAAC300A7BF5F /* UIDevice+Extension.swift in Sources */,
 				A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */,
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,
@@ -548,6 +559,7 @@
 				A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */,
 				946838C625921BF3005B1145 /* FMError.swift in Sources */,
 				946838D125921BF3005B1145 /* Orientation.swift in Sources */,
+				406437FB26E7864300B38B45 /* FMFrame.swift in Sources */,
 				A3798CA926AEA844007CB41F /* FrameFilterRejectionStatistics.swift in Sources */,
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,
@@ -572,10 +584,14 @@
 				A0D0C57426BAB96100F35448 /* FMLocationDelegate.swift in Sources */,
 				A0D5E88A26BA97DA00CE5B1C /* FantasmoSDKTests.swift in Sources */,
 				A0D5E89626BAA56100CE5B1C /* ErrorResponse.swift in Sources */,
+				406437FF26E787A300B38B45 /* FMCamera.swift in Sources */,
 				A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */,
+				406437FC26E7864300B38B45 /* FMFrame.swift in Sources */,
 				A0D5E89426BAA51F00CE5B1C /* FMLog.swift in Sources */,
 				A0D0C57326BAB95A00F35448 /* LocationFuser.swift in Sources */,
 				A0D0C57526BAB96500F35448 /* FMZone.swift in Sources */,
+				406437F826E7718700B38B45 /* FMMovementFilter.swift in Sources */,
+				406437F926E7719B00B38B45 /* FMFrameFilter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

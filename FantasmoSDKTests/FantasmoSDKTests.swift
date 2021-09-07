@@ -7,6 +7,7 @@
 
 import XCTest
 import CoreLocation
+import ARKit
 
 class FantasmoSDKTests: XCTestCase {
 
@@ -266,6 +267,15 @@ class FantasmoSDKTests: XCTestCase {
 
         locations.append(CLLocation(latitude: 10, longitude: 10))
         XCTAssertEqual(LocationFuser.confidence(locations), .high) // 5 samples
+    }
+    
+    func testMovementFilter() {
+        let filter = FMMovementFilter()
+        var transform = simd_float4x4(1)
+        XCTAssertEqual(filter.accepts(transform), .rejected(reason: .movingTooLittle))
+        transform = simd_float4x4(1.1)
+        XCTAssertEqual(filter.accepts(transform), .accepted)
+
     }
 
     //    func testPerformanceExample() throws {

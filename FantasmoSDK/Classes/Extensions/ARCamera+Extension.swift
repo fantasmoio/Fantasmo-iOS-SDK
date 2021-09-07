@@ -7,7 +7,7 @@
 
 import ARKit
 
-extension ARCamera {
+extension ARCamera: FMCamera {
     var pitch: Float { eulerAngles.x }
     var yaw: Float { eulerAngles.y }
     var roll: Float { eulerAngles.z }

@@ -37,6 +37,6 @@ public enum FMFrameFilterResult: Equatable {
 }
 
 /// Prime filters are original blocks for a compound frame filter or can be used alone as a standalone filter.
-public protocol FMFrameFilter {
-    func accepts(_ frame: ARFrame) -> FMFrameFilterResult
+protocol FMFrameFilter {
+    func accepts(_ frame: FMFrame) -> FMFrameFilterResult
 }

@@ -30,7 +30,7 @@ extension ARFrame: FMFrame {
     
     /// For camera CS the X-axis always points along the long axis of the device (from the front camera toward the Home, https://apple.co/3t1Dw33)
     /// For device coordinate system the Y-axis always points along the long axis of the device toward the front camera - https://apple.co/2R37LJW.
-    var transformOfDeviceInWorldCS: simd_float4x4 {
+    public var transformOfDeviceInWorldCS: simd_float4x4 {
         camera.transform * ARFrame.transformOfDeviceInCameraCS
     }
     
@@ -39,7 +39,7 @@ extension ARFrame: FMFrame {
     /// For example, if device is turned by more than 45° about Z-axis then CS of virtual device is turned by -45° about Z-axis so that its Y-axis is near to
     ///     vertical direction.
     /// For details about orientation of the coordinate systems see comment to `ARFrame.transformOfDeviceInWorldCS`
-    var transformOfVirtualDeviceInWorldCS: simd_float4x4 {
+    public var transformOfVirtualDeviceInWorldCS: simd_float4x4 {
         let angleOfVirtualDeviceCSInCameraCS = self.angleOfVirtualDeviceCSInCameraCS(deviceOrientation)
         
         let quaternionOfVirtualDeviceCSInCameraCS =
@@ -116,7 +116,7 @@ extension ARFrame: FMFrame {
     /// `UIDevice.endGeneratingDeviceOrientationNotifications()`, which would cause problems for proper functioning of SDK.
     /// - Note: result of calculating of `deviceOrientation` is cached, so subsequent invocations of this calculated property are cheap.
     /// - WARNING: function works only if `ARSession.configuration.worldAlignment != .camera`, otherwise it returns `.portrait`
-    var deviceOrientation: UIDeviceOrientation {
+    public var deviceOrientation: UIDeviceOrientation {
         if let cachedDeviceOrientation: UIDeviceOrientation =
             getAssociatedObject(object: self, associativeKey: &AssociatedKey.deviceOrientation) {
             return cachedDeviceOrientation

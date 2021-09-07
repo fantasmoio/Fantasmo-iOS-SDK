@@ -8,7 +8,7 @@
 import Foundation
 import ARKit
 
-protocol FMCamera : AnyObject {
+public protocol FMCamera : AnyObject {
     var transform : simd_float4x4 { get }
     var eulerAngles : simd_float3 { get }
     var pitch : Float { get }

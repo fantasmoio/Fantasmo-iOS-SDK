@@ -66,7 +66,7 @@ public class FMInputQualityFilterTestAdapter {
 
     }
 
-    internal func blurAccepts(_ frame: FMFrame) -> Bool {
+    public func blurAccepts(_ frame: FMFrame) -> Bool {
         return accepts(blurFilter, frame: frame)
     }
 

@@ -11,13 +11,9 @@ public class FMMovementFilter: FMFrameFilter {
     let threshold: Float = 0.001
     var lastTransform: simd_float4x4 = simd_float4x4(1)
 
-    internal func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
-        return accepts(frame.fmCamera.transform)
-    }
-    
-    internal func accepts(_ transform: simd_float4x4) -> FMFrameFilterResult {
-        if exceededThreshold(transform) {
-            lastTransform = transform
+    public func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
+        if exceededThreshold(frame.fmCamera.transform) {
+            lastTransform = frame.fmCamera.transform
             return .accepted
         } else {
             return .rejected(reason: .movingTooLittle)

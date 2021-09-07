@@ -8,7 +8,7 @@
 import Foundation
 import ARKit
 
-protocol FMFrame : AnyObject {
+public protocol FMFrame : AnyObject {
     var fmCamera : FMCamera { get }
     var capturedImage : CVPixelBuffer { get }
 }

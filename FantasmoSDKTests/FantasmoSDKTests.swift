@@ -274,11 +274,11 @@ class FantasmoSDKTests: XCTestCase {
         var transform = simd_float4x4(1)
         var pixelBuffer: CVPixelBuffer? = nil
         CVPixelBufferCreate(kCFAllocatorDefault, 64, 64, kCVPixelFormatType_OneComponent8, nil, &pixelBuffer)
-        if let nonnilBuffer = pixelBuffer {
-            var frame = MockFrame(fmCamera: MockCamera(transform: transform), capturedImage: nonnilBuffer)
+        if let pixelBuffer = pixelBuffer {
+            var frame = MockFrame(fmCamera: MockCamera(transform: transform), capturedImage: pixelBuffer)
             XCTAssertEqual(filter.accepts(frame), .rejected(reason: .movingTooLittle))
             transform = simd_float4x4(1.1)
-            frame = MockFrame(fmCamera: MockCamera(transform: transform), capturedImage: nonnilBuffer)
+            frame = MockFrame(fmCamera: MockCamera(transform: transform), capturedImage: pixelBuffer)
             XCTAssertEqual(filter.accepts(frame), .accepted)
             transform = simd_float4x4(1.099)
             XCTAssertEqual(filter.accepts(frame), .rejected(reason: .movingTooLittle))

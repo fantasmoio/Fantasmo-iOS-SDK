@@ -9,8 +9,8 @@ import ARKit
 
 struct FMTrackingStateFilter: FMFrameFilter {
     
-    func accepts(_ frame: ARFrame) -> FMFrameFilterResult {
-        switch frame.camera.trackingState {
+    func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
+        switch frame.fmCamera.trackingState {
         case .normal:
             return .accepted
         case .limited(let reasonOfLimitedState):

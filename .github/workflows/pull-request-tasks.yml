@@ -1,0 +1,30 @@
+name: Swift Integration Tests
+
+on:
+  pull_request:
+    branches:
+  push:
+    branches:
+      - master
+      - develop
+
+jobs:
+  test:
+    name: Tests
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        destination: ['platform=iOS Simulator,OS=14.4,name=iPhone 12 Pro Max']
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Build and Test
+        uses: sersoft-gmbh/xcodebuild-action@v1
+        with: 
+          project: FantasmoSDK.xcodeproj
+          scheme: FantasmoSDKTests
+          destination: ${{ matrix.destination }}
+          action: test
+          skip-testing: 'FantasmoSDKTests/SDKFilterTests/testBlurFilter'

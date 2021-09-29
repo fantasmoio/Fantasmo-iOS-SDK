@@ -231,7 +231,7 @@ class FMApi {
                 "total": events.total,
             ]
             
-            let imageResolution = imageResolution(from: frame, request: request)
+            let imageResolution = getImageResolution(from: frame, request: request)
 
             var params = [
                 "intrinsics" : intrinsics.toJson(),
@@ -298,7 +298,7 @@ class FMApi {
     ///   - frame: Frame to return the resolution from
     ///   - request: Localization request struct
     ///   - Returns: Resolution as CGSize
-    private func imageResolution(from frame: ARFrame, request: FMLocalizationRequest) -> FMFrameResolution {
+    private func getImageResolution(from frame: ARFrame, request: FMLocalizationRequest) -> FMFrameResolution {
         // mock if simulation
         guard !request.isSimulation else {
             let imageSize = MockData.imageResolution(request)

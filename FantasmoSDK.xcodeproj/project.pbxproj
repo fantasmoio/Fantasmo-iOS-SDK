@@ -56,7 +56,7 @@
 		A0D0C57426BAB96100F35448 /* FMLocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34426B9154D00525308 /* FMLocationDelegate.swift */; };
 		A0D0C57526BAB96500F35448 /* FMZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838AA25921BF3005B1145 /* FMZone.swift */; };
 		A0D0C57726BD086E00F35448 /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D0C57626BD086E00F35448 /* MotionManager.swift */; };
-		A0D5E88A26BA97DA00CE5B1C /* FantasmoSDKTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D5E88926BA97DA00CE5B1C /* FantasmoSDKTests.swift */; };
+		A0D5E88A26BA97DA00CE5B1C /* SDKLocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D5E88926BA97DA00CE5B1C /* SDKLocationTests.swift */; };
 		A0D5E88C26BA97DA00CE5B1C /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; };
 		A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */; };
 		A0D5E89326BA98ED00CE5B1C /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02EA34826B9253900525308 /* Array+Extension.swift */; };
@@ -92,6 +92,8 @@
 		A3CB77372636BDB8009625BB /* FMOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB77362636BDB8009625BB /* FMOrientation.swift */; };
 		A3CB773F263710D2009625BB /* simd_float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */; };
 		A3CB774226372A9B009625BB /* simd_quatf+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB774126372A9B009625BB /* simd_quatf+Extension.swift */; };
+		FFA8586D2701D5D20069EB5D /* SDKFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */; };
+		FFA8586E2701D5D20069EB5D /* SDKGeometricTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,7 +147,7 @@
 		A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extension.swift"; sourceTree = "<group>"; };
 		A0D0C57626BD086E00F35448 /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FantasmoSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A0D5E88926BA97DA00CE5B1C /* FantasmoSDKTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FantasmoSDKTests.swift; sourceTree = "<group>"; };
+		A0D5E88926BA97DA00CE5B1C /* SDKLocationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKLocationTests.swift; sourceTree = "<group>"; };
 		A0D5E88B26BA97DA00CE5B1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccumulatedARKitInfo.swift; sourceTree = "<group>"; };
 		A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalDeviceTranslationAccumulator.swift; sourceTree = "<group>"; };
@@ -176,6 +178,8 @@
 		A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "simd_float4x4+Extension.swift"; sourceTree = "<group>"; };
 		A3CB774126372A9B009625BB /* simd_quatf+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "simd_quatf+Extension.swift"; sourceTree = "<group>"; };
 		A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameFilter.swift; sourceTree = "<group>"; };
+		FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKFilterTests.swift; sourceTree = "<group>"; };
+		FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKGeometricTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -330,7 +334,9 @@
 		A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */ = {
 			isa = PBXGroup;
 			children = (
-				A0D5E88926BA97DA00CE5B1C /* FantasmoSDKTests.swift */,
+				FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */,
+				FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */,
+				A0D5E88926BA97DA00CE5B1C /* SDKLocationTests.swift */,
 				A0D5E88B26BA97DA00CE5B1C /* Info.plist */,
 				4064380B26E7B1B100B38B45 /* UIImage+Extension.swift */,
 			);
@@ -599,18 +605,20 @@
 				A0D5E89326BA98ED00CE5B1C /* Array+Extension.swift in Sources */,
 				A0D5E89526BAA54300CE5B1C /* FMError.swift in Sources */,
 				A0D0C57426BAB96100F35448 /* FMLocationDelegate.swift in Sources */,
-				A0D5E88A26BA97DA00CE5B1C /* FantasmoSDKTests.swift in Sources */,
+				A0D5E88A26BA97DA00CE5B1C /* SDKLocationTests.swift in Sources */,
 				A0D5E89626BAA56100CE5B1C /* ErrorResponse.swift in Sources */,
 				4064380926E7ABA600B38B45 /* FMBlurFilter.swift in Sources */,
 				406437FF26E787A300B38B45 /* FMCamera.swift in Sources */,
 				4064380C26E7B1B100B38B45 /* UIImage+Extension.swift in Sources */,
 				4064380726E7A76A00B38B45 /* Angle.swift in Sources */,
 				A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */,
+				FFA8586D2701D5D20069EB5D /* SDKFilterTests.swift in Sources */,
 				4064380326E79C7A00B38B45 /* MockCamera.swift in Sources */,
 				406437FC26E7864300B38B45 /* FMFrame.swift in Sources */,
 				A0D5E89426BAA51F00CE5B1C /* FMLog.swift in Sources */,
 				A0D0C57326BAB95A00F35448 /* LocationFuser.swift in Sources */,
 				A0D0C57526BAB96500F35448 /* FMZone.swift in Sources */,
+				FFA8586E2701D5D20069EB5D /* SDKGeometricTests.swift in Sources */,
 				4064380126E79C0D00B38B45 /* MockFrame.swift in Sources */,
 				406437F826E7718700B38B45 /* FMMovementFilter.swift in Sources */,
 				4064380626E7A70E00B38B45 /* FMCameraPitchFilter.swift in Sources */,

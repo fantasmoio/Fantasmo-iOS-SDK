@@ -23,7 +23,7 @@ public struct TrackingStateFrameStatistics {
     /// Number of frames captured at the moment when tracking state was `ARFrame.camera.trackingState == .limited`
     public private(set) var framesWithLimitedTrackingStateByReason: [ARCamera.TrackingState.Reason : Int] = [
         .initializing: 0,
-        .relocalizing: 0,
+        // .relocalizing: 0,  -- Removed as it requires iOS 11.3
         .excessiveMotion : 0,
         .insufficientFeatures : 0
     ]

@@ -9,7 +9,7 @@ import UIKit
 import ARKit
 import SceneKit
 
-public protocol FMSessionViewControllerDelegate: UIViewController {
+public protocol FMSessionViewControllerDelegate: AnyObject {
     func sessionViewController(_ sessionViewController: FMSessionViewController, didDetectQRCodeFeature qrCodeFeature: CIQRCodeFeature)
     func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidUpdateLocation result: FMLocationResult)
     func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidRequestBehavior behavior: FMBehaviorRequest)

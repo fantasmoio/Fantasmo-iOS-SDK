@@ -24,10 +24,7 @@ class QRCodeDetector {
         isChecking = true
         DispatchQueue.global(qos: .utility).async { [weak self] in
             let image = CIImage(cvPixelBuffer: frame.capturedImage)
-            guard let qrCodeFeature = self?.detector?.features(in: image).first as? CIQRCodeFeature else {
-                self?.isChecking = false
-                return
-            }
+            let qrCodeFeature = self?.detector?.features(in: image).first as? CIQRCodeFeature
             DispatchQueue.main.async {
                 self?.detectedQRCodeFeature = qrCodeFeature
                 self?.isChecking = false

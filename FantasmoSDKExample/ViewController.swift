@@ -26,10 +26,20 @@ class ViewController: UIViewController {
 
 extension ViewController: FMSessionViewControllerDelegate {
     func sessionViewController(_ sessionViewController: FMSessionViewController, didDetectQRCodeFeature qrCodeFeature: CIQRCodeFeature) {
-        if let message = qrCodeFeature.messageString {
-            print("got qr code: \(message)")
-            sessionViewController.stopQRScanning()
-            sessionViewController.startLocalizing()
-        }
+        print("didDetectQRCodeFeature: \(qrCodeFeature.messageString ?? "")")
+        sessionViewController.stopQRScanning()
+        sessionViewController.startLocalizing(sessionId: UUID().uuidString)
+    }
+
+    func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidUpdateLocation result: FMLocationResult) {
+        print("localizationDidUpdateLocation: \(result)")
+    }
+    
+    func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidRequestBehavior behavior: FMBehaviorRequest) {
+        print("localizationDidRequestBehavior: \(behavior.rawValue)")
+    }
+    
+    func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidFailWithError error: Error, errorMetadata: Any?) {
+        print("localizationDidFailWithError: \(error.localizedDescription)")
     }
 }

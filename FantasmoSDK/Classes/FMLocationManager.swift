@@ -10,7 +10,7 @@ import UIKit
 import ARKit
 import CoreLocation
 
-open class FMLocationManager: NSObject {
+internal class FMLocationManager: NSObject {
     
     public enum State {
         case stopped        // doing nothing

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0134BF872705E8F400DDEF7A /* FMTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0134BF862705E8F400DDEF7A /* FMTipLabel.swift */; };
+		0134BF882705E8F400DDEF7A /* FMTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0134BF862705E8F400DDEF7A /* FMTipLabel.swift */; };
+		0134BF8A270610E800DDEF7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
 		0144B79E27047C38009A4042 /* FMSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B79D27047C38009A4042 /* FMSessionViewController.swift */; };
 		0144B79F27047C38009A4042 /* FMSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B79D27047C38009A4042 /* FMSessionViewController.swift */; };
 		0144B7A127047CC0009A4042 /* FMQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */; };
@@ -151,6 +154,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0134BF862705E8F400DDEF7A /* FMTipLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMTipLabel.swift; sourceTree = "<group>"; };
 		0144B79D27047C38009A4042 /* FMSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSessionViewController.swift; sourceTree = "<group>"; };
 		0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewController.swift; sourceTree = "<group>"; };
 		0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewController.swift; sourceTree = "<group>"; };
@@ -265,12 +269,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0134BF8927060C1D00DDEF7A /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				0134BF862705E8F400DDEF7A /* FMTipLabel.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		0144B79C27047C15009A4042 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0144B79D27047C38009A4042 /* FMSessionViewController.swift */,
-				0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */,
+				0134BF8927060C1D00DDEF7A /* Components */,
 				0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */,
+				0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */,
+				0144B79D27047C38009A4042 /* FMSessionViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -641,6 +654,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0134BF8A270610E800DDEF7A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -688,6 +702,7 @@
 				A34459F326A8246900C96205 /* RotationAngleCalculator.swift in Sources */,
 				946838CB25921BF3005B1145 /* FMZone.swift in Sources */,
 				A0D0C57726BD086E00F35448 /* MotionManager.swift in Sources */,
+				0134BF872705E8F400DDEF7A /* FMTipLabel.swift in Sources */,
 				A34459EF26A8244F00C96205 /* EulerAngleSpreads.swift in Sources */,
 				946838C925921BF3005B1145 /* Location.swift in Sources */,
 				946838C225921BF3005B1145 /* MockData.swift in Sources */,
@@ -749,6 +764,7 @@
 				A0D5E89626BAA56100CE5B1C /* ErrorResponse.swift in Sources */,
 				4064380926E7ABA600B38B45 /* FMBlurFilter.swift in Sources */,
 				406437FF26E787A300B38B45 /* FMCamera.swift in Sources */,
+				0134BF882705E8F400DDEF7A /* FMTipLabel.swift in Sources */,
 				4064380C26E7B1B100B38B45 /* UIImage+Extension.swift in Sources */,
 				4064380726E7A76A00B38B45 /* Angle.swift in Sources */,
 				A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */,

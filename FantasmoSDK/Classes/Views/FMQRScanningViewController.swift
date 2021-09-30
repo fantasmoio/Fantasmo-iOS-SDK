@@ -13,23 +13,16 @@ public protocol FMQRScanningViewControllerProtocol: UIViewController {
 
 public class FMQRScanningViewController: UIViewController {
         
-    var label: UILabel!
+    var label: FMTipLabel!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.init(white: 0.0, alpha: 0.5)
+        view.backgroundColor = UIColor.init(white: 0.0, alpha: 0.5)
         
-        label = UILabel()
-        label.backgroundColor = .black
-        label.textColor = .white
-        label.text = "Scan QR Code"
-        label.textAlignment = .center
-        label.numberOfLines = 1
-        label.sizeToFit()
-        label.layer.cornerRadius = 10.0
-        label.layer.masksToBounds = true
-        self.view.addSubview(label)
+        label = FMTipLabel()
+        label.setText("Scan QR Code")
+        view.addSubview(label)
     }
         
     public override func viewDidLayoutSubviews() {
@@ -59,18 +52,16 @@ public class FMQRScanningViewController: UIViewController {
         maskLayer.path = path
         layer.mask = maskLayer
         
-        let labelPadding = 10.0
-        let labelMaxSize = CGSize(width: cutoutSize - 2 * labelPadding, height: bounds.height - cutoutRect.minY)
+        let labelMaxSize = CGSize(width: cutoutSize, height: bounds.height - cutoutRect.minY)
         var labelRect = CGRect.zero
         labelRect.size = label.sizeThatFits(labelMaxSize)
         labelRect.origin.x = cutoutRect.midX - 0.5 * labelRect.width
         labelRect.origin.y = cutoutRect.minY - labelRect.height - 40.0
-        label.frame = labelRect.insetBy(dx: -labelPadding, dy: -labelPadding)
+        label.frame = labelRect
     }
 }
 
 extension FMQRScanningViewController: FMQRScanningViewControllerProtocol {
     public func didDetectQRCodeFeature(_ qrCodeFeature: CIQRCodeFeature) {
-        log.info("didDetectQRCodeFeature: \(qrCodeFeature.messageString ?? "")")
     }
 }

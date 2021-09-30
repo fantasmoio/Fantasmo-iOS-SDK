@@ -11,6 +11,9 @@ import SceneKit
 
 public protocol FMSessionViewControllerDelegate: UIViewController {
     func sessionViewController(_ sessionViewController: FMSessionViewController, didDetectQRCodeFeature qrCodeFeature: CIQRCodeFeature)
+    func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidUpdateLocation result: FMLocationResult)
+    func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidRequestBehavior behavior: FMBehaviorRequest)
+    func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidFailWithError error: Error, errorMetadata: Any?)
 }
 
 public class FMSessionViewController: UIViewController {
@@ -21,7 +24,7 @@ public class FMSessionViewController: UIViewController {
         case localizing
     }
     
-    private (set) var state: State = .idle
+    public private(set) var state: State = .idle
     
     public weak var delegate: FMSessionViewControllerDelegate?
     
@@ -45,18 +48,21 @@ public class FMSessionViewController: UIViewController {
     /**
      Presents the default or custom registered QR scanning view controller and starts observing QR codes in the ARSession.
      
-     Detected QR codes can be handled either via `FMSessionViewControllerDelegate` or in a custom registered `FMQRScanningViewControllerProtocol` implementation.
+     Detected QR codes can be handled either via `FMSessionViewControllerDelegate` or in a registered `FMQRScanningViewControllerProtocol` implementation.
      This method automatically stops localizing.
      */
     public func startQRScanning() {
         if state == .qrScanning {
             return
         }
+        
         if state == .localizing {
             self.stopLocalizing()
         }
-        state = .qrScanning
+        
         showChildViewController(qrScanningViewControllerType.init())
+        
+        state = .qrScanning
     }
     
     /**
@@ -66,12 +72,20 @@ public class FMSessionViewController: UIViewController {
         if state != .qrScanning {
             return
         }
-        state = .idle
+        
         showChildViewController(nil)
+        
+        state = .idle
     }
     
     // MARK: -
     // MARK: Localization
+        
+    private let clLocationManager: CLLocationManager = CLLocationManager()
+        
+    private let fmLocationManager: FMLocationManager = FMLocationManager.shared
+            
+    private let fmLocationManagerAccessTokenInfoPlistKey = "FMLocationManagerAccessToken"
     
     private var localizingViewControllerType: FMLocalizingViewControllerProtocol.Type = FMLocalizingViewController.self
     
@@ -88,18 +102,46 @@ public class FMSessionViewController: UIViewController {
     /**
      Presents the default or custom registered localizing view controller and starts the localization process.
      
-     Localization results can be handled either via `FMSessionViewControllerDelegate` or in a custom registered `FMLocalizingViewControllerProtocol` implementation.
+     - Parameter sessionId: Identifier for a unique localization session for use by analytics and billing. The max length of the string is 64 characters.
+     
+     Localization results can be handled either via `FMSessionViewControllerDelegate` or in a registered `FMLocalizingViewControllerProtocol` implementation.
      This method automatically stops QR scanning.
      */
-    public func startLocalizing() {
+    public func startLocalizing(sessionId: String) {
         if state == .localizing {
             return
         }
+
         if state == .qrScanning {
             self.stopQRScanning()
         }
-        state = .localizing
+        
+        let accessToken = Bundle.main.object(forInfoDictionaryKey: fmLocationManagerAccessTokenInfoPlistKey) as? String
+        guard let accessToken = accessToken, !accessToken.isEmpty else {
+            log.error("Missing or invalid access token.")
+            log.error("Please add a Fantasmo access token to your Info.plist with the following key: \(fmLocationManagerAccessTokenInfoPlistKey)")
+            return
+        }
+        
+        guard CLLocationManager.locationServicesEnabled() else {
+            log.error("Location services are not enabled or permission was denied by the user.")
+            return
+        }
+        
+        clLocationManager.delegate = self
+        clLocationManager.desiredAccuracy = kCLLocationAccuracyBest
+        clLocationManager.requestWhenInUseAuthorization()
+        clLocationManager.startUpdatingLocation()
+        
+        fmLocationManager.isSimulation = true
+        fmLocationManager.simulationZone = .parking
+        fmLocationManager.logLevel = .debug
+        fmLocationManager.connect(accessToken: accessToken, delegate: self)
+        fmLocationManager.startUpdatingLocation(sessionId: sessionId)
+        
         showChildViewController(localizingViewControllerType.init())
+        
+        state = .localizing
     }
         
     /**
@@ -109,15 +151,15 @@ public class FMSessionViewController: UIViewController {
         if state != .localizing {
             return
         }
-        state = .idle
+        
+        clLocationManager.stopUpdatingLocation()
+        fmLocationManager.stopUpdatingLocation()
+        
         showChildViewController(nil)
+        
+        state = .idle
     }
-    
-    private func handleQRScanningResult(_ qrCodeFeature: CIQRCodeFeature) {
-        qrScanningViewController?.didDetectQRCodeFeature(qrCodeFeature)
-        delegate?.sessionViewController(self, didDetectQRCodeFeature: qrCodeFeature)
-    }
-    
+        
     // MARK: -
     // MARK: UI
     
@@ -174,6 +216,31 @@ public class FMSessionViewController: UIViewController {
     public override var shouldAutorotate: Bool {
         return false
     }
+    
+    deinit {
+        fmLocationManager.stopUpdatingLocation()
+    }
+}
+
+// MARK: -
+// MARK: FMLocationDelegate
+
+extension FMSessionViewController: FMLocationDelegate {
+    
+    func locationManager(didUpdateLocation result: FMLocationResult) {
+        delegate?.sessionViewController(self, localizationDidUpdateLocation: result)
+        localizingViewController?.didUpdateLocation(result)
+    }
+
+    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
+        delegate?.sessionViewController(self, localizationDidRequestBehavior: behavior)
+        localizingViewController?.didRequestBehavior(behavior)
+    }
+
+    func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {
+        delegate?.sessionViewController(self, localizationDidFailWithError: error, errorMetadata: metadata)
+        localizingViewController?.didFailWithError(error, errorMetadata: metadata)
+    }
 }
 
 // MARK: -
@@ -184,11 +251,27 @@ extension FMSessionViewController: ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         if state == .qrScanning {
             if let detectedQRCodeFeature = qrCodeDetector.detectedQRCodeFeature {
-                self.handleQRScanningResult(detectedQRCodeFeature)
+                delegate?.sessionViewController(self, didDetectQRCodeFeature: detectedQRCodeFeature)
+                qrScanningViewController?.didDetectQRCodeFeature(detectedQRCodeFeature)
                 qrCodeDetector.detectedQRCodeFeature = nil
             } else {
                 qrCodeDetector.checkFrameAsync(frame)
             }
+        }
+        if state == .localizing {
+            fmLocationManager.session(session, didUpdate: frame)
+        }
+    }
+}
+
+// MARK: -
+// MARK: CLLocationManagerDelegate
+
+extension FMSessionViewController: CLLocationManagerDelegate {
+    
+    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if state == .localizing {
+            fmLocationManager.locationManager(manager, didUpdateLocations: locations)
         }
     }
 }

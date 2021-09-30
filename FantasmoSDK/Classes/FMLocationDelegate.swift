@@ -8,11 +8,22 @@
 import Foundation
 import CoreLocation
 
-public enum FMResultConfidence: Comparable {
+public enum FMResultConfidence: Comparable, CustomStringConvertible {
     case low
     case medium
     case high
-
+    
+    public var description: String {
+        switch self {
+        case .low:
+            return "Low"
+        case .medium:
+            return "Medium"
+        case .high:
+            return "High"
+        }
+    }
+    
     public func abbreviation() -> String {
         switch self {
         case .low:
@@ -40,7 +51,7 @@ public enum FMBehaviorRequest: String {
 
 /// The methods that you use to receive events from an associated
 /// location manager object.
-public protocol FMLocationDelegate: AnyObject {
+internal protocol FMLocationDelegate: AnyObject {
 
     /// Tells the delegate that new location data is available.
     ///
@@ -63,12 +74,4 @@ public protocol FMLocationDelegate: AnyObject {
     /// remedial action (tilt up or down)
     /// Default implementation provided.
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
-}
-
-/// Empty implementations of the protocol to allow optional
-/// implementation for delegates.
-public extension FMLocationDelegate {
-    func locationManager(didUpdateLocation result: FMLocationResult) {}
-    func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {}
-    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {}
 }

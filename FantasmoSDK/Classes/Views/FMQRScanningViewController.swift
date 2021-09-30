@@ -8,11 +8,11 @@
 import UIKit
 
 public protocol FMQRScanningViewControllerProtocol: UIViewController {
-    
+    func didDetectQRCodeFeature(_ qrCodeFeature: CIQRCodeFeature)
 }
 
-public class FMQRScanningViewController: UIViewController, FMQRScanningViewControllerProtocol {
-    
+public class FMQRScanningViewController: UIViewController {
+        
     var label: UILabel!
     
     public override func viewDidLoad() {
@@ -66,5 +66,11 @@ public class FMQRScanningViewController: UIViewController, FMQRScanningViewContr
         labelRect.origin.x = cutoutRect.midX - 0.5 * labelRect.width
         labelRect.origin.y = cutoutRect.minY - labelRect.height - 40.0
         label.frame = labelRect.insetBy(dx: -labelPadding, dy: -labelPadding)
+    }
+}
+
+extension FMQRScanningViewController: FMQRScanningViewControllerProtocol {
+    public func didDetectQRCodeFeature(_ qrCodeFeature: CIQRCodeFeature) {
+        log.info("didDetectQRCodeFeature: \(qrCodeFeature.messageString ?? "")")
     }
 }

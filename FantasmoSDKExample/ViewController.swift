@@ -25,5 +25,11 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: FMSessionViewControllerDelegate {
-    
+    func sessionViewController(_ sessionViewController: FMSessionViewController, didDetectQRCodeFeature qrCodeFeature: CIQRCodeFeature) {
+        if let message = qrCodeFeature.messageString {
+            print("got qr code: \(message)")
+            sessionViewController.stopQRScanning()
+            sessionViewController.startLocalizing()
+        }
+    }
 }

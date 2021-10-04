@@ -158,7 +158,15 @@ public class FMSessionViewController: UIViewController {
     }
     
     // MARK: -
-    // MARK: Location Manager Properties
+    // MARK: Location Manager
+    
+    public func setAnchor() {
+        fmLocationManager.setAnchor()
+    }
+    
+    public func unsetAnchor() {
+        fmLocationManager.unsetAnchor()
+    }
     
     public var isSimulation: Bool {
         set {

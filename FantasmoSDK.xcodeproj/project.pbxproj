@@ -123,13 +123,6 @@
 			remoteGlobalIDString = 9468388A25921BAF005B1145;
 			remoteInfo = FantasmoSDK;
 		};
-		0144B7DA2704AB71009A4042 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9468388225921BAF005B1145 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9468388A25921BAF005B1145;
-			remoteInfo = FantasmoSDK;
-		};
 		A0D5E88D26BA97DA00CE5B1C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9468388225921BAF005B1145 /* Project object */;
@@ -556,7 +549,6 @@
 			);
 			dependencies = (
 				0144B7D72704AB6C009A4042 /* PBXTargetDependency */,
-				0144B7DB2704AB71009A4042 /* PBXTargetDependency */,
 			);
 			name = FantasmoSDKExample;
 			productName = FantasmoSDKExample;
@@ -794,11 +786,6 @@
 			isa = PBXTargetDependency;
 			target = 9468388A25921BAF005B1145 /* FantasmoSDK */;
 			targetProxy = 0144B7D62704AB6C009A4042 /* PBXContainerItemProxy */;
-		};
-		0144B7DB2704AB71009A4042 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9468388A25921BAF005B1145 /* FantasmoSDK */;
-			targetProxy = 0144B7DA2704AB71009A4042 /* PBXContainerItemProxy */;
 		};
 		A0D5E88E26BA97DA00CE5B1C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

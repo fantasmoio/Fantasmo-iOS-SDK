@@ -16,8 +16,10 @@ class ViewController: UIViewController {
         }
         
         let fmSessionViewController = FMSessionViewController()
-        fmSessionViewController.modalTransitionStyle = .crossDissolve
         fmSessionViewController.modalPresentationStyle = .fullScreen
+        fmSessionViewController.isSimulation = true
+        fmSessionViewController.simulationZone = .parking
+        fmSessionViewController.logLevel = .debug
         fmSessionViewController.delegate = self
         fmSessionViewController.startQRScanning()
         self.present(fmSessionViewController, animated: false)

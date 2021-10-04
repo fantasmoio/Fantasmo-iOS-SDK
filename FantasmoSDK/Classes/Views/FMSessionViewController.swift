@@ -133,9 +133,6 @@ public class FMSessionViewController: UIViewController {
         clLocationManager.requestWhenInUseAuthorization()
         clLocationManager.startUpdatingLocation()
         
-        fmLocationManager.isSimulation = true
-        fmLocationManager.simulationZone = .parking
-        fmLocationManager.logLevel = .debug
         fmLocationManager.connect(accessToken: accessToken, delegate: self)
         fmLocationManager.startUpdatingLocation(sessionId: sessionId)
         
@@ -158,6 +155,36 @@ public class FMSessionViewController: UIViewController {
         showChildViewController(nil)
         
         state = .idle
+    }
+    
+    // MARK: -
+    // MARK: Location Manager Properties
+    
+    public var isSimulation: Bool {
+        set {
+            fmLocationManager.isSimulation = newValue
+        }
+        get {
+            return fmLocationManager.isSimulation
+        }
+    }
+
+    public var simulationZone: FMZone.ZoneType {
+        set {
+            fmLocationManager.simulationZone = newValue
+        }
+        get {
+            return fmLocationManager.simulationZone
+        }
+    }
+
+    public var logLevel: FMLog.LogLevel {
+        set {
+            fmLocationManager.logLevel = newValue
+        }
+        get {
+            return fmLocationManager.logLevel
+        }
     }
         
     // MARK: -

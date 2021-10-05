@@ -21,7 +21,9 @@ class ViewController: UIViewController {
         fmSessionViewController.simulationZone = .parking
         fmSessionViewController.logLevel = .debug
         fmSessionViewController.delegate = self
-        fmSessionViewController.startQRScanning()
+        fmSessionViewController.showsStatistics = true
+        fmSessionViewController.startLocalizing(sessionId: UUID().uuidString)
+//        fmSessionViewController.startQRScanning()
         self.present(fmSessionViewController, animated: false)
     }
 }

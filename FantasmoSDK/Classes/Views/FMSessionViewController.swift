@@ -236,6 +236,8 @@ public class FMSessionViewController: UIViewController {
     
     private var sceneView: ARSCNView!
     
+    private var statisticsView: FMSessionStatisticsView?
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
                 
@@ -248,6 +250,10 @@ public class FMSessionViewController: UIViewController {
         sceneView.automaticallyUpdatesLighting = false
         sceneView.preferredFramesPerSecond = 60
         self.view.addSubview(sceneView)
+        
+        if let statisticsView = statisticsView {
+            self.view.addSubview(statisticsView)
+        }
         
         if let camera = sceneView.pointOfView?.camera {
             camera.wantsHDR = true
@@ -269,6 +275,7 @@ public class FMSessionViewController: UIViewController {
         let bounds = self.view.bounds
         sceneView.frame = bounds
         self.children.forEach { $0.view?.frame = bounds }
+        statisticsView?.frame = bounds
     }
     
     private func showChildViewController(_ childViewController: UIViewController?) {
@@ -277,11 +284,33 @@ public class FMSessionViewController: UIViewController {
             $0.removeFromParent()
             $0.view?.removeFromSuperview()
         }
-        if let childViewController = childViewController {
-            self.view.addSubview(childViewController.view)
-            self.addChild(childViewController)
-            childViewController.didMove(toParent: self)
+        guard let childViewController = childViewController else {
+            return
         }
+        if let statisticsView = statisticsView {
+            self.view.insertSubview(childViewController.view, belowSubview: statisticsView)
+        } else {
+            self.view.addSubview(childViewController.view)
+        }
+        self.addChild(childViewController)
+        childViewController.didMove(toParent: self)
+    }
+    
+    public var showsStatistics: Bool = false {
+        didSet {
+            statisticsView?.removeFromSuperview()
+            statisticsView = nil
+            if showsStatistics {
+                let nibName = String(describing: FMSessionStatisticsView.self)
+                statisticsView = Bundle(for: self.classForCoder).loadNibNamed(nibName, owner: self, options: nil)?.first as? FMSessionStatisticsView
+                statisticsView?.update(state: fmLocationManager.state)
+                self.viewIfLoaded?.addSubview(statisticsView!)
+            }
+        }
+    }
+    
+    private func updateStatisticsViewIfNeeded() {
+        statisticsView?.updateTimed(state: fmLocationManager.state)
     }
     
     public override var shouldAutorotate: Bool {
@@ -296,7 +325,7 @@ public class FMSessionViewController: UIViewController {
 // MARK: -
 // MARK: FMLocationDelegate
 
-extension FMSessionViewController: FMLocationDelegate {
+extension FMSessionViewController: FMLocationManagerDelegate {
     
     func locationManager(didUpdateLocation result: FMLocationResult) {
         delegate?.sessionViewController(self, localizationDidUpdateLocation: result)
@@ -311,6 +340,14 @@ extension FMSessionViewController: FMLocationDelegate {
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {
         delegate?.sessionViewController(self, localizationDidFailWithError: error, errorMetadata: metadata)
         localizingViewController?.didFailWithError(error, errorMetadata: metadata)
+    }
+    
+    func locationManager(didChangeState state: FMLocationManager.State) {
+        statisticsView?.updateTimed(state: state)
+    }
+    
+    func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator) {
+        statisticsView?.updateThrottled(frame: frame, info: info, rejections: rejections)
     }
 }
 

@@ -10,6 +10,11 @@
 		0134BF872705E8F400DDEF7A /* FMTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0134BF862705E8F400DDEF7A /* FMTipLabel.swift */; };
 		0134BF882705E8F400DDEF7A /* FMTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0134BF862705E8F400DDEF7A /* FMTipLabel.swift */; };
 		0134BF8A270610E800DDEF7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
+		0143E8D4270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */; };
+		0143E8D5270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */; };
+		0143E8D8270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */; };
+		0143E8D9270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */; };
+		0143E8DA270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */; };
 		0144B79E27047C38009A4042 /* FMSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B79D27047C38009A4042 /* FMSessionViewController.swift */; };
 		0144B79F27047C38009A4042 /* FMSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B79D27047C38009A4042 /* FMSessionViewController.swift */; };
 		0144B7A127047CC0009A4042 /* FMQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */; };
@@ -95,7 +100,6 @@
 		A35909A0269EE70800A7BF5F /* FMFrameFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */; };
 		A35909A2269EE73E00A7BF5F /* FMCameraPitchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */; };
 		A36BAA49265431A50041E875 /* AssociatedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36BAA48265431A50041E875 /* AssociatedObject.swift */; };
-		A36BAA5126553DF10041E875 /* FMLocationManagerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36BAA5026553DF10041E875 /* FMLocationManagerTester.swift */; };
 		A3798CA526AAF52D007CB41F /* ARCamera+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3798CA426AAF52D007CB41F /* ARCamera+Extension.swift */; };
 		A3798CA926AEA844007CB41F /* FrameFilterRejectionStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3798CA826AEA843007CB41F /* FrameFilterRejectionStatistics.swift */; };
 		A3B57315269C3B2D0089B5F5 /* BehaviorRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B57314269C3B2D0089B5F5 /* BehaviorRequester.swift */; };
@@ -148,6 +152,8 @@
 
 /* Begin PBXFileReference section */
 		0134BF862705E8F400DDEF7A /* FMTipLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMTipLabel.swift; sourceTree = "<group>"; };
+		0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSessionStatisticsView.swift; sourceTree = "<group>"; };
+		0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FMSessionStatisticsView.xib; sourceTree = "<group>"; };
 		0144B79D27047C38009A4042 /* FMSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSessionViewController.swift; sourceTree = "<group>"; };
 		0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewController.swift; sourceTree = "<group>"; };
 		0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewController.swift; sourceTree = "<group>"; };
@@ -213,7 +219,6 @@
 		A359099C269DBBC100A7BF5F /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
 		A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMCameraPitchFilter.swift; sourceTree = "<group>"; };
 		A36BAA48265431A50041E875 /* AssociatedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObject.swift; sourceTree = "<group>"; };
-		A36BAA5026553DF10041E875 /* FMLocationManagerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationManagerTester.swift; sourceTree = "<group>"; };
 		A3798CA426AAF52D007CB41F /* ARCamera+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARCamera+Extension.swift"; sourceTree = "<group>"; };
 		A3798CA826AEA843007CB41F /* FrameFilterRejectionStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameFilterRejectionStatistics.swift; sourceTree = "<group>"; };
 		A3B57314269C3B2D0089B5F5 /* BehaviorRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BehaviorRequester.swift; sourceTree = "<group>"; };
@@ -270,9 +275,19 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		0143E8D2270C693000A3CF35 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */,
+				0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		0144B79C27047C15009A4042 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				0143E8D2270C693000A3CF35 /* Debug */,
 				0134BF8927060C1D00DDEF7A /* Components */,
 				0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */,
 				0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */,
@@ -341,7 +356,6 @@
 			isa = PBXGroup;
 			children = (
 				0144B79C27047C15009A4042 /* Views */,
-				A36BAA4F26553DDB0041E875 /* Testing */,
 				9468389E25921BF3005B1145 /* Mock */,
 				A3BA02D1263919DF00524D66 /* Filters */,
 				946838A125921BF3005B1145 /* Network */,
@@ -468,14 +482,6 @@
 			children = (
 			);
 			name = "Recovered References";
-			sourceTree = "<group>";
-		};
-		A36BAA4F26553DDB0041E875 /* Testing */ = {
-			isa = PBXGroup;
-			children = (
-				A36BAA5026553DF10041E875 /* FMLocationManagerTester.swift */,
-			);
-			path = Testing;
 			sourceTree = "<group>";
 		};
 		A3BA02D1263919DF00524D66 /* Filters */ = {
@@ -637,6 +643,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0144B7D12704AADA009A4042 /* LaunchScreen.storyboard in Resources */,
+				0143E8DA270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */,
 				0144B7CE2704AADA009A4042 /* Assets.xcassets in Resources */,
 				0144B7CC2704AAD9009A4042 /* Main.storyboard in Resources */,
 			);
@@ -647,6 +654,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0134BF8A270610E800DDEF7A /* Assets.xcassets in Resources */,
+				0143E8D8270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -655,6 +663,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				40EA810526E7C6A8002E96A6 /* Assets.xcassets in Resources */,
+				0143E8D9270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -702,7 +711,6 @@
 				946838D025921BF3005B1145 /* ErrorResponse.swift in Sources */,
 				A30EBE09269F32B200E572FA /* AccumulatedARKitInfo.swift in Sources */,
 				946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */,
-				A36BAA5126553DF10041E875 /* FMLocationManagerTester.swift in Sources */,
 				A3CB77342636B496009625BB /* FMPosition.swift in Sources */,
 				946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */,
 				946838D725921BF3005B1145 /* Codable+Extension.swift in Sources */,
@@ -720,6 +728,7 @@
 				A359099A269DAAC300A7BF5F /* UIDevice+Extension.swift in Sources */,
 				015BA28A2705B47400194E9E /* QRCodeDetector.swift in Sources */,
 				A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */,
+				0143E8D4270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */,
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,
 				4064380426E79C7E00B38B45 /* MockFrame.swift in Sources */,
 				A02EA34926B9253900525308 /* Array+Extension.swift in Sources */,
@@ -758,6 +767,7 @@
 				406437FF26E787A300B38B45 /* FMCamera.swift in Sources */,
 				0134BF882705E8F400DDEF7A /* FMTipLabel.swift in Sources */,
 				4064380C26E7B1B100B38B45 /* UIImage+Extension.swift in Sources */,
+				0143E8D5270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */,
 				4064380726E7A76A00B38B45 /* Angle.swift in Sources */,
 				A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */,
 				015BA28B2705B47400194E9E /* QRCodeDetector.swift in Sources */,

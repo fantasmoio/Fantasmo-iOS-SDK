@@ -10,9 +10,18 @@ import UIKit
 import ARKit
 import CoreLocation
 
+
+internal protocol FMLocationManagerDelegate: AnyObject {
+    func locationManager(didUpdateLocation result: FMLocationResult)
+    func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
+    func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
+    func locationManager(didChangeState state: FMLocationManager.State)
+    func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
+}
+
 internal class FMLocationManager: NSObject {
     
-    public enum State {
+    public enum State: String {
         case stopped        // doing nothing
         case localizing     // localizing
         case uploading      // uploading image while localizing
@@ -22,7 +31,13 @@ internal class FMLocationManager: NSObject {
     // MARK: - Properties
     
     public static let shared = FMLocationManager()
-    public private(set) var state = State.stopped
+    public private(set) var state: State = .stopped {
+        didSet {
+            if state != oldValue {
+                delegate?.locationManager(didChangeState: state)
+            }
+        }
+    }
     
     // Clients can use this to mock the localization call
     public var mockLocalize: ((ARFrame) -> Void)?
@@ -60,7 +75,7 @@ internal class FMLocationManager: NSObject {
     
     private var anchorFrame: ARFrame? {
         didSet {
-            tester?.anchorFrame = anchorFrame
+            // tester?.anchorFrame = anchorFrame
             locationFuser.reset()
         }
     }
@@ -69,7 +84,7 @@ internal class FMLocationManager: NSObject {
     
     private lazy var behaviorRequester = BehaviorRequester { [weak self] behaviorRequest in
         // in testing mode, request behaviors even when stopped
-        if self?.tester != nil || self?.state != .stopped {
+        if self?.state != .stopped {
             self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
         }
     }
@@ -77,13 +92,10 @@ internal class FMLocationManager: NSObject {
     // Variables set by delegate handling methods
     private var lastFrame: ARFrame?
     private var lastCLLocation: CLLocation?
-    private weak var delegate: FMLocationDelegate?
+    private weak var delegate: FMLocationManagerDelegate?
 
     // Fusion
     private var locationFuser = LocationFuser()
-
-    /// Used for testing private `FMLocationManager`'s API.
-    private var tester: FMLocationManagerTester?
     
     /// States whether the client code using this manager set up connection with the manager.
     private var isConnected = false
@@ -94,15 +106,6 @@ internal class FMLocationManager: NSObject {
     private var appSessionId: String? // provided by client
     private var localizationSessionId: String? // created by SDK
     private let motionManager = MotionManager()
-
-    // MARK: - Testing
-    
-    /// This initializer must be used only for testing purposes. Otherwise use singleton object via `shared` static property.
-    public init(tester: FMLocationManagerTester? = nil) {
-        self.tester = tester
-        self.tester?.accumulatedARKitInfo = accumulatedARKitInfo
-        self.tester?.frameEventAccumulator = frameEventAccumulator
-    }
     
     // MARK: - Lifecycle
         
@@ -111,7 +114,7 @@ internal class FMLocationManager: NSObject {
     /// - Parameters:
     ///   - accessToken: Token for service authorization.
     ///   - delegate: Delegate for receiving location events.
-    public func connect(accessToken: String, delegate: FMLocationDelegate) {
+    public func connect(accessToken: String, delegate: FMLocationManagerDelegate) {
         log.debug(parameters: ["delegate": delegate])
 
         isConnected = true
@@ -130,7 +133,7 @@ internal class FMLocationManager: NSObject {
     ///   - session: ARSession to subscribe to as a delegate
     ///   - locationManger: CLLocationManager to subscribe to as a delegate
     public func connect(accessToken: String,
-                        delegate: FMLocationDelegate,
+                        delegate: FMLocationManagerDelegate,
                         session: ARSession? = nil,
                         locationManager: CLLocationManager? = nil) {
         log.debug(parameters: [
@@ -287,10 +290,10 @@ internal class FMLocationManager: NSObject {
             let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
             self.delegate?.locationManager(didUpdateLocation: result)
 
-            if let tester = self.tester {
-                let translation = openCVRelativeAnchorTransform?.inNonOpenCvCS.translation
-                tester.locationManager(didUpdateLocation: result, translationOfAnchorInVirtualDeviceCS: translation)
-            }
+//            if let tester = self.tester {
+//                let translation = openCVRelativeAnchorTransform?.inNonOpenCvCS.translation
+//                tester.locationManager(didUpdateLocation: result, translationOfAnchorInVirtualDeviceCS: translation)
+//            }
             
             if self.state != .stopped {
                 self.state = .localizing
@@ -343,13 +346,15 @@ internal class FMLocationManager: NSObject {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
-
-        guard state != .stopped || tester != nil else { return }
-
+        
+        guard state != .stopped else {
+            return
+        }
+        
         let filterResult = frameFilter.accepts(frame)
         behaviorRequester.processResult(filterResult)
         accumulatedARKitInfo.update(with: frame)
-
+        
         if case let .rejected(reason) = filterResult {
             frameEventAccumulator.accumulate(filterRejectionReason: reason)
         } else {
@@ -357,6 +362,8 @@ extension FMLocationManager : ARSessionDelegate {
                 localize(frame: frame, from: session)
             }
         }
+        
+        delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
     }
 }
 

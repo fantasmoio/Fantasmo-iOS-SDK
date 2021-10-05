@@ -130,8 +130,11 @@ public class FMSessionViewController: UIViewController {
         
         clLocationManager.delegate = self
         clLocationManager.desiredAccuracy = kCLLocationAccuracyBest
-        clLocationManager.requestWhenInUseAuthorization()
-        clLocationManager.startUpdatingLocation()
+        
+        if usesInternalLocationManager {
+            clLocationManager.requestWhenInUseAuthorization()
+            clLocationManager.startUpdatingLocation()
+        }
         
         fmLocationManager.connect(accessToken: accessToken, delegate: self)
         fmLocationManager.startUpdatingLocation(sessionId: sessionId)
@@ -155,6 +158,39 @@ public class FMSessionViewController: UIViewController {
         showChildViewController(nil)
         
         state = .idle
+    }
+    
+    /**
+     Controls whether this class uses its own internal `CLLocationManager` to determine the users location.
+     
+     When set to `false` it is expected that the user's location will be manually updated via `updateUserLocation(_:)`. Default is `true`.
+     */
+    public var usesInternalLocationManager: Bool = true {
+        didSet {
+            guard usesInternalLocationManager != oldValue, state == .localizing else {
+                return
+            }
+            if usesInternalLocationManager {
+                clLocationManager.requestWhenInUseAuthorization()
+                clLocationManager.startUpdatingLocation()
+            } else {
+                clLocationManager.stopUpdatingLocation()
+            }
+        }
+    }
+    
+    /**
+     Allows the host app to manually update the user's location when not using the internal `CLLocationManager`.
+     
+     - Parameter location: a `CLLocation` of the user's current location.
+     
+     Note: This method does nothing when `usesInternalLocationManager` is set to `true`.
+     */
+    public func updateUserLocation(_ location: CLLocation) {
+        guard !usesInternalLocationManager else {
+            return
+        }
+        locationManager(clLocationManager, didUpdateLocations: [location])
     }
     
     // MARK: -

@@ -16,7 +16,7 @@ public protocol FMSessionViewControllerDelegate: AnyObject {
     func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidFailWithError error: Error, errorMetadata: Any?)
 }
 
-public class FMSessionViewController: UIViewController {
+public final class FMSessionViewController: UIViewController {
         
     public enum State {
         case idle
@@ -298,14 +298,13 @@ public class FMSessionViewController: UIViewController {
     
     public var showsStatistics: Bool = false {
         didSet {
-            statisticsView?.removeFromSuperview()
-            statisticsView = nil
-            if showsStatistics {
+            if showsStatistics, statisticsView == nil {
                 let nibName = String(describing: FMSessionStatisticsView.self)
                 statisticsView = Bundle(for: self.classForCoder).loadNibNamed(nibName, owner: self, options: nil)?.first as? FMSessionStatisticsView
                 statisticsView?.update(state: fmLocationManager.state)
                 self.viewIfLoaded?.addSubview(statisticsView!)
             }
+            statisticsView?.isHidden = !showsStatistics
         }
     }
     

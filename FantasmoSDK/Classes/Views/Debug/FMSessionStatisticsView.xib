@@ -15,38 +15,52 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="0.0" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="EEl-fL-ZnH">
-                    <rect key="frame" x="15" y="590.5" width="384" height="271.5"/>
+                    <rect key="frame" x="15" y="539.5" width="384" height="322.5"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status: Stopped, Time: 0s" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hd6-Sn-Br5" userLabel="Manager Status Label">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status: stopped, Time: 0s" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hd6-Sn-Br5" userLabel="Manager Status Label">
                             <rect key="frame" x="0.0" y="0.0" width="384" height="20.5"/>
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera Translation: 0.00, 0.00, 0.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WUd-b1-MMC" userLabel="Camera Translation Label">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last result:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XKk-ZN-TKq" userLabel="Last Result Label">
                             <rect key="frame" x="0.0" y="25.5" width="384" height="20.5"/>
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance Traveled: 0m" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vbd-yi-UFp" userLabel="Distance Traveled Label">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Device location:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kgX-fc-kHM" userLabel="Device Location Label">
                             <rect key="frame" x="0.0" y="51" width="384" height="20.5"/>
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Euler Angles: 0.00°, 0.00°, 0.00°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ifi-EE-yAS" userLabel="Euler Angles Label">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Translation: 0.00, 0.00, 0.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WUd-b1-MMC" userLabel="Camera Translation Label">
                             <rect key="frame" x="0.0" y="76.5" width="384" height="20.5"/>
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance traveled: 0m" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vbd-yi-UFp" userLabel="Distance Traveled Label">
+                            <rect key="frame" x="0.0" y="102" width="384" height="20.5"/>
+                            <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Euler Angles: 0.00°, 0.00°, 0.00°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ifi-EE-yAS" userLabel="Euler Angles Label">
+                            <rect key="frame" x="0.0" y="127.5" width="384" height="20.5"/>
+                            <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jvU-2T-GZj" userLabel="Euler Angle Spreads Label">
-                            <rect key="frame" x="0.0" y="102" width="384" height="81.5"/>
+                            <rect key="frame" x="0.0" y="153" width="384" height="81.5"/>
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <string key="text">Euler Angle Spreads:
 	(0.00°, 0.00°) 0.00°
@@ -57,7 +71,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="LRo-P2-gqg" userLabel="Frame Stats Row 1">
-                            <rect key="frame" x="0.0" y="188.5" width="384" height="17"/>
+                            <rect key="frame" x="0.0" y="239.5" width="384" height="17"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Normal: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j02-ud-WcQ" userLabel="Frame Stats Normal Label">
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="17"/>
@@ -83,7 +97,7 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="5kK-H2-aIh" userLabel="Frame Stats Row 2">
-                            <rect key="frame" x="0.0" y="210.5" width="384" height="17"/>
+                            <rect key="frame" x="0.0" y="261.5" width="384" height="17"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Excessive motion: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDf-gL-dv7" userLabel="Frame Stats Excessive Motion Label">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="17"/>
@@ -102,7 +116,7 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="vBa-cP-vML" userLabel="Filter Stats Row 1">
-                            <rect key="frame" x="0.0" y="232.5" width="384" height="17"/>
+                            <rect key="frame" x="0.0" y="283.5" width="384" height="17"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Pitch low: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CxE-hz-leP" userLabel="Filter Stats Pitch Low Label">
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="17"/>
@@ -128,7 +142,7 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="kfj-0A-bdz" userLabel="Filter Stats Row 2">
-                            <rect key="frame" x="0.0" y="254.5" width="384" height="17"/>
+                            <rect key="frame" x="0.0" y="305.5" width="384" height="17"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Too fast: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XQg-wF-Bk6" userLabel="Filter Stats Too Fast Label">
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="17"/>
@@ -167,6 +181,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="cameraTranslationLabel" destination="WUd-b1-MMC" id="3Bg-Va-Jvx"/>
+                <outlet property="deviceLocationLabel" destination="kgX-fc-kHM" id="MsH-5d-JMZ"/>
                 <outlet property="distanceTraveledLabel" destination="vbd-yi-UFp" id="e2o-aV-vEB"/>
                 <outlet property="eulerAngleSpreadsLabel" destination="jvU-2T-GZj" id="YMA-98-x4y"/>
                 <outlet property="eulerAnglesLabel" destination="Ifi-EE-yAS" id="jot-VJ-a9R"/>
@@ -181,6 +196,7 @@
                 <outlet property="frameStatsLimitedLabel" destination="XTY-vW-5Vn" id="Ywt-Ru-4YG"/>
                 <outlet property="frameStatsNormalLabel" destination="j02-ud-WcQ" id="8C9-cK-QxT"/>
                 <outlet property="frameStatsNotAvailableLabel" destination="Xsk-e2-ywP" id="1I6-HF-Q85"/>
+                <outlet property="lastResultLabel" destination="XKk-ZN-TKq" id="gYM-iU-ohh"/>
                 <outlet property="managerStatusLabel" destination="Hd6-Sn-Br5" id="TBd-1A-0fq"/>
             </connections>
             <point key="canvasLocation" x="-455" y="155"/>

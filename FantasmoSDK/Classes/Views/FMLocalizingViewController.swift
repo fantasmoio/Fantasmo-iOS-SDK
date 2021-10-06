@@ -41,7 +41,7 @@ public class FMLocalizingViewController: UIViewController {
 
 extension FMLocalizingViewController: FMLocalizingViewControllerProtocol {
     public func didUpdateLocation(_ result: FMLocationResult) {
-        label.setText("Success\n\(result.location.coordinate)\n\(result.confidence) Confidence")
+        label.setText("Success")
         view.setNeedsLayout()
     }
     

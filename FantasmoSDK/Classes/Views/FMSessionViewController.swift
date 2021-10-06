@@ -310,7 +310,7 @@ public class FMSessionViewController: UIViewController {
     }
     
     private func updateStatisticsViewIfNeeded() {
-        statisticsView?.updateTimed(state: fmLocationManager.state)
+        statisticsView?.update(state: fmLocationManager.state)
     }
     
     public override var shouldAutorotate: Bool {
@@ -330,6 +330,7 @@ extension FMSessionViewController: FMLocationManagerDelegate {
     func locationManager(didUpdateLocation result: FMLocationResult) {
         delegate?.sessionViewController(self, localizationDidUpdateLocation: result)
         localizingViewController?.didUpdateLocation(result)
+        statisticsView?.update(lastResult: result)
     }
 
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
@@ -343,7 +344,7 @@ extension FMSessionViewController: FMLocationManagerDelegate {
     }
     
     func locationManager(didChangeState state: FMLocationManager.State) {
-        statisticsView?.updateTimed(state: state)
+        statisticsView?.update(state: state)
     }
     
     func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator) {
@@ -380,6 +381,7 @@ extension FMSessionViewController: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if state == .localizing {
             fmLocationManager.locationManager(manager, didUpdateLocations: locations)
+            statisticsView?.update(deviceLocation: fmLocationManager.lastCLLocation)
         }
     }
 }

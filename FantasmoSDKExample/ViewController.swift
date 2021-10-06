@@ -10,29 +10,51 @@ import FantasmoSDK
 
 class ViewController: UIViewController {
     
-    @IBAction func handleEndRideButton(_ sender: UIButton) {
-        guard self.presentedViewController == nil else {
+    weak var sessionViewController: FMSessionViewController!
+    
+    @IBOutlet var toggleModeButton: UIButton!
+    @IBOutlet var toggleStatisticsButton: UIButton!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        sessionViewController.startLocalizing(sessionId: UUID().uuidString)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let sessionViewController = segue.destination as? FMSessionViewController else {
             return
         }
+        sessionViewController.isSimulation = true
+        sessionViewController.simulationZone = .parking
+        sessionViewController.logLevel = .debug
+        sessionViewController.delegate = self
+        self.sessionViewController = sessionViewController
+    }
         
-        let fmSessionViewController = FMSessionViewController()
-        fmSessionViewController.modalPresentationStyle = .fullScreen
-        fmSessionViewController.isSimulation = true
-        fmSessionViewController.simulationZone = .parking
-        fmSessionViewController.logLevel = .debug
-        fmSessionViewController.delegate = self
-        fmSessionViewController.showsStatistics = true
-        fmSessionViewController.startLocalizing(sessionId: UUID().uuidString)
-//        fmSessionViewController.startQRScanning()
-        self.present(fmSessionViewController, animated: false)
+    @IBAction func handleToggleStatisticsButton(_ sender: UIButton) {
+        let showsStatistics = !sessionViewController.showsStatistics
+        sessionViewController.showsStatistics = showsStatistics
+        toggleStatisticsButton.isSelected = showsStatistics
+    }
+    
+    @IBAction func handleToggleModeButton(_ sender: UIButton) {
+        switch sessionViewController.state {
+        case .localizing:
+            sessionViewController.startQRScanning()
+            toggleModeButton.setImage(UIImage(systemName: "location.viewfinder"), for: .normal)
+        case .qrScanning:
+            sessionViewController.startLocalizing(sessionId: UUID().uuidString)
+            toggleModeButton.setImage(UIImage(systemName: "qrcode"), for: .normal)
+        default:
+            break
+        }
     }
 }
 
 extension ViewController: FMSessionViewControllerDelegate {
     func sessionViewController(_ sessionViewController: FMSessionViewController, didDetectQRCodeFeature qrCodeFeature: CIQRCodeFeature) {
         print("didDetectQRCodeFeature: \(qrCodeFeature.messageString ?? "")")
-        sessionViewController.stopQRScanning()
-        sessionViewController.startLocalizing(sessionId: UUID().uuidString)
     }
 
     func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidUpdateLocation result: FMLocationResult) {

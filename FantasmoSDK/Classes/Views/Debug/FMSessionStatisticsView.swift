@@ -12,15 +12,19 @@ import ARKit
 internal class FMSessionStatisticsView: UIView {
 
     @IBOutlet var managerStatusLabel: UILabel!
+    
     @IBOutlet var cameraTranslationLabel: UILabel!
     @IBOutlet var distanceTraveledLabel : UILabel!
+    
     @IBOutlet var eulerAnglesLabel: UILabel!
     @IBOutlet var eulerAngleSpreadsLabel: UILabel!
+    
     @IBOutlet var frameStatsNormalLabel: UILabel!
     @IBOutlet var frameStatsLimitedLabel: UILabel!
     @IBOutlet var frameStatsNotAvailableLabel: UILabel!
     @IBOutlet var frameStatsExcessiveMotionLabel: UILabel!
     @IBOutlet var frameStatsInsufficientFeaturesLabel: UILabel!
+    
     @IBOutlet var filterStatsPitchLowLabel: UILabel!
     @IBOutlet var filterStatsPitchHighLabel: UILabel!
     @IBOutlet var filterStatsBlurryLabel: UILabel!
@@ -28,19 +32,22 @@ internal class FMSessionStatisticsView: UIView {
     @IBOutlet var filterStatsTooLittleLabel: UILabel!
     @IBOutlet var filterStatsFeaturesLabel: UILabel!
     
-    var lastUpdateTimestamp: TimeInterval = 0.0
+    @IBOutlet var lastResultLabel: UILabel!
+    @IBOutlet var deviceLocationLabel: UILabel!
+    
+    var lastFrameTimestamp: TimeInterval = 0.0
     
     public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
-        let shouldUpdate = frame.timestamp - lastUpdateTimestamp > (1.0 / refreshRate)
+        let shouldUpdate = frame.timestamp - lastFrameTimestamp > (1.0 / refreshRate)
         guard shouldUpdate else {
             return
         }
-        lastUpdateTimestamp = frame.timestamp
+        lastFrameTimestamp = frame.timestamp
         let translationVector = frame.camera.transform.columns.3
-        let translationFormatted = String(format: "Camera Translation: %.2f, %.2f, %.2f",
+        let translationFormatted = String(format: "Translation: %.2f, %.2f, %.2f",
                                           translationVector.x, translationVector.y, translationVector.z)
         cameraTranslationLabel.text = translationFormatted
-        distanceTraveledLabel.text = String(format: "Distance Traveled: %.2fm", info.totalTranslation)
+        distanceTraveledLabel.text = String(format: "Distance traveled: %.2fm", info.totalTranslation)
         
         let eulerAngles = EulerAngles(frame.camera.eulerAngles)
         eulerAnglesLabel.text = eulerAngles.description(format: "Euler Angles: %.2f˚, %.2f˚, %.2f˚", units: .degrees)
@@ -70,40 +77,59 @@ internal class FMSessionStatisticsView: UIView {
         filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
     }
     
-    var stateTimer: Timer?
-    var stateTimerStart: Date?
+    var localizingStart: Date?
+    var uploadingStart: Date?
     
-    public func updateTimed(state: FMLocationManager.State) {
-        update(state: state)
-        stateTimerStart = Date()
-        stateTimer?.invalidate()
-        stateTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
-            guard let stateTimerStart = self?.stateTimerStart else { return }
-            let seconds = Date().timeIntervalSince(stateTimerStart)
-            self?.update(state: state, timeElapsed: seconds)
+    public func update(state: FMLocationManager.State) {
+        let color: UIColor
+        switch state {
+        case .localizing:
+            localizingStart = Date()
+            color = .green
+        case .uploading:
+            uploadingStart = Date()
+            color = .orange
+        default:
+            color = .black
         }
+        let text = "Status: \(state.rawValue)"
+        managerStatusLabel.attributedText = highlightString(state.rawValue, in: text, color: color)
     }
     
-    public func update(state: FMLocationManager.State, timeElapsed: TimeInterval = 0) {
-        let text = "Status: \(state.rawValue), Time: \(String(format:"%.1f", timeElapsed))s" as NSString
-        let attributedText = NSMutableAttributedString(string: text as String)
-        let statusRange = text.range(of: state.rawValue)
-        if statusRange.length != NSNotFound {
-            let color: UIColor
-            switch state {
-            case .uploading:
-                color = .orange
-            case .localizing:
-                color = .green
-            default:
-                color = .darkGray
-            }
-            attributedText.addAttribute(NSAttributedString.Key.foregroundColor, value: color.cgColor, range: statusRange)
+    public func update(lastResult: FMLocationResult) {
+        let coordinate = lastResult.location.coordinate
+        var lastResultText = String(format: "Last result: %f, %f (%@)",
+                                    coordinate.latitude, coordinate.longitude, lastResult.confidence.description)
+        var uploadingTime: TimeInterval = .nan
+        var localizingTime: TimeInterval = .nan
+        if let uploadingStart = uploadingStart {
+            uploadingTime = Date().timeIntervalSince(uploadingStart)
+            self.uploadingStart = nil
         }
-        managerStatusLabel.attributedText = attributedText
+        if let localizingStart = localizingStart {
+            localizingTime = Date().timeIntervalSince(localizingStart)
+            self.localizingStart = nil
+        }
+        
+        lastResultText += String(format: "\nLocalize time: %.1fs, Upload time: %.1fs", localizingTime, uploadingTime)
+        lastResultLabel.text = lastResultText
     }
     
-    deinit {
-        stateTimer?.invalidate()
+    public func update(deviceLocation: CLLocation?) {
+        var locationText = "Device location: "
+        if let coordinate = deviceLocation?.coordinate {
+            locationText += String(format: "%.6f, %.6f", coordinate.latitude, coordinate.longitude)
+        }
+        deviceLocationLabel.text = locationText
+    }
+    
+    private func highlightString(_ string: String, in source: String, color: UIColor) -> NSAttributedString {
+        let sourceString = source as NSString
+        let attributedString = NSMutableAttributedString(string: source)
+        let colorRange = sourceString.range(of: string)
+        if colorRange.length != NSNotFound {
+            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: color.cgColor, range: colorRange)
+        }
+        return NSAttributedString(attributedString: attributedString)
     }
 }

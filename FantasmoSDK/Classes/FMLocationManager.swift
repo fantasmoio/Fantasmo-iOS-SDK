@@ -90,8 +90,9 @@ internal class FMLocationManager: NSObject {
     }
     
     // Variables set by delegate handling methods
-    private var lastFrame: ARFrame?
-    private var lastCLLocation: CLLocation?
+    public private(set) var lastFrame: ARFrame?
+    public private(set) var lastCLLocation: CLLocation?
+    
     private weak var delegate: FMLocationManagerDelegate?
 
     // Fusion

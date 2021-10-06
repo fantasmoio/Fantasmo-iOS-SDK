@@ -33,22 +33,22 @@ public final class FMSessionViewController: UIViewController {
     
     private var qrCodeDetector = QRCodeDetector()
     
-    private var qrScanningViewControllerType: FMQRScanningViewControllerProtocol.Type = FMQRScanningViewController.self
+    private var qrScanningViewControllerType: FMQRScanningViewController.Type = FMSimpleQRScanningViewController.self
     
-    private var qrScanningViewController: FMQRScanningViewControllerProtocol? { self.children.first as? FMQRScanningViewControllerProtocol }
+    private var qrScanningViewController: FMQRScanningViewController? { self.children.first as? FMQRScanningViewController }
     
     /**
      Registers a custom view controller class to present and use when scanning QR codes.
-     - Parameter classType: Any class type conforming to FMQRScanningViewControllerProtocol.
+     - Parameter classType: Any class type conforming to FMQRScanningViewController.
      */
-    public func registerQRScanningViewController(_ classType: FMQRScanningViewControllerProtocol.Type) {
+    public func registerQRScanningViewController(_ classType: FMQRScanningViewController.Type) {
         qrScanningViewControllerType = classType
     }
 
     /**
      Presents the default or custom registered QR scanning view controller and starts observing QR codes in the ARSession.
      
-     Detected QR codes can be handled either via `FMSessionViewControllerDelegate` or in a registered `FMQRScanningViewControllerProtocol` implementation.
+     Detected QR codes can be handled either via `FMSessionViewControllerDelegate` or in a registered `FMQRScanningViewController` implementation.
      This method automatically stops localizing.
      */
     public func startQRScanning() {
@@ -87,15 +87,15 @@ public final class FMSessionViewController: UIViewController {
             
     private let fmLocationManagerAccessTokenInfoPlistKey = "FMLocationManagerAccessToken"
     
-    private var localizingViewControllerType: FMLocalizingViewControllerProtocol.Type = FMLocalizingViewController.self
+    private var localizingViewControllerType: FMLocalizingViewController.Type = FMSimpleLocalizingViewController.self
     
-    private var localizingViewController: FMLocalizingViewControllerProtocol? { self.children.first as? FMLocalizingViewControllerProtocol }
+    private var localizingViewController: FMLocalizingViewController? { self.children.first as? FMLocalizingViewController }
 
     /**
      Registers a custom view controller type to present and use when localizing.
-     - Parameter classType: Any class type conforming to FMLocalizingViewControllerProtocol.
+     - Parameter classType: Any class type conforming to FMLocalizingViewController.
      */
-    public func registerLocalizingViewController(_ classType: FMLocalizingViewControllerProtocol.Type) {
+    public func registerLocalizingViewController(_ classType: FMLocalizingViewController.Type) {
         localizingViewControllerType = classType
     }
 
@@ -104,7 +104,7 @@ public final class FMSessionViewController: UIViewController {
      
      - Parameter sessionId: Identifier for a unique localization session for use by analytics and billing. The max length of the string is 64 characters.
      
-     Localization results can be handled either via `FMSessionViewControllerDelegate` or in a registered `FMLocalizingViewControllerProtocol` implementation.
+     Localization results can be handled either via `FMSessionViewControllerDelegate` or in a registered `FMLocalizingViewController` implementation.
      This method automatically stops QR scanning.
      */
     public func startLocalizing(sessionId: String) {

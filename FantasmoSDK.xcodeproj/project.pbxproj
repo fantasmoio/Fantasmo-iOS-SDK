@@ -17,10 +17,10 @@
 		0143E8DA270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */; };
 		0144B79E27047C38009A4042 /* FMSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B79D27047C38009A4042 /* FMSessionViewController.swift */; };
 		0144B79F27047C38009A4042 /* FMSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B79D27047C38009A4042 /* FMSessionViewController.swift */; };
-		0144B7A127047CC0009A4042 /* FMSimpleQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A027047CC0009A4042 /* FMSimpleQRScanningViewController.swift */; };
-		0144B7A227047CC0009A4042 /* FMSimpleQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A027047CC0009A4042 /* FMSimpleQRScanningViewController.swift */; };
-		0144B7A427047CEB009A4042 /* FMSimpleLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A327047CEB009A4042 /* FMSimpleLocalizingViewController.swift */; };
-		0144B7A527047CEB009A4042 /* FMSimpleLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A327047CEB009A4042 /* FMSimpleLocalizingViewController.swift */; };
+		0144B7A127047CC0009A4042 /* FMQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */; };
+		0144B7A227047CC0009A4042 /* FMQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */; };
+		0144B7A427047CEB009A4042 /* FMLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */; };
+		0144B7A527047CEB009A4042 /* FMLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */; };
 		0144B7C52704AAD9009A4042 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7C42704AAD8009A4042 /* AppDelegate.swift */; };
 		0144B7C72704AAD9009A4042 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7C62704AAD9009A4042 /* SceneDelegate.swift */; };
 		0144B7C92704AAD9009A4042 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7C82704AAD9009A4042 /* ViewController.swift */; };
@@ -31,20 +31,6 @@
 		0144B7D92704AB71009A4042 /* FantasmoSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		015BA28A2705B47400194E9E /* QRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015BA2892705B47400194E9E /* QRCodeDetector.swift */; };
 		015BA28B2705B47400194E9E /* QRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015BA2892705B47400194E9E /* QRCodeDetector.swift */; };
-		01A3A4EB270E03E600B7679F /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; };
-		01A3A4EC270E03E600B7679F /* FantasmoSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		01FB941A270DF7CC00F92577 /* FMSimpleSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FB9419270DF7CC00F92577 /* FMSimpleSessionViewController.swift */; };
-		01FB941B270DF7CC00F92577 /* FMSimpleSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FB9419270DF7CC00F92577 /* FMSimpleSessionViewController.swift */; };
-		01FB941E270DFD7100F92577 /* FMLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FB941D270DFD7100F92577 /* FMLocalizingViewController.swift */; };
-		01FB941F270DFD7100F92577 /* FMLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FB941D270DFD7100F92577 /* FMLocalizingViewController.swift */; };
-		01FB9421270DFD9100F92577 /* FMQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FB9420270DFD9100F92577 /* FMQRScanningViewController.swift */; };
-		01FB9422270DFD9100F92577 /* FMQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FB9420270DFD9100F92577 /* FMQRScanningViewController.swift */; };
-		01FB942A270E00F000F92577 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FB9429270E00F000F92577 /* AppDelegate.swift */; };
-		01FB942C270E00F000F92577 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FB942B270E00F000F92577 /* SceneDelegate.swift */; };
-		01FB942E270E00F000F92577 /* EndRideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FB942D270E00F000F92577 /* EndRideViewController.swift */; };
-		01FB9431270E00F000F92577 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01FB942F270E00F000F92577 /* Main.storyboard */; };
-		01FB9433270E00F400F92577 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01FB9432270E00F400F92577 /* Assets.xcassets */; };
-		01FB9436270E00F400F92577 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01FB9434270E00F400F92577 /* LaunchScreen.storyboard */; };
 		406437F826E7718700B38B45 /* FMMovementFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */; };
 		406437F926E7719B00B38B45 /* FMFrameFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */; };
 		406437FB26E7864300B38B45 /* FMFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FA26E7864300B38B45 /* FMFrame.swift */; };
@@ -141,13 +127,6 @@
 			remoteGlobalIDString = 9468388A25921BAF005B1145;
 			remoteInfo = FantasmoSDK;
 		};
-		01FB943B270E013700F92577 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9468388225921BAF005B1145 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9468388A25921BAF005B1145;
-			remoteInfo = FantasmoSDK;
-		};
 		A0D5E88D26BA97DA00CE5B1C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9468388225921BAF005B1145 /* Project object */;
@@ -169,17 +148,6 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		01A3A4ED270E03E600B7679F /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				01A3A4EC270E03E600B7679F /* FantasmoSDK.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -187,8 +155,8 @@
 		0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSessionStatisticsView.swift; sourceTree = "<group>"; };
 		0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FMSessionStatisticsView.xib; sourceTree = "<group>"; };
 		0144B79D27047C38009A4042 /* FMSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSessionViewController.swift; sourceTree = "<group>"; };
-		0144B7A027047CC0009A4042 /* FMSimpleQRScanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSimpleQRScanningViewController.swift; sourceTree = "<group>"; };
-		0144B7A327047CEB009A4042 /* FMSimpleLocalizingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSimpleLocalizingViewController.swift; sourceTree = "<group>"; };
+		0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewController.swift; sourceTree = "<group>"; };
+		0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewController.swift; sourceTree = "<group>"; };
 		0144B7C22704AAD8009A4042 /* FantasmoSDKExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0144B7C42704AAD8009A4042 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0144B7C62704AAD9009A4042 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -198,17 +166,6 @@
 		0144B7D02704AADA009A4042 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0144B7D22704AADA009A4042 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		015BA2892705B47400194E9E /* QRCodeDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeDetector.swift; sourceTree = "<group>"; };
-		01FB9419270DF7CC00F92577 /* FMSimpleSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSimpleSessionViewController.swift; sourceTree = "<group>"; };
-		01FB941D270DFD7100F92577 /* FMLocalizingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewController.swift; sourceTree = "<group>"; };
-		01FB9420270DFD9100F92577 /* FMQRScanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewController.swift; sourceTree = "<group>"; };
-		01FB9427270E00F000F92577 /* FantasmoSDKSimpleExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKSimpleExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		01FB9429270E00F000F92577 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		01FB942B270E00F000F92577 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		01FB942D270E00F000F92577 /* EndRideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndRideViewController.swift; sourceTree = "<group>"; };
-		01FB9430270E00F000F92577 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		01FB9432270E00F400F92577 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		01FB9435270E00F400F92577 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		01FB9437270E00F400F92577 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		406437FA26E7864300B38B45 /* FMFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrame.swift; sourceTree = "<group>"; };
 		406437FD26E787A200B38B45 /* FMCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCamera.swift; sourceTree = "<group>"; };
 		4064380026E79C0D00B38B45 /* MockFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFrame.swift; sourceTree = "<group>"; };
@@ -292,14 +249,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		01FB9424270E00F000F92577 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				01A3A4EB270E03E600B7679F /* FantasmoSDK.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		9468388825921BAF005B1145 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -338,14 +287,11 @@
 		0144B79C27047C15009A4042 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0134BF8927060C1D00DDEF7A /* Components */,
 				0143E8D2270C693000A3CF35 /* Debug */,
+				0134BF8927060C1D00DDEF7A /* Components */,
+				0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */,
+				0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */,
 				0144B79D27047C38009A4042 /* FMSessionViewController.swift */,
-				01FB941D270DFD7100F92577 /* FMLocalizingViewController.swift */,
-				01FB9420270DFD9100F92577 /* FMQRScanningViewController.swift */,
-				01FB9419270DF7CC00F92577 /* FMSimpleSessionViewController.swift */,
-				0144B7A327047CEB009A4042 /* FMSimpleLocalizingViewController.swift */,
-				0144B7A027047CC0009A4042 /* FMSimpleQRScanningViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -364,27 +310,12 @@
 			path = FantasmoSDKExample;
 			sourceTree = "<group>";
 		};
-		01FB9428270E00F000F92577 /* FantasmoSDKSimpleExample */ = {
-			isa = PBXGroup;
-			children = (
-				01FB9429270E00F000F92577 /* AppDelegate.swift */,
-				01FB942B270E00F000F92577 /* SceneDelegate.swift */,
-				01FB942D270E00F000F92577 /* EndRideViewController.swift */,
-				01FB942F270E00F000F92577 /* Main.storyboard */,
-				01FB9432270E00F400F92577 /* Assets.xcassets */,
-				01FB9434270E00F400F92577 /* LaunchScreen.storyboard */,
-				01FB9437270E00F400F92577 /* Info.plist */,
-			);
-			path = FantasmoSDKSimpleExample;
-			sourceTree = "<group>";
-		};
 		9468388125921BAF005B1145 = {
 			isa = PBXGroup;
 			children = (
 				9468388D25921BAF005B1145 /* FantasmoSDK */,
 				A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */,
 				0144B7C32704AAD8009A4042 /* FantasmoSDKExample */,
-				01FB9428270E00F000F92577 /* FantasmoSDKSimpleExample */,
 				9468388C25921BAF005B1145 /* Products */,
 				946838E025921DFE005B1145 /* Frameworks */,
 				A3445A0226A8967300C96205 /* Recovered References */,
@@ -397,7 +328,6 @@
 				9468388B25921BAF005B1145 /* FantasmoSDK.framework */,
 				A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */,
 				0144B7C22704AAD8009A4042 /* FantasmoSDKExample.app */,
-				01FB9427270E00F000F92577 /* FantasmoSDKSimpleExample.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -631,25 +561,6 @@
 			productReference = 0144B7C22704AAD8009A4042 /* FantasmoSDKExample.app */;
 			productType = "com.apple.product-type.application";
 		};
-		01FB9426270E00F000F92577 /* FantasmoSDKSimpleExample */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 01FB9438270E00F400F92577 /* Build configuration list for PBXNativeTarget "FantasmoSDKSimpleExample" */;
-			buildPhases = (
-				01FB9423270E00F000F92577 /* Sources */,
-				01FB9424270E00F000F92577 /* Frameworks */,
-				01FB9425270E00F000F92577 /* Resources */,
-				01A3A4ED270E03E600B7679F /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				01FB943C270E013700F92577 /* PBXTargetDependency */,
-			);
-			name = FantasmoSDKSimpleExample;
-			productName = FantasmoSDKSimpleExample;
-			productReference = 01FB9427270E00F000F92577 /* FantasmoSDKSimpleExample.app */;
-			productType = "com.apple.product-type.application";
-		};
 		9468388A25921BAF005B1145 /* FantasmoSDK */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9468389325921BAF005B1145 /* Build configuration list for PBXNativeTarget "FantasmoSDK" */;
@@ -698,9 +609,6 @@
 					0144B7C12704AAD8009A4042 = {
 						CreatedOnToolsVersion = 13.0;
 					};
-					01FB9426270E00F000F92577 = {
-						CreatedOnToolsVersion = 13.0;
-					};
 					9468388A25921BAF005B1145 = {
 						CreatedOnToolsVersion = 12.2;
 					};
@@ -725,7 +633,6 @@
 				9468388A25921BAF005B1145 /* FantasmoSDK */,
 				A0D5E88626BA97DA00CE5B1C /* FantasmoSDKTests */,
 				0144B7C12704AAD8009A4042 /* FantasmoSDKExample */,
-				01FB9426270E00F000F92577 /* FantasmoSDKSimpleExample */,
 			);
 		};
 /* End PBXProject section */
@@ -739,16 +646,6 @@
 				0143E8DA270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */,
 				0144B7CE2704AADA009A4042 /* Assets.xcassets in Resources */,
 				0144B7CC2704AAD9009A4042 /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		01FB9425270E00F000F92577 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				01FB9436270E00F400F92577 /* LaunchScreen.storyboard in Resources */,
-				01FB9433270E00F400F92577 /* Assets.xcassets in Resources */,
-				01FB9431270E00F000F92577 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -783,23 +680,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		01FB9423270E00F000F92577 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				01FB942E270E00F000F92577 /* EndRideViewController.swift in Sources */,
-				01FB942A270E00F000F92577 /* AppDelegate.swift in Sources */,
-				01FB942C270E00F000F92577 /* SceneDelegate.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		9468388725921BAF005B1145 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				946838C125921BF3005B1145 /* FMUtility.swift in Sources */,
 				A3445A0526A896C700C96205 /* TrackingStateFrameStatistics.swift in Sources */,
-				0144B7A127047CC0009A4042 /* FMSimpleQRScanningViewController.swift in Sources */,
+				0144B7A127047CC0009A4042 /* FMQRScanningViewController.swift in Sources */,
 				A02646C0260CE46C00A7FA6B /* FMLog.swift in Sources */,
 				A3CB773F263710D2009625BB /* simd_float4x4+Extension.swift in Sources */,
 				946838C825921BF3005B1145 /* FMIntrinsics.swift in Sources */,
@@ -837,19 +724,17 @@
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,
 				A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */,
 				406437FE26E787A300B38B45 /* FMCamera.swift in Sources */,
-				0144B7A427047CEB009A4042 /* FMSimpleLocalizingViewController.swift in Sources */,
+				0144B7A427047CEB009A4042 /* FMLocalizingViewController.swift in Sources */,
 				A359099A269DAAC300A7BF5F /* UIDevice+Extension.swift in Sources */,
 				015BA28A2705B47400194E9E /* QRCodeDetector.swift in Sources */,
 				A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */,
 				0143E8D4270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */,
-				01FB941E270DFD7100F92577 /* FMLocalizingViewController.swift in Sources */,
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,
 				4064380426E79C7E00B38B45 /* MockFrame.swift in Sources */,
 				A02EA34926B9253900525308 /* Array+Extension.swift in Sources */,
 				946838DB25921BF3005B1145 /* FMConfiguration.swift in Sources */,
 				946838D425921BF3005B1145 /* UIImage+Extension.swift in Sources */,
 				A02646C6260CE58600A7FA6B /* ARFrame+Extension.swift in Sources */,
-				01FB9421270DFD9100F92577 /* FMQRScanningViewController.swift in Sources */,
 				946838C625921BF3005B1145 /* FMError.swift in Sources */,
 				946838D125921BF3005B1145 /* Orientation.swift in Sources */,
 				406437FB26E7864300B38B45 /* FMFrame.swift in Sources */,
@@ -857,7 +742,6 @@
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,
 				4064380526E79C8100B38B45 /* MockCamera.swift in Sources */,
-				01FB941A270DF7CC00F92577 /* FMSimpleSessionViewController.swift in Sources */,
 				A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */,
 				A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */,
 				A3BA03BB263B6C7D00524D66 /* Angle.swift in Sources */,
@@ -874,11 +758,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01FB941F270DFD7100F92577 /* FMLocalizingViewController.swift in Sources */,
 				A0D5E89326BA98ED00CE5B1C /* Array+Extension.swift in Sources */,
 				A0D5E89526BAA54300CE5B1C /* FMError.swift in Sources */,
 				A0D0C57426BAB96100F35448 /* FMLocationDelegate.swift in Sources */,
-				01FB9422270DFD9100F92577 /* FMQRScanningViewController.swift in Sources */,
 				A0D5E88A26BA97DA00CE5B1C /* SDKLocationTests.swift in Sources */,
 				A0D5E89626BAA56100CE5B1C /* ErrorResponse.swift in Sources */,
 				4064380926E7ABA600B38B45 /* FMBlurFilter.swift in Sources */,
@@ -887,15 +769,14 @@
 				4064380C26E7B1B100B38B45 /* UIImage+Extension.swift in Sources */,
 				0143E8D5270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */,
 				4064380726E7A76A00B38B45 /* Angle.swift in Sources */,
-				01FB941B270DF7CC00F92577 /* FMSimpleSessionViewController.swift in Sources */,
 				A0D5E89226BA98E900CE5B1C /* CLLocation+Extension.swift in Sources */,
 				015BA28B2705B47400194E9E /* QRCodeDetector.swift in Sources */,
-				0144B7A227047CC0009A4042 /* FMSimpleQRScanningViewController.swift in Sources */,
+				0144B7A227047CC0009A4042 /* FMQRScanningViewController.swift in Sources */,
 				FFA8586D2701D5D20069EB5D /* SDKFilterTests.swift in Sources */,
 				0144B79F27047C38009A4042 /* FMSessionViewController.swift in Sources */,
 				4064380326E79C7A00B38B45 /* MockCamera.swift in Sources */,
 				406437FC26E7864300B38B45 /* FMFrame.swift in Sources */,
-				0144B7A527047CEB009A4042 /* FMSimpleLocalizingViewController.swift in Sources */,
+				0144B7A527047CEB009A4042 /* FMLocalizingViewController.swift in Sources */,
 				A0D5E89426BAA51F00CE5B1C /* FMLog.swift in Sources */,
 				A0D0C57326BAB95A00F35448 /* LocationFuser.swift in Sources */,
 				A0D0C57526BAB96500F35448 /* FMZone.swift in Sources */,
@@ -915,11 +796,6 @@
 			isa = PBXTargetDependency;
 			target = 9468388A25921BAF005B1145 /* FantasmoSDK */;
 			targetProxy = 0144B7D62704AB6C009A4042 /* PBXContainerItemProxy */;
-		};
-		01FB943C270E013700F92577 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9468388A25921BAF005B1145 /* FantasmoSDK */;
-			targetProxy = 01FB943B270E013700F92577 /* PBXContainerItemProxy */;
 		};
 		A0D5E88E26BA97DA00CE5B1C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -941,22 +817,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				0144B7D02704AADA009A4042 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		01FB942F270E00F000F92577 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				01FB9430270E00F000F92577 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		01FB9434270E00F400F92577 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				01FB9435270E00F400F92577 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1017,66 +877,6 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKExample;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		01FB9439270E00F400F92577 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8V8339VAMG;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FantasmoSDKSimpleExample/Info.plist;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKSimpleExample;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		01FB943A270E00F400F92577 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8V8339VAMG;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = FantasmoSDKSimpleExample/Info.plist;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKSimpleExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1310,15 +1110,6 @@
 			buildConfigurations = (
 				0144B7D42704AADA009A4042 /* Debug */,
 				0144B7D52704AADA009A4042 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		01FB9438270E00F400F92577 /* Build configuration list for PBXNativeTarget "FantasmoSDKSimpleExample" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				01FB9439270E00F400F92577 /* Debug */,
-				01FB943A270E00F400F92577 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

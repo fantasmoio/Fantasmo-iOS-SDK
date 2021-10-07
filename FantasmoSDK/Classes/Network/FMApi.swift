@@ -95,7 +95,7 @@ class FMApi {
             
             // handle valid but erroneous response
             guard !(400...499 ~= code) else {
-                error(FMError(data))
+                error(FMError(ApiError.errorResponse, data))
                 return
             }
             

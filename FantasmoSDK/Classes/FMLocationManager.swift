@@ -92,6 +92,7 @@ internal class FMLocationManager: NSObject {
     // Variables set by delegate handling methods
     public private(set) var lastFrame: ARFrame?
     public private(set) var lastCLLocation: CLLocation?
+    public private(set) var lastResult: FMLocationResult?
     
     private weak var delegate: FMLocationManagerDelegate?
 
@@ -224,6 +225,17 @@ internal class FMLocationManager: NSObject {
     internal func localize(frame: ARFrame, from session: ARSession) {
         guard isConnected else { return }
 
+        // Check that we have access to location services, throw an error and stop updating location for 1 second if not
+        let locationAuthorization = CLLocationManager.authorizationStatus()
+        guard locationAuthorization == .authorizedAlways || locationAuthorization == .authorizedWhenInUse else {
+            self.delegate?.locationManager(didFailWithError: FMError(FMLocationError.accessDenied), errorMetadata: nil)
+            self.state = .paused
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.state = .localizing
+            }
+            return
+        }
+        
         log.debug(parameters: ["simulation": isSimulation])
         state = .uploading
         
@@ -268,7 +280,7 @@ internal class FMLocationManager: NSObject {
         
         // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second
         guard CLLocationCoordinate2DIsValid(approximateCoordinate) else {
-            self.delegate?.locationManager(didFailWithError: FMError(FMError.ErrorType.errorResponse, errorDescription:"No valid CLLocation coordinates"), errorMetadata: nil)
+            self.delegate?.locationManager(didFailWithError: FMError(FMLocationError.invalidCoordinate), errorMetadata: nil)
             self.state = .paused
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.state = .localizing
@@ -290,7 +302,8 @@ internal class FMLocationManager: NSObject {
 
             let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
             self.delegate?.locationManager(didUpdateLocation: result)
-
+            self.lastResult = result
+            
 //            if let tester = self.tester {
 //                let translation = openCVRelativeAnchorTransform?.inNonOpenCvCS.translation
 //                tester.locationManager(didUpdateLocation: result, translationOfAnchorInVirtualDeviceCS: translation)

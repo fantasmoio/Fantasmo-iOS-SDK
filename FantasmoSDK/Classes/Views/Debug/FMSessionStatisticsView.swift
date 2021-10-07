@@ -96,21 +96,24 @@ internal class FMSessionStatisticsView: UIView {
         managerStatusLabel.attributedText = highlightString(state.rawValue, in: text, color: color)
     }
     
-    public func update(lastResult: FMLocationResult) {
-        let coordinate = lastResult.location.coordinate
-        var lastResultText = String(format: "Last result: %f, %f (%@)",
-                                    coordinate.latitude, coordinate.longitude, lastResult.confidence.description)
-        var uploadingTime: TimeInterval = .nan
-        var localizingTime: TimeInterval = .nan
-        if let uploadingStart = uploadingStart {
-            uploadingTime = Date().timeIntervalSince(uploadingStart)
-            self.uploadingStart = nil
+    public func update(lastResult: FMLocationResult?) {
+        var lastResultText = "Last result: "
+        var uploadingTime: TimeInterval = 0
+        var localizingTime: TimeInterval = 0
+        if let lastResult = lastResult {
+            let coordinate = lastResult.location.coordinate
+            lastResultText += String(format: "%f, %f (%@)",
+                                     coordinate.latitude, coordinate.longitude,
+                                     lastResult.confidence.description)
+            if let uploadingStart = uploadingStart {
+                uploadingTime = Date().timeIntervalSince(uploadingStart)
+                self.uploadingStart = nil
+            }
+            if let localizingStart = localizingStart {
+                localizingTime = Date().timeIntervalSince(localizingStart)
+                self.localizingStart = nil
+            }
         }
-        if let localizingStart = localizingStart {
-            localizingTime = Date().timeIntervalSince(localizingStart)
-            self.localizingStart = nil
-        }
-        
         lastResultText += String(format: "\nLocalize time: %.1fs, Upload time: %.1fs", localizingTime, uploadingTime)
         lastResultLabel.text = lastResultText
     }

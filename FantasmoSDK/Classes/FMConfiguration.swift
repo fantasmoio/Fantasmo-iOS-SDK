@@ -16,6 +16,7 @@ internal struct FMConfiguration {
     enum infoKeys: String {
         case apiBaseUrl = "FM_API_BASE_URL"
         case gpsLatLong = "FM_GPS_LAT_LONG"
+        case accessToken = "FM_ACCESS_TOKEN"
     }
 
     /**

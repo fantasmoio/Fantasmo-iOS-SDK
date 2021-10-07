@@ -7,10 +7,6 @@
 
 import UIKit
 
-public protocol FMQRScanningViewControllerProtocol: UIViewController {
-    func didDetectQRCodeFeature(_ qrCodeFeature: CIQRCodeFeature)
-}
-
 public class FMQRScanningViewController: UIViewController {
         
     var label: FMTipLabel!
@@ -62,6 +58,4 @@ public class FMQRScanningViewController: UIViewController {
 }
 
 extension FMQRScanningViewController: FMQRScanningViewControllerProtocol {
-    public func didDetectQRCodeFeature(_ qrCodeFeature: CIQRCodeFeature) {
-    }
 }

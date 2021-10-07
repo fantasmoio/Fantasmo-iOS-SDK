@@ -1,13 +1,12 @@
 //
 //  SceneDelegate.swift
-//  FantasmoSDKExample
+//  FantasmoSDKParkingExample
 //
-//  Created by Nick Jensen on 29.09.21.
+//  Created by Nick Jensen on 07.10.21.
 //
 
 import UIKit
 
-@available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?

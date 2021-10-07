@@ -1,5 +1,5 @@
 //
-//  FMSessionViewController.swift
+//  FMParkingViewController.swift
 //  FantasmoSDK
 //
 //  Created by Nick Jensen on 29.09.21.
@@ -9,14 +9,7 @@ import UIKit
 import ARKit
 import SceneKit
 
-public protocol FMSessionViewControllerDelegate: AnyObject {
-    func sessionViewController(_ sessionViewController: FMSessionViewController, didDetectQRCodeFeature qrCodeFeature: CIQRCodeFeature)
-    func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidUpdateLocation result: FMLocationResult)
-    func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidRequestBehavior behavior: FMBehaviorRequest)
-    func sessionViewController(_ sessionViewController: FMSessionViewController, localizationDidFailWithError error: Error, errorMetadata: Any?)
-}
-
-public final class FMSessionViewController: UIViewController {
+public final class FMParkingViewController: UIViewController {
         
     public enum State {
         case idle
@@ -25,13 +18,36 @@ public final class FMSessionViewController: UIViewController {
     }
     
     public private(set) var state: State = .idle
+        
+    public weak var delegate: FMParkingViewControllerDelegate?
     
-    public weak var delegate: FMSessionViewControllerDelegate?
+    // MARK: -
+    // MARK: Initialization
+    
+    public let sessionId: String
+    
+    public let accessToken: String
+    
+    public init(sessionId: String) {
+        self.sessionId = sessionId
+        guard let accessToken = FMConfiguration.stringForInfoKey(.accessToken) else {
+            fatalError("Missing or invalid access token. Please add an access token to the Info.plist with the following key: " +
+                        "\(FMConfiguration.infoKeys.accessToken.rawValue)")
+        }
+        self.accessToken = accessToken
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: -
     // MARK: QR Codes
     
     private var qrCodeDetector = QRCodeDetector()
+    
+    private var qrCodeAwaitingContinue: Bool = false
     
     private var qrScanningViewControllerType: FMQRScanningViewControllerProtocol.Type = FMQRScanningViewController.self
     
@@ -48,34 +64,39 @@ public final class FMSessionViewController: UIViewController {
     /**
      Presents the default or custom registered QR scanning view controller and starts observing QR codes in the ARSession.
      
-     Detected QR codes can be handled either via `FMSessionViewControllerDelegate` or in a registered `FMQRScanningViewControllerProtocol` implementation.
+     Detected QR codes can be handled either via `FMParkingViewControllerDelegate` and/or in a registered `FMQRScanningViewControllerProtocol` implementation.
      This method automatically stops localizing.
      */
-    public func startQRScanning() {
+    private func startQRScanning() {
         if state == .qrScanning {
             return
         }
-        
         if state == .localizing {
             self.stopLocalizing()
         }
         
+        state = .qrScanning
         showChildViewController(qrScanningViewControllerType.init())
         
-        state = .qrScanning
+        qrScanningViewController?.didStartQRScanning()
+        delegate?.parkingViewControllerDidStartQRScanning(self)
     }
     
     /**
      Dismisses the default or custom registered QR scanning view controller and stops observing QR codes in the ARSession.
      */
-    public func stopQRScanning() {
+    private func stopQRScanning() {
         if state != .qrScanning {
             return
         }
         
-        showChildViewController(nil)
-        
         state = .idle
+        showChildViewController(nil)
+        qrCodeDetector.detectedQRCode = nil
+        qrCodeAwaitingContinue = false
+        
+        qrScanningViewController?.didStopQRScanning()
+        delegate?.parkingViewControllerDidStopQRScanning(self)
     }
     
     // MARK: -
@@ -84,8 +105,6 @@ public final class FMSessionViewController: UIViewController {
     private let clLocationManager: CLLocationManager = CLLocationManager()
         
     private let fmLocationManager: FMLocationManager = FMLocationManager.shared
-            
-    private let fmLocationManagerAccessTokenInfoPlistKey = "FMLocationManagerAccessToken"
     
     private var localizingViewControllerType: FMLocalizingViewControllerProtocol.Type = FMLocalizingViewController.self
     
@@ -104,30 +123,20 @@ public final class FMSessionViewController: UIViewController {
      
      - Parameter sessionId: Identifier for a unique localization session for use by analytics and billing. The max length of the string is 64 characters.
      
-     Localization results can be handled either via `FMSessionViewControllerDelegate` or in a registered `FMLocalizingViewControllerProtocol` implementation.
+     Localization results can be handled either via `FMParkingViewControllerDelegate` and/or in a registered `FMLocalizingViewControllerProtocol` implementation.
      This method automatically stops QR scanning.
      */
-    public func startLocalizing(sessionId: String) {
+    private func startLocalizing() {
         if state == .localizing {
             return
         }
-
         if state == .qrScanning {
             self.stopQRScanning()
         }
         
-        let accessToken = Bundle.main.object(forInfoDictionaryKey: fmLocationManagerAccessTokenInfoPlistKey) as? String
-        guard let accessToken = accessToken, !accessToken.isEmpty else {
-            log.error("Missing or invalid access token.")
-            log.error("Please add a Fantasmo access token to your Info.plist with the following key: \(fmLocationManagerAccessTokenInfoPlistKey)")
-            return
-        }
-        
-        guard CLLocationManager.locationServicesEnabled() else {
-            log.error("Location services are not enabled or permission was denied by the user.")
-            return
-        }
-        
+        state = .localizing
+        showChildViewController(localizingViewControllerType.init())
+
         clLocationManager.delegate = self
         clLocationManager.desiredAccuracy = kCLLocationAccuracyBest
         
@@ -139,25 +148,26 @@ public final class FMSessionViewController: UIViewController {
         fmLocationManager.connect(accessToken: accessToken, delegate: self)
         fmLocationManager.startUpdatingLocation(sessionId: sessionId)
         
-        showChildViewController(localizingViewControllerType.init())
-        
-        state = .localizing
+        localizingViewController?.didStartLocalizing()
+        delegate?.parkingViewControllerDidStartLocalizing(self)
     }
         
     /**
      Dismisses the default or custom registered localizing view controller and stops the localization process.
      */
-    public func stopLocalizing() {
+    private func stopLocalizing() {
         if state != .localizing {
             return
         }
+                
+        state = .idle
+        showChildViewController(nil)
         
         clLocationManager.stopUpdatingLocation()
         fmLocationManager.stopUpdatingLocation()
-        
-        showChildViewController(nil)
-        
-        state = .idle
+            
+        localizingViewController?.didStopLocalizing()
+        delegate?.parkingViewControllerDidStopLocalizing(self)
     }
     
     /**
@@ -195,15 +205,7 @@ public final class FMSessionViewController: UIViewController {
     
     // MARK: -
     // MARK: Location Manager
-    
-    public func setAnchor() {
-        fmLocationManager.setAnchor()
-    }
-    
-    public func unsetAnchor() {
-        fmLocationManager.unsetAnchor()
-    }
-    
+        
     public var isSimulation: Bool {
         set {
             fmLocationManager.isSimulation = newValue
@@ -269,6 +271,14 @@ public final class FMSessionViewController: UIViewController {
         session.run(configuration, options: options)
     }
     
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if state == .idle {
+            startQRScanning()
+        }
+    }
+        
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -302,16 +312,14 @@ public final class FMSessionViewController: UIViewController {
                 let nibName = String(describing: FMSessionStatisticsView.self)
                 statisticsView = Bundle(for: self.classForCoder).loadNibNamed(nibName, owner: self, options: nil)?.first as? FMSessionStatisticsView
                 statisticsView?.update(state: fmLocationManager.state)
+                statisticsView?.update(lastResult: fmLocationManager.lastResult)
+                statisticsView?.update(deviceLocation: fmLocationManager.lastCLLocation)
                 self.viewIfLoaded?.addSubview(statisticsView!)
             }
             statisticsView?.isHidden = !showsStatistics
         }
     }
-    
-    private func updateStatisticsViewIfNeeded() {
-        statisticsView?.update(state: fmLocationManager.state)
-    }
-    
+        
     public override var shouldAutorotate: Bool {
         return false
     }
@@ -324,22 +332,22 @@ public final class FMSessionViewController: UIViewController {
 // MARK: -
 // MARK: FMLocationDelegate
 
-extension FMSessionViewController: FMLocationManagerDelegate {
+extension FMParkingViewController: FMLocationManagerDelegate {
     
     func locationManager(didUpdateLocation result: FMLocationResult) {
-        delegate?.sessionViewController(self, localizationDidUpdateLocation: result)
-        localizingViewController?.didUpdateLocation(result)
+        delegate?.parkingViewController(self, didReceiveLocalizationResult: result)
+        localizingViewController?.didReceiveLocalizationResult(result)
         statisticsView?.update(lastResult: result)
     }
 
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
-        delegate?.sessionViewController(self, localizationDidRequestBehavior: behavior)
-        localizingViewController?.didRequestBehavior(behavior)
+        delegate?.parkingViewController(self, didRequestLocalizationBehavior: behavior)
+        localizingViewController?.didRequestLocalizationBehavior(behavior)
     }
 
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {
-        delegate?.sessionViewController(self, localizationDidFailWithError: error, errorMetadata: metadata)
-        localizingViewController?.didFailWithError(error, errorMetadata: metadata)
+        delegate?.parkingViewController(self, didReceiveLocalizationError: error, errorMetadata: metadata)
+        localizingViewController?.didReceiveLocalizationError(error, errorMetadata: metadata)
     }
     
     func locationManager(didChangeState state: FMLocationManager.State) {
@@ -354,20 +362,52 @@ extension FMSessionViewController: FMLocationManagerDelegate {
 // MARK: -
 // MARK: ARSessionDelegate
 
-extension FMSessionViewController: ARSessionDelegate {
+extension FMParkingViewController: ARSessionDelegate {
 
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        if state == .qrScanning {
-            if let detectedQRCodeFeature = qrCodeDetector.detectedQRCodeFeature {
-                delegate?.sessionViewController(self, didDetectQRCodeFeature: detectedQRCodeFeature)
-                qrScanningViewController?.didDetectQRCodeFeature(detectedQRCodeFeature)
-                qrCodeDetector.detectedQRCodeFeature = nil
-            } else {
-                qrCodeDetector.checkFrameAsync(frame)
+        switch state {
+        case .qrScanning:
+            if qrCodeAwaitingContinue {
+                // A scanned code was already passed to the delegate
+                // but the continueBlock hasn't been called yet.
+                return
             }
-        }
-        if state == .localizing {
+            guard let qrCode = qrCodeDetector.detectedQRCode else {
+                // No code has been detected yet, check for one now.
+                qrCodeDetector.checkFrameAsyncThrottled(frame)
+                return
+            }
+            // A code has been detected, notify the scanning view
+            qrScanningViewController?.didScanQRCode(qrCode)
+            guard let delegate = delegate else {
+                // No delegate set, continue immediately to localization.
+                startLocalizing()
+                return
+            }
+            // Now pass the code to the delegate along with a block to call
+            // deciding whether or not to continue to localization
+            qrCodeAwaitingContinue = true
+            delegate.parkingViewController(self, didScanQRCode: qrCode) { [weak self] shouldContinue in
+                guard Thread.isMainThread else {
+                    fatalError("continueBlock must be invoked on main thread")
+                }
+                guard let state = self?.state, state == .qrScanning else {
+                    return
+                }
+                if shouldContinue {
+                    self?.startLocalizing()
+                } else {
+                    self?.qrCodeAwaitingContinue = false
+                    self?.qrCodeDetector.detectedQRCode = nil
+                }
+            }
+        
+        case .localizing:
+            // If localizing, pass the current AR frame to the location manager
             fmLocationManager.session(session, didUpdate: frame)
+        
+        default:
+            break
         }
     }
 }
@@ -375,7 +415,7 @@ extension FMSessionViewController: ARSessionDelegate {
 // MARK: -
 // MARK: CLLocationManagerDelegate
 
-extension FMSessionViewController: CLLocationManagerDelegate {
+extension FMParkingViewController: CLLocationManagerDelegate {
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if state == .localizing {

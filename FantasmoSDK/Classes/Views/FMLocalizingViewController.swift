@@ -7,12 +7,6 @@
 
 import UIKit
 
-public protocol FMLocalizingViewControllerProtocol: UIViewController {
-    func didUpdateLocation(_ result: FMLocationResult)
-    func didRequestBehavior(_ behavior: FMBehaviorRequest)
-    func didFailWithError(_ error: Error, errorMetadata metadata: Any?)
-}
-
 public class FMLocalizingViewController: UIViewController {
     var label: FMTipLabel!
     
@@ -40,17 +34,17 @@ public class FMLocalizingViewController: UIViewController {
 }
 
 extension FMLocalizingViewController: FMLocalizingViewControllerProtocol {
-    public func didUpdateLocation(_ result: FMLocationResult) {
+    public func didReceiveLocalizationResult(_ result: FMLocationResult) {
         label.setText("Success")
         view.setNeedsLayout()
     }
-    
-    public func didRequestBehavior(_ behavior: FMBehaviorRequest) {
+
+    public func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest) {
         label.setText(behavior.rawValue)
         view.setNeedsLayout()
     }
     
-    public func didFailWithError(_ error: Error, errorMetadata metadata: Any?) {
+    public func didReceiveLocalizationError(_ error: Error, errorMetadata: Any?) {
         label.setText(error.localizedDescription)
         view.setNeedsLayout()
     }

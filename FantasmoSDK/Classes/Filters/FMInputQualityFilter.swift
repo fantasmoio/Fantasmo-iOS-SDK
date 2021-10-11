@@ -32,7 +32,7 @@ class FMInputQualityFilter: FMFrameFilter {
     }
     
     /// Accepted frames should be used for the localization.
-    func accepts(_ frame: ARFrame) -> FMFrameFilterResult {
+    func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
         if shouldForceAccept() {
             lastAcceptTime = clock()
             return .accepted
@@ -66,11 +66,11 @@ public class FMInputQualityFilterTestAdapter {
 
     }
 
-    public func blurAccepts(_ frame: ARFrame) -> Bool {
+    public func blurAccepts(_ frame: FMFrame) -> Bool {
         return accepts(blurFilter, frame: frame)
     }
 
-    func accepts(_ filter: FMFrameFilter, frame: ARFrame) -> Bool {
+    func accepts(_ filter: FMFrameFilter, frame: FMFrame) -> Bool {
         if case .rejected = filter.accepts(frame) {
             return false
         } else {

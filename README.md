@@ -1,3 +1,34 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<!-- *generated with [DocToc](https://github.com/thlorenz/doctoc)* -->
+
+- [Fantasmo-iOS-SDK](#fantasmo-ios-sdk)
+  - [Overview](#overview)
+  - [Installation](#installation)
+    - [CocoaPods (iOS 11+)](#cocoapods-ios-11)
+    - [Carthage (iOS 8+, OS X 10.9+)](#carthage-ios-8-os-x-109)
+    - [Importing](#importing)
+  - [Requirements](#requirements)
+  - [Functionality](#functionality)
+    - [Localization](#localization)
+    - [Anchors](#anchors)
+    - [Semantic Zones](#semantic-zones)
+  - [Usage](#usage)
+    - [Quick Start](#quick-start)
+    - [Initialization](#initialization)
+    - [Delegation](#delegation)
+    - [Localizing](#localizing)
+    - [Behaviors](#behaviors)
+    - [Anchors](#anchors-1)
+    - [Radius Check](#radius-check)
+    - [Simulation Mode](#simulation-mode)
+    - [Logging](#logging)
+    - [Overrides](#overrides)
+  - [Testing](#testing)
+    - [Running Tests](#running-tests)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Fantasmo-iOS-SDK
 
 ## Overview
@@ -11,6 +42,8 @@ Supercharge your app with hyper-accurate positioning using just the camera. The 
 CocoaPods is a dependency manager for Cocoa projects. For usage and installation instructions, visit https://cocoapods.org/. To integrate Fantasmo SDK into your Xcode project using CocoaPods, specify it in your Podfile:
 
    `pod 'FantasmoSDK'`
+
+Your Podfile should also include the line `use_frameworks!` at the top
 
 ### Carthage (iOS 8+, OS X 10.9+)
 
@@ -133,12 +166,15 @@ FMLocationManager.shared.connect(accessToken: "", delegate: self)
 
 ### Delegation
 
-The `FMLocationManager` singleton needs to receive `ARSessionDelegate` and `CLLocationManagerDelegate` updates. You must either set it to be the delegate for your session and location manager, or you must manually call the delegate methods from within your own delegate handlers.
+The `FMLocationManager` singleton needs to receive `ARSessionDelegate` updates, and either needs to receive `CLLocationManagerDelegate` updates or be provided `CLLocation` data by your code. You must either set it to be the delegate for your session and location manager, or you must manually call the delegate methods from within your own delegate handlers.
 
 If you do not need session or location updates, you can simply set `FMLocationManager` as their delegate.
 
 ```swift
 myView?.session.delegate = FMLocationManager.shared
+```
+and if you do not want to provide your own `CLLocation` updates
+```swift
 myLocationManager.delegate = FMLocationManager.shared
 ```
 
@@ -157,12 +193,17 @@ func session(_ session: ARSession, didUpdate frame: ARFrame) {
 func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
   // your update code
 
-  // also update the FMLocationManager
+  // also update the FMLocationManager if needed
   FMLocationManager.shared.locationManager(manager, didUpdateLocations: locations)
 }
 
 ```
+If you want to provide your own location data instead of `CLLocationManager`, you can provide your own `CLLocation` updates with:
+```swift
+FMLocationManager.shared.updateLocation(_ location: CLLocation)
+```
 
+If the SDK does not receive `CLLocation` updates either from `CLLocationManager` or from `FMLocationManager.shared.updateLocation`, it will return an error when trying to localize and the thread will go to sleep for one second while waiting for an update.
 
 ### Localizing 
 
@@ -292,3 +333,17 @@ For _internal development_ testing and demo builds, the API server URL can be sp
 
     key: FM_API_BASE_URL
     value: 192:168:0:1:8090/v1/image.localize
+
+## Testing
+
+### Running Tests
+
+To run unit tests from the command line use the following command:
+
+`xcodebuild test -project FantasmoSDK.xcodeproj -scheme FantasmoSDKTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 12 Pro Max'`
+
+If you would like to see the neatly formatted version that appears in the GitHub actions log pipe the output into xcpretty (you will need to install xcpretty separately):
+
+`xcodebuild test -project FantasmoSDK.xcodeproj -scheme FantasmoSDKTests -destination 'platform=iOS Simulator,OS=latest,name=iPhone 12 Pro Max' | xcpretty`
+
+You can specify multiple target OS and device names to run against if so desired.

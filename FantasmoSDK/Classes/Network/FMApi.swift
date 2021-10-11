@@ -41,6 +41,11 @@ struct FMFrameEvents {
     var total: Int
 }
 
+struct FMFrameResolution: Codable {
+    var height: Int
+    var width: Int
+}
+
 class FMApi {
     
     static let shared = FMApi()
@@ -225,6 +230,8 @@ class FMApi {
                 "lossOfTracking": events.lossOfTracking,
                 "total": events.total,
             ]
+            
+            let imageResolution = getImageResolution(from: frame, request: request)
 
             var params = [
                 "intrinsics" : intrinsics.toJson(),
@@ -249,6 +256,8 @@ class FMApi {
                 "totalDistance": String(request.analytics.totalDistance),
                 "rotationSpread": request.analytics.rotationSpread.toJson(),
                 "magneticData": request.analytics.magneticField.toJson(),
+                "imageResolution": imageResolution.toJson()
+                
             ]
 
             // calculate and send reference frame if anchoring
@@ -281,5 +290,22 @@ class FMApi {
 
         let imageData = FMUtility.toJpeg(pixelBuffer: frame.capturedImage, with: frame.deviceOrientation)
         return imageData
+    }
+    
+    /// Get the image resolution used to perform "localize" HTTP request .
+    ///
+    /// - Parameters:
+    ///   - frame: Frame to return the resolution from
+    ///   - request: Localization request struct
+    ///   - Returns: Resolution as CGSize
+    private func getImageResolution(from frame: ARFrame, request: FMLocalizationRequest) -> FMFrameResolution {
+        // mock if simulation
+        guard !request.isSimulation else {
+            let imageSize = MockData.imageResolution(request)
+            return FMFrameResolution(height: Int(imageSize.height), width: Int(imageSize.width))
+        }
+
+        let resolution = frame.camera.imageResolution
+        return FMFrameResolution(height: Int(resolution.height), width: Int(resolution.width))
     }
 }

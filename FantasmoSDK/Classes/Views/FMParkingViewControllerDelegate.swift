@@ -30,5 +30,5 @@ public extension FMParkingViewControllerDelegate {
     func parkingViewControllerDidStopLocalizing(_ parkingViewController: FMParkingViewController) {}
     func parkingViewController(_ parkingViewController: FMParkingViewController, didRequestLocalizationBehavior behavior: FMBehaviorRequest) {}
     func parkingViewController(_ parkingViewController: FMParkingViewController, didReceiveLocalizationResult result: FMLocationResult) {}
-    func parkingViewController(_ parkingViewController: FMParkingViewController, didReceiveLocalizationError error: Error, errorMetadata: Any?) {}
+    func parkingViewController(_ parkingViewController: FMParkingViewController, didReceiveLocalizationError error: FMError, errorMetadata: Any?) {}
 }

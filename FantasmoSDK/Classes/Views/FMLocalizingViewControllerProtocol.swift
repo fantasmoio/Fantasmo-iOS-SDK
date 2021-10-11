@@ -13,7 +13,7 @@ public protocol FMLocalizingViewControllerProtocol: UIViewController {
     func didStopLocalizing()
     func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest)
     func didReceiveLocalizationResult(_ result: FMLocationResult)
-    func didReceiveLocalizationError(_ error: Error, errorMetadata: Any?)
+    func didReceiveLocalizationError(_ error: FMError, errorMetadata: Any?)
 }
 
 // Default implementation, makes these methods optional.
@@ -22,5 +22,5 @@ extension FMLocalizingViewControllerProtocol {
     public func didStopLocalizing() {}
     public func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest) {}
     public func didReceiveLocalizationResult(_ result: FMLocationResult) {}
-    public func didReceiveLocalizationError(_ error: Error, errorMetadata: Any?) {}
+    public func didReceiveLocalizationError(_ error: FMError, errorMetadata: Any?) {}
 }

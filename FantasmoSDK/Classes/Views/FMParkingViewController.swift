@@ -347,8 +347,8 @@ extension FMParkingViewController: FMLocationManagerDelegate {
     }
 
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {
-        delegate?.parkingViewController(self, didReceiveLocalizationError: error, errorMetadata: metadata)
-        localizingViewController?.didReceiveLocalizationError(error, errorMetadata: metadata)
+        delegate?.parkingViewController(self, didReceiveLocalizationError: error as! FMError, errorMetadata: metadata)
+        localizingViewController?.didReceiveLocalizationError(error as! FMError, errorMetadata: metadata)
     }
     
     func locationManager(didChangeState state: FMLocationManager.State) {

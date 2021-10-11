@@ -16,7 +16,7 @@ public class FMLocalizingViewController: UIViewController {
         view.backgroundColor = UIColor.init(white: 0.0, alpha: 0.5)
         
         label = FMTipLabel()
-        label.setText("Point at stores, signs and buildings around you to get a precise location")
+        label.alpha = 0
         view.addSubview(label)
     }
         
@@ -31,21 +31,30 @@ public class FMLocalizingViewController: UIViewController {
         labelRect.origin.y = bounds.midY - 0.5 * labelRect.height
         label.frame = labelRect
     }
+        
+    private func showBehaviorText(_ behaviorText: String) {
+        UIView.transition(with: self.view, duration: 0.1, options: .transitionCrossDissolve) {
+            self.label.setText(behaviorText)
+            self.label.alpha = behaviorText.isEmpty ? 0 : 1
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+        }
+    }
 }
 
 extension FMLocalizingViewController: FMLocalizingViewControllerProtocol {
     public func didReceiveLocalizationResult(_ result: FMLocationResult) {
-        label.setText("Success")
+        showBehaviorText("")
         view.setNeedsLayout()
     }
 
     public func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest) {
-        label.setText(behavior.rawValue)
+        showBehaviorText(behavior.description)
         view.setNeedsLayout()
     }
     
-    public func didReceiveLocalizationError(_ error: Error, errorMetadata: Any?) {
-        label.setText(error.localizedDescription)
-        view.setNeedsLayout()
+    public func didReceiveLocalizationError(_ error: FMError, errorMetadata: Any?) {
+        log.debug(parameters: ["error": error.localizedDescription])
     }
 }

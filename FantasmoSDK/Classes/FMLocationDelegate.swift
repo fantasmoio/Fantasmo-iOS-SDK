@@ -42,9 +42,27 @@ public struct FMLocationResult {
     public var zones: [FMZone]?
 }
 
-public enum FMBehaviorRequest: String {
-    case tiltUp = "Tilt your device up"
-    case tiltDown = "Tilt your device down"
-    case panAround = "Pan around the scene"
-    case panSlowly = "Pan more slowly"
+public enum FMBehaviorRequest {
+    case pointAtBuildings
+    case tiltUp
+    case tiltDown
+    case panAround
+    case panSlowly
+}
+
+extension FMBehaviorRequest: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .pointAtBuildings:
+            return "Point at stores, signs and buildings around you to get a precise location"
+        case .tiltUp:
+            return "Tilt your device up"
+        case .tiltDown:
+            return "Tilt your device down"
+        case .panAround:
+            return "Pan around the scene"
+        case .panSlowly:
+            return "Pan more slowly"
+        }
+    }
 }

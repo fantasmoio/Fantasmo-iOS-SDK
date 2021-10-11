@@ -289,21 +289,22 @@ public final class FMParkingViewController: UIViewController {
     }
     
     private func showChildViewController(_ childViewController: UIViewController?) {
-        self.children.forEach {
-            $0.willMove(toParent: nil)
-            $0.removeFromParent()
-            $0.view?.removeFromSuperview()
+        let fromViewController = self.children.first
+        fromViewController?.willMove(toParent: nil)
+        fromViewController?.removeFromParent()
+                
+        if let toViewController = childViewController {
+            self.addChild(toViewController)
         }
-        guard let childViewController = childViewController else {
-            return
+        
+        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
+            fromViewController?.view.removeFromSuperview()
+            if let toViewController = childViewController {
+                self.view.addSubview(toViewController.view)
+            }
+        } completion: { _ in
+            childViewController?.didMove(toParent: self)
         }
-        if let statisticsView = statisticsView {
-            self.view.insertSubview(childViewController.view, belowSubview: statisticsView)
-        } else {
-            self.view.addSubview(childViewController.view)
-        }
-        self.addChild(childViewController)
-        childViewController.didMove(toParent: self)
     }
     
     public var showsStatistics: Bool = false {

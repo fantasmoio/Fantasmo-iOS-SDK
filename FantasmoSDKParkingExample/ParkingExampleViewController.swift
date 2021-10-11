@@ -17,7 +17,7 @@ class ParkingExampleViewController: UIViewController {
     @IBAction func handleEndRideButton(_ button: UIButton) {
         let parkingViewController = FMParkingViewController(sessionId: UUID().uuidString)
         // Simulate
-        parkingViewController.showsStatistics = true
+        // parkingViewController.showsStatistics = true
         parkingViewController.isSimulation = true
         parkingViewController.simulationZone = .parking
         //

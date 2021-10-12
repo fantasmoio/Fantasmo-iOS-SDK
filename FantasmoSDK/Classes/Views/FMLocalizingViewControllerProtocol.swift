@@ -10,7 +10,6 @@ import UIKit
 
 public protocol FMLocalizingViewControllerProtocol: UIViewController {
     func didStartLocalizing()
-    func didStopLocalizing()
     func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest)
     func didReceiveLocalizationResult(_ result: FMLocationResult)
     func didReceiveLocalizationError(_ error: FMError, errorMetadata: Any?)
@@ -19,7 +18,6 @@ public protocol FMLocalizingViewControllerProtocol: UIViewController {
 // Default implementation, makes these methods optional.
 public extension FMLocalizingViewControllerProtocol {
     func didStartLocalizing() {}
-    func didStopLocalizing() {}
     func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest) {}
     func didReceiveLocalizationResult(_ result: FMLocationResult) {}
     func didReceiveLocalizationError(_ error: FMError, errorMetadata: Any?) {}

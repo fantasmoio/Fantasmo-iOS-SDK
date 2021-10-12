@@ -20,6 +20,7 @@ public class FMLocalizingViewController: UIViewController {
         
         label = FMTipLabel()
         label.alpha = 0
+        label.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         view.addSubview(label)
         
         toolbar = FMToolbar()
@@ -59,7 +60,7 @@ public class FMLocalizingViewController: UIViewController {
     }
         
     private func showBehaviorText(_ behaviorText: String) {
-        UIView.transition(with: self.view, duration: 0.1, options: .transitionCrossDissolve) {
+        UIView.transition(with: self.view, duration: 0.5, options: .transitionCrossDissolve) {
             self.label.setText(behaviorText)
             self.label.alpha = behaviorText.isEmpty ? 0 : 1
             self.view.setNeedsLayout()

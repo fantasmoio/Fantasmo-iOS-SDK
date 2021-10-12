@@ -64,39 +64,18 @@ public final class FMParkingViewController: UIViewController {
     /**
      Presents the default or custom registered QR scanning view controller and starts observing QR codes in the ARSession.
      
-     Detected QR codes can be handled either via `FMParkingViewControllerDelegate` and/or in a registered `FMQRScanningViewControllerProtocol` implementation.
-     This method automatically stops localizing.
+     This method is only intended to be called while idle.
      */
     private func startQRScanning() {
-        if state == .qrScanning {
+        if state != .idle {
             return
-        }
-        if state == .localizing {
-            self.stopLocalizing()
         }
         
         state = .qrScanning
-        showChildViewController(qrScanningViewControllerType.init())
+        showChildViewController(qrScanningViewControllerType.init(), animated: false)
         
         qrScanningViewController?.didStartQRScanning()
         delegate?.parkingViewControllerDidStartQRScanning(self)
-    }
-    
-    /**
-     Dismisses the default or custom registered QR scanning view controller and stops observing QR codes in the ARSession.
-     */
-    private func stopQRScanning() {
-        if state != .qrScanning {
-            return
-        }
-        
-        state = .idle
-        showChildViewController(nil)
-        qrCodeDetector.detectedQRCode = nil
-        qrCodeAwaitingContinue = false
-        
-        qrScanningViewController?.didStopQRScanning()
-        delegate?.parkingViewControllerDidStopQRScanning(self)
     }
     
     // MARK: -
@@ -121,22 +100,19 @@ public final class FMParkingViewController: UIViewController {
     /**
      Presents the default or custom registered localizing view controller and starts the localization process.
      
-     - Parameter sessionId: Identifier for a unique localization session for use by analytics and billing. The max length of the string is 64 characters.
-     
-     Localization results can be handled either via `FMParkingViewControllerDelegate` and/or in a registered `FMLocalizingViewControllerProtocol` implementation.
-     This method automatically stops QR scanning.
+     This method is only intended to be called while QR scanning, it performs an animated transition to the localization view.
      */
     private func startLocalizing() {
-        if state == .localizing {
+        if state != .qrScanning {
             return
         }
-        if state == .qrScanning {
-            self.stopQRScanning()
-        }
+        
+        qrScanningViewController?.didStopQRScanning()
+        delegate?.parkingViewControllerDidStopQRScanning(self)
         
         state = .localizing
-        showChildViewController(localizingViewControllerType.init())
-
+        showChildViewController(localizingViewControllerType.init(), animated: true)
+                
         clLocationManager.delegate = self
         clLocationManager.desiredAccuracy = kCLLocationAccuracyBest
         
@@ -150,24 +126,6 @@ public final class FMParkingViewController: UIViewController {
         
         localizingViewController?.didStartLocalizing()
         delegate?.parkingViewControllerDidStartLocalizing(self)
-    }
-        
-    /**
-     Dismisses the default or custom registered localizing view controller and stops the localization process.
-     */
-    private func stopLocalizing() {
-        if state != .localizing {
-            return
-        }
-                
-        state = .idle
-        showChildViewController(nil)
-        
-        clLocationManager.stopUpdatingLocation()
-        fmLocationManager.stopUpdatingLocation()
-            
-        localizingViewController?.didStopLocalizing()
-        delegate?.parkingViewControllerDidStopLocalizing(self)
     }
     
     /**
@@ -288,23 +246,31 @@ public final class FMParkingViewController: UIViewController {
         statisticsView?.frame = bounds
     }
     
-    private func showChildViewController(_ childViewController: UIViewController?) {
+    private func showChildViewController(_ childViewController: UIViewController?, animated: Bool) {
         let fromViewController = self.children.first
         fromViewController?.willMove(toParent: nil)
         fromViewController?.removeFromParent()
                 
         if let toViewController = childViewController {
             self.addChild(toViewController)
+            self.view.addSubview(toViewController.view)
+            toViewController.view.layoutIfNeeded()
         }
         
-        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
-            fromViewController?.view.removeFromSuperview()
-            if let toViewController = childViewController {
-                self.view.addSubview(toViewController.view)
-            }
-        } completion: { _ in
+        guard animated else {
             childViewController?.didMove(toParent: self)
+            fromViewController?.view.removeFromSuperview()
+            return
         }
+        
+        childViewController?.view.alpha = 0
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
+            childViewController?.view.alpha = 1
+            fromViewController?.view.alpha = 0
+        }, completion: { _ in
+            childViewController?.didMove(toParent: self)
+            fromViewController?.view.removeFromSuperview()
+        })
     }
     
     public var showsStatistics: Bool = false {

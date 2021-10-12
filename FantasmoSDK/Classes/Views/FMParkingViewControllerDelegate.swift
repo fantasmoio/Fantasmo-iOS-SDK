@@ -13,7 +13,6 @@ public protocol FMParkingViewControllerDelegate: AnyObject {
     func parkingViewControllerDidStopQRScanning(_ parkingViewController: FMParkingViewController)
     func parkingViewController(_ parkingViewController: FMParkingViewController, didScanQRCode qrCode: CIQRCodeFeature, continueBlock: @escaping ((Bool) -> Void))
     func parkingViewControllerDidStartLocalizing(_ parkingViewController: FMParkingViewController)
-    func parkingViewControllerDidStopLocalizing(_ parkingViewController: FMParkingViewController)
     func parkingViewController(_ parkingViewController: FMParkingViewController, didRequestLocalizationBehavior behavior: FMBehaviorRequest)
     func parkingViewController(_ parkingViewController: FMParkingViewController, didReceiveLocalizationResult result: FMLocationResult)
     func parkingViewController(_ parkingViewController: FMParkingViewController, didReceiveLocalizationError error: FMError, errorMetadata: Any?)
@@ -27,7 +26,6 @@ public extension FMParkingViewControllerDelegate {
         continueBlock(true) // Default behavior, continue immediately to localization.
     }
     func parkingViewControllerDidStartLocalizing(_ parkingViewController: FMParkingViewController) {}
-    func parkingViewControllerDidStopLocalizing(_ parkingViewController: FMParkingViewController) {}
     func parkingViewController(_ parkingViewController: FMParkingViewController, didRequestLocalizationBehavior behavior: FMBehaviorRequest) {}
     func parkingViewController(_ parkingViewController: FMParkingViewController, didReceiveLocalizationResult result: FMLocationResult) {}
     func parkingViewController(_ parkingViewController: FMParkingViewController, didReceiveLocalizationError error: FMError, errorMetadata: Any?) {}

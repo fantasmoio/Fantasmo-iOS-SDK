@@ -8,7 +8,10 @@
 import UIKit
 
 public class FMLocalizingViewController: UIViewController {
+    
     var label: FMTipLabel!
+    
+    var toolbar: FMToolbar!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,17 +21,40 @@ public class FMLocalizingViewController: UIViewController {
         label = FMTipLabel()
         label.alpha = 0
         view.addSubview(label)
-    }
         
+        toolbar = FMToolbar()
+        toolbar.title = "VERIFY PARKING"
+        toolbar.closeButton.addTarget(self, action: #selector(handleCloseButton(_:)), for: .touchUpInside)
+        view.addSubview(toolbar)
+    }
+
+    @objc private func handleCloseButton(_ sender: UIButton) {
+        guard let parkingViewController = self.parent as? FMParkingViewController else {
+            return
+        }
+        parkingViewController.dismiss(animated: true, completion: nil)
+    }
+    
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         let bounds = self.view.bounds
+        let safeAreaBounds = self.view.safeAreaLayoutGuide.layoutFrame
+        
+        var toolbarRect = toolbar.frame
+        toolbarRect.origin.y = safeAreaBounds.origin.y
+        toolbarRect.size.width = safeAreaBounds.width
+        toolbarRect.size.height = FMToolbar.height
+        toolbar.frame = toolbarRect
+
         let labelMaxSize = CGSize(width: 300.0, height: bounds.height)
         var labelRect = CGRect.zero
         labelRect.size = label.sizeThatFits(labelMaxSize)
         labelRect.origin.x = bounds.midX - 0.5 * labelRect.width
-        labelRect.origin.y = bounds.midY - 0.5 * labelRect.height
+        
+        let qrCutoutSize = min(300.0, bounds.size.width - 80.0)
+        let labelAreaHeight = (bounds.midY - 0.5 * qrCutoutSize) - toolbarRect.maxY
+        labelRect.origin.y = toolbarRect.maxY + 0.5 * labelAreaHeight - 0.5 * labelRect.height
         label.frame = labelRect
     }
         

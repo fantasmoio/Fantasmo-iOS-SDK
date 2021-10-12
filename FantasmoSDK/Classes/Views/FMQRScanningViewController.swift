@@ -10,15 +10,29 @@ import UIKit
 public class FMQRScanningViewController: UIViewController {
         
     var label: FMTipLabel!
+
+    var toolbar: FMToolbar!
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor.init(white: 0.0, alpha: 0.5)
-        
+                
         label = FMTipLabel()
         label.setText("Scan QR Code")
         view.addSubview(label)
+        
+        toolbar = FMToolbar()
+        toolbar.title = "VERIFY PARKING"
+        toolbar.closeButton.addTarget(self, action: #selector(handleCloseButton(_:)), for: .touchUpInside)
+        view.addSubview(toolbar)
+    }
+    
+    @objc private func handleCloseButton(_ sender: UIButton) {
+        guard let parkingViewController = self.parent as? FMParkingViewController else {
+            return
+        }
+        parkingViewController.dismiss(animated: true, completion: nil)
     }
         
     public override func viewDidLayoutSubviews() {
@@ -26,6 +40,13 @@ public class FMQRScanningViewController: UIViewController {
         
         let layer = self.view.layer
         let bounds = self.view.bounds
+        let safeAreaBounds = self.view.safeAreaLayoutGuide.layoutFrame
+        
+        var toolbarRect = toolbar.frame
+        toolbarRect.origin.y = safeAreaBounds.origin.y
+        toolbarRect.size.width = safeAreaBounds.width
+        toolbarRect.size.height = FMToolbar.height
+        toolbar.frame = toolbarRect
         
         let maskLayer = CAShapeLayer()
         maskLayer.backgroundColor = UIColor.clear.cgColor
@@ -52,7 +73,9 @@ public class FMQRScanningViewController: UIViewController {
         var labelRect = CGRect.zero
         labelRect.size = label.sizeThatFits(labelMaxSize)
         labelRect.origin.x = cutoutRect.midX - 0.5 * labelRect.width
-        labelRect.origin.y = cutoutRect.minY - labelRect.height - 40.0
+        
+        let labelAreaHeight = (bounds.midY - 0.5 * cutoutSize) - toolbarRect.maxY
+        labelRect.origin.y = toolbarRect.maxY + 0.5 * labelAreaHeight - 0.5 * labelRect.height
         label.frame = labelRect
     }
 }

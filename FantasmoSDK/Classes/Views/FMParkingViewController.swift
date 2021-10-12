@@ -326,6 +326,7 @@ public final class FMParkingViewController: UIViewController {
     }
     
     deinit {
+        fmLocationManager.unsetAnchor()
         fmLocationManager.stopUpdatingLocation()
     }
 }
@@ -385,8 +386,9 @@ extension FMParkingViewController: ARSessionDelegate {
                 startLocalizing()
                 return
             }
-            // Now pass the code to the delegate along with a block to call
-            // deciding whether or not to continue to localization
+            // Set an AR anchor to use when localizing
+            fmLocationManager.setAnchor()
+            // Pass the scanned code to the delegate along with a continueBlock
             qrCodeAwaitingContinue = true
             delegate.parkingViewController(self, didScanQRCode: qrCode) { [weak self] shouldContinue in
                 guard Thread.isMainThread else {
@@ -400,6 +402,7 @@ extension FMParkingViewController: ARSessionDelegate {
                 } else {
                     self?.qrCodeAwaitingContinue = false
                     self?.qrCodeDetector.detectedQRCode = nil
+                    self?.fmLocationManager.unsetAnchor()
                 }
             }
         

@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-internal struct FMConfiguration {
+struct FMConfiguration {
 
     /**
      Info.plist keys used for configuration

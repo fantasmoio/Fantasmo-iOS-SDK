@@ -10,8 +10,7 @@ import UIKit
 import ARKit
 import CoreLocation
 
-
-internal protocol FMLocationManagerDelegate: AnyObject {
+protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didUpdateLocation result: FMLocationResult)
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
@@ -19,9 +18,9 @@ internal protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
 }
 
-internal class FMLocationManager: NSObject {
+class FMLocationManager: NSObject {
     
-    public enum State: String {
+    enum State: String {
         case stopped        // doing nothing
         case localizing     // localizing
         case uploading      // uploading image while localizing
@@ -222,7 +221,7 @@ internal class FMLocationManager: NSObject {
     /// provides a response via the delegate.
     ///
     /// - Parameter frame: Frame to localize.
-    internal func localize(frame: ARFrame, from session: ARSession) {
+    public func localize(frame: ARFrame, from session: ARSession) {
         guard isConnected else { return }
 
         // Check that we have access to location services, throw an error and stop updating location for 1 second if not

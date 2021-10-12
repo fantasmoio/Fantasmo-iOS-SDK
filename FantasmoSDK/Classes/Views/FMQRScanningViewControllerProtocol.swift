@@ -16,8 +16,8 @@ public protocol FMQRScanningViewControllerProtocol: UIViewController {
 }
 
 // Default implementation, makes these methods optional.
-extension FMQRScanningViewControllerProtocol {
-    public func didStartQRScanning() {}
-    public func didStopQRScanning() {}
-    public func didScanQRCode(_ qrCode: CIQRCodeFeature) {}
+public extension FMQRScanningViewControllerProtocol {
+    func didStartQRScanning() {}
+    func didStopQRScanning() {}
+    func didScanQRCode(_ qrCode: CIQRCodeFeature) {}
 }

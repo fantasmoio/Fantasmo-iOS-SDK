@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import ARKit
 
-internal class FMSessionStatisticsView: UIView {
+class FMSessionStatisticsView: UIView {
 
     @IBOutlet var managerStatusLabel: UILabel!
     

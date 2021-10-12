@@ -8,7 +8,7 @@
 import ARKit
 
 /// Statistics on frames by the quality of ARKit position tracking.
-public struct TrackingStateFrameStatistics {
+struct TrackingStateFrameStatistics {
     
     public private(set) var totalNumberOfFrames: Int = 0
     

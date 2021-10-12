@@ -11,7 +11,7 @@ import ARKit
 // is passing back a rectified image. Lens distortion lookup tables are available through
 // AVCameraCalibrationData. The intrinsics change on a frame-to-frame basis which requires they
 // are parsed for each frame.
-public struct FMIntrinsics:Codable {
+struct FMIntrinsics:Codable {
     
     var fx:Float
     var fy:Float

@@ -8,7 +8,7 @@
 import Foundation
 import simd
 
-public struct FMPosition: Codable, Equatable {
+struct FMPosition: Codable, Equatable {
     
     var x, y, z: Float
     

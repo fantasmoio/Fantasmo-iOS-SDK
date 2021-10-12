@@ -44,7 +44,8 @@ class BehaviorRequester {
                     let behaviorRequest = (newBehavior != lastTriggerBehavior) ? newBehavior : defaultBehavior
                     requestHandler(behaviorRequest)
                     lastTriggerBehavior = behaviorRequest
-                    restart()
+                    lastTriggerTime = clock()
+                    rejectionCounts.removeAll(keepingCapacity: true)
                 }
             } else {
                 rejectionCounts[rejectionReason] = count
@@ -60,5 +61,6 @@ class BehaviorRequester {
     func restart() {
         lastTriggerTime = clock()
         rejectionCounts.removeAll(keepingCapacity: true)
+        didRequestInitialDefaultBehavior = false
     }
 }

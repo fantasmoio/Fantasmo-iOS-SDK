@@ -129,9 +129,9 @@ public final class FMParkingViewController: UIViewController {
     }
     
     /**
-     Controls whether this class uses its own internal `CLLocationManager` to determine the users location.
+     Controls whether this class uses its own internal `CLLocationManager` to automatically receive location updates. Default is `true`.
      
-     When set to `false` it is expected that the user's location will be manually updated via `updateUserLocation(_:)`. Default is `true`.
+     When set to `false` it is expected that location updates will be manually provided via the `updateLocation(_:)` method.
      */
     public var usesInternalLocationManager: Bool = true {
         didSet {
@@ -389,9 +389,10 @@ extension FMParkingViewController: ARSessionDelegate {
 extension FMParkingViewController: CLLocationManagerDelegate {
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if state == .localizing {
-            fmLocationManager.locationManager(manager, didUpdateLocations: locations)
-            statisticsView?.update(deviceLocation: fmLocationManager.lastCLLocation)
+        guard usesInternalLocationManager, state == .localizing else {
+            return
         }
+        fmLocationManager.locationManager(manager, didUpdateLocations: locations)
+        statisticsView?.update(deviceLocation: fmLocationManager.lastCLLocation)
     }
 }

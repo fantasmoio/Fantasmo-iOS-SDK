@@ -183,7 +183,7 @@ extension ViewController: FMParkingViewControllerDelegate {
 
 The `sessionId` parameter allows you to associate localization results with your own session identifier. Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking session might involve multiple localization attempts. For analytics and billing purposes, this identifier allows you to link a set of attempts with a single parking session.
 
-### Providing CLLocation updates
+### Providing location updates
 
 By default, during localization the `FMParkingViewController` uses a `CLLocationManager` internally to get automatic updates to the device's location. If you would like to provide your own `CLLocation` updates, you can set the `usesInternalLocationManager` property to `false` and manually call `updateLocation(_ location: CLLocation)` with each update to the location.
 

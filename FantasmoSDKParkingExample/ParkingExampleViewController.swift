@@ -29,9 +29,12 @@ class ParkingExampleViewController: UIViewController {
     }
     
     func startParkingFlow() {
-        /// Configure a FMParkingViewController
-        let parkingViewController = FMParkingViewController(sessionId: UUID().uuidString)
-        /// Assign a delegate
+        /// Create a new `FMParkingViewController` and `sessionId`. This is typically a UUID string
+        /// but it can also follow your own format. It is used for analytics and billing purposes and
+        /// should represent a single parking session.
+        let sessionId = UUID().uuidString
+        let parkingViewController = FMParkingViewController(sessionId: sessionId)
+
         parkingViewController.delegate = self
         /// Present modally to start
         parkingViewController.modalPresentationStyle = .fullScreen

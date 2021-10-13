@@ -10,7 +10,38 @@ import ARKit
 import SceneKit
 
 public final class FMParkingViewController: UIViewController {
-        
+    
+    /// Default radius in meters used when checking parking availability via `isParkingAvailable(near:completion:)`.
+    ///
+    /// This value can be overriden in the Info.plist with the key `FM_AVAILABILITY_RADIUS`
+    public static let defaultParkingAvailabilityRadius: Int = 50
+    
+    /// Check if there's an available parking space near the supplied coordinate.
+    ///
+    /// - Parameter coordinate: the coordinate to check
+    /// - Parameter completion: block with a boolean result
+    ///
+    /// This method should be used to determine whether or not you should try to park and localize with Fantasmo.
+    /// The boolean value passed to the completion block tells you if there is an available parking space within the
+    /// acceptable radius of the supplied location. If `true`, you should construct an `FMParkingViewController` and
+    /// attempt to localize. If `false` you should resort to other options.
+    public static func isParkingAvailable(near coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
+        log.debug()
+        guard CLLocationCoordinate2DIsValid(coordinate) else {
+            log.error(FMError(FMLocationError.invalidCoordinate))
+            completion(false)
+            return
+        }
+        let radius = FMConfiguration.intForInfoKey(.availabilityRadius) ?? defaultParkingAvailabilityRadius
+        FMApi.shared.token = FMConfiguration.accessToken()
+        FMApi.shared.sendZoneInRadiusRequest(.parking, coordinate: coordinate, radius: radius, completion: completion
+        ) { error in
+            // For now, clients only care if a zone was found, so an error condition can be treated as a `false` completion
+            log.error(error)
+            completion(false)
+        }
+    }
+    
     public enum State {
         case idle
         case qrScanning
@@ -30,11 +61,7 @@ public final class FMParkingViewController: UIViewController {
     
     public init(sessionId: String) {
         self.sessionId = sessionId
-        guard let accessToken = FMConfiguration.stringForInfoKey(.accessToken) else {
-            fatalError("Missing or invalid access token. Please add an access token to the Info.plist with the following key: " +
-                        "\(FMConfiguration.infoKeys.accessToken.rawValue)")
-        }
-        self.accessToken = accessToken
+        self.accessToken = FMConfiguration.accessToken()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -168,18 +195,10 @@ public final class FMParkingViewController: UIViewController {
     public var isSimulation: Bool {
         set {
             fmLocationManager.isSimulation = newValue
+            fmLocationManager.simulationZone = isSimulation ? .parking : .unknown
         }
         get {
             return fmLocationManager.isSimulation
-        }
-    }
-
-    public var simulationZone: FMZone.ZoneType {
-        set {
-            fmLocationManager.simulationZone = newValue
-        }
-        get {
-            return fmLocationManager.simulationZone
         }
     }
 

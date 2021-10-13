@@ -189,23 +189,7 @@ class FMLocationManager: NSObject {
         log.debug()
         anchorFrame = nil
     }
-    
-    /// Check to see if a given zone is in the provided radius
-    ///
-    /// - Parameter zone: Zone to search for
-    /// - Parameter radius: Search radius in meters
-    /// - Parameter completion: Closure that consumes boolean server result
-    public func isZoneInRadius(_ zone: FMZone.ZoneType, radius: Int, completion: @escaping (Bool)->Void) {
-        log.debug()
-        FMApi.shared.sendZoneInRadiusRequest(
-            zone, coordinate: approximateCoordinate, radius: radius, completion: completion
-        ) { error in
-            // For now, clients only care if a zone was found, so an error condition can be treated as a `false` completion
-            log.error(error)
-            completion(false)
-        }
-    }
-    
+        
     /// Update the user's location, use instead of CLLocationManagerDelegate
     ///
     /// - Parameter location: current user location
@@ -214,25 +198,12 @@ class FMLocationManager: NSObject {
         lastCLLocation = location
     }
     
-    // MARK: - Internal instance methods
-    
     /// Localize the image frame. It triggers a network request that
     /// provides a response via the delegate.
     ///
     /// - Parameter frame: Frame to localize.
     public func localize(frame: ARFrame, from session: ARSession) {
         guard isConnected else { return }
-
-        // Check that we have access to location services, throw an error and stop updating location for 1 second if not
-        let locationAuthorization = CLLocationManager.authorizationStatus()
-        guard locationAuthorization == .authorizedAlways || locationAuthorization == .authorizedWhenInUse else {
-            self.delegate?.locationManager(didFailWithError: FMError(FMLocationError.accessDenied), errorMetadata: nil)
-            self.state = .paused
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.state = .localizing
-            }
-            return
-        }
         
         log.debug(parameters: ["simulation": isSimulation])
         state = .uploading

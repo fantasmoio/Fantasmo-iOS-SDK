@@ -169,8 +169,13 @@ class FMApi {
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
+            // handle valid but erroneous response
             guard let data = data else {
                 error(FMError(ApiError.invalidResponse))
+                return
+            }
+            guard let code = code, !(400...499 ~= code) else {
+                error(FMError(ApiError.errorResponse, data))
                 return
             }
             do {

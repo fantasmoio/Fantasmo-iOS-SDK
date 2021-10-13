@@ -34,8 +34,10 @@ class ParkingExampleViewController: UIViewController {
         /// should represent a single parking session.
         let sessionId = UUID().uuidString
         let parkingViewController = FMParkingViewController(sessionId: sessionId)
-
+        
+        /// Assign a delegate
         parkingViewController.delegate = self
+        
         /// Present modally to start
         parkingViewController.modalPresentationStyle = .fullScreen
         self.present(parkingViewController, animated: true)

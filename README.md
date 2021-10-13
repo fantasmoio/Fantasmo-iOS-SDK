@@ -119,7 +119,6 @@ Check out the `FantasmoSDKParkingExample` target or implement the code below.
 ```swift
 import UIKit
 import FantasmoSDK
-import CoreLocation
 
 override func viewDidLoad() {
     super.viewDidLoad()

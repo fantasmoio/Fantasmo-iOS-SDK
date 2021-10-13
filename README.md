@@ -114,96 +114,106 @@ When a position is found that is in a semantic zone, the server will report the 
 
 ### Quick Start 
 
-Try out the `Example` project or implement the code below. 
+Check out the `ParkingExample` project or take a look at the code below. 
 
 ```swift
+import UIKit
 import FantasmoSDK
-import CoreLocation 
-import ARKit
-
-var sceneView: ARSCNView!
-let locationManager = CLLocationManager()
+import CoreLocation
 
 override func viewDidLoad() {
     super.viewDidLoad()
-
-    // get location updates
-    locationManager.requestAlwaysAuthorization()
-    locationManager.startUpdatingLocation()
-
-    // configure delegation
-    sceneView.session.delegate = FMLocationManager.shared
-    locationManager.delegate = FMLocationManager.shared
-   
-    // connect and start updating
-    FMLocationManager.shared.connect(accessToken: "", delegate: self)
-    FMLocationManager.shared.startUpdatingLocation(sessionId: UUID().uuidString)
+    
+    // first check if parking is available nearby
+    FMParkingViewController.isParkingAvailable(near: userLocation) { isParkingAvailable in
+        if !isParkingAvailable {
+            print("No mapped parking spaces nearby.")
+            return
+        }
+        
+        // construct a new parking view with a sessionId
+        let sessionId = UUID().uuidString
+        let parkingViewController = FMParkingViewController(sessionId: sessionId)
+    
+        // configure delegation
+        parkingViewController.delegate = self
+                
+        // present modally to start
+        parkingViewController.modalPresentationStyle = .fullScreen
+        self.present(parkingViewController, animated: true)
+    }
 }
 
-extension ViewController: FMLocationDelegate {
-    func locationManager(didUpdateLocation result: FMLocationResult) {
-        // Handle location update
-    }
-
-    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
-        // Handle behavior request
+extension ViewController: FMParkingViewControllerDelegate {
+    
+    func parkingViewController(_ parkingViewController: FMParkingViewController,
+                               didScanQRCode qrCode: CIQRCodeFeature,
+                               continueBlock: @escaping ((Bool) -> Void)) {
+        // Optional validation of the QR code can be done here
+        let isValidCode = qrCode.messageString != nil
+        continueBlock(isValidCode)
     }
     
-    func locationManager(didFailWithError error: Error, 
-                         errorMetadata metadata: Any?) {
-        // Handle error
+    func parkingViewController(_ parkingViewController: FMParkingViewController,
+                               didReceiveLocalizationResult result: FMLocationResult) {
+        // Got a localization result
+        let coordinate = result.location.coordinate
+        print("Coordinate: \(coordinate.latitude), \(coordinate.longitude)\n\nConfidence: \(result.confidence)")
+        if result.confidence == .low {
+            return
+        }
+        // Medium or high confidence, dismiss to stop localizing
+        parkingViewController.dismiss(animated: true, completion: nil)
+    }
+    
+    func parkingViewController(_ parkingViewController: FMParkingViewController,
+                               didReceiveLocalizationError error: FMError, errorMetadata: Any?) {
+        // Got a localization error
+        errorCount += 1
+        print("Error: \(error.localizedDescription)")
+        if errorCount < 5 {
+            return
+        }
+        // Too many errors, dismiss to stop localizing
+        parkingViewController.dismiss(animated: true, completion: nil)
     }
 }
 ```
 
-### Initialization
+### Location Updates
 
-The location manager is accessed through a shared instance.
+During localization, the `FMParkingViewController` internally uses a `CLLocationManager` to get updates to the device's location. If you would like to provide your own `CLLocation` updates, you can set the `usesInternalLocationManager` property to `false` and manually call `updateLocation(_ location: CLLocation)` with each update to the location.
 
-```swift
-FMLocationManager.shared.connect(accessToken: "", delegate: self)
 ```
+let parkingViewController = FMParkingViewController(sessionId: sessionId)
+// disables the internal CLLocationManager
+parkingViewController.usesInternalLocationManager = false
+self.present(parkingViewController, animated: true)
 
-### Delegation
+// create our own CLLocationManager
+let myLocationManager = CLLocationManager()
+myLocationManager.delegate = self
+myLocationManager.requestAlwaysAuthorization()
+myLocationManager.startUpdatingLocation()
 
-The `FMLocationManager` singleton needs to receive `ARSessionDelegate` updates, and either needs to receive `CLLocationManagerDelegate` updates or be provided `CLLocation` data by your code. You must either set it to be the delegate for your session and location manager, or you must manually call the delegate methods from within your own delegate handlers.
-
-If you do not need session or location updates, you can simply set `FMLocationManager` as their delegate.
-
-```swift
-myView?.session.delegate = FMLocationManager.shared
-```
-and if you do not want to provide your own `CLLocation` updates
-```swift
-myLocationManager.delegate = FMLocationManager.shared
-```
-
-Alternately, you can proxy updates to `FMLocationManager` manually.
-
-```swift
-// your ARSessionDelegate
-func session(_ session: ARSession, didUpdate frame: ARFrame) {
-  // your update code
-
-  // also update the FMLocationManager
-  FMLocationManager.shared.session(session, didUpdate: frame)
+extension ViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // notify the parking view controller of the update
+        parkingViewController.updateLocation(locations.last)
+    }
 }
+```
 
-// your CLLocationManagerDelegate
-func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-  // your update code
+If the SDK does not receive valid `CLLocation` updates either from the internal `CLLocationManager` or manually via `updateLocation(_ location: CLLocation)`, localization will return an error.
 
-  // also update the FMLocationManager if needed
-  FMLocationManager.shared.locationManager(manager, didUpdateLocations: locations)
+```
+func parkingViewController(_ parkingViewController: FMParkingViewController,
+                               didReceiveLocalizationError error: FMError, errorMetadata: Any?) {
+    if (error.type as? FMLocationError) == FMLocationError.invalidCoordinate {
+        print("No location updates received.")
+    }
 }
-
 ```
-If you want to provide your own location data instead of `CLLocationManager`, you can provide your own `CLLocation` updates with:
-```swift
-FMLocationManager.shared.updateLocation(_ location: CLLocation)
-```
-
-If the SDK does not receive `CLLocation` updates either from `CLLocationManager` or from `FMLocationManager.shared.updateLocation`, it will return an error when trying to localize and the thread will go to sleep for one second while waiting for an update.
 
 ### Localizing 
 

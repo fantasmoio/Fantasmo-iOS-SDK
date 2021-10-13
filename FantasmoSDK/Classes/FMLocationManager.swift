@@ -74,7 +74,6 @@ class FMLocationManager: NSObject {
     
     private var anchorFrame: ARFrame? {
         didSet {
-            // tester?.anchorFrame = anchorFrame
             locationFuser.reset()
         }
     }
@@ -302,11 +301,6 @@ class FMLocationManager: NSObject {
             let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
             self.delegate?.locationManager(didUpdateLocation: result)
             self.lastResult = result
-            
-//            if let tester = self.tester {
-//                let translation = openCVRelativeAnchorTransform?.inNonOpenCvCS.translation
-//                tester.locationManager(didUpdateLocation: result, translationOfAnchorInVirtualDeviceCS: translation)
-//            }
             
             if self.state != .stopped {
                 self.state = .localizing

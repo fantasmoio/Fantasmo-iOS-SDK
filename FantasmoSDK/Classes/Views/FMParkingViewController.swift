@@ -59,6 +59,14 @@ public final class FMParkingViewController: UIViewController {
     
     public let accessToken: String
     
+    /// Designated initializer.
+    ///
+    /// - Parameter sessionId: an identifier for the parking session
+    ///
+    /// The `sessionId` parameter allows you to associate localization results with your own session identifier.
+    /// Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking
+    /// session might involve multiple localization attempts. For analytics and billing purposes this identifier allows
+    /// you to link a set of attempts with a single parking session.
     public init(sessionId: String) {
         self.sessionId = sessionId
         self.accessToken = FMConfiguration.accessToken()
@@ -80,19 +88,16 @@ public final class FMParkingViewController: UIViewController {
     
     private var qrScanningViewController: FMQRScanningViewControllerProtocol? { self.children.first as? FMQRScanningViewControllerProtocol }
     
-    /**
-     Registers a custom view controller class to present and use when scanning QR codes.
-     - Parameter classType: Any class type conforming to FMQRScanningViewControllerProtocol.
-     */
+    /// Registers a custom view controller class to present and use when scanning QR codes.
+    ///
+    /// - Parameter classType: Any class type conforming to FMQRScanningViewControllerProtocol.
     public func registerQRScanningViewController(_ classType: FMQRScanningViewControllerProtocol.Type) {
         qrScanningViewControllerType = classType
     }
-
-    /**
-     Presents the default or custom registered QR scanning view controller and starts observing QR codes in the ARSession.
-     
-     This method is only intended to be called while idle.
-     */
+    
+    /// Presents the default or custom registered QR scanning view controller and starts observing QR codes in the ARSession.
+    ///
+    /// This method is only intended to be called while idle.
     private func startQRScanning() {
         if state != .idle {
             return
@@ -116,19 +121,16 @@ public final class FMParkingViewController: UIViewController {
     
     private var localizingViewController: FMLocalizingViewControllerProtocol? { self.children.first as? FMLocalizingViewControllerProtocol }
 
-    /**
-     Registers a custom view controller type to present and use when localizing.
-     - Parameter classType: Any class type conforming to FMLocalizingViewControllerProtocol.
-     */
+    /// Registers a custom view controller type to present and use when localizing.
+    ///
+    /// - Parameter classType: Any class type conforming to FMLocalizingViewControllerProtocol.
     public func registerLocalizingViewController(_ classType: FMLocalizingViewControllerProtocol.Type) {
         localizingViewControllerType = classType
     }
-
-    /**
-     Presents the default or custom registered localizing view controller and starts the localization process.
-     
-     This method is only intended to be called while QR scanning, it performs an animated transition to the localization view.
-     */
+    
+    /// Presents the default or custom registered localizing view controller and starts the localization process.
+    ///
+    /// This method is only intended to be called while QR scanning, it performs an animated transition to the localization view.
     private func startLocalizing() {
         if state != .qrScanning {
             return
@@ -155,11 +157,9 @@ public final class FMParkingViewController: UIViewController {
         delegate?.parkingViewControllerDidStartLocalizing(self)
     }
     
-    /**
-     Controls whether this class uses its own internal `CLLocationManager` to automatically receive location updates. Default is `true`.
-     
-     When set to `false` it is expected that location updates will be manually provided via the `updateLocation(_:)` method.
-     */
+    /// Controls whether this class uses its own internal `CLLocationManager` to automatically receive location updates. Default is `true`.
+    ///
+    /// When set to `false` it is expected that location updates will be manually provided via the `updateLocation(_:)` method.
     public var usesInternalLocationManager: Bool = true {
         didSet {
             guard usesInternalLocationManager != oldValue, state == .localizing else {
@@ -174,13 +174,11 @@ public final class FMParkingViewController: UIViewController {
         }
     }
     
-    /**
-     Allows host apps to manually provide a location update.
-     
-     - Parameter location: the device's current location.
-     
-     This method can only be used when `usesInternalLocationManager` is set to `false`.
-     */
+    /// Allows host apps to manually provide a location update.
+    ///
+    /// - Parameter location: the device's current location.
+    ///
+    /// This method can only be used when `usesInternalLocationManager` is set to `false`.
     public func updateLocation(_ location: CLLocation) {
         guard !usesInternalLocationManager, state == .localizing else {
             return

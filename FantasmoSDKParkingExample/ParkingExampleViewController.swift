@@ -67,7 +67,7 @@ extension ParkingExampleViewController: FMParkingViewControllerDelegate {
     
     func parkingViewController(_ parkingViewController: FMParkingViewController, didReceiveLocalizationResult result: FMLocationResult) {
         /// Got a localization result
-        /// Localization will continue until the view is dismissed
+        /// Localization will continue until you dismiss the view
         /// You should decide on acceptable criteria for a result, one way is by checking the `confidence` value
         if result.confidence != .low {
             /// We're satisfied with the result, dismiss to stop localizing
@@ -88,7 +88,7 @@ extension ParkingExampleViewController: FMParkingViewControllerDelegate {
             /// Otherwise check that the user allowed access to location.
             return
         }
-        /// Localization will continue until the view is dismissed
+        /// Localization will continue until you dismiss the view
         /// You should decide on an acceptable threshold of errors and dismiss the view when it's reached
         errorCount += 1
         if errorCount >= 5 {

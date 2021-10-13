@@ -197,6 +197,8 @@ public final class FMParkingViewController: UIViewController {
     
     private var sceneView: ARSCNView!
     
+    private var containerView: UIView!
+    
     private var statisticsView: FMSessionStatisticsView?
     
     public override func viewDidLoad() {
@@ -211,6 +213,9 @@ public final class FMParkingViewController: UIViewController {
         sceneView.automaticallyUpdatesLighting = false
         sceneView.preferredFramesPerSecond = 60
         self.view.addSubview(sceneView)
+        
+        containerView = UIView()
+        self.view.addSubview(containerView)
         
         if let statisticsView = statisticsView {
             self.view.addSubview(statisticsView)
@@ -243,8 +248,9 @@ public final class FMParkingViewController: UIViewController {
         
         let bounds = self.view.bounds
         sceneView.frame = bounds
-        self.children.forEach { $0.view?.frame = bounds }
+        containerView.frame = bounds
         statisticsView?.frame = bounds
+        self.children.forEach { $0.view?.frame = containerView.bounds }
     }
     
     private func showChildViewController(_ childViewController: UIViewController?, animated: Bool) {
@@ -254,7 +260,7 @@ public final class FMParkingViewController: UIViewController {
                 
         if let toViewController = childViewController {
             self.addChild(toViewController)
-            self.view.addSubview(toViewController.view)
+            containerView.addSubview(toViewController.view)
             toViewController.view.layoutIfNeeded()
         }
         
@@ -282,6 +288,7 @@ public final class FMParkingViewController: UIViewController {
                 statisticsView?.update(state: fmLocationManager.state)
                 statisticsView?.update(lastResult: fmLocationManager.lastResult)
                 statisticsView?.update(deviceLocation: fmLocationManager.lastCLLocation)
+                statisticsView?.isUserInteractionEnabled = false
                 self.viewIfLoaded?.addSubview(statisticsView!)
             }
             statisticsView?.isHidden = !showsStatistics

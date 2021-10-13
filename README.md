@@ -114,7 +114,7 @@ When a position is found that is in a semantic zone, the server will report the 
 
 ### Quick Start 
 
-Check out the `ParkingExample` project or take a look at the code below. 
+Check out the `FantasmoSDKParkingExample` targer or implement the code below. 
 
 ```swift
 import UIKit

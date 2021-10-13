@@ -51,7 +51,7 @@ You can use Carthage to install Fantasmo SDK by adding it to your Cartfile:
 - Get Carthage by running `brew install carthage`
 - Create a Cartfile using https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile in the same directory where your .xcodeproj or .xcworkspace is and add below dependnacy in it. For example:
 
-   `github "fantasmoio/Fantasmo-iOS-SDK" ~> 0.1.16`
+   `github "fantasmoio/Fantasmo-iOS-SDK" ~> 2.0.0`
 
 - Add Carthage.sh by unzip [Carthage.sh.zip](https://github.com/fantasmoio/Fantasmo-iOS-SDK/files/5754931/Carthage.sh.zip) and place it to same directory where your .xcodeproj or .xcworkspace is.
 - Give edit permission to Carthage.sh by `chmod +x Carthage.sh`
@@ -180,9 +180,13 @@ extension ViewController: FMParkingViewControllerDelegate {
 }
 ```
 
-### Location Updates
+### Providing a `sessionId`
 
-During localization, the `FMParkingViewController` internally uses a `CLLocationManager` to get updates to the device's location. If you would like to provide your own `CLLocation` updates, you can set the `usesInternalLocationManager` property to `false` and manually call `updateLocation(_ location: CLLocation)` with each update to the location.
+The `sessionId` parameter allows you to associate localization results with your own session identifier. Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking session might involve multiple localization attempts. For analytics and billing purposes, this identifier allows you to link a set of attempts with a single parking session.
+
+### Providing CLLocation updates
+
+By default, during localization the `FMParkingViewController` uses a `CLLocationManager` internally to get automatic updates to the device's location. If you would like to provide your own `CLLocation` updates, you can set the `usesInternalLocationManager` property to `false` and manually call `updateLocation(_ location: CLLocation)` with each update to the location.
 
 ```swift
 let parkingViewController = FMParkingViewController(sessionId: sessionId)
@@ -204,7 +208,7 @@ extension ViewController: CLLocationManagerDelegate {
 }
 ```
 
-If the SDK does not receive valid `CLLocation` updates either from the internal `CLLocationManager` or manually via `updateLocation(_ location: CLLocation)`, localization will return an error.
+If the SDK does not receive valid `CLLocation` updates either from the internal `CLLocationManager` or manually via `updateLocation(_ location: CLLocation)`, then you will receive a localization error.
 
 ```swift
 func parkingViewController(_ parkingViewController: FMParkingViewController,
@@ -215,21 +219,17 @@ func parkingViewController(_ parkingViewController: FMParkingViewController,
 }
 ```
 
+If this occurs you should check that you're correctly providing the location updates yourself, or if you're using the internal location manager, that the user has given permission to access the device's location.
+
+### QR Scanning
+
+//
+// LEFT OFF HERE - NICK
+//
+
 ### Localizing 
 
-To start location updates:
-```swift
-FMLocationManager.shared.startUpdatingLocation(sessionId: "")
-```
-
 Frames will be continuously captured and sent to the server for localization. Filtering logic in the SDK will automatically select the best frames, and it will issue requests to the user to help improve the incoming images.
-
-The `sessionId` parameter will allow you to associate the location updates with your own session identifier. Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking session might involve multiple localization attempts. For analytics and billing purposes, this identifier allows you to link a set of attempts with a single parking session.
-
-To stop location updates:
-```swift
-FMLocationManager.shared.stopUpdatingLocation()
-```
 
 Location events are be provided through `FMLocationDelegate`. Confidence in the location result increases during successive updates. Clients can choose to stop location updates when a desired confidence threshold is reached.
 

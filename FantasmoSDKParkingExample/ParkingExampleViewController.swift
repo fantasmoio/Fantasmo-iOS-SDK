@@ -34,14 +34,20 @@ class ParkingExampleViewController: UIViewController {
         /// should represent a single parking session.
         let sessionId = UUID().uuidString
         let parkingViewController = FMParkingViewController(sessionId: sessionId)
-        
+                
         /// Assign a delegate
         parkingViewController.delegate = self
-        
+                
         /// Present modally to start
         parkingViewController.modalPresentationStyle = .fullScreen
         self.present(parkingViewController, animated: true)
-        /// You can also run in simulation mode, if you're not near a space
+        
+        /// You can also register custom view controllers for each step if you wish
+        ///
+        ///     parkingViewController.registerQRScanningViewController(MyCustomQRScanningViewController.self)
+        ///     parkingViewController.registerLocalizingViewController(MyCustomLocalizingViewController.self)
+        ///
+        /// Run in simulation mode, if you're not near a space
         ///
         ///     parkingViewController.isSimulation = true
         ///

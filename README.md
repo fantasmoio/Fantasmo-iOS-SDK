@@ -184,7 +184,7 @@ extension ViewController: FMParkingViewControllerDelegate {
 
 During localization, the `FMParkingViewController` internally uses a `CLLocationManager` to get updates to the device's location. If you would like to provide your own `CLLocation` updates, you can set the `usesInternalLocationManager` property to `false` and manually call `updateLocation(_ location: CLLocation)` with each update to the location.
 
-```
+```swift
 let parkingViewController = FMParkingViewController(sessionId: sessionId)
 // disables the internal CLLocationManager
 parkingViewController.usesInternalLocationManager = false
@@ -206,7 +206,7 @@ extension ViewController: CLLocationManagerDelegate {
 
 If the SDK does not receive valid `CLLocation` updates either from the internal `CLLocationManager` or manually via `updateLocation(_ location: CLLocation)`, localization will return an error.
 
-```
+```swift
 func parkingViewController(_ parkingViewController: FMParkingViewController,
                                didReceiveLocalizationError error: FMError, errorMetadata: Any?) {
     if (error.type as? FMLocationError) == FMLocationError.invalidCoordinate {

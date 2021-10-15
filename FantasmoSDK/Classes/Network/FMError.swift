@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct FMError: LocalizedError {
+public struct FMError: LocalizedError {
     enum ErrorType: Error {
         case errorResponse
         case invalidErrorResponse
     }
     
-    var type: Error
-    var errorDescription: String?
-    var cause: Error?
+    public var type: Error
+    public var errorDescription: String?
+    public var cause: Error?
     
     init(_ type: Error, errorDescription: String? = nil, cause: Error? = nil) {
         self.type = type
@@ -37,7 +37,7 @@ struct FMError: LocalizedError {
 }
 
 extension FMError: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         if let errorDescription = errorDescription {
             return String(describing: type) + " " + errorDescription
         } else {
@@ -47,7 +47,7 @@ extension FMError: CustomStringConvertible {
 }
 
 extension FMError: CustomDebugStringConvertible {
-    var debugDescription: String {
+    public var debugDescription: String {
         if let cause = cause {
             return self.description + " caused by " + String(describing: cause)
         } else {

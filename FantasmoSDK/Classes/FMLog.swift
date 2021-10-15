@@ -10,7 +10,9 @@ import Foundation
 var log = FMLog()
 
 public struct FMLog {
-    
+
+    public var intercept: ((String) -> Void)?
+
     private static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
@@ -76,7 +78,11 @@ public struct FMLog {
     // MARK: - Private methods
     
     private func log(_ message: String) {
-        print(message)
+        if let intercept = intercept {
+            intercept(message)
+        } else {
+            print(message)
+        }
     }
     
     private func format(

@@ -29,7 +29,6 @@ class FMLocationManager: NSObject {
     
     // MARK: - Properties
     
-    public static let shared = FMLocationManager()
     public private(set) var state: State = .stopped {
         didSet {
             if state != oldValue {

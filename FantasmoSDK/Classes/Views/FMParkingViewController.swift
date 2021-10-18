@@ -115,7 +115,7 @@ public final class FMParkingViewController: UIViewController {
         
     private let clLocationManager: CLLocationManager = CLLocationManager()
         
-    private let fmLocationManager: FMLocationManager = FMLocationManager.shared
+    private let fmLocationManager: FMLocationManager = FMLocationManager()
     
     private var localizingViewControllerType: FMLocalizingViewControllerProtocol.Type = FMLocalizingViewController.self
     

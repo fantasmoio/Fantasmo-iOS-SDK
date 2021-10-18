@@ -6,6 +6,7 @@
 //
 
 import simd
+import Foundation
 
 /// Corresponds to yx'z'' intrinsic rotation.
 struct EulerAngles<Scalar>: CustomStringConvertible where Scalar: SIMDScalar&FloatingPoint&BinaryFloatingPoint {

@@ -8,6 +8,7 @@
 import Foundation
 import ARKit
 import CoreMotion
+import UIKit
 
 struct FMLocalizationRequest {
     var isSimulation: Bool
@@ -250,7 +251,7 @@ class FMApi {
                 "deviceModel": UIDevice.current.identifier,
                 "deviceOs": UIDevice.current.correctedSystemName,
                 "deviceOsVersion": UIDevice.current.systemVersion,
-                "sdkVersion": Bundle.fullVersion,
+                "sdkVersion": FMSDKInfo.fullVersion,
 
                 // session identifiers
                 "appSessionId": request.analytics.appSessionId,

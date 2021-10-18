@@ -331,6 +331,14 @@ By default only errors and warnings are logged, but other verbosity levels are a
 FMLocationManager.shared.logLevel = .debug
 ```
 
+You may also intercept logging calls to send log messages to your own analytics services.
+
+```swift
+FMLocationManager.shared.logIntercept = { message in
+  sendToAnalytics(message)
+}
+```
+
 ### Overrides
 
 For testing, the device location can be specified in the Info.plist.

@@ -47,6 +47,12 @@ class FMLocationManager: NSObject {
         }
     }
 
+    public var logIntercept: ((String) -> Void)? = nil {
+        didSet {
+            log.intercept = logIntercept
+        }
+    }
+
     /// When in simulation mode, mock data is used from the assets directory instead of the live camera feed.
     /// This mode is useful for implementation and debugging.
     public var isSimulation = false

@@ -12,6 +12,8 @@ import CoreLocation
 class ParkingExampleViewController: UIViewController {
         
     @IBOutlet var resultLabel: UILabel!
+    @IBOutlet var isSimulationSwitch: UISwitch!
+    @IBOutlet var showsStatisticsSwitch: UISwitch!
     
     var errorCount: Int = 0
     
@@ -38,22 +40,20 @@ class ParkingExampleViewController: UIViewController {
         /// Assign a delegate
         parkingViewController.delegate = self
                 
-        /// Present modally to start
-        parkingViewController.modalPresentationStyle = .fullScreen
-        self.present(parkingViewController, animated: true)
+        /// Run in simulation mode, if you're not near a space
+        parkingViewController.isSimulation = isSimulationSwitch.isOn
         
-        /// You can also register custom view controllers for each step if you wish
+        /// Show useful stats for debugging, if needed
+        parkingViewController.showsStatistics = showsStatisticsSwitch.isOn
+
+        /// Optionally register custom view controllers for each step
         ///
         ///     parkingViewController.registerQRScanningViewController(MyCustomQRScanningViewController.self)
         ///     parkingViewController.registerLocalizingViewController(MyCustomLocalizingViewController.self)
-        ///
-        /// Run in simulation mode, if you're not near a space
-        ///
-        ///     parkingViewController.isSimulation = true
-        ///
-        /// And show useful stats for debugging
-        ///
-        ///     parkingViewController.showsStatistics = true
+        
+        /// Present modally to start
+        parkingViewController.modalPresentationStyle = .fullScreen
+        self.present(parkingViewController, animated: true)
     }
 }
 

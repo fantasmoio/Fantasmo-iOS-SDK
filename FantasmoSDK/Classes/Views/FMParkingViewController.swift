@@ -188,7 +188,7 @@ public final class FMParkingViewController: UIViewController {
     }
     
     // MARK: -
-    // MARK: Location Manager
+    // MARK: Debug
         
     public var isSimulation: Bool {
         set {
@@ -206,6 +206,15 @@ public final class FMParkingViewController: UIViewController {
         }
         get {
             return fmLocationManager.logLevel
+        }
+    }
+    
+    public var logIntercept: ((String) -> Void)? {
+        set {
+            fmLocationManager.logIntercept = newValue
+        }
+        get {
+            return fmLocationManager.logIntercept
         }
     }
         

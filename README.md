@@ -1,34 +1,3 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<!-- *generated with [DocToc](https://github.com/thlorenz/doctoc)* -->
-
-- [Fantasmo-iOS-SDK](#fantasmo-ios-sdk)
-  - [Overview](#overview)
-  - [Installation](#installation)
-    - [CocoaPods (iOS 11+)](#cocoapods-ios-11)
-    - [Carthage (iOS 8+, OS X 10.9+)](#carthage-ios-8-os-x-109)
-    - [Importing](#importing)
-  - [Requirements](#requirements)
-  - [Functionality](#functionality)
-    - [Localization](#localization)
-    - [Anchors](#anchors)
-    - [Semantic Zones](#semantic-zones)
-  - [Usage](#usage)
-    - [Quick Start](#quick-start)
-    - [Initialization](#initialization)
-    - [Delegation](#delegation)
-    - [Localizing](#localizing)
-    - [Behaviors](#behaviors)
-    - [Anchors](#anchors-1)
-    - [Radius Check](#radius-check)
-    - [Simulation Mode](#simulation-mode)
-    - [Logging](#logging)
-    - [Overrides](#overrides)
-  - [Testing](#testing)
-    - [Running Tests](#running-tests)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # Fantasmo-iOS-SDK
 
 ## Overview
@@ -76,10 +45,10 @@ You can use Carthage to install Fantasmo SDK by adding it to your Cartfile:
 In the near term, the Fantasmo SDK will be provided as a Cocoapod. In the meantime,
 the Fantasmo SDK directory can be imported directly into a project.
 
-### Access Token
+### Access Tokens
 
 Add your access token to your app's `Info.plist`.
-```
+```xml
 <key>FM_ACCESS_TOKEN</key>
 <string>a0fc7aa1e1144f1e81eaa2ad47794a9e</string>
 ```
@@ -96,27 +65,6 @@ Add your access token to your app's `Info.plist`.
 Camera-based localization is the process of determining the global position of the device camera from an image. Image frames are acquired from an active `ARSession` and sent to a server for computation. The server computation time is approximately 900 ms. The full round trip time is then dictated by latency of the connection.
 
 Since the camera will likely move after the moment at which the image frame is captured, it is necessary to track the motion of the device continuously during localizaiton to determine the position of the device at the time of response. Tracking is provided by `ARSession`. Conventiently, it is then possible to determine the global position of the device at any point in the tracking session regardless of when the image was captured (though you may incur some drift after excessive motion).
-
-### Anchors
-
-Localization determines the position of the camera at a point in time. If it is desired to track the location of an object besides the camera itself (e.g., a scooter), then it is possible to set an anchor point for that object. When an anchor is set, the location update will provide the location of the anchor instead of the camera. The anchor position is determined by applying the inverse motion since the anchor was set until the localization was request was made. 
-
-### Semantic Zones
-
-The utility of precise localization is only as useful as the precision of the underlying map data. Semantic zones (e.g., "micro-geofences") allow your application to make contextual decisions about operating in the environment. 
-
-When a position is found that is in a semantic zone, the server will report the zone type and ID. The zone types are as follows:
-
-+ Street
-+ Sidewalk
-+ Furniture
-+ Crosswalk
-+ Access Ramp
-+ Mobility parking
-+ Auto parking
-+ Bus stop
-+ Planter
-
 
 ## Usage
 
@@ -144,9 +92,9 @@ override func viewDidLoad() {
 }
 ```
 
-### Checking availability
+### Checking Availability
 
-Before attempting to park and localize with FantasmoSDK, you should first check if parking is available in the users current location. You can do this with the static method `FMParkingViewController.isParkingAvailable(near:)` and passing a `CLLocation`. The result block is called with a boolean indicating whether or not the user is near a mapped Fantasmo parking space.
+Before attempting to park and localize with FantasmoSDK, you should first check if parking is available in the user's current location. You can do this with the static method `FMParkingViewController.isParkingAvailable(near:)` and passing a `CLLocation`. The result block is called with a boolean indicating whether or not the user is near a mapped parking space.
 
 ```swift
 FMParkingViewController.isParkingAvailable(near: userLocation) { isParkingAvailable in
@@ -172,7 +120,7 @@ let parkingViewController = FMParkingViewController(sessionId: sessionId)
 parkingViewController.usesInternalLocationManager = false
 self.present(parkingViewController, animated: true)
 
-// create our own CLLocationManager
+// create your own CLLocationManager
 let myLocationManager = CLLocationManager()
 myLocationManager.delegate = self
 myLocationManager.requestAlwaysAuthorization()
@@ -197,12 +145,11 @@ func parkingViewController(_ parkingViewController: FMParkingViewController,
 }
 ```
 
-If this occurs you should check that you're correctly providing the location updates yourself, or if you're using the internal location manager, that the user has given permission to access the device's location.
+If this occurs you should check that you're correctly providing the location updates, or if you're using the internal location manager, that the user has given permission to access the device's location.
 
 ### QR Codes
 
-Scanning a QR code is the first and only step before localizing. Because we are trying to localize a vehicle and not the device itself, we need a way to determine the vehicle's position relative to the device. This is accomplished by setting an anchor in the ARSession and it is done automatically when the user scans a QR code. The FantasmoSDK doesn't care about the contents of the QR code and by default will start localizating after any QR code is detected. If your app does care about the contents of the QR code, then you can validate them in the following `FMParkingViewControllerDelegate` method:
-
+Scanning a QR code is the first and only step before localizing. Because we are trying to localize a vehicle and not the device itself, we need a way to determine the vehicle's position relative to the device. This is accomplished by setting an anchor in the ARSession and it's done automatically when the user scans a QR code. The SDK doesn't care about the contents of the QR code and by default will start localizing after any QR code is detected. If your app _does_ care about the contents of the QR code, they can be validated by implementing the the `FMParkingViewControllerDelegate` method:
 
 ```swift
 func parkingViewController(_ parkingViewController: FMParkingViewController, didScanQRCode qrCode: CIQRCodeFeature, continueBlock: @escaping ((Bool) -> Void)) {
@@ -219,11 +166,11 @@ func parkingViewController(_ parkingViewController: FMParkingViewController, did
 }
 ```
 
-**Important:** If you implement this method, you must call the `continueBlock` with a boolean value. This can be done A value of `true` indicates the QR code is valid and that localization should start. Passing `false` to this block indicates the code is invalid and instructs the parking view to scan for more QR codes. This block may be called synchronously or asynchronously but must be done so on the main queue.
+**Important:** If you implement this method, you must call the `continueBlock` with a boolean value. A value of `true` indicates the QR code is valid and that localization should start. Passing `false` to this block indicates the code is invalid and instructs the parking view to scan for more QR codes. This block may be called synchronously or asynchronously but must be done so on the main queue.
 
 ### Localizing 
 
-During localization, frames are continuously captured and sent to the server. Filtering logic in the SDK will automatically select the best frames, and it will issue requests to the user to help improve the incoming images. Confidence in the location result increases during successive updates and clients can choose to stop localizing updates when a desired confidence threshold is reached by dismissing the view. 
+During localization, frames are continuously captured and sent to the server. Filtering logic in the SDK will automatically select the best frames, and it will issue behavior requests to the user to help improve the incoming images. Confidence in the location result increases during successive updates and clients can choose to stop localizing by dismissing the view, when a desired confidence level is reached.
 
 ```swift
 func parkingViewController(_ parkingViewController: FMParkingViewController,
@@ -239,7 +186,7 @@ func parkingViewController(_ parkingViewController: FMParkingViewController,
 }
 ```
 
-Localization errors may occur but the localiztion process will not stop. Even after several errors it is still possible to get a successful localization result. You should decide on an acceptable threshold for errors and stop localizing when it is reached, again by dismissing the view.
+Localization errors may occur but the localization process will not stop and it is still possible to get a successful localization result. You should decide on an acceptable threshold for errors and only stop localizing when it is reached, again by dismissing the view.
 
 ```swift
 func parkingViewController(_ parkingViewController: FMParkingViewController,
@@ -273,7 +220,7 @@ public protocol FMLocalizingViewControllerProtocol: UIViewController {
 }
 ```
 
-Once you've created a view controllers for the above protocols, simply register them with your `FMParkingViewController` instance before presenting it.
+Once you've created view controllers for the above protocols, simply register them with your `FMParkingViewController` instance before presenting it.
 
 ```swift
 parkingViewController.registerQRScanningViewController(MyCustomQRScanningViewController.self)
@@ -284,7 +231,7 @@ parkingViewController.registerLocalizingViewController(MyCustomLocalizingViewCon
 
 To help the user localize successfully and to maximize the result quality, camera input is filtered against common problems and behavior requests are displayed to the user. These are messages explaining what the user should be doing with their device in order to localize properly. For example, if the users device is aimed at the ground, you may receive a `"Tilt your device up"` request. 
 
-If you're using the default localization UI, these requests are already displayed to the user. If you've registered your own custom UI, you should use the `didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest)` method of `FMLocalizingViewControllerProtocol` to display these requests to your users. 
+If you're using the default localization UI, these requests are already displayed to the user. If you've registered your own custom UI, you should use the `didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest)` method of `FMLocalizingViewControllerProtocol` to display these requests to users. 
 
 ```swift
 class MyCustomLocalizingViewController: UIViewController, FMLocalizingViewControllerProtocol {
@@ -298,7 +245,7 @@ class MyCustomLocalizingViewController: UIViewController, FMLocalizingViewContro
 }
 ```
 
-As of right now the behaviors requests are only available in English. More languages coming soon.
+As of right now behavior requests are only available in English. More languages coming soon.
 
 ### Testing and Debugging 
 
@@ -308,7 +255,7 @@ Since it's not always possible to be onsite for testing, a simulation mode is pr
 parkingViewController.isSimulation = true
 ```
 
-And for debugging, it's sometimes useful to toggle the statistics view to see what's happening under the hood.
+And for debugging, it's sometimes useful to show the statistics view to see what's happening under the hood.
 
 ```swift
 parkingViewController.showsStatistics = showsStatisticsSwitch.isOn

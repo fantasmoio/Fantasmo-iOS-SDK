@@ -181,9 +181,9 @@ extension ViewController: FMParkingViewControllerDelegate {
 
 ### Providing a `sessionId`
 
-The `sessionId` parameter allows you to associate localization results with your own session identifier. Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking session might involve multiple localization attempts. For analytics and billing purposes, this identifier allows you to link a set of attempts with a single parking session.
+The `sessionId` parameter allows you to associate localization results with your own session identifier. Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking session might take multiple localization attempts. For analytics and billing purposes, this identifier allows you to link mo attempts with a single parking session.
 
-### Providing location updates
+### Providing Location Updates
 
 By default, during localization the `FMParkingViewController` uses a `CLLocationManager` internally to get automatic updates to the device's location. If you would like to provide your own `CLLocation` updates, you can set the `usesInternalLocationManager` property to `false` and manually call `updateLocation(_ location: CLLocation)` with each update to the location.
 
@@ -220,11 +220,24 @@ func parkingViewController(_ parkingViewController: FMParkingViewController,
 
 If this occurs you should check that you're correctly providing the location updates yourself, or if you're using the internal location manager, that the user has given permission to access the device's location.
 
-### QR Scanning
+### QR Codes
 
-//
-// LEFT OFF HERE - NICK
-//
+Scanning a QR code is the first and only step before localizing. Because we are trying to localize a vehicle and not the device itself, we need a way to determine the vehicle's position relative to the device. This is accomplished by setting an anchor in the ARSession and it is done automatically when the user scans a QR code. The FantasmoSDK doesn't care about the contents of the QR code and by default will start localizating after any QR code is detected. If your app does care about the contents of the QR code, then they can be validated via the following `FMParkingViewControllerDelegate` method:
+
+```swift
+func parkingViewController(_ parkingViewController: FMParkingViewController, didScanQRCode qrCode: CIQRCodeFeature, continueBlock: @escaping ((Bool) -> Void)) {
+    /// Validate the QR code
+    let isValidCode = qrCode.messageString != nil
+    /// Call the continue block with the result
+    continueBlock(isValidCode)
+    /// Validation can also be done asynchronously.
+    ///     APIService.validateQRCode(qrCode) { isValidCode in
+    ///         continueBlock(isValidCode)
+    ///     }
+}
+```
+
+**Important:** If you implement this method, you must call the `continueBlock` with a boolean value. A value of `true` indicates the QR code is valid and that localization should start. Passing `false` to this block indicates the code is invalid and instructs the parking view to c scan for more QR codes. This block may be called synchronously or asynchronously but must be done so on the main queue.
 
 ### Localizing 
 

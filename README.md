@@ -70,11 +70,19 @@ You can use Carthage to install Fantasmo SDK by adding it to your Cartfile:
    
 - Add below files in **Output Files**:   
    `$(DERIVED_FILE_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FantasmoSDK.framework`
-  
+
 ### Importing
 
 In the near term, the Fantasmo SDK will be provided as a Cocoapod. In the meantime,
 the Fantasmo SDK directory can be imported directly into a project.
+
+### Access Token
+
+Add your access token to your app's `Info.plist`.
+```
+<key>FM_ACCESS_TOKEN</key>
+<string>a0fc7aa1e1144f1e81eaa2ad47794a9e</string>
+```
 
 ## Requirements
 
@@ -122,52 +130,31 @@ import FantasmoSDK
 
 override func viewDidLoad() {
     super.viewDidLoad()
-    
-    // first check if parking is available nearby
-    FMParkingViewController.isParkingAvailable(near: userLocation) { isParkingAvailable in
-        if !isParkingAvailable {
-            print("No mapped parking spaces nearby.")
-            return
-        }
-        
-        // construct a new parking view with a sessionId
-        let sessionId = UUID().uuidString
-        let parkingViewController = FMParkingViewController(sessionId: sessionId)
-    
-        // configure delegation
-        parkingViewController.delegate = self
-                
-        // present modally to start
-        parkingViewController.modalPresentationStyle = .fullScreen
-        self.present(parkingViewController, animated: true)
-    }
-}
+            
+    // construct a new parking view with a sessionId
+    let sessionId = UUID().uuidString
+    let parkingViewController = FMParkingViewController(sessionId: sessionId)
 
-extension ViewController: FMParkingViewControllerDelegate {
-    
-    func parkingViewController(_ parkingViewController: FMParkingViewController,
-                               didReceiveLocalizationResult result: FMLocationResult) {
-        // Got a localization result
-        let coordinate = result.location.coordinate
-        print("Coordinate: \(coordinate.latitude), \(coordinate.longitude)\n\nConfidence: \(result.confidence)")
-        if result.confidence == .low {
-            return
-        }
-        // Medium or high confidence, dismiss to stop localizing
-        parkingViewController.dismiss(animated: true, completion: nil)
+    // configure delegation
+    parkingViewController.delegate = self
+
+    // present modally to start
+    parkingViewController.modalPresentationStyle = .fullScreen
+    self.present(parkingViewController, animated: true)
+}
+```
+
+### Checking availability
+
+Before attempting to park and localize with FantasmoSDK, you should first check if parking is available in the users current location. You can do this with the static method `FMParkingViewController.isParkingAvailable(near:)` and passing a `CLLocation`. The result block is called with a boolean indicating whether or not the user is near a mapped Fantasmo parking space.
+
+```swift
+FMParkingViewController.isParkingAvailable(near: userLocation) { isParkingAvailable in
+    if !isParkingAvailable {
+        print("No mapped parking spaces nearby.")
+        return
     }
-    
-    func parkingViewController(_ parkingViewController: FMParkingViewController,
-                               didReceiveLocalizationError error: FMError, errorMetadata: Any?) {
-        // Got a localization error
-        errorCount += 1
-        print("Error: \(error.localizedDescription)")
-        if errorCount < 5 {
-            return
-        }
-        // Too many errors, dismiss to stop localizing
-        parkingViewController.dismiss(animated: true, completion: nil)
-    }
+    // Create and present a FMParkingViewController here
 }
 ```
 
@@ -214,118 +201,117 @@ If this occurs you should check that you're correctly providing the location upd
 
 ### QR Codes
 
-Scanning a QR code is the first and only step before localizing. Because we are trying to localize a vehicle and not the device itself, we need a way to determine the vehicle's position relative to the device. This is accomplished by setting an anchor in the ARSession and it is done automatically when the user scans a QR code. The FantasmoSDK doesn't care about the contents of the QR code and by default will start localizating after any QR code is detected. If your app does care about the contents of the QR code, then they can be validated via the following `FMParkingViewControllerDelegate` method:
+Scanning a QR code is the first and only step before localizing. Because we are trying to localize a vehicle and not the device itself, we need a way to determine the vehicle's position relative to the device. This is accomplished by setting an anchor in the ARSession and it is done automatically when the user scans a QR code. The FantasmoSDK doesn't care about the contents of the QR code and by default will start localizating after any QR code is detected. If your app does care about the contents of the QR code, then you can validate them in the following `FMParkingViewControllerDelegate` method:
+
 
 ```swift
 func parkingViewController(_ parkingViewController: FMParkingViewController, didScanQRCode qrCode: CIQRCodeFeature, continueBlock: @escaping ((Bool) -> Void)) {
-    /// Validate the QR code
+    // Validate the QR code
     let isValidCode = qrCode.messageString != nil
-    /// Call the continue block with the result
+    
+    // Call the continue block with the result
     continueBlock(isValidCode)
-    /// Validation can also be done asynchronously.
-    ///     APIService.validateQRCode(qrCode) { isValidCode in
-    ///         continueBlock(isValidCode)
-    ///     }
+    
+    // Validation can also be done asynchronously.
+    APIService.validateQRCode(qrCode) { isValidCode in
+        continueBlock(isValidCode)
+    }
 }
 ```
 
-**Important:** If you implement this method, you must call the `continueBlock` with a boolean value. A value of `true` indicates the QR code is valid and that localization should start. Passing `false` to this block indicates the code is invalid and instructs the parking view to c scan for more QR codes. This block may be called synchronously or asynchronously but must be done so on the main queue.
+**Important:** If you implement this method, you must call the `continueBlock` with a boolean value. This can be done A value of `true` indicates the QR code is valid and that localization should start. Passing `false` to this block indicates the code is invalid and instructs the parking view to scan for more QR codes. This block may be called synchronously or asynchronously but must be done so on the main queue.
 
 ### Localizing 
 
-Frames will be continuously captured and sent to the server for localization. Filtering logic in the SDK will automatically select the best frames, and it will issue requests to the user to help improve the incoming images.
-
-Location events are be provided through `FMLocationDelegate`. Confidence in the location result increases during successive updates. Clients can choose to stop location updates when a desired confidence threshold is reached.
+During localization, frames are continuously captured and sent to the server. Filtering logic in the SDK will automatically select the best frames, and it will issue requests to the user to help improve the incoming images. Confidence in the location result increases during successive updates and clients can choose to stop localizing updates when a desired confidence threshold is reached by dismissing the view. 
 
 ```swift
-public enum FMResultConfidence {
-    case low
-    case medium
-    case high
-}
-
-public struct FMLocationResult {
-    public var location: CLLocation
-    public var confidence: FMResultConfidence
-    public var zones: [FMZone]?
-}
-
-extension ViewController: FMLocationDelegate {
-    func locationManager(didUpdateLocation result: FMLocationResult) {
-        // Handle location update
+func parkingViewController(_ parkingViewController: FMParkingViewController,
+                           didReceiveLocalizationResult result: FMLocationResult) {
+    // Got a localization result
+    if result.confidence == .low {
+        return
     }
-    
-    func locationManager(didFailWithError error: Error, 
-                         errorMetadata metadata: Any?) {
-        // Handle error
+    let coordinate = result.location.coordinate
+    print("Coordinate: \(coordinate.latitude), \(coordinate.longitude)")
+    // Medium or high confidence, dismiss to stop localizing
+    parkingViewController.dismiss(animated: true, completion: nil)
+}
+```
+
+Localization errors may occur but the localiztion process will not stop. Even after several errors it is still possible to get a successful localization result. You should decide on an acceptable threshold for errors and stop localizing when it is reached, again by dismissing the view.
+
+```swift
+func parkingViewController(_ parkingViewController: FMParkingViewController,
+                           didReceiveLocalizationError error: FMError, errorMetadata: Any?) {
+    // Got a localization error
+    errorCount += 1
+    if errorCount < 5 {
+        return
+    }
+    // Too many errors, dismiss to stop localizing
+    parkingViewController.dismiss(animated: true, completion: nil)
+}
+```
+
+### Customizing UI
+
+The UI for both scanning QR codes and localizing can be completely customized by creating your own implementations of the view protocols.
+
+```swift
+public protocol FMQRScanningViewControllerProtocol: UIViewController {
+    func didStartQRScanning()
+    func didStopQRScanning()
+    func didScanQRCode(_ qrCode: CIQRCodeFeature)
+}
+
+public protocol FMLocalizingViewControllerProtocol: UIViewController {
+    func didStartLocalizing()
+    func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest)
+    func didReceiveLocalizationResult(_ result: FMLocationResult)
+    func didReceiveLocalizationError(_ error: FMError, errorMetadata: Any?)
+}
+```
+
+Once you've created a view controllers for the above protocols, simply register them with your `FMParkingViewController` instance before presenting it.
+
+```swift
+parkingViewController.registerQRScanningViewController(MyCustomQRScanningViewController.self)
+parkingViewController.registerLocalizingViewController(MyCustomLocalizingViewController.self)
+```
+
+### Behavior Requests
+
+To help the user localize successfully and to maximize the result quality, camera input is filtered against common problems and behavior requests are displayed to the user. These are messages explaining what the user should be doing with their device in order to localize properly. For example, if the users device is aimed at the ground, you may receive a `"Tilt your device up"` request. 
+
+If you're using the default localization UI, these requests are already displayed to the user. If you've registered your own custom UI, you should use the `didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest)` method of `FMLocalizingViewControllerProtocol` to display these requests to your users. 
+
+```swift
+class MyCustomLocalizingViewController: UIViewController, FMLocalizingViewControllerProtocol {
+  
+    @IBOutlet var label: UILabel!
+  
+    func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest) {
+        // display the requested behavior to the user
+        label.text = behavior.description
     }
 }
 ```
 
-### Behaviors
+As of right now the behaviors requests are only available in English. More languages coming soon.
 
-To maximize localization quality, camera input is filtered against common problems. The designated `FMLocationDelegate` will be called with behavior requests intended to alleviate such problems.
+### Testing and Debugging 
+
+Since it's not always possible to be onsite for testing, a simulation mode is provided to make test localization queries.
 
 ```swift
-extension ViewController: FMLocationDelegate {
-    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
-        // Handle behavior update
-    }
-}
+parkingViewController.isSimulation = true
 ```
 
-The following behaviors are currently requested:
+And for debugging, it's sometimes useful to toggle the statistics view to see what's happening under the hood.
 
 ```swift
-public enum FMBehaviorRequest: String {
-    case tiltUp = "Tilt your device up"
-    case tiltDown = "Tilt your device down"
-    case panAround = "Pan around the scene"
-    case panSlowly = "Pan more slowly"
-}
-```
-
-When notified, your application should prompt the user to undertake the remedial behavior. Notifcations are issued at most once per every two seconds. You may use our enum cases to map to your own verbiage or simply rely on our `.rawValue` strings.
-
-### Anchors
-
-In order to get location updates for an anchor, set the anchor before
-starting or during location updates. 
-
-```swift
-FMLocationManager.shared.setAnchor()
-```
-
-To return to device localization, simply unset the anchor point. 
-
-```swift
-FMLocationManager.shared.unsetAnchor()
-```
-
-Anchoring relies on ARKit and is therefore supported by iPhone SE, iPhone 6s, iPhone 6s Plus and newer.
-
-### Radius Check
-
-In order to check if a zone, like parking, is within a given radius of the current device location (as provided by CoreLocation) before attempting to localize, use the `isZoneInRadius` method. The method takes a closure which provides a boolean result.
-
-Currently only `.parking` zones are supported.
-
-```swift
-FMLocationManager.shared.isZoneInRadius(.parking, radius: 50) { result in
-  self.isParkingInRadius = result
-}
-```
-
-### Simulation Mode
-
-Since it's not always possible to be onsite for testing, a simulation mode is provided
-queries the localization service with stored images. 
-
-In order to activate simulation mode, set the flag and choose a semantic zone type to simulate. 
-
-```swift
-FMLocationManager.shared.isSimulation = true
-FMLocationManager.shared.simulationZone = .parking
+parkingViewController.showsStatistics = showsStatisticsSwitch.isOn
 ```
 
 ### Logging
@@ -333,14 +319,14 @@ FMLocationManager.shared.simulationZone = .parking
 By default only errors and warnings are logged, but other verbosity levels are available: `debug`, `info`, `warning`, and `error`.
 
 ```swift
-FMLocationManager.shared.logLevel = .debug
+parkingViewController.logLevel = .debug
 ```
 
 You may also intercept logging calls to send log messages to your own analytics services.
 
 ```swift
-FMLocationManager.shared.logIntercept = { message in
-  sendToAnalytics(message)
+parkingViewController.logIntercept = { message in
+    sendToAnalytics(message)
 }
 ```
 

@@ -146,14 +146,6 @@ override func viewDidLoad() {
 extension ViewController: FMParkingViewControllerDelegate {
     
     func parkingViewController(_ parkingViewController: FMParkingViewController,
-                               didScanQRCode qrCode: CIQRCodeFeature,
-                               continueBlock: @escaping ((Bool) -> Void)) {
-        // Optional validation of the QR code can be done here
-        let isValidCode = qrCode.messageString != nil
-        continueBlock(isValidCode)
-    }
-    
-    func parkingViewController(_ parkingViewController: FMParkingViewController,
                                didReceiveLocalizationResult result: FMLocationResult) {
         // Got a localization result
         let coordinate = result.location.coordinate

@@ -92,7 +92,7 @@ override func viewDidLoad() {
 
 ### Checking Availability
 
-Before attempting to park and localize with FantasmoSDK, you should first check if parking is available in the user's current location. You can do this with the static method `FMParkingViewController.isParkingAvailable(near:)` and passing a `CLLocation`. The result block is called with a boolean indicating whether or not the user is near a mapped parking space.
+Before attempting to park and localize with Fantasmo SDK, you should first check if parking is available in the user's current location. You can do this with the static method `FMParkingViewController.isParkingAvailable(near:)` and passing a `CLLocation`. The result block is called with a boolean indicating whether or not the user is near a mapped parking space.
 
 ```swift
 FMParkingViewController.isParkingAvailable(near: userLocation) { isParkingAvailable in

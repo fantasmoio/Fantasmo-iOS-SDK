@@ -16,25 +16,25 @@ public final class FMParkingViewController: UIViewController {
     /// This value can be overriden in the Info.plist with the key `FM_AVAILABILITY_RADIUS`
     public static let defaultParkingAvailabilityRadius: Int = 50
     
-    /// Check if there's an available parking space near the supplied coordinate.
+    /// Check if there's an available parking space near a supplied CLLocation.
     ///
-    /// - Parameter coordinate: the coordinate to check
+    /// - Parameter location: the CLLocation to check
     /// - Parameter completion: block with a boolean result
     ///
     /// This method should be used to determine whether or not you should try to park and localize with Fantasmo.
     /// The boolean value passed to the completion block tells you if there is an available parking space within the
     /// acceptable radius of the supplied location. If `true`, you should construct an `FMParkingViewController` and
     /// attempt to localize. If `false` you should resort to other options.
-    public static func isParkingAvailable(near coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
+    public static func isParkingAvailable(near location: CLLocation, completion: @escaping (Bool) -> Void) {
         log.debug()
-        guard CLLocationCoordinate2DIsValid(coordinate) else {
+        guard CLLocationCoordinate2DIsValid(location.coordinate) else {
             log.error(FMError(FMLocationError.invalidCoordinate))
             completion(false)
             return
         }
         let radius = FMConfiguration.intForInfoKey(.availabilityRadius) ?? defaultParkingAvailabilityRadius
         FMApi.shared.token = FMConfiguration.accessToken()
-        FMApi.shared.sendZoneInRadiusRequest(.parking, coordinate: coordinate, radius: radius, completion: completion
+        FMApi.shared.sendZoneInRadiusRequest(.parking, coordinate: location.coordinate, radius: radius, completion: completion
         ) { error in
             // For now, clients only care if a zone was found, so an error condition can be treated as a `false` completion
             log.error(error)

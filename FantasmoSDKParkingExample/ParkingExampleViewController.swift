@@ -18,10 +18,10 @@ class ParkingExampleViewController: UIViewController {
     var errorCount: Int = 0
     
     @IBAction func handleEndRideButton(_ button: UIButton) {
-        /// Test coordinate of a parking space in Berlin
-        let coordinate = CLLocationCoordinate2D(latitude: 52.50578283943285, longitude: 13.378954977173915)
+        /// Test location of a parking space in Berlin
+        let testLocation = CLLocation(latitude: 52.50578283943285, longitude: 13.378954977173915)
         /// Before trying to localize with Fantasmo you should check if the user is near a mapped parking space
-        FMParkingViewController.isParkingAvailable(near: coordinate) { [weak self] isParkingAvailable in
+        FMParkingViewController.isParkingAvailable(near: testLocation) { [weak self] isParkingAvailable in
             if !isParkingAvailable {
                 self?.resultLabel.text = "Parking not available near your location."
                 return

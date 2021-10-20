@@ -2,7 +2,13 @@
 
 ## Overview
 
-Supercharge your app with hyper-accurate positioning using just the camera. The Fantasmo SDK is the gateway to the Camera Positiong System (CPS) which provides 6 Degrees-of-Freedom (position and orientation) localization for mobile devices.
+Supercharge your app with hyper-accurate positioning using just the camera. The Fantasmo SDK is the gateway to the Camera Positioning System (CPS) which provides 6 Degrees-of-Freedom (position and orientation) localization for mobile devices.
+
+## Functionality
+
+Camera-based localization is the process of determining the global position of the device camera from an image. Image frames are acquired from an active `ARSession` and sent to a server for computation. The server computation time is approximately 900 ms. The full round trip time is then dictated by latency of the connection.
+
+Since the camera will likely move after the moment at which the image frame is captured, it is necessary to track the motion of the device continuously during localizaiton to determine the position of the device at the time of response. Tracking is provided by `ARSession`. Conventiently, it is then possible to determine the global position of the device at any point in the tracking session regardless of when the image was captured (though you may incur some drift after excessive motion).
 
 ## Installation
 
@@ -58,12 +64,6 @@ Add your access token to your app's `Info.plist`.
 - iOS 11.0+
 - Xcode 11.0+
 
-## Functionality
-
-Camera-based localization is the process of determining the global position of the device camera from an image. Image frames are acquired from an active `ARSession` and sent to a server for computation. The server computation time is approximately 900 ms. The full round trip time is then dictated by latency of the connection.
-
-Since the camera will likely move after the moment at which the image frame is captured, it is necessary to track the motion of the device continuously during localizaiton to determine the position of the device at the time of response. Tracking is provided by `ARSession`. Conventiently, it is then possible to determine the global position of the device at any point in the tracking session regardless of when the image was captured (though you may incur some drift after excessive motion).
-
 ## Usage
 
 ### Quick Start 
@@ -110,10 +110,11 @@ The `sessionId` parameter allows you to associate localization results with your
 
 ### Providing Location Updates
 
-By default, during localization the `FMParkingViewController` uses a `CLLocationManager` internally to get automatic updates to the device's location. If you would like to provide your own `CLLocation` updates, you can set the `usesInternalLocationManager` property to `false` and manually call `updateLocation(_ location: CLLocation)` with each update to the location.
+By default, during localization the `FMParkingViewController` uses a `CLLocationManager` internally to get automatic updates of the device's location. If you would like to provide your own `CLLocation` updates, you can set the `usesInternalLocationManager` property to `false` and manually call `updateLocation(_ location: CLLocation)` with each update to the location.
 
 ```swift
 let parkingViewController = FMParkingViewController(sessionId: sessionId)
+
 // disables the internal CLLocationManager
 parkingViewController.usesInternalLocationManager = false
 self.present(parkingViewController, animated: true)
@@ -157,7 +158,7 @@ func parkingViewController(_ parkingViewController: FMParkingViewController, did
     // Call the continue block with the result
     continueBlock(isValidCode)
     
-    // Validation can also be done asynchronously.
+    // Alternatively, validation can be done asynchronously
     APIService.validateQRCode(qrCode) { isValidCode in
         continueBlock(isValidCode)
     }
@@ -199,6 +200,26 @@ func parkingViewController(_ parkingViewController: FMParkingViewController,
 }
 ```
 
+### Behavior Requests
+
+To help the user localize successfully and to maximize the result quality, camera input is filtered against common problems and behavior requests are displayed to the user. These are messages explaining what the user should be doing with their device in order to localize properly. For example, if the users device is aimed at the ground, you may receive a `"Tilt your device up"` request. 
+
+If you're using the default localization UI, these requests are already displayed to the user. If you've registered your own custom UI, you should use the `didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest)` method of `FMLocalizingViewControllerProtocol` to display these requests to users. 
+
+```swift
+class MyCustomLocalizingViewController: UIViewController, FMLocalizingViewControllerProtocol {
+  
+    @IBOutlet var label: UILabel!
+  
+    func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest) {
+        // display the requested behavior to the user
+        label.text = behavior.description
+    }
+}
+```
+
+As of right now behavior requests are only available in English. More languages coming soon.
+
 ### Customizing UI
 
 The UI for both scanning QR codes and localizing can be completely customized by creating your own implementations of the view protocols.
@@ -224,26 +245,6 @@ Once you've created view controllers for the above protocols, simply register th
 parkingViewController.registerQRScanningViewController(MyCustomQRScanningViewController.self)
 parkingViewController.registerLocalizingViewController(MyCustomLocalizingViewController.self)
 ```
-
-### Behavior Requests
-
-To help the user localize successfully and to maximize the result quality, camera input is filtered against common problems and behavior requests are displayed to the user. These are messages explaining what the user should be doing with their device in order to localize properly. For example, if the users device is aimed at the ground, you may receive a `"Tilt your device up"` request. 
-
-If you're using the default localization UI, these requests are already displayed to the user. If you've registered your own custom UI, you should use the `didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest)` method of `FMLocalizingViewControllerProtocol` to display these requests to users. 
-
-```swift
-class MyCustomLocalizingViewController: UIViewController, FMLocalizingViewControllerProtocol {
-  
-    @IBOutlet var label: UILabel!
-  
-    func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest) {
-        // display the requested behavior to the user
-        label.text = behavior.description
-    }
-}
-```
-
-As of right now behavior requests are only available in English. More languages coming soon.
 
 ### Testing and Debugging 
 
@@ -282,7 +283,7 @@ For testing, the device location can be specified in the Info.plist.
     key: FM_GPS_LAT_LONG
     value: 25.762586765198417,-80.19404801110545
 
-For _internal development_ testing and demo builds, the API server URL can be specified in the Info.plist. It should _not_ include the URI scheme.
+For _Fantasmo internal development_ testing and demo builds, the API server URL can be specified in the Info.plist. It should _not_ include the URI scheme.
 
     key: FM_API_BASE_URL
     value: 192:168:0:1:8090/v1/image.localize

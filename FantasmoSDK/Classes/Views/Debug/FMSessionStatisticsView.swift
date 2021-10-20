@@ -11,6 +11,8 @@ import ARKit
 
 class FMSessionStatisticsView: UIView {
 
+    @IBOutlet var sdkVersionLabel: UILabel!
+    
     @IBOutlet var managerStatusLabel: UILabel!
     
     @IBOutlet var cameraTranslationLabel: UILabel!
@@ -36,7 +38,12 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var deviceLocationLabel: UILabel!
     
     var lastFrameTimestamp: TimeInterval = 0.0
-    
+        
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        sdkVersionLabel.text = "Fantasmo SDK \(FMSDKInfo.fullVersion)"
+    }
+        
     public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
         let shouldUpdate = frame.timestamp - lastFrameTimestamp > (1.0 / refreshRate)
         guard shouldUpdate else {

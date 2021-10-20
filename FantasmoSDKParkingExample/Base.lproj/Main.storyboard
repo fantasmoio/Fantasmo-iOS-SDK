@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -93,11 +94,23 @@
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PvU-0R-zup">
+                                        <rect key="frame" x="163" y="155.5" width="58.5" height="47"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="" cornerStyle="large" buttonSize="large">
+                                            <imageReference key="image" image="mappin.and.ellipse" catalog="system" symbolScale="large"/>
+                                        </buttonConfiguration>
+                                        <connections>
+                                            <segue destination="YgX-EP-ZPj" kind="presentation" identifier="showMap" id="bqz-qb-4Wm"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="PvU-0R-zup" firstAttribute="centerX" secondItem="vUQ-cW-NYt" secondAttribute="centerX" id="Az8-6Y-lQq"/>
                                     <constraint firstItem="vUQ-cW-NYt" firstAttribute="centerX" secondItem="Wex-MA-z1G" secondAttribute="centerX" id="BrT-5p-SC7"/>
                                     <constraint firstItem="vUQ-cW-NYt" firstAttribute="centerY" secondItem="Wex-MA-z1G" secondAttribute="centerY" id="Km4-BS-7wA"/>
                                     <constraint firstItem="vUQ-cW-NYt" firstAttribute="width" relation="lessThanOrEqual" secondItem="Wex-MA-z1G" secondAttribute="width" id="LQH-sP-Urt"/>
+                                    <constraint firstItem="PvU-0R-zup" firstAttribute="top" secondItem="vUQ-cW-NYt" secondAttribute="bottom" id="U7x-yB-quY"/>
                                     <constraint firstItem="vUQ-cW-NYt" firstAttribute="height" relation="lessThanOrEqual" secondItem="Wex-MA-z1G" secondAttribute="height" id="uAC-hB-nFg"/>
                                 </constraints>
                             </view>
@@ -118,6 +131,7 @@
                     </view>
                     <connections>
                         <outlet property="isSimulationSwitch" destination="hmX-l8-Mdl" id="Ay3-js-Zq1"/>
+                        <outlet property="mapPinButton" destination="PvU-0R-zup" id="OiY-Bw-XEp"/>
                         <outlet property="resultLabel" destination="vUQ-cW-NYt" id="tSs-Sm-XMQ"/>
                         <outlet property="showsStatisticsSwitch" destination="1xl-Qi-6Bx" id="tNK-0F-vfu"/>
                     </connections>
@@ -126,5 +140,25 @@
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="138.61607142857142"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="jTO-c9-U8L">
+            <objects>
+                <viewController id="YgX-EP-ZPj" sceneMemberID="viewController">
+                    <mapView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="son-S9-CWN">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </mapView>
+                    <connections>
+                        <outlet property="view" destination="son-S9-CWN" id="2Zw-SU-rKf"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oSO-AL-Rh0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="935" y="139"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="mappin.and.ellipse" catalog="system" width="118" height="128"/>
+    </resources>
 </document>

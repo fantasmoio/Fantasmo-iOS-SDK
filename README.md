@@ -24,6 +24,14 @@ You can use Carthage to install Fantasmo SDK by adding it to your Cartfile:
 
 - Add Carthage.sh by unzip [Carthage.sh.zip](https://github.com/fantasmoio/Fantasmo-iOS-SDK/files/5754931/Carthage.sh.zip) and place it to same directory where your .xcodeproj or .xcworkspace is.
 - Give edit permission to Carthage.sh by `chmod +x Carthage.sh`
+- Note: you may need to update the XCode version number inside the Carthage.sh file. It should work out of the box for XCode 12, but for XCode 13 update the follow section:
+
+`... __XCODE__1200__BUILD_ ...`
+
+to
+
+`... __XCODE__1300__BUILD_ ...`
+
 - Carthage is run simply by pasting the following command into Terminal:
 
    `./Carthage.sh update --platform iOS`

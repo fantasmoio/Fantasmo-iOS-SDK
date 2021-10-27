@@ -8,28 +8,24 @@
 import Foundation
 
 public struct FMError: LocalizedError {
-    enum ErrorType: Error {
-        case errorResponse
-        case invalidErrorResponse
-    }
     
-    public var type: Error
-    public var errorDescription: String?
-    public var cause: Error?
+    public let type: Error
+    public let errorDescription: String?
+    public let cause: Error?
     
     init(_ type: Error, errorDescription: String? = nil, cause: Error? = nil) {
         self.type = type
-        self.errorDescription = errorDescription
+        self.errorDescription = errorDescription ?? type.localizedDescription
         self.cause = cause
     }
     
-    init(_ errorResponse: Data) {
+    init(_ type: Error, _ errorResponse: Data) {
+        self.type = type
         do {
             let decoded = try JSONDecoder().decode(ErrorResponse.self, from: errorResponse)
-            self.type = ErrorType.errorResponse
             self.errorDescription = decoded.message
+            self.cause = nil
         } catch {
-            self.type = ErrorType.invalidErrorResponse
             self.errorDescription = "JSON decoding error"
             self.cause = error
         }
@@ -53,6 +49,5 @@ extension FMError: CustomDebugStringConvertible {
         } else {
             return self.description
         }
-        
     }
 }

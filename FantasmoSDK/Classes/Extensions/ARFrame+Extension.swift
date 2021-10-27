@@ -9,7 +9,7 @@ import ARKit
 
 
 extension ARFrame: FMFrame {
-    public var fmCamera: FMCamera {
+    var fmCamera: FMCamera {
         return self.camera
     }
     

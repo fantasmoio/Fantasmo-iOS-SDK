@@ -9,7 +9,7 @@ import Foundation
 import simd
 
 // Orientation represented as a quaternion.
-public struct FMOrientation: Codable {
+struct FMOrientation: Codable {
     
     var x, y, z, w: Float
     

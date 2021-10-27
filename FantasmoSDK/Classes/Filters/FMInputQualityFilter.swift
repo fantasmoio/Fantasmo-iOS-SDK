@@ -56,7 +56,7 @@ class FMInputQualityFilter: FMFrameFilter {
 }
 
 /// Used for internal testing of filters
-public class FMInputQualityFilterTestAdapter {
+class FMInputQualityFilterTestAdapter {
     let blurFilter = FMBlurFilter()
     public var blurVariance: Float {
         blurFilter.averageVariance

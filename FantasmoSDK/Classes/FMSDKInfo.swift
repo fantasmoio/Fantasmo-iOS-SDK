@@ -1,13 +1,13 @@
 //
-//  Bundle+Extension.swift
+//  FMSDKInfo.swift
 //  FantasmoSDK
 //
-//  Created by Yauheni Klishevich on 13.07.2021.
+//  Created by Nick Jensen on 18.10.21.
 //
 
 import Foundation
 
-extension Bundle {
+public class FMSDKInfo {
     
     /// Returns the full version of a bundle represented by the "short version" (usually software version in the format "major.minor.patch") accompanied
     /// with a "CFBundleVersion" version (usually representing build number).
@@ -16,7 +16,7 @@ extension Bundle {
         var version = ""
 
         // we want the SDK bundle, not the host `main` bundle
-        let bundle = Bundle(for: FMLocationManager.self)
+        let bundle = Bundle(for: FMSDKInfo.self)
 
         if let shortBundleVersion = bundle.infoDictionary?["CFBundleShortVersionString"] as? String {
             version += shortBundleVersion
@@ -28,5 +28,4 @@ extension Bundle {
 
         return version
     }
-    
 }

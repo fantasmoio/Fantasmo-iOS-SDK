@@ -67,6 +67,15 @@ Add your access token to your app's `Info.plist`.
 <string>a0fc7aa1e1144f1e81eaa2ad47794a9e</string>
 ```
 
+### Camera and Location Access
+
+FantasmoSDK requires access to the device's camera and location. Therefore you will need to add usage descriptions for the following keys in your apps `Info.plist`.
+
+```xml
+NSCameraUsageDescription
+NSLocationWhenInUseUsageDescription
+```
+
 ## Requirements
 
 - iOS 11.0+

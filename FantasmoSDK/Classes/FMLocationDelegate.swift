@@ -8,11 +8,22 @@
 import Foundation
 import CoreLocation
 
-public enum FMResultConfidence: Comparable {
+public enum FMResultConfidence: Comparable, CustomStringConvertible {
     case low
     case medium
     case high
-
+    
+    public var description: String {
+        switch self {
+        case .low:
+            return "Low"
+        case .medium:
+            return "Medium"
+        case .high:
+            return "High"
+        }
+    }
+    
     public func abbreviation() -> String {
         switch self {
         case .low:
@@ -31,44 +42,27 @@ public struct FMLocationResult {
     public var zones: [FMZone]?
 }
 
-public enum FMBehaviorRequest: String {
-    case tiltUp = "Tilt your device up"
-    case tiltDown = "Tilt your device down"
-    case panAround = "Pan around the scene"
-    case panSlowly = "Pan more slowly"
+public enum FMBehaviorRequest {
+    case pointAtBuildings
+    case tiltUp
+    case tiltDown
+    case panAround
+    case panSlowly
 }
 
-/// The methods that you use to receive events from an associated
-/// location manager object.
-public protocol FMLocationDelegate: AnyObject {
-
-    /// Tells the delegate that new location data is available.
-    ///
-    /// - Parameters:
-    ///   - location: Location of the device (or anchor if set)
-    ///   - zones: Semantic zone corresponding to the location
-    /// Default implementation provided.
-    func locationManager(didUpdateLocation result: FMLocationResult)
-
-    /// Tells the delegate that an error has occurred.
-    ///
-    /// - Parameters:
-    ///   - error: The error reported.
-    ///   - metadata: Metadata related to the error.
-    /// Default implementation provided.
-    func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
-
-    /// Notifies delegate of the needed user action to enable localization.
-    /// For example user may holds the device tilted too much, which makes localization impossible. In this case manager will request corresponding
-    /// remedial action (tilt up or down)
-    /// Default implementation provided.
-    func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
-}
-
-/// Empty implementations of the protocol to allow optional
-/// implementation for delegates.
-public extension FMLocationDelegate {
-    func locationManager(didUpdateLocation result: FMLocationResult) {}
-    func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {}
-    func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {}
+extension FMBehaviorRequest: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .pointAtBuildings:
+            return "Point at stores, signs and buildings around you to get a precise location"
+        case .tiltUp:
+            return "Tilt your device up"
+        case .tiltDown:
+            return "Tilt your device down"
+        case .panAround:
+            return "Pan around the scene"
+        case .panSlowly:
+            return "Pan more slowly"
+        }
+    }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-internal struct FMConfiguration {
+struct FMConfiguration {
 
     /**
      Info.plist keys used for configuration
@@ -16,8 +16,28 @@ internal struct FMConfiguration {
     enum infoKeys: String {
         case apiBaseUrl = "FM_API_BASE_URL"
         case gpsLatLong = "FM_GPS_LAT_LONG"
+        case accessToken = "FM_ACCESS_TOKEN"
+        case availabilityRadius = "FM_AVAILABILITY_RADIUS"
     }
 
+    static func accessToken() -> String {
+        guard let accessToken = stringForInfoKey(.accessToken) else {
+            fatalError("Missing or invalid access token. Please add an access token to the Info.plist with the following key: \(infoKeys.accessToken.rawValue)")
+        }
+        return accessToken
+    }
+    
+    /**
+     Get optional int from Info.plist by key
+     */
+    static func intForInfoKey(_ key: infoKeys) -> Int? {
+        if let info = Bundle.main.object(forInfoDictionaryKey: key.rawValue) as? Int {
+            return info
+        } else {
+            return nil
+        }
+    }
+    
     /**
      Get optional string from Info.plist by key
      */

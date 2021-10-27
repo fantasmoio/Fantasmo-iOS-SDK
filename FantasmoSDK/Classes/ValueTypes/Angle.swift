@@ -8,7 +8,7 @@
 import Foundation
 
 // Represents the degree of turn between two straight lines with a common vertex.
-public struct Angle: CustomStringConvertible, Equatable {
+struct Angle: CustomStringConvertible, Equatable {
     
     /// The pi constant, the ratio of a circle's circumference to its diameter
     public static let (pi, π) = (Double.pi, Double.pi)

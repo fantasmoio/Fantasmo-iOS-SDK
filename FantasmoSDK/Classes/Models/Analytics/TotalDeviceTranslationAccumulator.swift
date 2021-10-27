@@ -12,7 +12,7 @@ import ARKit
 /// To reduce error introduced by noise we use decimation (downsampling without passing through low-pass filter) by an integer factor as the most
 /// simple approach which should yield sufficient accuracy.
 /// More info about downsampling and decimation can be read at https://en.wikipedia.org/wiki/Downsampling_(signal_processing)
-public class TotalDeviceTranslationAccumulator {
+class TotalDeviceTranslationAccumulator {
     
     /// Current value of total translation in meters, which is updated as more frames are passed via `update(`
     private(set) var totalTranslation: Float = 0.0 {

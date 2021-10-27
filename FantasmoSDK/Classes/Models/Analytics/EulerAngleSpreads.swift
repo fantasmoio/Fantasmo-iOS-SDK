@@ -10,7 +10,7 @@ import simd
 import ARKit
 
 /// Spread of Euler angles covered by device over a period of time.
-public struct EulerAngleSpreadsAccumulator {
+struct EulerAngleSpreadsAccumulator {
     
     /// minRotationAngle ∈ [-∞, +∞],  maxRotationAngle ∈ [-∞, +∞], spread ∈ [0, pi]
     public var pitch: (minRotationAngle: Float, maxRotationAngle: Float, spread: Float) {

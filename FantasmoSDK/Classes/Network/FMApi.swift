@@ -8,6 +8,7 @@
 import Foundation
 import ARKit
 import CoreMotion
+import UIKit
 
 struct FMLocalizationRequest {
     var isSimulation: Bool
@@ -95,7 +96,7 @@ class FMApi {
             
             // handle valid but erroneous response
             guard !(400...499 ~= code) else {
-                error(FMError(data))
+                error(FMError(ApiError.errorResponse, data))
                 return
             }
             
@@ -169,8 +170,13 @@ class FMApi {
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
+            // handle valid but erroneous response
             guard let data = data else {
                 error(FMError(ApiError.invalidResponse))
+                return
+            }
+            guard let code = code, !(400...499 ~= code) else {
+                error(FMError(ApiError.errorResponse, data))
                 return
             }
             do {
@@ -245,7 +251,7 @@ class FMApi {
                 "deviceModel": UIDevice.current.identifier,
                 "deviceOs": UIDevice.current.correctedSystemName,
                 "deviceOsVersion": UIDevice.current.systemVersion,
-                "sdkVersion": Bundle.fullVersion,
+                "sdkVersion": FMSDKInfo.fullVersion,
 
                 // session identifiers
                 "appSessionId": request.analytics.appSessionId,

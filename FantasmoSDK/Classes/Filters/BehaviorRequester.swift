@@ -12,10 +12,15 @@ class BehaviorRequester {
     /// Minimum number of seconds that must elapse between trigering events.
     private let throttleThreshold = 2.0
     
+    private let defaultBehavior = FMBehaviorRequest.pointAtBuildings
+    private var didRequestInitialDefaultBehavior = false
+    
     /// The number of times the rejection must occur before triggering.
     private let incidenceThreshold = 30
 
     private var lastTriggerTime = clock()
+    private var lastTriggerBehavior: FMBehaviorRequest?
+    
     private var rejectionCounts = [FMFilterRejectionReason : Int]()
 
     private var requestHandler: ((FMBehaviorRequest) -> Void)
@@ -35,11 +40,20 @@ class BehaviorRequester {
             if count > incidenceThreshold {
                 let elapsed = Double(clock() - lastTriggerTime) / Double(CLOCKS_PER_SEC)
                 if elapsed > throttleThreshold {
-                    requestHandler(rejectionReason.mapToBehaviorRequest())
-                    restart()
+                    let newBehavior = rejectionReason.mapToBehaviorRequest()
+                    let behaviorRequest = (newBehavior != lastTriggerBehavior) ? newBehavior : defaultBehavior
+                    requestHandler(behaviorRequest)
+                    lastTriggerBehavior = behaviorRequest
+                    lastTriggerTime = clock()
+                    rejectionCounts.removeAll(keepingCapacity: true)
                 }
             } else {
                 rejectionCounts[rejectionReason] = count
+            }
+            
+            if !didRequestInitialDefaultBehavior {
+                didRequestInitialDefaultBehavior = true
+                requestHandler(defaultBehavior)
             }
         }
     }
@@ -47,5 +61,6 @@ class BehaviorRequester {
     func restart() {
         lastTriggerTime = clock()
         rejectionCounts.removeAll(keepingCapacity: true)
+        didRequestInitialDefaultBehavior = false
     }
 }

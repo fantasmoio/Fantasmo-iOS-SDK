@@ -10,9 +10,17 @@ import UIKit
 import ARKit
 import CoreLocation
 
-open class FMLocationManager: NSObject {
+protocol FMLocationManagerDelegate: AnyObject {
+    func locationManager(didUpdateLocation result: FMLocationResult)
+    func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
+    func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
+    func locationManager(didChangeState state: FMLocationManager.State)
+    func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
+}
+
+class FMLocationManager: NSObject {
     
-    public enum State {
+    enum State: String {
         case stopped        // doing nothing
         case localizing     // localizing
         case uploading      // uploading image while localizing
@@ -21,8 +29,13 @@ open class FMLocationManager: NSObject {
     
     // MARK: - Properties
     
-    public static let shared = FMLocationManager()
-    public private(set) var state = State.stopped
+    public private(set) var state: State = .stopped {
+        didSet {
+            if state != oldValue {
+                delegate?.locationManager(didChangeState: state)
+            }
+        }
+    }
     
     // Clients can use this to mock the localization call
     public var mockLocalize: ((ARFrame) -> Void)?
@@ -66,7 +79,6 @@ open class FMLocationManager: NSObject {
     
     private var anchorFrame: ARFrame? {
         didSet {
-            tester?.anchorFrame = anchorFrame
             locationFuser.reset()
         }
     }
@@ -75,21 +87,20 @@ open class FMLocationManager: NSObject {
     
     private lazy var behaviorRequester = BehaviorRequester { [weak self] behaviorRequest in
         // in testing mode, request behaviors even when stopped
-        if self?.tester != nil || self?.state != .stopped {
+        if self?.state != .stopped {
             self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
         }
     }
     
     // Variables set by delegate handling methods
-    private var lastFrame: ARFrame?
-    private var lastCLLocation: CLLocation?
-    private weak var delegate: FMLocationDelegate?
+    public private(set) var lastFrame: ARFrame?
+    public private(set) var lastCLLocation: CLLocation?
+    public private(set) var lastResult: FMLocationResult?
+    
+    private weak var delegate: FMLocationManagerDelegate?
 
     // Fusion
     private var locationFuser = LocationFuser()
-
-    /// Used for testing private `FMLocationManager`'s API.
-    private var tester: FMLocationManagerTester?
     
     /// States whether the client code using this manager set up connection with the manager.
     private var isConnected = false
@@ -100,15 +111,6 @@ open class FMLocationManager: NSObject {
     private var appSessionId: String? // provided by client
     private var localizationSessionId: String? // created by SDK
     private let motionManager = MotionManager()
-
-    // MARK: - Testing
-    
-    /// This initializer must be used only for testing purposes. Otherwise use singleton object via `shared` static property.
-    public init(tester: FMLocationManagerTester? = nil) {
-        self.tester = tester
-        self.tester?.accumulatedARKitInfo = accumulatedARKitInfo
-        self.tester?.frameEventAccumulator = frameEventAccumulator
-    }
     
     // MARK: - Lifecycle
         
@@ -117,7 +119,7 @@ open class FMLocationManager: NSObject {
     /// - Parameters:
     ///   - accessToken: Token for service authorization.
     ///   - delegate: Delegate for receiving location events.
-    public func connect(accessToken: String, delegate: FMLocationDelegate) {
+    public func connect(accessToken: String, delegate: FMLocationManagerDelegate) {
         log.debug(parameters: ["delegate": delegate])
 
         isConnected = true
@@ -136,7 +138,7 @@ open class FMLocationManager: NSObject {
     ///   - session: ARSession to subscribe to as a delegate
     ///   - locationManger: CLLocationManager to subscribe to as a delegate
     public func connect(accessToken: String,
-                        delegate: FMLocationDelegate,
+                        delegate: FMLocationManagerDelegate,
                         session: ARSession? = nil,
                         locationManager: CLLocationManager? = nil) {
         log.debug(parameters: [
@@ -192,23 +194,7 @@ open class FMLocationManager: NSObject {
         log.debug()
         anchorFrame = nil
     }
-    
-    /// Check to see if a given zone is in the provided radius
-    ///
-    /// - Parameter zone: Zone to search for
-    /// - Parameter radius: Search radius in meters
-    /// - Parameter completion: Closure that consumes boolean server result
-    public func isZoneInRadius(_ zone: FMZone.ZoneType, radius: Int, completion: @escaping (Bool)->Void) {
-        log.debug()
-        FMApi.shared.sendZoneInRadiusRequest(
-            zone, coordinate: approximateCoordinate, radius: radius, completion: completion
-        ) { error in
-            // For now, clients only care if a zone was found, so an error condition can be treated as a `false` completion
-            log.error(error)
-            completion(false)
-        }
-    }
-    
+        
     /// Update the user's location, use instead of CLLocationManagerDelegate
     ///
     /// - Parameter location: current user location
@@ -217,15 +203,13 @@ open class FMLocationManager: NSObject {
         lastCLLocation = location
     }
     
-    // MARK: - Internal instance methods
-    
     /// Localize the image frame. It triggers a network request that
     /// provides a response via the delegate.
     ///
     /// - Parameter frame: Frame to localize.
-    internal func localize(frame: ARFrame, from session: ARSession) {
+    public func localize(frame: ARFrame, from session: ARSession) {
         guard isConnected else { return }
-
+        
         log.debug(parameters: ["simulation": isSimulation])
         state = .uploading
         
@@ -270,7 +254,7 @@ open class FMLocationManager: NSObject {
         
         // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second
         guard CLLocationCoordinate2DIsValid(approximateCoordinate) else {
-            self.delegate?.locationManager(didFailWithError: FMError(FMError.ErrorType.errorResponse, errorDescription:"No valid CLLocation coordinates"), errorMetadata: nil)
+            self.delegate?.locationManager(didFailWithError: FMError(FMLocationError.invalidCoordinate), errorMetadata: nil)
             self.state = .paused
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.state = .localizing
@@ -292,11 +276,7 @@ open class FMLocationManager: NSObject {
 
             let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
             self.delegate?.locationManager(didUpdateLocation: result)
-
-            if let tester = self.tester {
-                let translation = openCVRelativeAnchorTransform?.inNonOpenCvCS.translation
-                tester.locationManager(didUpdateLocation: result, translationOfAnchorInVirtualDeviceCS: translation)
-            }
+            self.lastResult = result
             
             if self.state != .stopped {
                 self.state = .localizing
@@ -349,13 +329,15 @@ open class FMLocationManager: NSObject {
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
-
-        guard state != .stopped || tester != nil else { return }
-
+        
+        guard state != .stopped else {
+            return
+        }
+        
         let filterResult = frameFilter.accepts(frame)
         behaviorRequester.processResult(filterResult)
         accumulatedARKitInfo.update(with: frame)
-
+        
         if case let .rejected(reason) = filterResult {
             frameEventAccumulator.accumulate(filterRejectionReason: reason)
         } else {
@@ -363,6 +345,8 @@ extension FMLocationManager : ARSessionDelegate {
                 localize(frame: frame, from: session)
             }
         }
+        
+        delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
     }
 }
 

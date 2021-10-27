@@ -8,7 +8,7 @@
 import Foundation
 
 /// Accumulator of the statistics on the number of the several types of frame filter rejections.
-public class FrameFilterRejectionStatisticsAccumulator {
+class FrameFilterRejectionStatisticsAccumulator {
     
     public private(set) var counts =
         Dictionary<FMFilterRejectionReason, Int>(initialValueForAllCases: 0)

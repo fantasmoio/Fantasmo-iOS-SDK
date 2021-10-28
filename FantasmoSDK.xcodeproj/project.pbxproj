@@ -314,26 +314,17 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		0143E8D2270C693000A3CF35 /* Debug */ = {
-			isa = PBXGroup;
-			children = (
-				0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */,
-				0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */,
-			);
-			path = Debug;
-			sourceTree = "<group>";
-		};
 		0144B79C27047C15009A4042 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				0134BF8927060C1D00DDEF7A /* Components */,
-				0143E8D2270C693000A3CF35 /* Debug */,
 				0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */,
 				0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */,
 				0144B79D27047C38009A4042 /* FMParkingViewController.swift */,
 				0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */,
 				0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */,
 				0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */,
+				0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -390,6 +381,7 @@
 			children = (
 				9468389825921BF3005B1145 /* .gitkeep */,
 				9468389925921BF3005B1145 /* Assets.xcassets */,
+				0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */,
 			);
 			path = Assets;
 			sourceTree = "<group>";

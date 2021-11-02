@@ -143,6 +143,11 @@
 		A3CB77372636BDB8009625BB /* FMOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB77362636BDB8009625BB /* FMOrientation.swift */; };
 		A3CB773F263710D2009625BB /* simd_float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */; };
 		A3CB774226372A9B009625BB /* simd_quatf+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB774126372A9B009625BB /* simd_quatf+Extension.swift */; };
+		FFD0445F2731A637005CA6E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD0445E2731A637005CA6E1 /* AppDelegate.swift */; };
+		FFD044612731A637005CA6E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD044602731A637005CA6E1 /* ViewController.swift */; };
+		FFD044642731A637005CA6E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FFD044622731A637005CA6E1 /* Main.storyboard */; };
+		FFD044662731A639005CA6E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFD044652731A639005CA6E1 /* Assets.xcassets */; };
+		FFD044692731A639005CA6E1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FFD044672731A639005CA6E1 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -268,6 +273,15 @@
 		A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameFilter.swift; sourceTree = "<group>"; };
 		FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKFilterTests.swift; sourceTree = "<group>"; };
 		FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKGeometricTests.swift; sourceTree = "<group>"; };
+		FFD043A62731727B005CA6E1 /* localise-pass-target .mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = "localise-pass-target .mov"; path = "../../../../Volumes/GoogleDrive/Shared drives/Fantasmo Share/Videos /RC/localise-pass-target .mov"; sourceTree = "<group>"; };
+		FFD04443273198E0005CA6E1 /* Experience.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = Experience.rcproject; sourceTree = "<group>"; };
+		FFD0445427319FF7005CA6E1 /* IcedLatte.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = IcedLatte.usdz; sourceTree = "<group>"; };
+		FFD0445C2731A637005CA6E1 /* FantasmoSDKARSession.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKARSession.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFD0445E2731A637005CA6E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		FFD044602731A637005CA6E1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FFD044632731A637005CA6E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		FFD044652731A639005CA6E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FFD044682731A639005CA6E1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -291,6 +305,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0D5E88C26BA97DA00CE5B1C /* FantasmoSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FFD044592731A637005CA6E1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,9 +367,11 @@
 		9468388125921BAF005B1145 = {
 			isa = PBXGroup;
 			children = (
+				FFD043A62731727B005CA6E1 /* localise-pass-target .mov */,
 				9468388D25921BAF005B1145 /* FantasmoSDK */,
 				A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */,
 				01A3A4F3270F14B000B7679F /* FantasmoSDKParkingExample */,
+				FFD0445D2731A637005CA6E1 /* FantasmoSDKARSession */,
 				9468388C25921BAF005B1145 /* Products */,
 				946838E025921DFE005B1145 /* Frameworks */,
 				A3445A0226A8967300C96205 /* Recovered References */,
@@ -361,6 +384,7 @@
 				9468388B25921BAF005B1145 /* FantasmoSDK.framework */,
 				A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */,
 				01A3A4F2270F14B000B7679F /* FantasmoSDKParkingExample.app */,
+				FFD0445C2731A637005CA6E1 /* FantasmoSDKARSession.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -562,6 +586,20 @@
 			path = FMPose;
 			sourceTree = "<group>";
 		};
+		FFD0445D2731A637005CA6E1 /* FantasmoSDKARSession */ = {
+			isa = PBXGroup;
+			children = (
+				FFD0445427319FF7005CA6E1 /* IcedLatte.usdz */,
+				FFD0445E2731A637005CA6E1 /* AppDelegate.swift */,
+				FFD044602731A637005CA6E1 /* ViewController.swift */,
+				FFD04443273198E0005CA6E1 /* Experience.rcproject */,
+				FFD044622731A637005CA6E1 /* Main.storyboard */,
+				FFD044652731A639005CA6E1 /* Assets.xcassets */,
+				FFD044672731A639005CA6E1 /* LaunchScreen.storyboard */,
+			);
+			path = FantasmoSDKARSession;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -631,14 +669,31 @@
 			productReference = A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		FFD0445B2731A637005CA6E1 /* FantasmoSDKARSession */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FFD0446A2731A639005CA6E1 /* Build configuration list for PBXNativeTarget "FantasmoSDKARSession" */;
+			buildPhases = (
+				FFD044582731A637005CA6E1 /* Sources */,
+				FFD044592731A637005CA6E1 /* Frameworks */,
+				FFD0445A2731A637005CA6E1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FantasmoSDKARSession;
+			productName = FantasmoSDKARSession;
+			productReference = FFD0445C2731A637005CA6E1 /* FantasmoSDKARSession.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		9468388225921BAF005B1145 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
-				LastUpgradeCheck = 1220;
+				LastSwiftUpdateCheck = 1310;
+				LastUpgradeCheck = 1310;
 				TargetAttributes = {
 					01A3A4F1270F14B000B7679F = {
 						CreatedOnToolsVersion = 13.0;
@@ -648,6 +703,9 @@
 					};
 					A0D5E88626BA97DA00CE5B1C = {
 						CreatedOnToolsVersion = 12.5.1;
+					};
+					FFD0445B2731A637005CA6E1 = {
+						CreatedOnToolsVersion = 13.1;
 					};
 				};
 			};
@@ -667,6 +725,7 @@
 				9468388A25921BAF005B1145 /* FantasmoSDK */,
 				A0D5E88626BA97DA00CE5B1C /* FantasmoSDKTests */,
 				01A3A4F1270F14B000B7679F /* FantasmoSDKParkingExample */,
+				FFD0445B2731A637005CA6E1 /* FantasmoSDKARSession */,
 			);
 		};
 /* End PBXProject section */
@@ -696,6 +755,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				40EA810526E7C6A8002E96A6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FFD0445A2731A637005CA6E1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FFD044692731A639005CA6E1 /* LaunchScreen.storyboard in Resources */,
+				FFD044662731A639005CA6E1 /* Assets.xcassets in Resources */,
+				FFD044642731A637005CA6E1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -849,6 +918,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		FFD044582731A637005CA6E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FFD044612731A637005CA6E1 /* ViewController.swift in Sources */,
+				FFD0445F2731A637005CA6E1 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -877,6 +955,22 @@
 			isa = PBXVariantGroup;
 			children = (
 				01A3A500270F14B200B7679F /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		FFD044622731A637005CA6E1 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FFD044632731A637005CA6E1 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		FFD044672731A639005CA6E1 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FFD044682731A639005CA6E1 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -996,7 +1090,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1054,7 +1148,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1079,7 +1173,7 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = FantasmoSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1108,7 +1202,7 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				INFOPLIST_FILE = FantasmoSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1130,7 +1224,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8V8339VAMG;
 				INFOPLIST_FILE = FantasmoSDKTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1149,7 +1243,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8V8339VAMG;
 				INFOPLIST_FILE = FantasmoSDKTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1157,6 +1251,70 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = fantasmo.FantasmoSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FFD0446B2731A639005CA6E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DMQTKK7U5U;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKParkingExample.FantasmoSDKARSession;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FFD0446C2731A639005CA6E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = DMQTKK7U5U;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = arkit;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKParkingExample.FantasmoSDKARSession;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1197,6 +1355,15 @@
 			buildConfigurations = (
 				A0D5E89026BA97DA00CE5B1C /* Debug */,
 				A0D5E89126BA97DA00CE5B1C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FFD0446A2731A639005CA6E1 /* Build configuration list for PBXNativeTarget "FantasmoSDKARSession" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FFD0446B2731A639005CA6E1 /* Debug */,
+				FFD0446C2731A639005CA6E1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

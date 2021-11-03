@@ -56,6 +56,9 @@ class MockData {
         if let relativeOpenCVAnchorPose = request.relativeOpenCVAnchorPose {
             params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
         }
+
+        params["imageResolution"] = imageResolution(request).toJson()
+        
         return params
     }
     

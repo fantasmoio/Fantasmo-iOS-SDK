@@ -13,18 +13,20 @@ import MapKit
 class ParkingExampleViewController: UIViewController {
         
     @IBOutlet var resultLabel: UILabel!
+    @IBOutlet var mapPinButton: UIButton!
+    @IBOutlet var endRideButton: UIButton!
     @IBOutlet var isSimulationSwitch: UISwitch!
     @IBOutlet var showsStatisticsSwitch: UISwitch!
-    @IBOutlet var mapPinButton: UIButton!
     
     var errorCount: Int = 0
     var lastResult: FMLocationResult?
-    
+    var locationManager = CLLocationManager()
+    var deviceLocation: CLLocation!
+        
     @IBAction func handleEndRideButton(_ button: UIButton) {
-        /// Test location of a parking space in Berlin
-        let testLocation = CLLocation(latitude: 52.50578283943285, longitude: 13.378954977173915)
-        /// Before trying to localize with Fantasmo you should check if the user is near a mapped parking space
-        FMParkingViewController.isParkingAvailable(near: testLocation) { [weak self] isParkingAvailable in
+        let myLocation = getMyLocation()
+        /// Before trying to localize with Fantasmo, check if you're near a mapped parking space
+        FMParkingViewController.isParkingAvailable(near: myLocation) { [weak self] isParkingAvailable in
             if !isParkingAvailable {
                 self?.resultLabel.text = "Parking not available near your location."
                 return
@@ -116,7 +118,59 @@ extension ParkingExampleViewController: FMParkingViewControllerDelegate {
     }
 }
 
-extension ParkingExampleViewController {
+
+/// Code below here should not be relevant for host app integration.
+
+extension ParkingExampleViewController: CLLocationManagerDelegate {
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        deviceLocation = locations.last
+        updateEndRideButtonState()
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        updateEndRideButtonState()
+    }
+    
+    @IBAction func handleSimulationModeToggle(_ sender: UISwitch) {
+        if !isSimulationSwitch.isOn {
+            locationManager.delegate = self
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+        } else {
+            locationManager.stopUpdatingLocation()
+        }
+        updateEndRideButtonState()
+    }
+    
+    /// Returns the device location or a test parking location in simulation mode.
+    private func getMyLocation() -> CLLocation {
+        var location: CLLocation
+        if isSimulationSwitch.isOn {
+            location = CLLocation(latitude: 52.50578283943285, longitude: 13.378954977173915)
+        } else {
+            location = deviceLocation
+        }
+        return location
+    }
+    
+    /// Returns whether the user denied access to location services.
+    private var didDenyLocationAccess: Bool {
+        return locationManager.authorizationStatus == .denied || locationManager.authorizationStatus == .restricted
+    }
+    
+    /// Enable the "End Ride" button only if we have a location or we're in simulation mode.
+    private func updateEndRideButtonState() {
+        endRideButton.isEnabled = isSimulationSwitch.isOn || deviceLocation != nil
+        endRideButton.alpha = endRideButton.isEnabled ? 1.0 : 0.5
+        if !isSimulationSwitch.isOn && didDenyLocationAccess {
+            endRideButton.titleLabel?.adjustsFontSizeToFitWidth = true
+            endRideButton.setTitle("Location access denied", for: .normal)
+        } else {
+            endRideButton.setTitle("End Ride", for: .normal)
+        }
+    }
+        
     /// Show the lastResult on a MKMapView
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let mapView = segue.destination.view as? MKMapView, let result = lastResult else {

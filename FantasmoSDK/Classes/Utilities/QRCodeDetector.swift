@@ -11,7 +11,7 @@ import ARKit
 
 class QRCodeDetector {
     
-    static let minDetectableSize: CGFloat = 250.0
+    static let minDetectableSize: CGFloat = 0.0
     
     public var detectedQRCode: CIQRCodeFeature?
         

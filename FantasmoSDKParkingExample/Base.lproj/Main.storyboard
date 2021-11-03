@@ -56,8 +56,11 @@
                                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="hmX-l8-Mdl">
+                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hmX-l8-Mdl">
                                                         <rect key="frame" x="201" y="0.0" width="51" height="31"/>
+                                                        <connections>
+                                                            <action selector="handleSimulationModeToggle:" destination="BYZ-38-t0r" eventType="valueChanged" id="19R-6K-rfK"/>
+                                                        </connections>
                                                     </switch>
                                                 </subviews>
                                             </stackView>
@@ -95,7 +98,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PvU-0R-zup">
-                                        <rect key="frame" x="173" y="133.5" width="39" height="41"/>
+                                        <rect key="frame" x="173" y="133.5" width="38.5" height="41"/>
                                         <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="">
@@ -132,6 +135,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="pDV-1Y-XbK"/>
                     <connections>
+                        <outlet property="endRideButton" destination="Wqm-PQ-Ntz" id="nhR-lk-xRX"/>
                         <outlet property="isSimulationSwitch" destination="hmX-l8-Mdl" id="Ay3-js-Zq1"/>
                         <outlet property="mapPinButton" destination="PvU-0R-zup" id="OiY-Bw-XEp"/>
                         <outlet property="resultLabel" destination="vUQ-cW-NYt" id="tSs-Sm-XMQ"/>

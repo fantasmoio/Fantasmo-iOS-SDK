@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0103238E2732D4F100056E91 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0103238D2732D4F100056E91 /* Settings.bundle */; };
 		0123A4D7270F2E7E00763758 /* FMParkingViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */; };
 		0123A4D9270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */; };
 		0123A4DC270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */; };
@@ -177,6 +178,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0103238D2732D4F100056E91 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMParkingViewControllerDelegate.swift; sourceTree = "<group>"; };
 		0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewControllerProtocol.swift; sourceTree = "<group>"; };
@@ -336,9 +338,10 @@
 				01A3A4F6270F14B000B7679F /* SceneDelegate.swift */,
 				01A3A4F8270F14B000B7679F /* ParkingExampleViewController.swift */,
 				01A3A4FA270F14B000B7679F /* Main.storyboard */,
-				01A3A4FD270F14B200B7679F /* Assets.xcassets */,
 				01A3A4FF270F14B200B7679F /* LaunchScreen.storyboard */,
 				01A3A502270F14B200B7679F /* Info.plist */,
+				01A3A4FD270F14B200B7679F /* Assets.xcassets */,
+				0103238D2732D4F100056E91 /* Settings.bundle */,
 			);
 			path = FantasmoSDKParkingExample;
 			sourceTree = "<group>";
@@ -676,6 +679,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0103238E2732D4F100056E91 /* Settings.bundle in Resources */,
 				01A3A501270F14B200B7679F /* LaunchScreen.storyboard in Resources */,
 				01A3A4FE270F14B200B7679F /* Assets.xcassets in Resources */,
 				01A3A4FC270F14B000B7679F /* Main.storyboard in Resources */,

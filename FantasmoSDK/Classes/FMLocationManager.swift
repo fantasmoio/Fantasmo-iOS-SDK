@@ -92,10 +92,11 @@ class FMLocationManager: NSObject {
         }
     }
     
-    // Variables set by delegate handling methods
+    /// Read-only vars, used to populate the statistics view
     public private(set) var lastFrame: ARFrame?
     public private(set) var lastCLLocation: CLLocation?
     public private(set) var lastResult: FMLocationResult?
+    public private(set) var errors: [FMError] = []
     
     private weak var delegate: FMLocationManagerDelegate?
 
@@ -254,7 +255,9 @@ class FMLocationManager: NSObject {
         
         // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second
         guard CLLocationCoordinate2DIsValid(approximateCoordinate) else {
-            self.delegate?.locationManager(didFailWithError: FMError(FMLocationError.invalidCoordinate), errorMetadata: nil)
+            let error = FMError(FMLocationError.invalidCoordinate)
+            self.errors.append(error)
+            self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
             self.state = .paused
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.state = .localizing
@@ -286,6 +289,7 @@ class FMLocationManager: NSObject {
         // Set up error closure
         let localizeError: FMApi.ErrorResult = { error in
             log.error(error)
+            self.errors.append(error)
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
             
             if self.state != .stopped {

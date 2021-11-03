@@ -255,6 +255,9 @@ public final class FMParkingViewController: UIViewController {
         }
         
         let configuration = ARWorldTrackingConfiguration()
+        if #available(iOS 11.3, *) {
+            configuration.isAutoFocusEnabled = true
+        }
         configuration.worldAlignment = .gravity
         
         let options: ARSession.RunOptions = [.resetTracking]

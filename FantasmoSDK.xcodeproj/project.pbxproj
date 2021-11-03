@@ -143,6 +143,7 @@
 		A3CB77372636BDB8009625BB /* FMOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB77362636BDB8009625BB /* FMOrientation.swift */; };
 		A3CB773F263710D2009625BB /* simd_float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */; };
 		A3CB774226372A9B009625BB /* simd_quatf+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB774126372A9B009625BB /* simd_quatf+Extension.swift */; };
+		FFB4C9D227329CF70078DD13 /* IcedLatte.usdz in Resources */ = {isa = PBXBuildFile; fileRef = FFB4C9D127329CF70078DD13 /* IcedLatte.usdz */; };
 		FFD0445F2731A637005CA6E1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD0445E2731A637005CA6E1 /* AppDelegate.swift */; };
 		FFD044612731A637005CA6E1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD044602731A637005CA6E1 /* ViewController.swift */; };
 		FFD044642731A637005CA6E1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FFD044622731A637005CA6E1 /* Main.storyboard */; };
@@ -273,9 +274,9 @@
 		A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameFilter.swift; sourceTree = "<group>"; };
 		FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKFilterTests.swift; sourceTree = "<group>"; };
 		FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKGeometricTests.swift; sourceTree = "<group>"; };
+		FFB4C9D127329CF70078DD13 /* IcedLatte.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; name = IcedLatte.usdz; path = ../../IcedLatte.usdz; sourceTree = "<group>"; };
 		FFD043A62731727B005CA6E1 /* localise-pass-target .mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; name = "localise-pass-target .mov"; path = "../../../../Volumes/GoogleDrive/Shared drives/Fantasmo Share/Videos /RC/localise-pass-target .mov"; sourceTree = "<group>"; };
 		FFD04443273198E0005CA6E1 /* Experience.rcproject */ = {isa = PBXFileReference; lastKnownFileType = file.rcproject; path = Experience.rcproject; sourceTree = "<group>"; };
-		FFD0445427319FF7005CA6E1 /* IcedLatte.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = IcedLatte.usdz; sourceTree = "<group>"; };
 		FFD0445C2731A637005CA6E1 /* FantasmoSDKARSession.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKARSession.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFD0445E2731A637005CA6E1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FFD044602731A637005CA6E1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -589,7 +590,7 @@
 		FFD0445D2731A637005CA6E1 /* FantasmoSDKARSession */ = {
 			isa = PBXGroup;
 			children = (
-				FFD0445427319FF7005CA6E1 /* IcedLatte.usdz */,
+				FFB4C9D127329CF70078DD13 /* IcedLatte.usdz */,
 				FFD0445E2731A637005CA6E1 /* AppDelegate.swift */,
 				FFD044602731A637005CA6E1 /* ViewController.swift */,
 				FFD04443273198E0005CA6E1 /* Experience.rcproject */,
@@ -765,6 +766,7 @@
 				FFD044692731A639005CA6E1 /* LaunchScreen.storyboard in Resources */,
 				FFD044662731A639005CA6E1 /* Assets.xcassets in Resources */,
 				FFD044642731A637005CA6E1 /* Main.storyboard in Resources */,
+				FFB4C9D227329CF70078DD13 /* IcedLatte.usdz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1264,7 +1266,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DMQTKK7U5U;
+				DEVELOPMENT_TEAM = 8V8339VAMG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1296,7 +1298,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DMQTKK7U5U;
+				DEVELOPMENT_TEAM = 8V8339VAMG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FM_ACCESS_TOKEN</key>
+	<string>a0fc7aa1e1144f1e81eaa2ad47794a9e</string>
+	<key>NSCameraUsageDescription</key>
+	<string>For image capture.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>For localization.</string>
+</dict>
+</plist>

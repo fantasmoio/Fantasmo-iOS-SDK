@@ -80,7 +80,7 @@ public final class FMParkingViewController: UIViewController {
     // MARK: -
     // MARK: QR Codes
     
-    private var qrCodeDetector = QRCodeDetector()
+    public var qrCodeDetector: FMQRCodeDetector = QRCodeDetector()
     
     private var qrCodeAwaitingContinue: Bool = false
     

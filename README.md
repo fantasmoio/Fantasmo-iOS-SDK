@@ -263,6 +263,8 @@ parkingViewController.registerQRScanningViewController(MyCustomQRScanningViewCon
 parkingViewController.registerLocalizingViewController(MyCustomLocalizingViewController.self)
 ```
 
+*Important:* Your custom views are child view controllers of the `FMParkingViewController` and will be placed on top of a view that displays a live camera feed. Therefore your custom views should be semi-transparent, or contain some transparency to allow the user to see the camera underneath.
+
 ### Testing and Debugging 
 
 Since it's not always possible to be onsite for testing, a simulation mode is provided to make test localization queries.

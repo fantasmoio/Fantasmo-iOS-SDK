@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0103238E2732D4F100056E91 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0103238D2732D4F100056E91 /* Settings.bundle */; };
+		010C274C273556BC00EF34A3 /* FMQRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C274B273556BC00EF34A3 /* FMQRCodeDetector.swift */; };
 		0123A4D7270F2E7E00763758 /* FMParkingViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */; };
 		0123A4D9270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */; };
 		0123A4DC270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */; };
@@ -177,6 +179,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0103238D2732D4F100056E91 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		010C274B273556BC00EF34A3 /* FMQRCodeDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRCodeDetector.swift; sourceTree = "<group>"; };
 		0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMParkingViewControllerDelegate.swift; sourceTree = "<group>"; };
 		0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewControllerProtocol.swift; sourceTree = "<group>"; };
@@ -336,9 +340,10 @@
 				01A3A4F6270F14B000B7679F /* SceneDelegate.swift */,
 				01A3A4F8270F14B000B7679F /* ParkingExampleViewController.swift */,
 				01A3A4FA270F14B000B7679F /* Main.storyboard */,
-				01A3A4FD270F14B200B7679F /* Assets.xcassets */,
 				01A3A4FF270F14B200B7679F /* LaunchScreen.storyboard */,
 				01A3A502270F14B200B7679F /* Info.plist */,
+				01A3A4FD270F14B200B7679F /* Assets.xcassets */,
+				0103238D2732D4F100056E91 /* Settings.bundle */,
 			);
 			path = FantasmoSDKParkingExample;
 			sourceTree = "<group>";
@@ -401,6 +406,7 @@
 				9468389B25921BF3005B1145 /* FMLocationManager.swift */,
 				A02EA34426B9154D00525308 /* FMLocationDelegate.swift */,
 				946838BB25921BF3005B1145 /* FMConfiguration.swift */,
+				010C274B273556BC00EF34A3 /* FMQRCodeDetector.swift */,
 				9468389D25921BF3005B1145 /* FMUtility.swift */,
 				A02646BF260CE46C00A7FA6B /* FMLog.swift */,
 				01343E96271D8376003A4716 /* FMSDKInfo.swift */,
@@ -676,6 +682,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0103238E2732D4F100056E91 /* Settings.bundle in Resources */,
 				01A3A501270F14B200B7679F /* LaunchScreen.storyboard in Resources */,
 				01A3A4FE270F14B200B7679F /* Assets.xcassets in Resources */,
 				01A3A4FC270F14B000B7679F /* Main.storyboard in Resources */,
@@ -784,6 +791,7 @@
 				A02646BB260CE44900A7FA6B /* FMApiRouter.swift in Sources */,
 				0123A4DF270F520800763758 /* FMLocationError.swift in Sources */,
 				A3B57315269C3B2D0089B5F5 /* BehaviorRequester.swift in Sources */,
+				010C274C273556BC00EF34A3 /* FMQRCodeDetector.swift in Sources */,
 				A34459F126A8246400C96205 /* OrientationAngleSpreadCalculator.swift in Sources */,
 				A3B57317269C3B6E0089B5F5 /* FMInputQualityFilter.swift in Sources */,
 				946838D825921BF3005B1145 /* CGImage+Extension.swift in Sources */,
@@ -1070,7 +1078,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8V8339VAMG;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1099,7 +1107,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8V8339VAMG;
 				DYLIB_COMPATIBILITY_VERSION = 1;

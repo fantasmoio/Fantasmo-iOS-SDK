@@ -35,6 +35,7 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var filterStatsFeaturesLabel: UILabel!
     
     @IBOutlet var lastResultLabel: UILabel!
+    @IBOutlet var errorsLabel: UILabel!
     @IBOutlet var deviceLocationLabel: UILabel!
     
     var lastFrameTimestamp: TimeInterval = 0.0
@@ -101,6 +102,14 @@ class FMSessionStatisticsView: UIView {
         }
         let text = "Status: \(state.rawValue)"
         managerStatusLabel.attributedText = highlightString(state.rawValue, in: text, color: color)
+    }
+    
+    public func update(errorCount: Int, lastError: FMError?) {
+        var errorText = "Errors: \(errorCount)"
+        if let lastError = lastError {
+            errorText += "\nLast error: \(lastError.debugDescription)"
+        }
+        errorsLabel.text = errorText
     }
     
     public func update(lastResult: FMLocationResult?) {

@@ -80,7 +80,7 @@ public final class FMParkingViewController: UIViewController {
     // MARK: -
     // MARK: QR Codes
     
-    private var qrCodeDetector = QRCodeDetector()
+    public var qrCodeDetector: FMQRCodeDetector = QRCodeDetector()
     
     private var qrCodeAwaitingContinue: Bool = false
     
@@ -255,6 +255,9 @@ public final class FMParkingViewController: UIViewController {
         }
         
         let configuration = ARWorldTrackingConfiguration()
+        if #available(iOS 11.3, *) {
+            configuration.isAutoFocusEnabled = true
+        }
         configuration.worldAlignment = .gravity
         
         let options: ARSession.RunOptions = [.resetTracking]
@@ -313,6 +316,7 @@ public final class FMParkingViewController: UIViewController {
                 statisticsView = Bundle(for: self.classForCoder).loadNibNamed(nibName, owner: self, options: nil)?.first as? FMSessionStatisticsView
                 statisticsView?.update(state: fmLocationManager.state)
                 statisticsView?.update(lastResult: fmLocationManager.lastResult)
+                statisticsView?.update(errorCount: fmLocationManager.errors.count, lastError: fmLocationManager.errors.last)
                 statisticsView?.update(deviceLocation: fmLocationManager.lastCLLocation)
                 statisticsView?.isUserInteractionEnabled = false
                 self.viewIfLoaded?.addSubview(statisticsView!)
@@ -348,8 +352,10 @@ extension FMParkingViewController: FMLocationManagerDelegate {
     }
 
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?) {
-        delegate?.parkingViewController(self, didReceiveLocalizationError: error as! FMError, errorMetadata: metadata)
-        localizingViewController?.didReceiveLocalizationError(error as! FMError, errorMetadata: metadata)
+        let fmError = error as! FMError  // TODO - change this method to receive an FMError
+        delegate?.parkingViewController(self, didReceiveLocalizationError: fmError, errorMetadata: metadata)
+        localizingViewController?.didReceiveLocalizationError(fmError, errorMetadata: metadata)
+        statisticsView?.update(errorCount: fmLocationManager.errors.count, lastError: fmError)
     }
     
     func locationManager(didChangeState state: FMLocationManager.State) {

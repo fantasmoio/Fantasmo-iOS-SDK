@@ -9,9 +9,9 @@ import Foundation
 import CoreImage
 import ARKit
 
-class QRCodeDetector {
+class QRCodeDetector: FMQRCodeDetector {
     
-    static let minDetectableSize: CGFloat = 250.0
+    static let minDetectableSize: CGFloat = 0.0
     
     public var detectedQRCode: CIQRCodeFeature?
         

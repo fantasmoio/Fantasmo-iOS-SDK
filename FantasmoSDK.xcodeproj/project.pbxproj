@@ -76,6 +76,11 @@
 		0144B7A127047CC0009A4042 /* FMQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */; };
 		0144B7A427047CEB009A4042 /* FMLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */; };
 		015BA28A2705B47400194E9E /* QRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015BA2892705B47400194E9E /* QRCodeDetector.swift */; };
+		0186293A273D203100EBFE4C /* ImageQualityEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01862939273D203100EBFE4C /* ImageQualityEstimator.swift */; };
+		0186293B273D241600EBFE4C /* ImageQualityModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01862937273D202500EBFE4C /* ImageQualityModel.mlmodel */; };
+		0186293F273D358F00EBFE4C /* ImageQualityEstimationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0186293E273D358F00EBFE4C /* ImageQualityEstimationResult.swift */; };
+		01862941273D396D00EBFE4C /* ImageQualityEstimatorCoreML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01862940273D396D00EBFE4C /* ImageQualityEstimatorCoreML.swift */; };
+		01862945273D5CB000EBFE4C /* MockQRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01862944273D5CB000EBFE4C /* MockQRCodeDetector.swift */; };
 		01984383271590A9004CAC3A /* FMToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01984382271590A9004CAC3A /* FMToolbar.swift */; };
 		019C16DC27451E40008B6002 /* FMDeviceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019C16DB27451E40008B6002 /* FMDeviceError.swift */; };
 		01A3A4F5270F14B000B7679F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A3A4F4270F14B000B7679F /* AppDelegate.swift */; };
@@ -194,6 +199,11 @@
 		0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewController.swift; sourceTree = "<group>"; };
 		0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewController.swift; sourceTree = "<group>"; };
 		015BA2892705B47400194E9E /* QRCodeDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeDetector.swift; sourceTree = "<group>"; };
+		01862937273D202500EBFE4C /* ImageQualityModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ImageQualityModel.mlmodel; sourceTree = "<group>"; };
+		01862939273D203100EBFE4C /* ImageQualityEstimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQualityEstimator.swift; sourceTree = "<group>"; };
+		0186293E273D358F00EBFE4C /* ImageQualityEstimationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQualityEstimationResult.swift; sourceTree = "<group>"; };
+		01862940273D396D00EBFE4C /* ImageQualityEstimatorCoreML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQualityEstimatorCoreML.swift; sourceTree = "<group>"; };
+		01862944273D5CB000EBFE4C /* MockQRCodeDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockQRCodeDetector.swift; sourceTree = "<group>"; };
 		01984382271590A9004CAC3A /* FMToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMToolbar.swift; sourceTree = "<group>"; };
 		019C16DB27451E40008B6002 /* FMDeviceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMDeviceError.swift; sourceTree = "<group>"; };
 		01A3A4F2270F14B000B7679F /* FantasmoSDKParkingExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKParkingExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -335,11 +345,23 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		01862936273D200100EBFE4C /* CoreML */ = {
+			isa = PBXGroup;
+			children = (
+				01862937273D202500EBFE4C /* ImageQualityModel.mlmodel */,
+				01862939273D203100EBFE4C /* ImageQualityEstimator.swift */,
+				01862940273D396D00EBFE4C /* ImageQualityEstimatorCoreML.swift */,
+				0186293E273D358F00EBFE4C /* ImageQualityEstimationResult.swift */,
+			);
+			path = CoreML;
+			sourceTree = "<group>";
+		};
 		01A3A4F3270F14B000B7679F /* FantasmoSDKParkingExample */ = {
 			isa = PBXGroup;
 			children = (
 				01A3A4F4270F14B000B7679F /* AppDelegate.swift */,
 				01A3A4F6270F14B000B7679F /* SceneDelegate.swift */,
+				01862944273D5CB000EBFE4C /* MockQRCodeDetector.swift */,
 				01A3A4F8270F14B000B7679F /* ParkingExampleViewController.swift */,
 				01A3A4FA270F14B000B7679F /* Main.storyboard */,
 				01A3A4FF270F14B200B7679F /* LaunchScreen.storyboard */,
@@ -439,6 +461,7 @@
 		946838A525921BF3005B1145 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				01862936273D200100EBFE4C /* CoreML */,
 				A30EBE0A269F32C400E572FA /* Analytics */,
 				A3CB772E2636B3BF009625BB /* FMPose */,
 				946838AE25921BF3005B1145 /* Coordinate.swift */,
@@ -715,6 +738,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01862945273D5CB000EBFE4C /* MockQRCodeDetector.swift in Sources */,
 				01A3A4F9270F14B000B7679F /* ParkingExampleViewController.swift in Sources */,
 				01A3A4F5270F14B000B7679F /* AppDelegate.swift in Sources */,
 				01A3A4F7270F14B000B7679F /* SceneDelegate.swift in Sources */,
@@ -754,13 +778,16 @@
 				946838D025921BF3005B1145 /* ErrorResponse.swift in Sources */,
 				A30EBE09269F32B200E572FA /* AccumulatedARKitInfo.swift in Sources */,
 				946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */,
+				01862941273D396D00EBFE4C /* ImageQualityEstimatorCoreML.swift in Sources */,
 				A3CB77342636B496009625BB /* FMPosition.swift in Sources */,
 				946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */,
+				0186293B273D241600EBFE4C /* ImageQualityModel.mlmodel in Sources */,
 				A354BA6026A4B88300AF2023 /* EulerAngles.swift in Sources */,
 				A3C7657C26B29F4F0062E932 /* FMTrackingStateFilter.swift in Sources */,
 				A02646BD260CE44900A7FA6B /* FMApi.swift in Sources */,
 				A35909A0269EE70800A7BF5F /* FMFrameFilter.swift in Sources */,
 				946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */,
+				0186293A273D203100EBFE4C /* ImageQualityEstimator.swift in Sources */,
 				01343E8B271D7E5C003A4716 /* Codable+Extension.swift in Sources */,
 				946838CA25921BF3005B1145 /* Geofence.swift in Sources */,
 				A3BA02DF263919F300524D66 /* MovingAverage.swift in Sources */,
@@ -781,6 +808,7 @@
 				946838C625921BF3005B1145 /* FMError.swift in Sources */,
 				946838D125921BF3005B1145 /* Orientation.swift in Sources */,
 				01343E8E271D7ECC003A4716 /* ARFrame+Extension.swift in Sources */,
+				0186293F273D358F00EBFE4C /* ImageQualityEstimationResult.swift in Sources */,
 				406437FB26E7864300B38B45 /* FMFrame.swift in Sources */,
 				A3798CA926AEA844007CB41F /* FrameFilterRejectionStatistics.swift in Sources */,
 				019C16DC27451E40008B6002 /* FMDeviceError.swift in Sources */,

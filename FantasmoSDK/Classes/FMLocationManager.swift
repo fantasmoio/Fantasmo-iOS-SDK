@@ -92,6 +92,8 @@ class FMLocationManager: NSObject {
         }
     }
     
+    var imageQualityEstimator = ImageQualityEstimator.makeEstimator()
+    
     /// Read-only vars, used to populate the statistics view
     public private(set) var lastFrame: ARFrame?
     public private(set) var lastCLLocation: CLLocation?
@@ -218,6 +220,16 @@ class FMLocationManager: NSObject {
         guard mockLocalize == nil else {
             mockLocalize?(frame)
             return
+        }
+        
+        let iqe = imageQualityEstimator.estimateImageQuality(from: frame.capturedImage)
+        switch iqe {
+        case .error(let message):
+            print("IQE error: \(message)")
+        case .unknown:
+            print("IQE unknown")
+        case .estimate(let score):
+            print("IQE score: \(score)")
         }
         
         let openCVRelativeAnchorTransform = openCVPoseOfAnchorInVirtualDeviceCS(for: frame)

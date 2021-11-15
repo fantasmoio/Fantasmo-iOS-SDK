@@ -51,6 +51,7 @@ class FMApi {
     
     static let shared = FMApi()
     var token: String?
+    var imageEncoder = ImageEncoder(largestSingleOutputDimension: 1280)
     
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
     typealias RadiusResult = (Bool) -> Void
@@ -294,7 +295,7 @@ class FMApi {
             return MockData.imageData(request)
         }
 
-        let imageData = FMUtility.toJpeg(pixelBuffer: frame.capturedImage, with: frame.deviceOrientation)
+        let imageData = imageEncoder.jpegData(from: frame)
         return imageData
     }
     

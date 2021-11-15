@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0103238E2732D4F100056E91 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0103238D2732D4F100056E91 /* Settings.bundle */; };
 		010C274C273556BC00EF34A3 /* FMQRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C274B273556BC00EF34A3 /* FMQRCodeDetector.swift */; };
+		011589E62742957100CFC368 /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011589E52742957100CFC368 /* ImageEncoder.swift */; };
 		0123A4D7270F2E7E00763758 /* FMParkingViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */; };
 		0123A4D9270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */; };
 		0123A4DC270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */; };
@@ -181,6 +182,7 @@
 /* Begin PBXFileReference section */
 		0103238D2732D4F100056E91 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		010C274B273556BC00EF34A3 /* FMQRCodeDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRCodeDetector.swift; sourceTree = "<group>"; };
+		011589E52742957100CFC368 /* ImageEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoder.swift; sourceTree = "<group>"; };
 		0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMParkingViewControllerDelegate.swift; sourceTree = "<group>"; };
 		0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewControllerProtocol.swift; sourceTree = "<group>"; };
@@ -545,6 +547,7 @@
 				A3BA88CD26A5E905003E422B /* ObservationToken.swift */,
 				A02EA34626B91D1F00525308 /* LocationFuser.swift */,
 				015BA2892705B47400194E9E /* QRCodeDetector.swift */,
+				011589E52742957100CFC368 /* ImageEncoder.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -782,6 +785,7 @@
 				01343E8E271D7ECC003A4716 /* ARFrame+Extension.swift in Sources */,
 				406437FB26E7864300B38B45 /* FMFrame.swift in Sources */,
 				A3798CA926AEA844007CB41F /* FrameFilterRejectionStatistics.swift in Sources */,
+				011589E62742957100CFC368 /* ImageEncoder.swift in Sources */,
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,
 				4064380526E79C8100B38B45 /* MockCamera.swift in Sources */,

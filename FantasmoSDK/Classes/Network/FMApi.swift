@@ -79,12 +79,12 @@ class FMApi {
                                  error: @escaping ErrorResult) {
         
         // set up request parameters
-        guard let imageData = imageData(from: frame, request: request) else {
+        guard let image = encodedImage(from: frame, request: request) else {
             error(FMError(ApiError.invalidImage))
             return
         }
         
-        let params = getParams(for: frame, request: request)
+        let params = getParams(for: frame, image: image, request: request)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -141,7 +141,7 @@ class FMApi {
         FMRestClient.post(
             .localize,
             parameters: params,
-            imageData: imageData,
+            imageData: image.data,
             token: token,
             completion: postCompletion,
             error: postError
@@ -211,7 +211,8 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func getParams(for frame: ARFrame, request: FMLocalizationRequest) -> [String : String?] {
+    private func getParams(for frame: ARFrame, image: ImageEncoder.Image, request: FMLocalizationRequest) -> [String : String?] {
+        var params: [String : String?]
         
         // mock if simulation
         if !request.isSimulation {
@@ -219,8 +220,11 @@ class FMApi {
             
             let pose = FMPose(frame.openCVTransformOfVirtualDeviceInWorldCS)
             
+            let imageSize = max(image.resolution.width, image.resolution.height)
+            let originalImageSize = max(image.originalResolution.width, image.originalResolution.height)
+            let imageScaleFactor = originalImageSize > 0 ? imageSize / originalImageSize : 0
             let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
-                                          atScale: Float(FMUtility.Constants.ImageScaleFactor),
+                                          atScale: Float(imageScaleFactor),
                                           withStatusBarOrientation: interfaceOrientation,
                                           withDeviceOrientation: frame.deviceOrientation,
                                           withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
@@ -238,9 +242,7 @@ class FMApi {
                 "total": events.total,
             ]
             
-            let imageResolution = getImageResolution(from: frame, request: request)
-
-            var params = [
+            params = [
                 "intrinsics" : intrinsics.toJson(),
                 "gravity" : pose.orientation.toJson(),
                 "capturedAt" : String(NSDate().timeIntervalSince1970),
@@ -263,20 +265,21 @@ class FMApi {
                 "totalDistance": String(request.analytics.totalDistance),
                 "rotationSpread": request.analytics.rotationSpread.toJson(),
                 "magneticData": request.analytics.magneticField.toJson(),
-                "imageResolution": imageResolution.toJson()
-                
             ]
-
-            // calculate and send reference frame if anchoring
-            if let relativeOpenCVAnchorPose = request.relativeOpenCVAnchorPose {
-                params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
-            }
-
-            return params
         }
         else {
-            return MockData.params(request)
+            params = MockData.params(request)
         }
+        
+        let imageResolution = FMFrameResolution(height: Int(image.resolution.height), width: Int(image.resolution.width))
+        params["imageResolution"] = imageResolution.toJson()
+        
+        // calculate and send reference frame if anchoring
+        if let relativeOpenCVAnchorPose = request.relativeOpenCVAnchorPose {
+            params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
+        }
+                
+        return params
     }
     
     /// Generate the image data used to perform "localize" HTTP request .
@@ -288,31 +291,14 @@ class FMApi {
     ///   - frame: Frame to localize
     ///   - request: Localization request struct
     ///   - Returns: Prepared localization image
-    private func imageData(from frame: ARFrame, request: FMLocalizationRequest) -> Data? {
+    private func encodedImage(from frame: ARFrame, request: FMLocalizationRequest) -> ImageEncoder.Image? {
         
         // mock if simulation
         guard !request.isSimulation else {
-            return MockData.imageData(request)
+            return MockData.encodedImage(request)
         }
 
-        let imageData = imageEncoder.jpegData(from: frame)
-        return imageData
-    }
-    
-    /// Get the image resolution used to perform "localize" HTTP request .
-    ///
-    /// - Parameters:
-    ///   - frame: Frame to return the resolution from
-    ///   - request: Localization request struct
-    ///   - Returns: Resolution as CGSize
-    private func getImageResolution(from frame: ARFrame, request: FMLocalizationRequest) -> FMFrameResolution {
-        // mock if simulation
-        guard !request.isSimulation else {
-            let imageSize = MockData.imageResolution(request)
-            return FMFrameResolution(height: Int(imageSize.height), width: Int(imageSize.width))
-        }
-
-        let resolution = frame.camera.imageResolution
-        return FMFrameResolution(height: Int(resolution.height), width: Int(resolution.width))
-    }
+        let encodedImage = imageEncoder.encodedImage(from: frame)
+        return encodedImage
+    }    
 }

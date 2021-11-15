@@ -15,28 +15,19 @@ class MockData {
     /// - Parameters:
     ///   - zone: Type of semantic zone to simulate.
     /// - Returns: Parameters and encoded image data for query.
-    static func imageData(_ request: FMLocalizationRequest) -> Data {
-        var jpegData: Data?
-        
+    static func encodedImage(_ request: FMLocalizationRequest) -> ImageEncoder.Image? {
+        var image: UIImage?
         switch request.simulationZone {
         case .parking:
-            jpegData = UIImage(named: "inParking", in:Bundle(for:MockData.self), compatibleWith: nil)?.toJpeg(compressionQuality: FMUtility.Constants.JpegCompressionRatio)
+            image = UIImage(named: "inParking", in:Bundle(for:MockData.self), compatibleWith: nil)
         default:
-            jpegData = UIImage(named: "onStreet", in:Bundle(for:MockData.self), compatibleWith: nil)?.toJpeg(compressionQuality: FMUtility.Constants.JpegCompressionRatio)
+            image = UIImage(named: "onStreet", in:Bundle(for:MockData.self), compatibleWith: nil)
         }
-        
-        return jpegData ?? Data()
-    }
-    
-    static func imageResolution(_ request: FMLocalizationRequest) -> CGSize {
-        var imageResolution: CGSize?
-        switch request.simulationZone {
-        case .parking:
-            imageResolution = UIImage(named: "inParking", in:Bundle(for:MockData.self), compatibleWith: nil)?.size
-        default:
-            imageResolution = UIImage(named: "onStreet", in:Bundle(for:MockData.self), compatibleWith: nil)?.size
+        guard let image = image, let jpegData = image.jpegData(compressionQuality: 0.9) else {
+            return nil
         }
-        return imageResolution ?? CGSize()
+        let resolution = CGSize(width: image.size.width * image.scale, height: image.size.height * image.scale)
+        return ImageEncoder.Image(data: jpegData, resolution: resolution, originalResolution: resolution)
     }
 
     /// Generate a simulated localization query params from a known location.
@@ -51,14 +42,7 @@ class MockData {
             params = Self.parkingMockParameters
         default:
             params = Self.streetMockParameters
-        }
-        
-        if let relativeOpenCVAnchorPose = request.relativeOpenCVAnchorPose {
-            params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
-        }
-
-        params["imageResolution"] = imageResolution(request).toJson()
-        
+        }        
         return params
     }
     

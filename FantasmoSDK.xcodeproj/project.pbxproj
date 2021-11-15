@@ -46,7 +46,6 @@
 		01343E7A271D7B12003A4716 /* FMApiRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646B8260CE44900A7FA6B /* FMApiRouter.swift */; };
 		01343E7B271D7BDB003A4716 /* FMConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838BB25921BF3005B1145 /* FMConfiguration.swift */; };
 		01343E7C271D7BE7003A4716 /* LocalizeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A625921BF3005B1145 /* LocalizeResponse.swift */; };
-		01343E7D271D7BFE003A4716 /* FMUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389D25921BF3005B1145 /* FMUtility.swift */; };
 		01343E7E271D7C6B003A4716 /* simd_quatf+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB774126372A9B009625BB /* simd_quatf+Extension.swift */; };
 		01343E7F271D7C77003A4716 /* Geofence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A925921BF3005B1145 /* Geofence.swift */; };
 		01343E80271D7C85003A4716 /* EulerAngles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03C3263B6F0100524D66 /* EulerAngles.swift */; };
@@ -92,7 +91,6 @@
 		40EA810526E7C6A8002E96A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
 		9468389025921BAF005B1145 /* FantasmoSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 9468388E25921BAF005B1145 /* FantasmoSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389B25921BF3005B1145 /* FMLocationManager.swift */; };
-		946838C125921BF3005B1145 /* FMUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389D25921BF3005B1145 /* FMUtility.swift */; };
 		946838C225921BF3005B1145 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389F25921BF3005B1145 /* MockData.swift */; };
 		946838C625921BF3005B1145 /* FMError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A425921BF3005B1145 /* FMError.swift */; };
 		946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838A625921BF3005B1145 /* LocalizeResponse.swift */; };
@@ -214,7 +212,6 @@
 		9468389825921BF3005B1145 /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		9468389925921BF3005B1145 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9468389B25921BF3005B1145 /* FMLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLocationManager.swift; sourceTree = "<group>"; };
-		9468389D25921BF3005B1145 /* FMUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUtility.swift; sourceTree = "<group>"; };
 		9468389F25921BF3005B1145 /* MockData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
 		946838A425921BF3005B1145 /* FMError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMError.swift; sourceTree = "<group>"; };
 		946838A625921BF3005B1145 /* LocalizeResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizeResponse.swift; sourceTree = "<group>"; };
@@ -409,7 +406,6 @@
 				A02EA34426B9154D00525308 /* FMLocationDelegate.swift */,
 				946838BB25921BF3005B1145 /* FMConfiguration.swift */,
 				010C274B273556BC00EF34A3 /* FMQRCodeDetector.swift */,
-				9468389D25921BF3005B1145 /* FMUtility.swift */,
 				A02646BF260CE46C00A7FA6B /* FMLog.swift */,
 				01343E96271D8376003A4716 /* FMSDKInfo.swift */,
 			);
@@ -726,7 +722,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				946838C125921BF3005B1145 /* FMUtility.swift in Sources */,
 				A3445A0526A896C700C96205 /* TrackingStateFrameStatistics.swift in Sources */,
 				0144B7A127047CC0009A4042 /* FMQRScanningViewController.swift in Sources */,
 				A02646C0260CE46C00A7FA6B /* FMLog.swift in Sources */,
@@ -811,7 +806,6 @@
 				01343E65271D7925003A4716 /* FMFrame.swift in Sources */,
 				01343E88271D7DD5003A4716 /* Dictionary+Extension.swift in Sources */,
 				01343E87271D7D5E003A4716 /* Coordinate.swift in Sources */,
-				01343E7D271D7BFE003A4716 /* FMUtility.swift in Sources */,
 				01343E84271D7D40003A4716 /* Pose.swift in Sources */,
 				01343E64271D7919003A4716 /* FMMovementFilter.swift in Sources */,
 				01343E67271D79A5003A4716 /* FMZone.swift in Sources */,

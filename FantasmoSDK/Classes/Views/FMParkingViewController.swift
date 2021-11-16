@@ -253,7 +253,11 @@ public final class FMParkingViewController: UIViewController {
             camera.exposureOffset = -1
             camera.minimumExposure = -1
         }
-        
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+                
         let configuration = ARWorldTrackingConfiguration()
         if #available(iOS 11.3, *) {
             configuration.isAutoFocusEnabled = true
@@ -261,17 +265,19 @@ public final class FMParkingViewController: UIViewController {
         configuration.worldAlignment = .gravity
         
         let options: ARSession.RunOptions = [.resetTracking]
-        session.run(configuration, options: options)
-    }
-    
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
+        sceneView.session.run(configuration, options: options)
+                
         if state == .idle {
             startQRScanning()
         }
     }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         
+        sceneView.session.pause()
+    }
+                
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -418,6 +424,32 @@ extension FMParkingViewController: ARSessionDelegate {
         
         default:
             break
+        }
+    }
+    
+    public func session(_ session: ARSession, didFailWithError error: Error) {
+        guard error is ARError else {
+            return
+        }
+        let errorWithInfo: NSError
+        if #available(iOS 14.5, *) {
+            let underlyingError = (error as NSError).underlyingErrors.first
+            errorWithInfo = underlyingError as NSError? ?? error as NSError
+        } else {
+            errorWithInfo = error as NSError
+        }
+        let messages = [
+            errorWithInfo.localizedDescription,
+            errorWithInfo.localizedRecoverySuggestion
+        ]
+        let errorMessage = messages.compactMap({ $0 }).joined(separator: "\n")
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: "ARSession Error", message: errorMessage, preferredStyle: .alert)
+            let restartAction = UIAlertAction(title: "Dismiss", style: .default) { _ in
+                alertController.dismiss(animated: true) { self.dismiss(animated: true, completion: nil) }
+            }
+            alertController.addAction(restartAction)
+            self.present(alertController, animated: true, completion: nil)
         }
     }
 }

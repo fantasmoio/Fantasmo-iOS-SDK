@@ -16,17 +16,22 @@ public final class FMParkingViewController: UIViewController {
     /// This value can be overriden in the Info.plist with the key `FM_AVAILABILITY_RADIUS`
     public static let defaultParkingAvailabilityRadius: Int = 50
     
-    /// Check if there's an available parking space near a supplied CLLocation.
+    /// Check if there's an available parking space near a supplied CLLocation and that Fantasmo is supported on the device.
     ///
     /// - Parameter location: the CLLocation to check
     /// - Parameter completion: block with a boolean result
     ///
-    /// This method should be used to determine whether or not you should try to park and localize with Fantasmo.
-    /// The boolean value passed to the completion block tells you if there is an available parking space within the
-    /// acceptable radius of the supplied location. If `true`, you should construct an `FMParkingViewController` and
-    /// attempt to localize. If `false` you should resort to other options.
+    /// This method is used to decide whether or not you can park and localize with Fantasmo. The `completion` block is called
+    /// with the answer. If `true` it means there is a parking space near the supplied location and that the device supports
+    /// `ARKit`, which is required by Fantasmo. You should now construct a `FMParkingViewController` and present it modally.
+    /// If the value is `false` then you should _not_ attempt to localize and instead resort to other options.
     public static func isParkingAvailable(near location: CLLocation, completion: @escaping (Bool) -> Void) {
         log.debug()
+        guard ARWorldTrackingConfiguration.isSupported else {
+            log.error(FMError(FMDeviceError.notSupported))
+            completion(false)
+            return
+        }
         guard CLLocationCoordinate2DIsValid(location.coordinate) else {
             log.error(FMError(FMLocationError.invalidCoordinate))
             completion(false)
@@ -253,7 +258,11 @@ public final class FMParkingViewController: UIViewController {
             camera.exposureOffset = -1
             camera.minimumExposure = -1
         }
-        
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+                
         let configuration = ARWorldTrackingConfiguration()
         if #available(iOS 11.3, *) {
             configuration.isAutoFocusEnabled = true
@@ -261,17 +270,19 @@ public final class FMParkingViewController: UIViewController {
         configuration.worldAlignment = .gravity
         
         let options: ARSession.RunOptions = [.resetTracking]
-        session.run(configuration, options: options)
-    }
-    
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
+        sceneView.session.run(configuration, options: options)
+                
         if state == .idle {
             startQRScanning()
         }
     }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         
+        sceneView.session.pause()
+    }
+                
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -418,6 +429,32 @@ extension FMParkingViewController: ARSessionDelegate {
         
         default:
             break
+        }
+    }
+    
+    public func session(_ session: ARSession, didFailWithError error: Error) {
+        guard error is ARError else {
+            return
+        }
+        let errorWithInfo: NSError
+        if #available(iOS 14.5, *) {
+            let underlyingError = (error as NSError).underlyingErrors.first
+            errorWithInfo = underlyingError as NSError? ?? error as NSError
+        } else {
+            errorWithInfo = error as NSError
+        }
+        let messages = [
+            errorWithInfo.localizedDescription,
+            errorWithInfo.localizedRecoverySuggestion
+        ]
+        let errorMessage = messages.compactMap({ $0 }).joined(separator: "\n")
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: "ARSession Error", message: errorMessage, preferredStyle: .alert)
+            let restartAction = UIAlertAction(title: "Dismiss", style: .default) { _ in
+                alertController.dismiss(animated: true) { self.dismiss(animated: true, completion: nil) }
+            }
+            alertController.addAction(restartAction)
+            self.present(alertController, animated: true, completion: nil)
         }
     }
 }

@@ -29,7 +29,7 @@ You can use Carthage to install Fantasmo SDK by adding it to your Cartfile:
    `github "fantasmoio/Fantasmo-iOS-SDK" ~> 2.0.0`
 
 - Add Carthage.sh by unzip [Carthage.sh.zip](https://github.com/fantasmoio/Fantasmo-iOS-SDK/files/5754931/Carthage.sh.zip) and place it to same directory where your .xcodeproj or .xcworkspace is.
-- Give edit permission to Carthage.sh by `chmod +x Carthage.sh`
+- Give execute permission to Carthage.sh by `chmod +x Carthage.sh`
 - Note: you may need to update the XCode version number inside the Carthage.sh file. It should work out of the box for XCode 12, but for XCode 13 update the follow section:
 
 `... __XCODE__1200__BUILD_ ...`
@@ -80,21 +80,37 @@ NSLocationWhenInUseUsageDescription
 
 - iOS 11.0+
 - Xcode 11.0+
+- ARKit
+   * iPhone 6s, 6s Plus, SE or newer
+   * iPad/iPad Mini 5th Gen or newer
+   * iPad Pro (9.7”, 10.5” or 12.9”)
+   * iPod touch 7th generation or newer
 
 ## Usage
 
-### Quick Start 
+### Quick Start
 
-Check out the `FantasmoSDKParkingExample` target or implement the code below. 
+To park and localize with the Fantasmo SDK, you should first check if parking is available in the user's current location. You can do this with the static method `FMParkingViewController.isParkingAvailable(near:)` and passing a `CLLocation`. The result block is called with a boolean indicating whether or not the user is near a mapped parking space.
 
 ```swift
-import UIKit
 import FantasmoSDK
 
-override func viewDidLoad() {
-    super.viewDidLoad()
-            
-    // construct a new parking view with a sessionId
+FMParkingViewController.isParkingAvailable(near: userLocation) { isParkingAvailable in
+    if !isParkingAvailable {
+        print("No mapped parking spaces nearby.")
+        return
+    }
+    // Safe to start parking flow
+    self.startParkingFlow()
+}
+```
+The above method also checks that the device supports ARKit. If the device is not supported, the `completion` block is immediately called with `false`.
+
+```swift
+// SomeViewController.swift
+
+func startParkingFlow() {            
+    // construct a new parking view controller with a sessionId
     let sessionId = UUID().uuidString
     let parkingViewController = FMParkingViewController(sessionId: sessionId)
 
@@ -104,20 +120,6 @@ override func viewDidLoad() {
     // present modally to start
     parkingViewController.modalPresentationStyle = .fullScreen
     self.present(parkingViewController, animated: true)
-}
-```
-
-### Checking Availability
-
-Before attempting to park and localize with Fantasmo SDK, you should first check if parking is available in the user's current location. You can do this with the static method `FMParkingViewController.isParkingAvailable(near:)` and passing a `CLLocation`. The result block is called with a boolean indicating whether or not the user is near a mapped parking space.
-
-```swift
-FMParkingViewController.isParkingAvailable(near: userLocation) { isParkingAvailable in
-    if !isParkingAvailable {
-        print("No mapped parking spaces nearby.")
-        return
-    }
-    // Create and present a FMParkingViewController here
 }
 ```
 
@@ -263,7 +265,7 @@ parkingViewController.registerQRScanningViewController(MyCustomQRScanningViewCon
 parkingViewController.registerLocalizingViewController(MyCustomLocalizingViewController.self)
 ```
 
-*Important:* Your custom views are child view controllers of the `FMParkingViewController` and will be placed on top of a view that displays a live camera feed. Therefore your custom views should be semi-transparent, or contain some transparency to allow the user to see the camera underneath.
+**Important:** Your custom views are child view controllers of the `FMParkingViewController` and will be placed on top of a view that displays a live camera feed. Therefore your custom views should be semi-transparent, or contain some transparency to allow the user to see the camera underneath.
 
 ### Testing and Debugging 
 

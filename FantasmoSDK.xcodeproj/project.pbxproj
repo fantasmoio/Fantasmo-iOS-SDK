@@ -77,6 +77,7 @@
 		0144B7A427047CEB009A4042 /* FMLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */; };
 		015BA28A2705B47400194E9E /* QRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015BA2892705B47400194E9E /* QRCodeDetector.swift */; };
 		01984383271590A9004CAC3A /* FMToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01984382271590A9004CAC3A /* FMToolbar.swift */; };
+		019C16DC27451E40008B6002 /* FMDeviceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019C16DB27451E40008B6002 /* FMDeviceError.swift */; };
 		01A3A4F5270F14B000B7679F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A3A4F4270F14B000B7679F /* AppDelegate.swift */; };
 		01A3A4F7270F14B000B7679F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A3A4F6270F14B000B7679F /* SceneDelegate.swift */; };
 		01A3A4F9270F14B000B7679F /* ParkingExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A3A4F8270F14B000B7679F /* ParkingExampleViewController.swift */; };
@@ -194,6 +195,7 @@
 		0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewController.swift; sourceTree = "<group>"; };
 		015BA2892705B47400194E9E /* QRCodeDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeDetector.swift; sourceTree = "<group>"; };
 		01984382271590A9004CAC3A /* FMToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMToolbar.swift; sourceTree = "<group>"; };
+		019C16DB27451E40008B6002 /* FMDeviceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMDeviceError.swift; sourceTree = "<group>"; };
 		01A3A4F2270F14B000B7679F /* FantasmoSDKParkingExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKParkingExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01A3A4F4270F14B000B7679F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01A3A4F6270F14B000B7679F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 			isa = PBXGroup;
 			children = (
 				0123A4DE270F520800763758 /* FMLocationError.swift */,
+				019C16DB27451E40008B6002 /* FMDeviceError.swift */,
 			);
 			path = Errors;
 			sourceTree = "<group>";
@@ -780,6 +783,7 @@
 				01343E8E271D7ECC003A4716 /* ARFrame+Extension.swift in Sources */,
 				406437FB26E7864300B38B45 /* FMFrame.swift in Sources */,
 				A3798CA926AEA844007CB41F /* FrameFilterRejectionStatistics.swift in Sources */,
+				019C16DC27451E40008B6002 /* FMDeviceError.swift in Sources */,
 				011589E62742957100CFC368 /* ImageEncoder.swift in Sources */,
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,

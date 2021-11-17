@@ -73,11 +73,11 @@ class ImageEncoder {
         // We need to shrink the image, calculate the new size keeping the aspect ratio.
         var newSize = CGSize.zero
         if image.size.width > image.size.height {
-            newSize.width = largestSingleOutputDimension
-            newSize.height = largestSingleOutputDimension * image.size.height / image.size.width
+            newSize.width = floor(largestSingleOutputDimension)
+            newSize.height = floor(largestSingleOutputDimension * image.size.height / image.size.width)
         } else {
-            newSize.height = largestSingleOutputDimension
-            newSize.width = largestSingleOutputDimension * image.size.width / image.size.height
+            newSize.height = floor(largestSingleOutputDimension)
+            newSize.width = floor(largestSingleOutputDimension * image.size.width / image.size.height)
         }
         
         // Create a new image renderer if we haven't already, or if the output size has changed.

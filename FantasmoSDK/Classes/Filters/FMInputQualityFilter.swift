@@ -11,7 +11,7 @@ import ARKit
 
 /// Stateful filter for choosing the frames which are acceptable to localize against.
 /// If it is necessary to process a new sequence of frames, then `startOrRestartFiltering()` must be invoked.
-class FMInputQualityFilter: FMFrameFilter {
+class FMInputQualityFilter {
     
     private var lastAcceptTime = clock()
     
@@ -32,13 +32,16 @@ class FMInputQualityFilter: FMFrameFilter {
     }
     
     /// Accepted frames should be used for the localization.
-    func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
+    func accepts(_ frame: FMFrame, state: FMLocationManager.State) -> FMFrameFilterResult {
         if shouldForceAccept() {
             lastAcceptTime = clock()
             return .accepted
         }
         
         for filter in filters {
+            if filter is FMBlurFilter, state != .localizing {
+                continue
+            }
             if case let .rejected(reason) = filter.accepts(frame) {
                 return .rejected(reason: reason)
             }

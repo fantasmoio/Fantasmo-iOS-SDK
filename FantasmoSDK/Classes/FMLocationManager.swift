@@ -350,7 +350,7 @@ extension FMLocationManager : ARSessionDelegate {
             return
         }
         
-        let filterResult = frameFilter.accepts(frame)
+        let filterResult = frameFilter.accepts(frame, state: state)
         behaviorRequester.processResult(filterResult)
         accumulatedARKitInfo.update(with: frame)
         

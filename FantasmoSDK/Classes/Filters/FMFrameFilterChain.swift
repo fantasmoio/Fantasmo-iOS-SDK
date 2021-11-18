@@ -1,5 +1,5 @@
 //
-//  FMInputQualityFilter.swift
+//  FMFrameFilterChain.swift
 //  FantasmoSDK
 //
 //  Created by lucas kuzma on 3/30/21.
@@ -11,7 +11,7 @@ import ARKit
 
 /// Stateful filter for choosing the frames which are acceptable to localize against.
 /// If it is necessary to process a new sequence of frames, then `startOrRestartFiltering()` must be invoked.
-class FMInputQualityFilter {
+class FMFrameFilterChain {
     
     private var lastAcceptTime = clock()
     
@@ -23,7 +23,8 @@ class FMInputQualityFilter {
         FMTrackingStateFilter(),
         FMCameraPitchFilter(),
         FMMovementFilter(),
-        FMBlurFilter(),
+        // FMBlurFilter(),
+        FMImageQualityFilter()
     ]
 
     /// Start or restart filtering
@@ -32,14 +33,14 @@ class FMInputQualityFilter {
     }
     
     /// Accepted frames should be used for the localization.
-    func accepts(_ frame: FMFrame, state: FMLocationManager.State) -> FMFrameFilterResult {
+    func evaluate(_ frame: FMFrame, state: FMLocationManager.State) -> FMFrameFilterResult {
         if shouldForceAccept() {
             lastAcceptTime = clock()
             return .accepted
         }
         
         for filter in filters {
-            if filter is FMBlurFilter, state != .localizing {
+            if (filter is FMBlurFilter || filter is FMImageQualityFilter), state != .localizing {
                 continue
             }
             if case let .rejected(reason) = filter.accepts(frame) {
@@ -55,29 +56,5 @@ class FMInputQualityFilter {
     private func shouldForceAccept() -> Bool {
         let elapsedTime = Double(clock() - lastAcceptTime) / Double(CLOCKS_PER_SEC)
         return (elapsedTime > acceptanceThreshold)
-    }
-}
-
-/// Used for internal testing of filters
-class FMInputQualityFilterTestAdapter {
-    let blurFilter = FMBlurFilter()
-    public var blurVariance: Float {
-        blurFilter.averageVariance
-    }
-
-    public init() {
-
-    }
-
-    public func blurAccepts(_ frame: FMFrame) -> Bool {
-        return accepts(blurFilter, frame: frame)
-    }
-
-    func accepts(_ filter: FMFrameFilter, frame: FMFrame) -> Bool {
-        if case .rejected = filter.accepts(frame) {
-            return false
-        } else {
-            return true
-        }
     }
 }

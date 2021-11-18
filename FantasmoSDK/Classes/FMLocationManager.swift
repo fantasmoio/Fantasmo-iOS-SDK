@@ -83,7 +83,7 @@ class FMLocationManager: NSObject {
         }
     }
     
-    private var frameFilter = FMInputQualityFilter()
+    private var frameFilterChain = FMFrameFilterChain()
     
     private lazy var behaviorRequester = BehaviorRequester { [weak self] behaviorRequest in
         // in testing mode, request behaviors even when stopped
@@ -91,9 +91,7 @@ class FMLocationManager: NSObject {
             self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
         }
     }
-    
-    var imageQualityEstimator = ImageQualityEstimator.makeEstimator()
-    
+        
     /// Read-only vars, used to populate the statistics view
     public private(set) var lastFrame: ARFrame?
     public private(set) var lastCLLocation: CLLocation?
@@ -167,7 +165,7 @@ class FMLocationManager: NSObject {
 
         accumulatedARKitInfo.reset()
         frameEventAccumulator.reset()
-        frameFilter.restart()
+        frameFilterChain.restart()
         behaviorRequester.restart()
         motionManager.restart()
         locationFuser.reset()
@@ -221,17 +219,7 @@ class FMLocationManager: NSObject {
             mockLocalize?(frame)
             return
         }
-        
-        let iqe = imageQualityEstimator.estimateImageQuality(from: frame.capturedImage)
-        switch iqe {
-        case .error(let message):
-            print("IQE error: \(message)")
-        case .unknown:
-            print("IQE unknown")
-        case .estimate(let score):
-            print("IQE score: \(score)")
-        }
-        
+                
         let openCVRelativeAnchorTransform = openCVPoseOfAnchorInVirtualDeviceCS(for: frame)
         let openCVRelativeAnchorPose = openCVRelativeAnchorTransform.map { FMPose($0) }
 
@@ -350,7 +338,8 @@ extension FMLocationManager : ARSessionDelegate {
             return
         }
         
-        let filterResult = frameFilter.accepts(frame, state: state)
+        // run the frame through the configured filters
+        let filterResult = frameFilterChain.evaluate(frame, state: state)
         behaviorRequester.processResult(filterResult)
         accumulatedARKitInfo.update(with: frame)
         

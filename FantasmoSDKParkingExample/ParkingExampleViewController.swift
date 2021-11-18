@@ -16,7 +16,6 @@ class ParkingExampleViewController: UIViewController {
     @IBOutlet var mapPinButton: UIButton!
     @IBOutlet var endRideButton: UIButton!
     @IBOutlet var isSimulationSwitch: UISwitch!
-    @IBOutlet var showsStatisticsSwitch: UISwitch!
     
     var errorCount: Int = 0
     var lastResult: FMLocationResult?
@@ -48,9 +47,6 @@ class ParkingExampleViewController: UIViewController {
         /// Run in simulation mode, if you're not near a space
         parkingViewController.isSimulation = isSimulationSwitch.isOn
         
-        /// Show useful stats for debugging, if needed
-        parkingViewController.showsStatistics = showsStatisticsSwitch.isOn
-
         /// Optionally register custom view controllers for each step
         ///
         ///     parkingViewController.registerQRScanningViewController(MyCustomQRScanningViewController.self)

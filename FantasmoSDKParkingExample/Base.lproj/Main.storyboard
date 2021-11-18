@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Parking Example View Controller-->
+        <!--Fantasmo-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ParkingExampleViewController" customModule="FantasmoSDKParkingExample" customModuleProvider="target" sceneMemberID="viewController">
@@ -18,15 +18,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wqm-PQ-Ntz">
-                                <rect key="frame" x="82" y="415" width="250" height="66"/>
+                                <rect key="frame" x="82" y="418.5" width="250" height="59"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="TMB-zT-MrM"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                 <inset key="contentEdgeInsets" minX="15" minY="15" maxX="15" maxY="15"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="End Ride">
+                                <state key="normal" title="Verify Parking">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <state key="highlighted">
@@ -42,16 +42,16 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wex-MA-z1G">
-                                <rect key="frame" x="15" y="118" width="384" height="267"/>
+                                <rect key="frame" x="15" y="118" width="384" height="270.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vUQ-cW-NYt">
-                                        <rect key="frame" x="192" y="133.5" width="0.0" height="0.0"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                        <rect key="frame" x="192" y="135.5" width="0.0" height="0.0"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PvU-0R-zup">
-                                        <rect key="frame" x="173" y="133.5" width="38.5" height="41"/>
+                                        <rect key="frame" x="173" y="135.5" width="38.5" height="41"/>
                                         <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="">
@@ -72,7 +72,7 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="cA0-ic-8nR">
-                                <rect key="frame" x="82" y="511" width="250" height="31"/>
+                                <rect key="frame" x="82" y="507.5" width="250" height="31"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simulation Mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yB3-OJ-7da">
                                         <rect key="frame" x="0.0" y="0.0" width="189" height="31"/>
@@ -103,7 +103,7 @@
                             <constraint firstItem="Wqm-PQ-Ntz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="zat-zg-vtR"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="pDV-1Y-XbK"/>
+                    <navigationItem key="navigationItem" title="Fantasmo" id="pDV-1Y-XbK"/>
                     <connections>
                         <outlet property="endRideButton" destination="Wqm-PQ-Ntz" id="nhR-lk-xRX"/>
                         <outlet property="isSimulationSwitch" destination="hmX-l8-Mdl" id="Ay3-js-Zq1"/>
@@ -115,7 +115,7 @@
             </objects>
             <point key="canvasLocation" x="909" y="139"/>
         </scene>
-        <!--View Controller-->
+        <!--Result-->
         <scene sceneID="jTO-c9-U8L">
             <objects>
                 <viewController id="YgX-EP-ZPj" sceneMemberID="viewController">
@@ -124,7 +124,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </mapView>
-                    <navigationItem key="navigationItem" id="TIv-s8-FUO"/>
+                    <navigationItem key="navigationItem" title="Result" id="TIv-s8-FUO"/>
                     <connections>
                         <outlet property="view" destination="son-S9-CWN" id="2Zw-SU-rKf"/>
                     </connections>

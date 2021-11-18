@@ -8,7 +8,7 @@
 import Foundation
 import CoreML
 import CoreVideo
-import CoreImage
+import VideoToolbox
 import UIKit
 
 @available(iOS 13.0, *)
@@ -18,14 +18,11 @@ class ImageQualityEstimatorCoreML: ImageQualityEstimatorProtocol {
     let mlInputShape: [NSNumber] = [1, 3, 320, 240]
     let imageWidth: Int = 320
     let imageHeight: Int = 240
-    var ciContext: CIContext?
     
-    func resizePixelBuffer(_ pixelBuffer: CVPixelBuffer) -> UnsafeMutablePointer<UInt8>? {
-        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-        if ciContext == nil {
-            ciContext = CIContext(options: [.highQualityDownsample: true, .priorityRequestLow: true])
-        }
-        guard let cgImage = ciContext?.createCGImage(ciImage, from: ciImage.extent) else {
+    func makeResizedPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> UnsafeMutablePointer<UInt8>? {
+        var cgImage: CGImage?
+        VTCreateCGImageFromCVPixelBuffer(pixelBuffer, options: nil, imageOut: &cgImage)
+        guard let cgImage = cgImage else {
             return nil
         }
         let bytesPerRow = 4 * imageWidth
@@ -52,13 +49,15 @@ class ImageQualityEstimatorCoreML: ImageQualityEstimatorProtocol {
         guard let mlInputArray = try? MLMultiArray(shape: mlInputShape, dataType: MLMultiArrayDataType.float32) else {
             return .error(message: "Failed to create input MLMultiArray.")
         }
-        guard let resizedPixelBuffer = resizePixelBuffer(pixelBuffer) else {
+        guard let resizedPixelBuffer = makeResizedPixelBuffer(pixelBuffer) else {
             return .error(message: "Failed to resize pixel buffer.")
         }
                 
         // var originalBytes = Array<[String]>(repeating: Array<String>(repeating: "", count: 320), count: 240)
         // var rotatedBytes = Array<[String]>(repeating: Array<String>(repeating: "", count: 240), count: 320)
         
+        // Get a pointer to the multiarray’s contents.
+        let mlInputArrayPointer = UnsafeMutablePointer<Float32>(OpaquePointer(mlInputArray.dataPointer))
         let bytesPerRow = imageWidth * 4
         for y in 0..<imageHeight {
             for x in 0..<imageWidth {
@@ -82,9 +81,10 @@ class ImageQualityEstimatorCoreML: ImageQualityEstimatorProtocol {
                 let rIndex = 0 * imageHeight * imageWidth + h * imageHeight + w
                 let gIndex = 1 * imageHeight * imageWidth + h * imageHeight + w
                 let bIndex = 2 * imageHeight * imageWidth + h * imageHeight + w
-                mlInputArray[rIndex] = NSNumber(value: r)
-                mlInputArray[gIndex] = NSNumber(value: g)
-                mlInputArray[bIndex] = NSNumber(value: b)
+
+                mlInputArrayPointer[rIndex] = r
+                mlInputArrayPointer[gIndex] = g
+                mlInputArrayPointer[bIndex] = b
                 
                 // let rStr = String(format: "%02X", resizedPixelBuffer[index + 1])
                 // let gStr = String(format: "%02X", resizedPixelBuffer[index + 2])

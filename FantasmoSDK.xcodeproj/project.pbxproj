@@ -76,6 +76,7 @@
 		0144B7A127047CC0009A4042 /* FMQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */; };
 		0144B7A427047CEB009A4042 /* FMLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */; };
 		015BA28A2705B47400194E9E /* QRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015BA2892705B47400194E9E /* QRCodeDetector.swift */; };
+		0166C09B274695C8001D871E /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011589E52742957100CFC368 /* ImageEncoder.swift */; };
 		01984383271590A9004CAC3A /* FMToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01984382271590A9004CAC3A /* FMToolbar.swift */; };
 		019C16DC27451E40008B6002 /* FMDeviceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019C16DB27451E40008B6002 /* FMDeviceError.swift */; };
 		019C16E427455442008B6002 /* ImageQualityEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019C16E027455442008B6002 /* ImageQualityEstimator.swift */; };
@@ -845,6 +846,7 @@
 				01343E73271D7A6D003A4716 /* FMRestClient.swift in Sources */,
 				01343E8C271D7E9F003A4716 /* CGImage+Extension.swift in Sources */,
 				01343E71271D7A5D003A4716 /* MotionManager.swift in Sources */,
+				0166C09B274695C8001D871E /* ImageEncoder.swift in Sources */,
 				01343E5E271D7864003A4716 /* SDKLocationTests.swift in Sources */,
 				01343E86271D7D55003A4716 /* Position.swift in Sources */,
 				01343E61271D78B3003A4716 /* FMLog.swift in Sources */,

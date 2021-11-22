@@ -1,0 +1,14 @@
+{
+    "frame_acceptance_threshold_timeout": 1.0,
+    "is_behavior_requester_enabled": true,
+    "is_tracking_state_filter_enabled": true,
+    "is_movement_filter_enabled": true,
+    "movement_filter_threshold": 0.001,
+    "is_blur_filter_enabled": true,
+    "blur_filter_variance_threshold": 250.0,
+    "blur_filter_sudden_drop_threshold": 0.4,
+    "blur_filter_average_throughput_threshold": 8.0,
+    "is_camera_pitch_filter_enabled": true,
+    "camera_pitch_filter_max_upward_tilt": 30.0,
+    "camera_pitch_filter_max_downward_tilt": 65.0
+}

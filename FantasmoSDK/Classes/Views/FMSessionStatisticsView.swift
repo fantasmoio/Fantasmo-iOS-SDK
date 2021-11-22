@@ -21,6 +21,8 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var eulerAnglesLabel: UILabel!
     @IBOutlet var eulerAngleSpreadsLabel: UILabel!
     
+    @IBOutlet var imageQualityScoreLabel: UILabel!
+    
     @IBOutlet var frameStatsNormalLabel: UILabel!
     @IBOutlet var frameStatsLimitedLabel: UILabel!
     @IBOutlet var frameStatsNotAvailableLabel: UILabel!
@@ -45,7 +47,7 @@ class FMSessionStatisticsView: UIView {
         sdkVersionLabel.text = "Fantasmo SDK \(FMSDKInfo.fullVersion)"
     }
         
-    public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
+    public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, imageQualityScore: Float, refreshRate: TimeInterval = 10.0) {
         let shouldUpdate = frame.timestamp - lastFrameTimestamp > (1.0 / refreshRate)
         guard shouldUpdate else {
             return
@@ -83,6 +85,8 @@ class FMSessionStatisticsView: UIView {
         filterStatsTooFastLabel.text = "Too fast: \(rejectionCounts[.movingTooFast] ?? 0)"
         filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
         filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
+        
+        imageQualityScoreLabel.text = "Image Quality Score: \(String(format: "%.6f", imageQualityScore))"
     }
     
     var localizingStart: Date?

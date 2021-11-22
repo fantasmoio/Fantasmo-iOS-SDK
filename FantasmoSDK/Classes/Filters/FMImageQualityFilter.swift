@@ -9,7 +9,9 @@ import ARKit
 
 class FMImageQualityFilter: FMFrameFilter {
 
-    var imageQualityEstimator = ImageQualityEstimator.makeEstimator()
+    private var imageQualityEstimator = ImageQualityEstimator.makeEstimator()
+    
+    public private(set) var lastImageQualityScore: Float = 0.0
     
     public func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
         let startDate = Date()
@@ -17,15 +19,14 @@ class FMImageQualityFilter: FMFrameFilter {
         switch iqe {
         case .error(let message):
             log.error("iqe error: \(message)")
-            return .accepted
         case .unknown:
             log.info("iqe unknown")
-            return .accepted
         case .estimate(let score):
             log.info("iqe score: \(score)")
             log.info("iqe time: \(Date().timeIntervalSince(startDate)) seconds")
-            return .accepted
+            lastImageQualityScore = score
         }
+        return .accepted
     }
 }
 

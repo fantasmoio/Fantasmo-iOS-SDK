@@ -23,7 +23,7 @@ class FMFrameFilterChain {
         FMTrackingStateFilter(),
         FMCameraPitchFilter(),
         FMMovementFilter(),
-        // FMBlurFilter(),
+        FMBlurFilter(),
         FMImageQualityFilter()
     ]
 
@@ -33,25 +33,40 @@ class FMFrameFilterChain {
     }
     
     /// Accepted frames should be used for the localization.
-    func evaluate(_ frame: FMFrame, state: FMLocationManager.State) -> FMFrameFilterResult {
+    func evaluateAsync(_ frame: FMFrame, state: FMLocationManager.State, completion: @escaping ((FMFrameFilterResult) -> Void)) {
+        guard Thread.isMainThread else { fatalError("evaluateAsync not called from main thread") }
+        
         if shouldForceAccept() {
             lastAcceptTime = clock()
-            return .accepted
+            completion(.accepted)
+            return
         }
         
-        for filter in filters {
-            if (filter is FMBlurFilter || filter is FMImageQualityFilter), state != .localizing {
-                continue
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            var result: FMFrameFilterResult = .accepted
+            let filters: [FMFrameFilter] = self?.filters ?? []
+            for filter in filters {
+                if case let .rejected(reason) = filter.accepts(frame) {
+                    result = .rejected(reason: reason)
+                    break
+                }
             }
-            if case let .rejected(reason) = filter.accepts(frame) {
-                return .rejected(reason: reason)
+            DispatchQueue.main.async {
+                if result == .accepted {
+                    self?.lastAcceptTime = clock()
+                }
+                completion(result)
             }
         }
-        
-        lastAcceptTime = clock()
-        return .accepted
     }
-
+    
+    func getLastImageQualityScore() -> Float {
+        guard let imageQualityFilter = filters.first(where: { $0 is FMImageQualityFilter }) as? FMImageQualityFilter else {
+            return 0.0
+        }
+        return imageQualityFilter.lastImageQualityScore
+    }
+    
     /// If there are a lot of continuous rejections, we force an acceptance
     private func shouldForceAccept() -> Bool {
         let elapsedTime = Double(clock() - lastAcceptTime) / Double(CLOCKS_PER_SEC)

@@ -16,7 +16,6 @@ class ParkingExampleViewController: UIViewController {
     @IBOutlet var mapPinButton: UIButton!
     @IBOutlet var endRideButton: UIButton!
     @IBOutlet var isSimulationSwitch: UISwitch!
-    @IBOutlet var showsStatisticsSwitch: UISwitch!
     
     var errorCount: Int = 0
     var lastResult: FMLocationResult?
@@ -48,9 +47,6 @@ class ParkingExampleViewController: UIViewController {
         /// Run in simulation mode, if you're not near a space
         parkingViewController.isSimulation = isSimulationSwitch.isOn
         
-        /// Show useful stats for debugging, if needed
-        parkingViewController.showsStatistics = showsStatisticsSwitch.isOn
-
         /// Optionally register custom view controllers for each step
         ///
         ///     parkingViewController.registerQRScanningViewController(MyCustomQRScanningViewController.self)
@@ -159,7 +155,7 @@ extension ParkingExampleViewController: CLLocationManagerDelegate {
         return locationManager.authorizationStatus == .denied || locationManager.authorizationStatus == .restricted
     }
     
-    /// Enable the "End Ride" button only if we have a location or we're in simulation mode.
+    /// Enable the "Verify Parking" button only if we have a location or we're in simulation mode.
     private func updateEndRideButtonState() {
         endRideButton.isEnabled = isSimulationSwitch.isOn || deviceLocation != nil
         endRideButton.alpha = endRideButton.isEnabled ? 1.0 : 0.5
@@ -167,7 +163,7 @@ extension ParkingExampleViewController: CLLocationManagerDelegate {
             endRideButton.titleLabel?.adjustsFontSizeToFitWidth = true
             endRideButton.setTitle("Location access denied", for: .normal)
         } else {
-            endRideButton.setTitle("End Ride", for: .normal)
+            endRideButton.setTitle("Verify Parking", for: .normal)
         }
     }
         

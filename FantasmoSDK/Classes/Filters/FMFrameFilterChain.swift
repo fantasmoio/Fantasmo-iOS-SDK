@@ -1,5 +1,5 @@
 //
-//  FMInputQualityFilter.swift
+//  FMFrameFilterChain.swift
 //  FantasmoSDK
 //
 //  Created by lucas kuzma on 3/30/21.
@@ -11,7 +11,7 @@ import ARKit
 
 /// Stateful filter for choosing the frames which are acceptable to localize against.
 /// If it is necessary to process a new sequence of frames, then `startOrRestartFiltering()` must be invoked.
-class FMInputQualityFilter: FMFrameFilter {
+class FMFrameFilterChain {
     
     private var lastAcceptTime = clock()
     
@@ -54,6 +54,14 @@ class FMInputQualityFilter: FMFrameFilter {
             enabledFilters.append(blurFilter)
         }
         
+        if rc.isImageQualityFilterEnabled {
+            let imageQualityFilter = FMImageQualityFilter(
+                scoreThreshold: rc.imageQualityFilterScoreThreshold
+            )
+            enabledFilters.append(imageQualityFilter)
+        }
+        
+        
         filters = enabledFilters
     }
 
@@ -63,49 +71,43 @@ class FMInputQualityFilter: FMFrameFilter {
     }
     
     /// Accepted frames should be used for the localization.
-    func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
+    func evaluateAsync(_ frame: FMFrame, state: FMLocationManager.State, completion: @escaping ((FMFrameFilterResult) -> Void)) {
+        guard Thread.isMainThread else { fatalError("evaluateAsync not called from main thread") }
+        
         if shouldForceAccept() {
             lastAcceptTime = clock()
-            return .accepted
+            completion(.accepted)
+            return
         }
         
-        for filter in filters {
-            if case let .rejected(reason) = filter.accepts(frame) {
-                return .rejected(reason: reason)
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            var result: FMFrameFilterResult = .accepted
+            let filters: [FMFrameFilter] = self?.filters ?? []
+            for filter in filters {
+                if case let .rejected(reason) = filter.accepts(frame) {
+                    result = .rejected(reason: reason)
+                    break
+                }
+            }
+            DispatchQueue.main.async {
+                if result == .accepted {
+                    self?.lastAcceptTime = clock()
+                }
+                completion(result)
             }
         }
-        
-        lastAcceptTime = clock()
-        return .accepted
     }
-
+    
+    func getLastImageQualityScore() -> Float {
+        guard let imageQualityFilter = filters.first(where: { $0 is FMImageQualityFilter }) as? FMImageQualityFilter else {
+            return 0.0
+        }
+        return imageQualityFilter.lastImageQualityScore
+    }
+    
     /// If there are a lot of continuous rejections, we force an acceptance
     private func shouldForceAccept() -> Bool {
         let elapsedTime = Float(clock() - lastAcceptTime) / Float(CLOCKS_PER_SEC)
         return (elapsedTime > acceptanceThreshold)
-    }
-}
-
-/// Used for internal testing of filters
-class FMInputQualityFilterTestAdapter {
-    let blurFilter = FMBlurFilter(varianceThreshold: 250.0, suddenDropThreshold: 0.4, averageThroughputThreshold: 0.25)
-    public var blurVariance: Float {
-        blurFilter.averageVariance
-    }
-
-    public init() {
-
-    }
-
-    public func blurAccepts(_ frame: FMFrame) -> Bool {
-        return accepts(blurFilter, frame: frame)
-    }
-
-    func accepts(_ filter: FMFrameFilter, frame: FMFrame) -> Bool {
-        if case .rejected = filter.accepts(frame) {
-            return false
-        } else {
-            return true
-        }
     }
 }

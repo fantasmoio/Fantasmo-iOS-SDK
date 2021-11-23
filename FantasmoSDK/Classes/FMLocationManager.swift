@@ -15,7 +15,7 @@ protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
     func locationManager(didChangeState state: FMLocationManager.State)
-    func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
+    func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, imageQualityScore: Float)
 }
 
 class FMLocationManager: NSObject {
@@ -26,6 +26,8 @@ class FMLocationManager: NSObject {
         case uploading      // uploading image while localizing
         case paused         // paused
    }
+    
+    private var isEvaluatingFrame: Bool = false
     
     // MARK: - Properties
     
@@ -83,7 +85,7 @@ class FMLocationManager: NSObject {
         }
     }
     
-    private var frameFilter = FMInputQualityFilter()
+    private var frameFilterChain = FMFrameFilterChain()
     
     private var behaviorRequester: BehaviorRequester?
     
@@ -172,7 +174,7 @@ class FMLocationManager: NSObject {
 
         accumulatedARKitInfo.reset()
         frameEventAccumulator.reset()
-        frameFilter.restart()
+        frameFilterChain.restart()
         behaviorRequester?.restart()
         motionManager.restart()
         locationFuser.reset()
@@ -226,7 +228,7 @@ class FMLocationManager: NSObject {
             mockLocalize?(frame)
             return
         }
-        
+                
         let openCVRelativeAnchorTransform = openCVPoseOfAnchorInVirtualDeviceCS(for: frame)
         let openCVRelativeAnchorPose = openCVRelativeAnchorTransform.map { FMPose($0) }
 
@@ -341,11 +343,19 @@ extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
         lastFrame = frame
         
-        guard state != .stopped else {
+        guard !isEvaluatingFrame, state != .stopped else {
             return
         }
         
-        let filterResult = frameFilter.accepts(frame)
+        // run the frame through the configured filters
+        isEvaluatingFrame = true
+        frameFilterChain.evaluateAsync(frame, state: state) { [weak self] filterResult in
+            self?.processFrame(frame, from: session, filterResult: filterResult)
+            self?.isEvaluatingFrame = false
+        }
+    }
+    
+    private func processFrame(_ frame: ARFrame, from session: ARSession, filterResult: FMFrameFilterResult) {
         behaviorRequester?.processResult(filterResult)
         accumulatedARKitInfo.update(with: frame)
         
@@ -357,7 +367,8 @@ extension FMLocationManager : ARSessionDelegate {
             }
         }
         
-        delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
+        let imageQualityScore = frameFilterChain.getLastImageQualityScore()
+        delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator, imageQualityScore: imageQualityScore)
     }
 }
 

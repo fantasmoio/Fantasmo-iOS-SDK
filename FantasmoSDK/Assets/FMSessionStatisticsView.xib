@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,7 +15,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="0.0" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="EEl-fL-ZnH">
-                    <rect key="frame" x="15" y="488.5" width="384" height="373.5"/>
+                    <rect key="frame" x="15" y="463" width="384" height="399"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fantasmo SDK" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4MQ-Tu-HZ0" userLabel="sdkVersionLabel">
                             <rect key="frame" x="0.0" y="0.0" width="384" height="20.5"/>
@@ -66,15 +66,22 @@
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Euler Angles: 0.00°, 0.00°, 0.00°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ifi-EE-yAS" userLabel="Euler Angles Label">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Image Quality Filter: disabled" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mR3-Oi-z5y" userLabel="Euler Angle Spreads Label">
                             <rect key="frame" x="0.0" y="178.5" width="384" height="20.5"/>
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Euler Angles: 0.00°, 0.00°, 0.00°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ifi-EE-yAS" userLabel="Euler Angles Label">
+                            <rect key="frame" x="0.0" y="204" width="384" height="20.5"/>
+                            <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jvU-2T-GZj" userLabel="Euler Angle Spreads Label">
-                            <rect key="frame" x="0.0" y="204" width="384" height="81.5"/>
+                            <rect key="frame" x="0.0" y="229.5" width="384" height="81.5"/>
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <string key="text">Euler Angle Spreads:
 	(0.00°, 0.00°) 0.00°
@@ -85,7 +92,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="LRo-P2-gqg" userLabel="Frame Stats Row 1">
-                            <rect key="frame" x="0.0" y="290.5" width="384" height="17"/>
+                            <rect key="frame" x="0.0" y="316" width="384" height="17"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Normal: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j02-ud-WcQ" userLabel="Frame Stats Normal Label">
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="17"/>
@@ -111,7 +118,7 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="5kK-H2-aIh" userLabel="Frame Stats Row 2">
-                            <rect key="frame" x="0.0" y="312.5" width="384" height="17"/>
+                            <rect key="frame" x="0.0" y="338" width="384" height="17"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Excessive motion: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDf-gL-dv7" userLabel="Frame Stats Excessive Motion Label">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="17"/>
@@ -130,7 +137,7 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="vBa-cP-vML" userLabel="Filter Stats Row 1">
-                            <rect key="frame" x="0.0" y="334.5" width="384" height="17"/>
+                            <rect key="frame" x="0.0" y="360" width="384" height="17"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Pitch low: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CxE-hz-leP" userLabel="Filter Stats Pitch Low Label">
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="17"/>
@@ -156,7 +163,7 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="kfj-0A-bdz" userLabel="Filter Stats Row 2">
-                            <rect key="frame" x="0.0" y="356.5" width="384" height="17"/>
+                            <rect key="frame" x="0.0" y="382" width="384" height="17"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Too fast: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XQg-wF-Bk6" userLabel="Filter Stats Too Fast Label">
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="17"/>
@@ -211,6 +218,7 @@
                 <outlet property="frameStatsLimitedLabel" destination="XTY-vW-5Vn" id="Ywt-Ru-4YG"/>
                 <outlet property="frameStatsNormalLabel" destination="j02-ud-WcQ" id="8C9-cK-QxT"/>
                 <outlet property="frameStatsNotAvailableLabel" destination="Xsk-e2-ywP" id="1I6-HF-Q85"/>
+                <outlet property="imageQualityFilterLabel" destination="mR3-Oi-z5y" id="PYW-PV-PCf"/>
                 <outlet property="lastResultLabel" destination="XKk-ZN-TKq" id="gYM-iU-ohh"/>
                 <outlet property="managerStatusLabel" destination="Hd6-Sn-Br5" id="TBd-1A-0fq"/>
                 <outlet property="sdkVersionLabel" destination="4MQ-Tu-HZ0" id="dL9-7T-pU1"/>

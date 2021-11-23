@@ -59,7 +59,6 @@
 		01343E8A271D7E49003A4716 /* Codable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B725921BF3005B1145 /* Codable+Extension.swift */; };
 		01343E8B271D7E5C003A4716 /* Codable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B725921BF3005B1145 /* Codable+Extension.swift */; };
 		01343E8C271D7E9F003A4716 /* CGImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B825921BF3005B1145 /* CGImage+Extension.swift */; };
-		01343E8D271D7EB8003A4716 /* RadiusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */; };
 		01343E8E271D7ECC003A4716 /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
 		01343E90271D7ECE003A4716 /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
 		01343E91271D7F01003A4716 /* simd_float4x4+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */; };
@@ -76,8 +75,14 @@
 		0144B7A127047CC0009A4042 /* FMQRScanningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */; };
 		0144B7A427047CEB009A4042 /* FMLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */; };
 		015BA28A2705B47400194E9E /* QRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015BA2892705B47400194E9E /* QRCodeDetector.swift */; };
+		0166C09B274695C8001D871E /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011589E52742957100CFC368 /* ImageEncoder.swift */; };
+		0166C0A12746BEC3001D871E /* FMImageQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */; };
 		01984383271590A9004CAC3A /* FMToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01984382271590A9004CAC3A /* FMToolbar.swift */; };
 		019C16DC27451E40008B6002 /* FMDeviceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019C16DB27451E40008B6002 /* FMDeviceError.swift */; };
+		019C16E427455442008B6002 /* ImageQualityEstimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019C16E027455442008B6002 /* ImageQualityEstimator.swift */; };
+		019C16E527455442008B6002 /* ImageQualityEstimationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019C16E127455442008B6002 /* ImageQualityEstimationResult.swift */; };
+		019C16E627455442008B6002 /* ImageQualityEstimatorCoreML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019C16E227455442008B6002 /* ImageQualityEstimatorCoreML.swift */; };
+		019C16E727455442008B6002 /* ImageQualityModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 019C16E327455442008B6002 /* ImageQualityModel.mlmodel */; };
 		01A3A4F5270F14B000B7679F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A3A4F4270F14B000B7679F /* AppDelegate.swift */; };
 		01A3A4F7270F14B000B7679F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A3A4F6270F14B000B7679F /* SceneDelegate.swift */; };
 		01A3A4F9270F14B000B7679F /* ParkingExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A3A4F8270F14B000B7679F /* ParkingExampleViewController.swift */; };
@@ -88,6 +93,7 @@
 		01A3A50A270F14EA00B7679F /* FantasmoSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		01B58681274BF8DF0082FFF7 /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B58680274BF8DF0082FFF7 /* RemoteConfig.swift */; };
 		01B58683274BFF3C0082FFF7 /* default-config.json in Resources */ = {isa = PBXBuildFile; fileRef = 01B58682274BFF3C0082FFF7 /* default-config.json */; };
+		01B58687274D45DE0082FFF7 /* InitializeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B58686274D45DE0082FFF7 /* InitializeResponse.swift */; };
 		406437FB26E7864300B38B45 /* FMFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FA26E7864300B38B45 /* FMFrame.swift */; };
 		406437FE26E787A300B38B45 /* FMCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FD26E787A200B38B45 /* FMCamera.swift */; };
 		4064380526E79C8100B38B45 /* MockCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4064380226E79C7A00B38B45 /* MockCamera.swift */; };
@@ -127,7 +133,6 @@
 		A34459F326A8246900C96205 /* RotationAngleCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34459F226A8246900C96205 /* RotationAngleCalculator.swift */; };
 		A3445A0526A896C700C96205 /* TrackingStateFrameStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3445A0326A896B100C96205 /* TrackingStateFrameStatistics.swift */; };
 		A354BA6026A4B88300AF2023 /* EulerAngles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA03C3263B6F0100524D66 /* EulerAngles.swift */; };
-		A354BA6526A4BFF300AF2023 /* RadiusResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */; };
 		A359099A269DAAC300A7BF5F /* UIDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3590999269DAAC300A7BF5F /* UIDevice+Extension.swift */; };
 		A35909A0269EE70800A7BF5F /* FMFrameFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */; };
 		A35909A2269EE73E00A7BF5F /* FMCameraPitchFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */; };
@@ -135,7 +140,7 @@
 		A3798CA526AAF52D007CB41F /* ARCamera+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3798CA426AAF52D007CB41F /* ARCamera+Extension.swift */; };
 		A3798CA926AEA844007CB41F /* FrameFilterRejectionStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3798CA826AEA843007CB41F /* FrameFilterRejectionStatistics.swift */; };
 		A3B57315269C3B2D0089B5F5 /* BehaviorRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B57314269C3B2D0089B5F5 /* BehaviorRequester.swift */; };
-		A3B57317269C3B6E0089B5F5 /* FMInputQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B57316269C3B6D0089B5F5 /* FMInputQualityFilter.swift */; };
+		A3B57317269C3B6E0089B5F5 /* FMFrameFilterChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3B57316269C3B6D0089B5F5 /* FMFrameFilterChain.swift */; };
 		A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */; };
 		A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */; };
 		A3BA02DF263919F300524D66 /* MovingAverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3BA02DE263919F300524D66 /* MovingAverage.swift */; };
@@ -196,8 +201,13 @@
 		0144B7A027047CC0009A4042 /* FMQRScanningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewController.swift; sourceTree = "<group>"; };
 		0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewController.swift; sourceTree = "<group>"; };
 		015BA2892705B47400194E9E /* QRCodeDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeDetector.swift; sourceTree = "<group>"; };
+		0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMImageQualityFilter.swift; sourceTree = "<group>"; };
 		01984382271590A9004CAC3A /* FMToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMToolbar.swift; sourceTree = "<group>"; };
 		019C16DB27451E40008B6002 /* FMDeviceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMDeviceError.swift; sourceTree = "<group>"; };
+		019C16E027455442008B6002 /* ImageQualityEstimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageQualityEstimator.swift; sourceTree = "<group>"; };
+		019C16E127455442008B6002 /* ImageQualityEstimationResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageQualityEstimationResult.swift; sourceTree = "<group>"; };
+		019C16E227455442008B6002 /* ImageQualityEstimatorCoreML.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageQualityEstimatorCoreML.swift; sourceTree = "<group>"; };
+		019C16E327455442008B6002 /* ImageQualityModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ImageQualityModel.mlmodel; sourceTree = "<group>"; };
 		01A3A4F2270F14B000B7679F /* FantasmoSDKParkingExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKParkingExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01A3A4F4270F14B000B7679F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01A3A4F6270F14B000B7679F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -208,6 +218,7 @@
 		01A3A502270F14B200B7679F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01B58680274BF8DF0082FFF7 /* RemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfig.swift; sourceTree = "<group>"; };
 		01B58682274BFF3C0082FFF7 /* default-config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "default-config.json"; sourceTree = "<group>"; };
+		01B58686274D45DE0082FFF7 /* InitializeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeResponse.swift; sourceTree = "<group>"; };
 		406437FA26E7864300B38B45 /* FMFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrame.swift; sourceTree = "<group>"; };
 		406437FD26E787A200B38B45 /* FMCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCamera.swift; sourceTree = "<group>"; };
 		4064380026E79C0D00B38B45 /* MockFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFrame.swift; sourceTree = "<group>"; };
@@ -254,14 +265,13 @@
 		A34459F026A8246400C96205 /* OrientationAngleSpreadCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrientationAngleSpreadCalculator.swift; sourceTree = "<group>"; };
 		A34459F226A8246900C96205 /* RotationAngleCalculator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotationAngleCalculator.swift; sourceTree = "<group>"; };
 		A3445A0326A896B100C96205 /* TrackingStateFrameStatistics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingStateFrameStatistics.swift; sourceTree = "<group>"; };
-		A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadiusResponse.swift; sourceTree = "<group>"; };
 		A3590999269DAAC300A7BF5F /* UIDevice+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+Extension.swift"; sourceTree = "<group>"; };
 		A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMCameraPitchFilter.swift; sourceTree = "<group>"; };
 		A36BAA48265431A50041E875 /* AssociatedObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssociatedObject.swift; sourceTree = "<group>"; };
 		A3798CA426AAF52D007CB41F /* ARCamera+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ARCamera+Extension.swift"; sourceTree = "<group>"; };
 		A3798CA826AEA843007CB41F /* FrameFilterRejectionStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameFilterRejectionStatistics.swift; sourceTree = "<group>"; };
 		A3B57314269C3B2D0089B5F5 /* BehaviorRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BehaviorRequester.swift; sourceTree = "<group>"; };
-		A3B57316269C3B6D0089B5F5 /* FMInputQualityFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInputQualityFilter.swift; sourceTree = "<group>"; };
+		A3B57316269C3B6D0089B5F5 /* FMFrameFilterChain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMFrameFilterChain.swift; sourceTree = "<group>"; };
 		A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMovementFilter.swift; sourceTree = "<group>"; };
 		A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMBlurFilter.swift; sourceTree = "<group>"; };
 		A3BA02DE263919F300524D66 /* MovingAverage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovingAverage.swift; sourceTree = "<group>"; };
@@ -337,6 +347,17 @@
 				0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		019C16DF27455442008B6002 /* CoreML */ = {
+			isa = PBXGroup;
+			children = (
+				019C16E027455442008B6002 /* ImageQualityEstimator.swift */,
+				019C16E127455442008B6002 /* ImageQualityEstimationResult.swift */,
+				019C16E227455442008B6002 /* ImageQualityEstimatorCoreML.swift */,
+				019C16E327455442008B6002 /* ImageQualityModel.mlmodel */,
+			);
+			path = CoreML;
 			sourceTree = "<group>";
 		};
 		01A3A4F3270F14B000B7679F /* FantasmoSDKParkingExample */ = {
@@ -453,6 +474,7 @@
 		946838A525921BF3005B1145 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				019C16DF27455442008B6002 /* CoreML */,
 				A30EBE0A269F32C400E572FA /* Analytics */,
 				A3CB772E2636B3BF009625BB /* FMPose */,
 				946838AE25921BF3005B1145 /* Coordinate.swift */,
@@ -460,12 +482,12 @@
 				946838A725921BF3005B1145 /* FMIntrinsics.swift */,
 				946838AA25921BF3005B1145 /* FMZone.swift */,
 				946838A925921BF3005B1145 /* Geofence.swift */,
+				01B58686274D45DE0082FFF7 /* InitializeResponse.swift */,
 				946838A625921BF3005B1145 /* LocalizeResponse.swift */,
 				946838A825921BF3005B1145 /* Location.swift */,
 				946838B025921BF3005B1145 /* Orientation.swift */,
 				946838AD25921BF3005B1145 /* Pose.swift */,
 				946838B225921BF3005B1145 /* Position.swift */,
-				A354BA6426A4BFF300AF2023 /* RadiusResponse.swift */,
 				406437FA26E7864300B38B45 /* FMFrame.swift */,
 				406437FD26E787A200B38B45 /* FMCamera.swift */,
 			);
@@ -546,9 +568,10 @@
 				A3BA02D4263919DF00524D66 /* FMBlurFilter.swift */,
 				A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */,
 				A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */,
-				A3B57316269C3B6D0089B5F5 /* FMInputQualityFilter.swift */,
+				A3B57316269C3B6D0089B5F5 /* FMFrameFilterChain.swift */,
 				A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */,
 				A3C7657B26B29F4F0062E932 /* FMTrackingStateFilter.swift */,
+				0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -748,7 +771,6 @@
 				A36BAA49265431A50041E875 /* AssociatedObject.swift in Sources */,
 				0144B79E27047C38009A4042 /* FMParkingViewController.swift in Sources */,
 				A3CB77302636B3D5009625BB /* FMPose.swift in Sources */,
-				A354BA6526A4BFF300AF2023 /* RadiusResponse.swift in Sources */,
 				A35909A2269EE73E00A7BF5F /* FMCameraPitchFilter.swift in Sources */,
 				01343E97271D8376003A4716 /* FMSDKInfo.swift in Sources */,
 				A3CB774226372A9B009625BB /* simd_quatf+Extension.swift in Sources */,
@@ -760,6 +782,7 @@
 				946838CB25921BF3005B1145 /* FMZone.swift in Sources */,
 				A0D0C57726BD086E00F35448 /* MotionManager.swift in Sources */,
 				0134BF872705E8F400DDEF7A /* FMTipLabel.swift in Sources */,
+				01B58687274D45DE0082FFF7 /* InitializeResponse.swift in Sources */,
 				0123A4D9270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift in Sources */,
 				A34459EF26A8244F00C96205 /* EulerAngleSpreads.swift in Sources */,
 				946838C925921BF3005B1145 /* Location.swift in Sources */,
@@ -768,7 +791,10 @@
 				A02EA34526B9154D00525308 /* FMLocationDelegate.swift in Sources */,
 				946838D025921BF3005B1145 /* ErrorResponse.swift in Sources */,
 				A30EBE09269F32B200E572FA /* AccumulatedARKitInfo.swift in Sources */,
+				019C16E527455442008B6002 /* ImageQualityEstimationResult.swift in Sources */,
 				946838BF25921BF3005B1145 /* FMLocationManager.swift in Sources */,
+				0166C0A12746BEC3001D871E /* FMImageQualityFilter.swift in Sources */,
+				019C16E627455442008B6002 /* ImageQualityEstimatorCoreML.swift in Sources */,
 				A3CB77342636B496009625BB /* FMPosition.swift in Sources */,
 				946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */,
 				A354BA6026A4B88300AF2023 /* EulerAngles.swift in Sources */,
@@ -778,6 +804,7 @@
 				946838D625921BF3005B1145 /* Dictionary+Extension.swift in Sources */,
 				01343E8B271D7E5C003A4716 /* Codable+Extension.swift in Sources */,
 				946838CA25921BF3005B1145 /* Geofence.swift in Sources */,
+				019C16E427455442008B6002 /* ImageQualityEstimator.swift in Sources */,
 				A3BA02DF263919F300524D66 /* MovingAverage.swift in Sources */,
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,
 				A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */,
@@ -789,6 +816,7 @@
 				015BA28A2705B47400194E9E /* QRCodeDetector.swift in Sources */,
 				A30EBE0C269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift in Sources */,
 				0143E8D4270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */,
+				019C16E727455442008B6002 /* ImageQualityModel.mlmodel in Sources */,
 				0123A4D7270F2E7E00763758 /* FMParkingViewControllerDelegate.swift in Sources */,
 				946838CE25921BF3005B1145 /* Pose.swift in Sources */,
 				A02EA34926B9253900525308 /* Array+Extension.swift in Sources */,
@@ -812,7 +840,7 @@
 				A3B57315269C3B2D0089B5F5 /* BehaviorRequester.swift in Sources */,
 				010C274C273556BC00EF34A3 /* FMQRCodeDetector.swift in Sources */,
 				A34459F126A8246400C96205 /* OrientationAngleSpreadCalculator.swift in Sources */,
-				A3B57317269C3B6E0089B5F5 /* FMInputQualityFilter.swift in Sources */,
+				A3B57317269C3B6E0089B5F5 /* FMFrameFilterChain.swift in Sources */,
 				946838D825921BF3005B1145 /* CGImage+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -837,6 +865,7 @@
 				01343E73271D7A6D003A4716 /* FMRestClient.swift in Sources */,
 				01343E8C271D7E9F003A4716 /* CGImage+Extension.swift in Sources */,
 				01343E71271D7A5D003A4716 /* MotionManager.swift in Sources */,
+				0166C09B274695C8001D871E /* ImageEncoder.swift in Sources */,
 				01343E5E271D7864003A4716 /* SDKLocationTests.swift in Sources */,
 				01343E86271D7D55003A4716 /* Position.swift in Sources */,
 				01343E61271D78B3003A4716 /* FMLog.swift in Sources */,
@@ -847,7 +876,6 @@
 				01343E5D271D7861003A4716 /* SDKGeometricTests.swift in Sources */,
 				01343E72271D7A66003A4716 /* FMPose.swift in Sources */,
 				01343E83271D7D3C003A4716 /* Location.swift in Sources */,
-				01343E8D271D7EB8003A4716 /* RadiusResponse.swift in Sources */,
 				01343E90271D7ECE003A4716 /* ARFrame+Extension.swift in Sources */,
 				01343E7C271D7BE7003A4716 /* LocalizeResponse.swift in Sources */,
 				01343E76271D7AEB003A4716 /* FMBlurFilter.swift in Sources */,

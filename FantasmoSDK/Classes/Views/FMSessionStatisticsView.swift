@@ -20,7 +20,7 @@ class FMSessionStatisticsView: UIView {
     
     @IBOutlet var eulerAnglesLabel: UILabel!
     @IBOutlet var eulerAngleSpreadsLabel: UILabel!
-    
+        
     @IBOutlet var frameStatsNormalLabel: UILabel!
     @IBOutlet var frameStatsLimitedLabel: UILabel!
     @IBOutlet var frameStatsNotAvailableLabel: UILabel!
@@ -34,6 +34,8 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var filterStatsTooLittleLabel: UILabel!
     @IBOutlet var filterStatsFeaturesLabel: UILabel!
     
+    @IBOutlet var imageQualityFilterLabel: UILabel!
+    
     @IBOutlet var lastResultLabel: UILabel!
     @IBOutlet var errorsLabel: UILabel!
     @IBOutlet var deviceLocationLabel: UILabel!
@@ -45,7 +47,7 @@ class FMSessionStatisticsView: UIView {
         sdkVersionLabel.text = "Fantasmo SDK \(FMSDKInfo.fullVersion)"
     }
         
-    public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
+    public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, imageQualityScore: Float, refreshRate: TimeInterval = 10.0) {
         let shouldUpdate = frame.timestamp - lastFrameTimestamp > (1.0 / refreshRate)
         guard shouldUpdate else {
             return
@@ -83,6 +85,18 @@ class FMSessionStatisticsView: UIView {
         filterStatsTooFastLabel.text = "Too fast: \(rejectionCounts[.movingTooFast] ?? 0)"
         filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
         filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
+        
+        let remoteConfig = RemoteConfig.config()
+        var imageQualityFilterText = "Image Quality Filter: "
+        if !remoteConfig.isImageQualityFilterEnabled {
+            imageQualityFilterText += "disabled"
+        } else {
+            imageQualityFilterText += "enabled\n"
+            imageQualityFilterText += "\tScore: \(String(format: "%.5f", imageQualityScore))\n"
+            imageQualityFilterText += "\tThreshold: \(String(format: "%.3f", remoteConfig.imageQualityFilterScoreThreshold))\n"
+            imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)"
+        }
+        imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
     }
     
     var localizingStart: Date?
@@ -106,10 +120,12 @@ class FMSessionStatisticsView: UIView {
     
     public func update(errorCount: Int, lastError: FMError?) {
         var errorText = "Errors: \(errorCount)"
-        if let lastError = lastError {
-            errorText += "\nLast error: \(lastError.debugDescription)"
+        if let lastErrorDescription = lastError?.debugDescription {
+            errorText += "\nLast error: \(lastErrorDescription)"
+            errorsLabel.attributedText = highlightString(lastErrorDescription, in: errorText, color: .red)
+        } else {
+            errorsLabel.text = errorText
         }
-        errorsLabel.text = errorText
     }
     
     public func update(lastResult: FMLocationResult?) {

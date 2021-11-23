@@ -8,9 +8,13 @@
 import ARKit
 
 class FMMovementFilter: FMFrameFilter {
-    let threshold: Float = 0.001
+    let threshold: Float
     var lastTransform: simd_float4x4 = simd_float4x4(1)
 
+    init(threshold: Float) {
+        self.threshold = threshold
+    }
+    
     public func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
         if exceededThreshold(frame.fmCamera.transform) {
             lastTransform = frame.fmCamera.transform

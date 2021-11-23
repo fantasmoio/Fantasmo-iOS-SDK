@@ -7,7 +7,7 @@
     "is_blur_filter_enabled": true,
     "blur_filter_variance_threshold": 250.0,
     "blur_filter_sudden_drop_threshold": 0.4,
-    "blur_filter_average_throughput_threshold": 8.0,
+    "blur_filter_average_throughput_threshold": 0.25,
     "is_camera_pitch_filter_enabled": true,
     "camera_pitch_filter_max_upward_tilt": 30.0,
     "camera_pitch_filter_max_downward_tilt": 65.0

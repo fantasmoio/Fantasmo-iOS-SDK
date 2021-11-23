@@ -86,6 +86,8 @@
 		01A3A501270F14B200B7679F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01A3A4FF270F14B200B7679F /* LaunchScreen.storyboard */; };
 		01A3A509270F14EA00B7679F /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; };
 		01A3A50A270F14EA00B7679F /* FantasmoSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		01B58681274BF8DF0082FFF7 /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B58680274BF8DF0082FFF7 /* RemoteConfig.swift */; };
+		01B58683274BFF3C0082FFF7 /* default-config.json in Resources */ = {isa = PBXBuildFile; fileRef = 01B58682274BFF3C0082FFF7 /* default-config.json */; };
 		406437FB26E7864300B38B45 /* FMFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FA26E7864300B38B45 /* FMFrame.swift */; };
 		406437FE26E787A300B38B45 /* FMCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FD26E787A200B38B45 /* FMCamera.swift */; };
 		4064380526E79C8100B38B45 /* MockCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4064380226E79C7A00B38B45 /* MockCamera.swift */; };
@@ -204,6 +206,8 @@
 		01A3A4FD270F14B200B7679F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01A3A500270F14B200B7679F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		01A3A502270F14B200B7679F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		01B58680274BF8DF0082FFF7 /* RemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfig.swift; sourceTree = "<group>"; };
+		01B58682274BFF3C0082FFF7 /* default-config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "default-config.json"; sourceTree = "<group>"; };
 		406437FA26E7864300B38B45 /* FMFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrame.swift; sourceTree = "<group>"; };
 		406437FD26E787A200B38B45 /* FMCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCamera.swift; sourceTree = "<group>"; };
 		4064380026E79C0D00B38B45 /* MockFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFrame.swift; sourceTree = "<group>"; };
@@ -350,6 +354,14 @@
 			path = FantasmoSDKParkingExample;
 			sourceTree = "<group>";
 		};
+		01B5867F274BF8CA0082FFF7 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				01B58680274BF8DF0082FFF7 /* RemoteConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		9468388125921BAF005B1145 = {
 			isa = PBXGroup;
 			children = (
@@ -389,6 +401,7 @@
 				9468389825921BF3005B1145 /* .gitkeep */,
 				9468389925921BF3005B1145 /* Assets.xcassets */,
 				0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */,
+				01B58682274BFF3C0082FFF7 /* default-config.json */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -396,6 +409,7 @@
 		9468389A25921BF3005B1145 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				01B5867F274BF8CA0082FFF7 /* Config */,
 				0123A4E1270F521400763758 /* Errors */,
 				0144B79C27047C15009A4042 /* Views */,
 				9468389E25921BF3005B1145 /* Mock */,
@@ -697,6 +711,7 @@
 			files = (
 				0134BF8A270610E800DDEF7A /* Assets.xcassets in Resources */,
 				0143E8D8270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */,
+				01B58683274BFF3C0082FFF7 /* default-config.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -768,6 +783,7 @@
 				A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */,
 				406437FE26E787A300B38B45 /* FMCamera.swift in Sources */,
 				0144B7A427047CEB009A4042 /* FMLocalizingViewController.swift in Sources */,
+				01B58681274BF8DF0082FFF7 /* RemoteConfig.swift in Sources */,
 				A359099A269DAAC300A7BF5F /* UIDevice+Extension.swift in Sources */,
 				0123A4DC270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift in Sources */,
 				015BA28A2705B47400194E9E /* QRCodeDetector.swift in Sources */,

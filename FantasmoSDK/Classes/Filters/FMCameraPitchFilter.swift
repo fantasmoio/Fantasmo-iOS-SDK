@@ -8,14 +8,19 @@
 import ARKit
 
 class FMCameraPitchFilter: FMFrameFilter {
-    private let maxUpwardTilt: Float = deg2rad(30)
-    private let maxDownwardTilt: Float = deg2rad(65)
-        
+    private let maxUpwardTiltRadians: Float
+    private let maxDownwardTiltRadians: Float
+    
+    init(maxUpwardTiltDegrees: Float, maxDownwardTiltDegrees: Float) {
+        self.maxUpwardTiltRadians = deg2rad(maxUpwardTiltDegrees)
+        self.maxDownwardTiltRadians = deg2rad(maxDownwardTiltDegrees)
+    }
+    
     func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
         switch frame.fmCamera.pitch {
-        case _ where frame.fmCamera.pitch > maxUpwardTilt:
+        case _ where frame.fmCamera.pitch > maxUpwardTiltRadians:
             return .rejected(reason: .pitchTooHigh)
-        case _ where frame.fmCamera.pitch < -maxDownwardTilt:
+        case _ where frame.fmCamera.pitch < -maxDownwardTiltRadians:
             return .rejected(reason: .pitchTooLow)
         default:
             return .accepted

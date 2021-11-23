@@ -23,9 +23,10 @@ class FMBlurFilter: FMFrameFilter {
         varianceAverager.average
     }
 
-    var varianceThreshold: Float = 250.0 // empirically determined
-    var suddenDropThreshold: Float = 0.4 // empirically determined
-        
+    let varianceThreshold: Float
+    let suddenDropThreshold: Float
+    let averageThroughputThreshold: Float
+    
     var throughputAverager = MovingAverage(period: 8)
     var averageThroughput: Float {
         throughputAverager.average
@@ -34,7 +35,10 @@ class FMBlurFilter: FMFrameFilter {
     let metalDevice = MTLCreateSystemDefaultDevice()
     let metalCommandQueue: MTLCommandQueue?
 
-    init() {
+    init(varianceThreshold: Float, suddenDropThreshold: Float, averageThroughputThreshold: Float) {
+        self.varianceThreshold = varianceThreshold
+        self.suddenDropThreshold = suddenDropThreshold
+        self.averageThroughputThreshold = averageThroughputThreshold
         metalCommandQueue = metalDevice?.makeCommandQueue()
     }
     
@@ -56,7 +60,7 @@ class FMBlurFilter: FMFrameFilter {
         }
         
         // if not enough images are passing, pass regardless of variance
-        if averageThroughput < 0.25 {
+        if averageThroughput < averageThroughputThreshold {
             isBlurry = false
         } else {
             isBlurry = isLowVariance

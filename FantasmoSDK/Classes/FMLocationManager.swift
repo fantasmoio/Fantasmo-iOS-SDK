@@ -85,12 +85,7 @@ class FMLocationManager: NSObject {
     
     private var frameFilter = FMInputQualityFilter()
     
-    private lazy var behaviorRequester = BehaviorRequester { [weak self] behaviorRequest in
-        // in testing mode, request behaviors even when stopped
-        if self?.state != .stopped {
-            self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
-        }
-    }
+    private var behaviorRequester: BehaviorRequester?
     
     /// Read-only vars, used to populate the statistics view
     public private(set) var lastFrame: ARFrame?
@@ -128,6 +123,18 @@ class FMLocationManager: NSObject {
         
         // set up FMApi
         FMApi.shared.token = accessToken
+        
+        // configure behavior requester
+        let rc = RemoteConfig.config()
+        if rc.isBehaviorRequesterEnabled {
+            behaviorRequester = BehaviorRequester { [weak self] behaviorRequest in
+                if self?.state != .stopped {
+                    self?.delegate?.locationManager(didRequestBehavior: behaviorRequest)
+                }
+            }
+        } else {
+            behaviorRequester = nil
+        }
     }
 
     /// Connect to the location service.
@@ -166,7 +173,7 @@ class FMLocationManager: NSObject {
         accumulatedARKitInfo.reset()
         frameEventAccumulator.reset()
         frameFilter.restart()
-        behaviorRequester.restart()
+        behaviorRequester?.restart()
         motionManager.restart()
         locationFuser.reset()
 
@@ -339,7 +346,7 @@ extension FMLocationManager : ARSessionDelegate {
         }
         
         let filterResult = frameFilter.accepts(frame)
-        behaviorRequester.processResult(filterResult)
+        behaviorRequester?.processResult(filterResult)
         accumulatedARKitInfo.update(with: frame)
         
         if case let .rejected(reason) = filterResult {

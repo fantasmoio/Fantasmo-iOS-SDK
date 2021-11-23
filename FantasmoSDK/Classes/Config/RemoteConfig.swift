@@ -22,6 +22,8 @@ class RemoteConfig {
         let isCameraPitchFilterEnabled: Bool
         let cameraPitchFilterMaxUpwardTilt: Float
         let cameraPitchFilterMaxDownwardTilt: Float
+        let isImageQualityFilterEnabled: Bool
+        let imageQualityFilterScoreThreshold: Float
     }
         
     private static let userDefaultsKey = "FantasmoSDK.RemoteConfig"

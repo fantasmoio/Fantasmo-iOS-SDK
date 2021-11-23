@@ -54,6 +54,14 @@ class FMFrameFilterChain {
             enabledFilters.append(blurFilter)
         }
         
+        if rc.isImageQualityFilterEnabled {
+            let imageQualityFilter = FMImageQualityFilter(
+                scoreThreshold: rc.imageQualityFilterScoreThreshold
+            )
+            enabledFilters.append(imageQualityFilter)
+        }
+        
+        
         filters = enabledFilters
     }
 

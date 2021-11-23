@@ -20,9 +20,7 @@ class FMSessionStatisticsView: UIView {
     
     @IBOutlet var eulerAnglesLabel: UILabel!
     @IBOutlet var eulerAngleSpreadsLabel: UILabel!
-    
-    @IBOutlet var imageQualityScoreLabel: UILabel!
-    
+        
     @IBOutlet var frameStatsNormalLabel: UILabel!
     @IBOutlet var frameStatsLimitedLabel: UILabel!
     @IBOutlet var frameStatsNotAvailableLabel: UILabel!
@@ -35,6 +33,8 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var filterStatsTooFastLabel: UILabel!
     @IBOutlet var filterStatsTooLittleLabel: UILabel!
     @IBOutlet var filterStatsFeaturesLabel: UILabel!
+    
+    @IBOutlet var imageQualityFilterLabel: UILabel!
     
     @IBOutlet var lastResultLabel: UILabel!
     @IBOutlet var errorsLabel: UILabel!
@@ -86,7 +86,17 @@ class FMSessionStatisticsView: UIView {
         filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
         filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
         
-        imageQualityScoreLabel.text = "Image Quality Score: \(String(format: "%.6f", imageQualityScore))"
+        let remoteConfig = RemoteConfig.config()
+        var imageQualityFilterText = "Image Quality Filter: "
+        if !remoteConfig.isImageQualityFilterEnabled {
+            imageQualityFilterText += "disabled"
+        } else {
+            imageQualityFilterText += "enabled\n"
+            imageQualityFilterText += "\tScore: \(String(format: "%.5f", imageQualityScore))\n"
+            imageQualityFilterText += "\tThreshold: \(String(format: "%.3f", remoteConfig.imageQualityFilterScoreThreshold))\n"
+            imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)"
+        }
+        imageQualityFilterLabel.text = imageQualityFilterText
     }
     
     var localizingStart: Date?

@@ -16,7 +16,7 @@ class MotionManager {
         motionManager.deviceMotionUpdateInterval = 1.0/15.0
         return motionManager
     }()
-    private(set) var magneticField = MagneticField()
+    private(set) var magneticField: MagneticField?
 
     struct MagneticField: Codable {
         var x = 0.0
@@ -25,7 +25,7 @@ class MotionManager {
     }
 
     func restart() {
-        magneticField = MagneticField()
+        magneticField = nil
         motionManager.startDeviceMotionUpdates(
             using: CMAttitudeReferenceFrame.xArbitraryCorrectedZVertical,
             to: .main) { (motion, error) in

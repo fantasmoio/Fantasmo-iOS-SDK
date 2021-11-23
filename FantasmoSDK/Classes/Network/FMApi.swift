@@ -24,7 +24,7 @@ struct FMLocalizationAnalytics {
     var frameEvents: FMFrameEvents
     var rotationSpread: FMRotationSpread
     var totalDistance: Float
-    var magneticField: MotionManager.MagneticField
+    var magneticField: MotionManager.MagneticField?
 }
 
 struct FMRotationSpread: Codable {
@@ -245,7 +245,7 @@ class FMApi {
             params = [
                 "intrinsics" : intrinsics.toJson(),
                 "gravity" : pose.orientation.toJson(),
-                "capturedAt" : String(NSDate().timeIntervalSince1970),
+                "capturedAt" : String(NSDate().timeIntervalSince1970 * 1000.0),
                 "uuid" : UUID().uuidString,
                 "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
 
@@ -264,8 +264,11 @@ class FMApi {
                 "frameEventCounts": frameEventCounts.toJson(),
                 "totalDistance": String(request.analytics.totalDistance),
                 "rotationSpread": request.analytics.rotationSpread.toJson(),
-                "magneticData": request.analytics.magneticField.toJson(),
             ]
+            
+            if let magneticData = request.analytics.magneticField?.toJson() {
+                params["magneticData"] = magneticData
+            }
         }
         else {
             params = MockData.params(request)

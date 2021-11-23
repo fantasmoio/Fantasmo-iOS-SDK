@@ -10,12 +10,7 @@ import ARKit
 import SceneKit
 
 public final class FMParkingViewController: UIViewController {
-    
-    /// Default radius in meters used when checking parking availability via `isParkingAvailable(near:completion:)`.
-    ///
-    /// This value can be overriden in the Info.plist with the key `FM_AVAILABILITY_RADIUS`
-    public static let defaultParkingAvailabilityRadius: Int = 50
-    
+        
     /// Check if there's an available parking space near a supplied CLLocation and that Fantasmo is supported on the device.
     ///
     /// - Parameter location: the CLLocation to check
@@ -37,10 +32,8 @@ public final class FMParkingViewController: UIViewController {
             completion(false)
             return
         }
-        let radius = FMConfiguration.intForInfoKey(.availabilityRadius) ?? defaultParkingAvailabilityRadius
         FMApi.shared.token = FMConfiguration.accessToken()
-        FMApi.shared.sendZoneInRadiusRequest(.parking, coordinate: location.coordinate, radius: radius, completion: completion
-        ) { error in
+        FMApi.shared.sendInitializationRequest(location: location, completion: completion) { error in
             // For now, clients only care if a zone was found, so an error condition can be treated as a `false` completion
             log.error(error)
             completion(false)

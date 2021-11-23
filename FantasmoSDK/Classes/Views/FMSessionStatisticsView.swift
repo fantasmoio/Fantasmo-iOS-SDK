@@ -96,7 +96,7 @@ class FMSessionStatisticsView: UIView {
             imageQualityFilterText += "\tThreshold: \(String(format: "%.3f", remoteConfig.imageQualityFilterScoreThreshold))\n"
             imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)"
         }
-        imageQualityFilterLabel.text = imageQualityFilterText
+        imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
     }
     
     var localizingStart: Date?
@@ -120,10 +120,12 @@ class FMSessionStatisticsView: UIView {
     
     public func update(errorCount: Int, lastError: FMError?) {
         var errorText = "Errors: \(errorCount)"
-        if let lastError = lastError {
-            errorText += "\nLast error: \(lastError.debugDescription)"
+        if let lastErrorDescription = lastError?.debugDescription {
+            errorText += "\nLast error: \(lastErrorDescription)"
+            errorsLabel.attributedText = highlightString(lastErrorDescription, in: errorText, color: .red)
+        } else {
+            errorsLabel.text = errorText
         }
-        errorsLabel.text = errorText
     }
     
     public func update(lastResult: FMLocationResult?) {

@@ -51,10 +51,21 @@ class RemoteConfig {
               let defaultConfigData = try? Data(contentsOf: defaultConfigUrl),
               let defaultConfig = try? jsonDecoder.decode(Config.self, from: defaultConfigData)
         else {
-            fatalError("failed to parse SDK default config")
+            fatalError("failed to parse SDK default remote config")
         }
         
         _config = defaultConfig
         return defaultConfig
+    }
+    
+    static func update(_ latest: RemoteConfig.Config) {
+        _config = latest
+        // save the latest config data in user defaults
+        guard let configData = try? JSONEncoder().encode(latest) else {
+            log.error("failed to save new remote config")
+            return
+        }
+        log.info("successfully saved new remote config")
+        UserDefaults.standard.set(configData, forKey: userDefaultsKey)
     }
 }

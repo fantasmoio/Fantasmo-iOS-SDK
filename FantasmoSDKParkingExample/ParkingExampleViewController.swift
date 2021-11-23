@@ -155,7 +155,7 @@ extension ParkingExampleViewController: CLLocationManagerDelegate {
         return locationManager.authorizationStatus == .denied || locationManager.authorizationStatus == .restricted
     }
     
-    /// Enable the "End Ride" button only if we have a location or we're in simulation mode.
+    /// Enable the "Verify Parking" button only if we have a location or we're in simulation mode.
     private func updateEndRideButtonState() {
         endRideButton.isEnabled = isSimulationSwitch.isOn || deviceLocation != nil
         endRideButton.alpha = endRideButton.isEnabled ? 1.0 : 0.5
@@ -163,7 +163,7 @@ extension ParkingExampleViewController: CLLocationManagerDelegate {
             endRideButton.titleLabel?.adjustsFontSizeToFitWidth = true
             endRideButton.setTitle("Location access denied", for: .normal)
         } else {
-            endRideButton.setTitle("End Ride", for: .normal)
+            endRideButton.setTitle("Verify Parking", for: .normal)
         }
     }
         

@@ -15,7 +15,7 @@ protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
     func locationManager(didChangeState state: FMLocationManager.State)
-    func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, imageQualityScore: Float)
+    func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
 }
 
 class FMLocationManager: NSObject {
@@ -367,8 +367,13 @@ extension FMLocationManager : ARSessionDelegate {
             }
         }
         
-        let imageQualityScore = frameFilterChain.getLastImageQualityScore()
-        delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator, imageQualityScore: imageQualityScore)
+        if #available(iOS 13, *), let imageQualityFilter = frameFilterChain.getFilter(ofType: FMImageQualityFilter.self) {
+            accumulatedARKitInfo.imageQualityFilterScores.append(imageQualityFilter.lastImageQualityScore)
+            accumulatedARKitInfo.imageQualityFilterScoreThreshold = imageQualityFilter.scoreThreshold
+            accumulatedARKitInfo.imageQualityFilterModelVersion = imageQualityFilter.modelVersion
+        }
+        
+        delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
     }
 }
 

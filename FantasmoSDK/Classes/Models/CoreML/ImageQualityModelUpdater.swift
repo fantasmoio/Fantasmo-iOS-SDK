@@ -12,33 +12,49 @@ class ImageQualityModelUpdater {
     
     static let shared = ImageQualityModelUpdater()
     
-    let imageQualityModelCompiledFilename = "ImageQualityModel.mlmodelc"
-    let imageQualityModelCurrentVersionKey = "ImageQualityModelCurrentVersionKey"
-    
-    var isCheckingForUpdates: Bool = false
+    var isUpdatingModel: Bool = false
     
     func checkForUpdates() {
-        guard !isCheckingForUpdates else {
-            return  // Previous update in progress
+        guard #available(iOS 13.0, *) else {
+            return
         }
         
+        guard !isUpdatingModel else {
+            return
+        }
+        
+        log.info("checking for model updates")
+        
         let remoteConfig = RemoteConfig.config()
-        guard let latestModelUrlString = remoteConfig.imageQualityFilterModelUri,
-                let latestModelUrl = URL(string: latestModelUrlString) else {
-            return  // No model in the remote config
+        guard let latestModelVersion = remoteConfig.imageQualityFilterModelVersion,
+              let latestModelUrlString = remoteConfig.imageQualityFilterModelUri,
+              let latestModelUrl = URL(string: latestModelUrlString)
+        else {
+            log.info("no model specified in remote config")
+            return
         }
 
         let fileManager = FileManager.default
-        let userDefaults = UserDefaults.standard
-        
-        // Check if we have a downloaded a model file already and if it matches what's in remote config
+        let modelName = String(describing: ImageQualityModel.self)
         let appSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let currentCompiledModelFile = appSupportDirectory.appendingPathComponent(imageQualityModelCompiledFilename)
-        if fileManager.fileExists(atPath: currentCompiledModelFile.path),
-            userDefaults.string(forKey: imageQualityModelCurrentVersionKey) == latestModelUrlString {
-            return  // Model is up to date
+        let currentModelLocation = appSupportDirectory.appendingPathComponent(modelName).appendingPathExtension("mlmodelc")
+                
+        if fileManager.fileExists(atPath: currentModelLocation.path) {
+            do {
+                log.info("checking current model version")
+                let currentModel = try ImageQualityModel(contentsOf: currentModelLocation)
+                let currentModelDescription = currentModel.model.modelDescription
+                let currentModelVersion = currentModelDescription.metadata[MLModelMetadataKey.versionString] as? String ?? ""
+                if currentModelVersion == latestModelVersion {
+                    log.info("version \(currentModelVersion) is already the latest")
+                    return
+                }
+            } catch {
+                log.error("error checking current model version: \(error.localizedDescription)")
+                try? fileManager.removeItem(at: currentModelLocation)
+            }
         }
-
+        
         // Create the app support directory if needed, it doesn't exist by default
         if !fileManager.fileExists(atPath: appSupportDirectory.path, isDirectory: nil) {
             guard let _  = try? fileManager.createDirectory(
@@ -48,18 +64,23 @@ class ImageQualityModelUpdater {
             }
         }
                 
-        isCheckingForUpdates = true
+        isUpdatingModel = true
+        log.info("updating model to version \(latestModelVersion)")
         
-        // Download the latest model
         downloadModel(at: latestModelUrl) { modelData, downloadError in
             guard downloadError == nil, let modelData = modelData else {
-                // Download error
-                self.isCheckingForUpdates = false
-                log.error("Error downloading model: \(downloadError?.localizedDescription ?? "")")
+                self.isUpdatingModel = false
+                log.error("error downloading model: \(downloadError?.localizedDescription ?? "")")
                 return
             }
-            self.compileModel(data: modelData, overwriting: currentCompiledModelFile) { compileError in
-                self.isCheckingForUpdates = false
+            
+            self.compileModel(data: modelData, overwriting: currentModelLocation) { compileError in
+                self.isUpdatingModel = false
+                if let compileError = compileError {
+                    log.error("error compiling model: \(compileError.localizedDescription)")
+                } else {
+                    log.info("successfully updated model")
+                }
             }
         }
     }
@@ -78,6 +99,7 @@ class ImageQualityModelUpdater {
             }
         }
         downloadTask.resume()
+        log.info("downloading model \(url)")
     }
     
     private func compileModel(data: Data, overwriting destFile: URL, completion: @escaping ((Error?) -> Void)) {
@@ -91,8 +113,10 @@ class ImageQualityModelUpdater {
                 let tempModelFile = tempDirectory.appendingPathComponent(tempName)
                 try data.write(to: tempModelFile, options: .atomic)
                 // Compile the model
+                log.info("compiling model \(tempModelFile)")
                 let compiledModelFile = try MLModel.compileModel(at: tempModelFile)
                 // Replace the destination file with the newly compiled model
+                log.info("replacing model \(tempModelFile) => \(destFile)")
                 _ = try! fileManager.replaceItemAt(destFile, withItemAt: compiledModelFile)
             } catch {
                 compileError = error
@@ -101,9 +125,5 @@ class ImageQualityModelUpdater {
                 completion(compileError)
             }
         }
-    }
-    
-    private func getApplicationSupportDirectory() -> URL {
-        return FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
     }
 }

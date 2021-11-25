@@ -183,6 +183,7 @@ class FMApi {
                 // update remote config values
                 if let config = initializeResponse.config {
                     RemoteConfig.update(config)
+                    ImageQualityModelUpdater.shared.checkForUpdates()
                 }
                 completion(initializeResponse.parkingInRadius)
             } catch let jsonError {

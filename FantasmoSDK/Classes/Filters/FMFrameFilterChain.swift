@@ -54,13 +54,12 @@ class FMFrameFilterChain {
             enabledFilters.append(blurFilter)
         }
         
-        if rc.isImageQualityFilterEnabled {
+        if rc.isImageQualityFilterEnabled, #available(iOS 13, *) {
             let imageQualityFilter = FMImageQualityFilter(
                 scoreThreshold: rc.imageQualityFilterScoreThreshold
             )
             enabledFilters.append(imageQualityFilter)
         }
-        
         
         filters = enabledFilters
     }
@@ -98,11 +97,8 @@ class FMFrameFilterChain {
         }
     }
     
-    func getLastImageQualityScore() -> Float {
-        guard let imageQualityFilter = filters.first(where: { $0 is FMImageQualityFilter }) as? FMImageQualityFilter else {
-            return 0.0
-        }
-        return imageQualityFilter.lastImageQualityScore
+    func getFilter<T:FMFrameFilter>(ofType type: T.Type) -> T? {
+        return filters.first(where: { $0 is T }) as? T
     }
     
     /// If there are a lot of continuous rejections, we force an acceptance

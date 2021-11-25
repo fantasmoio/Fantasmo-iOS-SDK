@@ -47,7 +47,7 @@ class FMSessionStatisticsView: UIView {
         sdkVersionLabel.text = "Fantasmo SDK \(FMSDKInfo.fullVersion)"
     }
         
-    public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, imageQualityScore: Float, refreshRate: TimeInterval = 10.0) {
+    public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
         let shouldUpdate = frame.timestamp - lastFrameTimestamp > (1.0 / refreshRate)
         guard shouldUpdate else {
             return
@@ -86,17 +86,14 @@ class FMSessionStatisticsView: UIView {
         filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
         filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
         
-        let remoteConfig = RemoteConfig.config()
-        var imageQualityFilterText = "Image Quality Filter: "
-        if !remoteConfig.isImageQualityFilterEnabled {
-            imageQualityFilterText += "disabled"
-        } else {
-            imageQualityFilterText += "enabled\n"
-            imageQualityFilterText += "\tScore: \(String(format: "%.5f", imageQualityScore))\n"
-            imageQualityFilterText += "\tThreshold: \(String(format: "%.3f", remoteConfig.imageQualityFilterScoreThreshold))\n"
-            imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)"
+        if let lastImageQualityFilterScore = info.imageQualityFilterScores.last {
+            var imageQualityFilterText = "Image Quality Filter: enabled\n"
+            imageQualityFilterText += "\tScore: \(String(format: "%.5f", lastImageQualityFilterScore))\n"
+            imageQualityFilterText += "\tThreshold: \(String(format: "%.2f", info.imageQualityFilterScoreThreshold ?? 0))\n"
+            imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)\n"
+            imageQualityFilterText += "\tVersion: \(info.imageQualityFilterModelVersion ?? "n/a")"
+            imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
         }
-        imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
     }
     
     var localizingStart: Date?

@@ -12,5 +12,5 @@
     "camera_pitch_filter_max_upward_tilt": 30.0,
     "camera_pitch_filter_max_downward_tilt": 65.0,
     "is_image_quality_filter_enabled": true,
-    "image_quality_filter_score_threshold": 0.0,
+    "image_quality_filter_score_threshold": 0.0
 }

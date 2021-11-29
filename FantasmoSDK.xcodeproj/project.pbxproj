@@ -9,6 +9,23 @@
 /* Begin PBXBuildFile section */
 		0103238E2732D4F100056E91 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0103238D2732D4F100056E91 /* Settings.bundle */; };
 		010C274C273556BC00EF34A3 /* FMQRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010C274B273556BC00EF34A3 /* FMQRCodeDetector.swift */; };
+		01138A1927551D5F00AB31DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A1827551D5F00AB31DF /* AppDelegate.swift */; };
+		01138A1B27551D5F00AB31DF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A1A27551D5F00AB31DF /* SceneDelegate.swift */; };
+		01138A2027551D5F00AB31DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01138A1E27551D5F00AB31DF /* Main.storyboard */; };
+		01138A2227551D6000AB31DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01138A2127551D6000AB31DF /* Assets.xcassets */; };
+		01138A2527551D6000AB31DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01138A2327551D6000AB31DF /* LaunchScreen.storyboard */; };
+		01138A2E27551F5B00AB31DF /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 01138A2D27551F5B00AB31DF /* Settings.bundle */; };
+		01138A3027551F8700AB31DF /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; };
+		01138A3127551F8700AB31DF /* FantasmoSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		01138A36275533D400AB31DF /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A34275533D400AB31DF /* UIViewController+Extensions.swift */; };
+		01138A37275533D400AB31DF /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A35275533D400AB31DF /* UITextField+Extensions.swift */; };
+		01138A392755344000AB31DF /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A382755343F00AB31DF /* PermissionsViewController.swift */; };
+		01138A3E275534DC00AB31DF /* FilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A3D275534DC00AB31DF /* FilledButton.swift */; };
+		01138A442755355A00AB31DF /* MockQRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A3F2755355A00AB31DF /* MockQRCodeDetector.swift */; };
+		01138A452755355A00AB31DF /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A402755355A00AB31DF /* Settings.swift */; };
+		01138A462755355A00AB31DF /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A412755355A00AB31DF /* SettingsViewController.swift */; };
+		01138A472755355A00AB31DF /* LocalizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A422755355A00AB31DF /* LocalizeViewController.swift */; };
+		01138A482755355A00AB31DF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A432755355A00AB31DF /* MapViewController.swift */; };
 		011589E62742957100CFC368 /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011589E52742957100CFC368 /* ImageEncoder.swift */; };
 		01172678274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */; };
 		0117268E274FEEA5005EA7C0 /* ImageQualityModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0117268D274FEEA5005EA7C0 /* ImageQualityModel.mlmodel */; };
@@ -153,6 +170,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		01138A2A27551F2000AB31DF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9468388225921BAF005B1145 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9468388A25921BAF005B1145;
+			remoteInfo = FantasmoSDK;
+		};
 		01A3A506270F14E000B7679F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9468388225921BAF005B1145 /* Project object */;
@@ -170,6 +194,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		01138A3227551F8700AB31DF /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				01138A3127551F8700AB31DF /* FantasmoSDK.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01A3A50B270F14EA00B7679F /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -186,6 +221,23 @@
 /* Begin PBXFileReference section */
 		0103238D2732D4F100056E91 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		010C274B273556BC00EF34A3 /* FMQRCodeDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRCodeDetector.swift; sourceTree = "<group>"; };
+		01138A1627551D5F00AB31DF /* FantasmoSDKTestHarness.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKTestHarness.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		01138A1827551D5F00AB31DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		01138A1A27551D5F00AB31DF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		01138A1F27551D5F00AB31DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		01138A2127551D6000AB31DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		01138A2427551D6000AB31DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		01138A2627551D6000AB31DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		01138A2D27551F5B00AB31DF /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		01138A34275533D400AB31DF /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		01138A35275533D400AB31DF /* UITextField+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
+		01138A382755343F00AB31DF /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
+		01138A3D275534DC00AB31DF /* FilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilledButton.swift; sourceTree = "<group>"; };
+		01138A3F2755355A00AB31DF /* MockQRCodeDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockQRCodeDetector.swift; sourceTree = "<group>"; };
+		01138A402755355A00AB31DF /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		01138A412755355A00AB31DF /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		01138A422755355A00AB31DF /* LocalizeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizeViewController.swift; sourceTree = "<group>"; };
+		01138A432755355A00AB31DF /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		011589E52742957100CFC368 /* ImageEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoder.swift; sourceTree = "<group>"; };
 		01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQualityModelUpdater.swift; sourceTree = "<group>"; };
 		0117268D274FEEA5005EA7C0 /* ImageQualityModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ImageQualityModel.mlmodel; sourceTree = "<group>"; };
@@ -286,6 +338,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		01138A1327551D5F00AB31DF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01138A3027551F8700AB31DF /* FantasmoSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01A3A4EF270F14B000B7679F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -312,6 +372,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01138A1727551D5F00AB31DF /* FantasmoSDKTestHarness */ = {
+			isa = PBXGroup;
+			children = (
+				01138A3A2755344700AB31DF /* Classes */,
+				01138A33275533D400AB31DF /* Extensions */,
+				01138A1827551D5F00AB31DF /* AppDelegate.swift */,
+				01138A1A27551D5F00AB31DF /* SceneDelegate.swift */,
+				01138A1E27551D5F00AB31DF /* Main.storyboard */,
+				01138A2327551D6000AB31DF /* LaunchScreen.storyboard */,
+				01138A2127551D6000AB31DF /* Assets.xcassets */,
+				01138A2D27551F5B00AB31DF /* Settings.bundle */,
+				01138A2627551D6000AB31DF /* Info.plist */,
+			);
+			path = FantasmoSDKTestHarness;
+			sourceTree = "<group>";
+		};
+		01138A33275533D400AB31DF /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				01138A34275533D400AB31DF /* UIViewController+Extensions.swift */,
+				01138A35275533D400AB31DF /* UITextField+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		01138A3A2755344700AB31DF /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				01138A3D275534DC00AB31DF /* FilledButton.swift */,
+				01138A422755355A00AB31DF /* LocalizeViewController.swift */,
+				01138A432755355A00AB31DF /* MapViewController.swift */,
+				01138A3F2755355A00AB31DF /* MockQRCodeDetector.swift */,
+				01138A382755343F00AB31DF /* PermissionsViewController.swift */,
+				01138A402755355A00AB31DF /* Settings.swift */,
+				01138A412755355A00AB31DF /* SettingsViewController.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		01172688274FBD3C005EA7C0 /* CoreML */ = {
 			isa = PBXGroup;
 			children = (
@@ -381,8 +480,9 @@
 			isa = PBXGroup;
 			children = (
 				9468388D25921BAF005B1145 /* FantasmoSDK */,
-				A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */,
 				01A3A4F3270F14B000B7679F /* FantasmoSDKParkingExample */,
+				A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */,
+				01138A1727551D5F00AB31DF /* FantasmoSDKTestHarness */,
 				9468388C25921BAF005B1145 /* Products */,
 				946838E025921DFE005B1145 /* Frameworks */,
 				A3445A0226A8967300C96205 /* Recovered References */,
@@ -395,6 +495,7 @@
 				9468388B25921BAF005B1145 /* FantasmoSDK.framework */,
 				A0D5E88726BA97DA00CE5B1C /* FantasmoSDKTests.xctest */,
 				01A3A4F2270F14B000B7679F /* FantasmoSDKParkingExample.app */,
+				01138A1627551D5F00AB31DF /* FantasmoSDKTestHarness.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -615,6 +716,25 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		01138A1527551D5F00AB31DF /* FantasmoSDKTestHarness */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01138A2927551D6000AB31DF /* Build configuration list for PBXNativeTarget "FantasmoSDKTestHarness" */;
+			buildPhases = (
+				01138A1227551D5F00AB31DF /* Sources */,
+				01138A1327551D5F00AB31DF /* Frameworks */,
+				01138A1427551D5F00AB31DF /* Resources */,
+				01138A3227551F8700AB31DF /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				01138A2B27551F2000AB31DF /* PBXTargetDependency */,
+			);
+			name = FantasmoSDKTestHarness;
+			productName = FantasmoSDKTestHarness;
+			productReference = 01138A1627551D5F00AB31DF /* FantasmoSDKTestHarness.app */;
+			productType = "com.apple.product-type.application";
+		};
 		01A3A4F1270F14B000B7679F /* FantasmoSDKParkingExample */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 01A3A503270F14B200B7679F /* Build configuration list for PBXNativeTarget "FantasmoSDKParkingExample" */;
@@ -676,9 +796,12 @@
 		9468388225921BAF005B1145 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1300;
+				LastSwiftUpdateCheck = 1310;
 				LastUpgradeCheck = 1310;
 				TargetAttributes = {
+					01138A1527551D5F00AB31DF = {
+						CreatedOnToolsVersion = 13.1;
+					};
 					01A3A4F1270F14B000B7679F = {
 						CreatedOnToolsVersion = 13.0;
 					};
@@ -705,12 +828,24 @@
 			targets = (
 				9468388A25921BAF005B1145 /* FantasmoSDK */,
 				A0D5E88626BA97DA00CE5B1C /* FantasmoSDKTests */,
+				01138A1527551D5F00AB31DF /* FantasmoSDKTestHarness */,
 				01A3A4F1270F14B000B7679F /* FantasmoSDKParkingExample */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		01138A1427551D5F00AB31DF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01138A2E27551F5B00AB31DF /* Settings.bundle in Resources */,
+				01138A2527551D6000AB31DF /* LaunchScreen.storyboard in Resources */,
+				01138A2227551D6000AB31DF /* Assets.xcassets in Resources */,
+				01138A2027551D5F00AB31DF /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01A3A4F0270F14B000B7679F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -743,6 +878,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		01138A1227551D5F00AB31DF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				01138A36275533D400AB31DF /* UIViewController+Extensions.swift in Sources */,
+				01138A1927551D5F00AB31DF /* AppDelegate.swift in Sources */,
+				01138A462755355A00AB31DF /* SettingsViewController.swift in Sources */,
+				01138A3E275534DC00AB31DF /* FilledButton.swift in Sources */,
+				01138A472755355A00AB31DF /* LocalizeViewController.swift in Sources */,
+				01138A37275533D400AB31DF /* UITextField+Extensions.swift in Sources */,
+				01138A482755355A00AB31DF /* MapViewController.swift in Sources */,
+				01138A442755355A00AB31DF /* MockQRCodeDetector.swift in Sources */,
+				01138A452755355A00AB31DF /* Settings.swift in Sources */,
+				01138A1B27551D5F00AB31DF /* SceneDelegate.swift in Sources */,
+				01138A392755344000AB31DF /* PermissionsViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		01A3A4EE270F14B000B7679F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -898,6 +1051,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		01138A2B27551F2000AB31DF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9468388A25921BAF005B1145 /* FantasmoSDK */;
+			targetProxy = 01138A2A27551F2000AB31DF /* PBXContainerItemProxy */;
+		};
 		01A3A507270F14E000B7679F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9468388A25921BAF005B1145 /* FantasmoSDK */;
@@ -911,6 +1069,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		01138A1E27551D5F00AB31DF /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				01138A1F27551D5F00AB31DF /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		01138A2327551D6000AB31DF /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				01138A2427551D6000AB31DF /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		01A3A4FA270F14B000B7679F /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -930,6 +1104,74 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		01138A2727551D6000AB31DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8V8339VAMG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FantasmoSDKTestHarness/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Test Harness";
+				INFOPLIST_KEY_NSCameraUsageDescription = "For QR code scanning and localization.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "For localization.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKTestHarness;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		01138A2827551D6000AB31DF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8V8339VAMG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FantasmoSDKTestHarness/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Test Harness";
+				INFOPLIST_KEY_NSCameraUsageDescription = "For QR code scanning and localization.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "For localization.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKTestHarness;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 		01A3A504270F14B200B7679F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1131,7 +1373,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fantasmo.sdk.FantasmoSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1160,7 +1402,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fantasmo.sdk.FantasmoSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1211,6 +1453,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		01138A2927551D6000AB31DF /* Build configuration list for PBXNativeTarget "FantasmoSDKTestHarness" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				01138A2727551D6000AB31DF /* Debug */,
+				01138A2827551D6000AB31DF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		01A3A503270F14B200B7679F /* Build configuration list for PBXNativeTarget "FantasmoSDKParkingExample" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

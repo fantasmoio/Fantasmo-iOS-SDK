@@ -7,56 +7,55 @@
 
 import ARKit
 
-// MARK:-
-
-/// Stateful filter for choosing the frames which are acceptable to localize against.
-/// If it is necessary to process a new sequence of frames, then `startOrRestartFiltering()` must be invoked.
+/// A chain of active `FMFrameFilter` instances through which ARFrames can be run.
+/// Frames are evaluated asynchronously and in order by each filter in the chain until
+/// either one of filters rejects the frame, or all of the filters accept it.
 class FMFrameFilterChain {
     
     private var lastAcceptTime = clock()
     
-    /// The number of seconds after which we forcibly accept a frame.
+    /// The number of seconds after which we forcibly accept a frame, bypassing the filters
     private let acceptanceThreshold: Float
     
-    /// Filter chain, in order of increasing computational cost
-    private let filters: [FMFrameFilter]
+    /// Active frame filters, in order of increasing computational cost
+    let filters: [FMFrameFilter]
     
-    init() {
-        let rc = RemoteConfig.config()
-        acceptanceThreshold = rc.frameAcceptanceThresholdTimeout
-        
+    init(config: RemoteConfig.Config) {
+
+        acceptanceThreshold = config.frameAcceptanceThresholdTimeout
+                
         var enabledFilters: [FMFrameFilter] = []
-        if rc.isTrackingStateFilterEnabled {
+        if config.isTrackingStateFilterEnabled {
             enabledFilters.append(FMTrackingStateFilter())
         }
         
-        if rc.isCameraPitchFilterEnabled {
+        if config.isCameraPitchFilterEnabled {
             let cameraPitchFilter = FMCameraPitchFilter(
-                maxUpwardTiltDegrees: rc.cameraPitchFilterMaxUpwardTilt,
-                maxDownwardTiltDegrees: rc.cameraPitchFilterMaxDownwardTilt
+                maxUpwardTiltDegrees: config.cameraPitchFilterMaxUpwardTilt,
+                maxDownwardTiltDegrees: config.cameraPitchFilterMaxDownwardTilt
             )
             enabledFilters.append(cameraPitchFilter)
         }
         
-        if rc.isMovementFilterEnabled {
+        if config.isMovementFilterEnabled {
             let movementFilter = FMMovementFilter(
-                threshold: rc.movementFilterThreshold
+                threshold: config.movementFilterThreshold
             )
             enabledFilters.append(movementFilter)
         }
         
-        if rc.isBlurFilterEnabled {
+        if config.isBlurFilterEnabled {
             let blurFilter = FMBlurFilter(
-                varianceThreshold: rc.blurFilterVarianceThreshold,
-                suddenDropThreshold: rc.blurFilterSuddenDropThreshold,
-                averageThroughputThreshold: rc.blurFilterAverageThroughputThreshold
+                varianceThreshold: config.blurFilterVarianceThreshold,
+                suddenDropThreshold: config.blurFilterSuddenDropThreshold,
+                averageThroughputThreshold: config.blurFilterAverageThroughputThreshold
             )
             enabledFilters.append(blurFilter)
         }
         
-        if rc.isImageQualityFilterEnabled, #available(iOS 13, *) {
+        if config.isImageQualityFilterEnabled, #available(iOS 13, *) {
             let imageQualityFilter = FMImageQualityFilter(
-                scoreThreshold: rc.imageQualityFilterScoreThreshold
+                scoreThreshold: config.imageQualityFilterScoreThreshold
             )
             enabledFilters.append(imageQualityFilter)
         }

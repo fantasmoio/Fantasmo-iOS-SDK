@@ -8,8 +8,8 @@
 import ARKit
 
 class FMCameraPitchFilter: FMFrameFilter {
-    private let maxUpwardTiltRadians: Float
-    private let maxDownwardTiltRadians: Float
+    let maxUpwardTiltRadians: Float
+    let maxDownwardTiltRadians: Float
     
     init(maxUpwardTiltDegrees: Float, maxDownwardTiltDegrees: Float) {
         self.maxUpwardTiltRadians = deg2rad(maxUpwardTiltDegrees)

@@ -85,7 +85,7 @@ class FMLocationManager: NSObject {
         }
     }
     
-    private var frameFilterChain = FMFrameFilterChain()
+    private var frameFilterChain = FMFrameFilterChain(config: RemoteConfig.config())
     
     private var behaviorRequester: BehaviorRequester?
     

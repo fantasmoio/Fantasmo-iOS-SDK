@@ -29,7 +29,7 @@ class SDKFilterTests: XCTestCase {
     
     // note: this test will not fail and not throw an error code if the pixelBuffer assignment fails
     func testMovementFilter() {
-        let filter = FMMovementFilter()
+        let filter = FMMovementFilter(threshold: 0.001)
         var transform = simd_float4x4(1)
         var pixelBuffer: CVPixelBuffer? = nil
         CVPixelBufferCreate(kCFAllocatorDefault, 64, 64, kCVPixelFormatType_OneComponent8, nil, &pixelBuffer)
@@ -48,7 +48,7 @@ class SDKFilterTests: XCTestCase {
 
     // note: this test will not fail and not throw an error code if the nonnilBuffer assignment fails
     func testCameraPitchFilter() {
-        let filter = FMCameraPitchFilter()
+        let filter = FMCameraPitchFilter(maxUpwardTiltDegrees: 30, maxDownwardTiltDegrees: 65)
         var pixelBuffer: CVPixelBuffer? = nil
         CVPixelBufferCreate(kCFAllocatorDefault, 64, 64, kCVPixelFormatType_OneComponent8, nil, &pixelBuffer)
         var pitch : Float = deg2rad(-90)
@@ -73,7 +73,7 @@ class SDKFilterTests: XCTestCase {
     }
     
     func testBlurFilter() {
-        let filter = FMBlurFilter()
+        let filter = FMBlurFilter(varianceThreshold: 250, suddenDropThreshold: 0.4, averageThroughputThreshold: 0.25)
         let dayScan = UIImage(named: "dayScan", in: Bundle(for: type(of: self)), compatibleWith: nil)
         let dayScanFrame = MockFrame(capturedImage: dayScan!.pixelBuffer()!)
         let nightScan = UIImage(named: "nightScan", in: Bundle(for: type(of: self)), compatibleWith: nil)

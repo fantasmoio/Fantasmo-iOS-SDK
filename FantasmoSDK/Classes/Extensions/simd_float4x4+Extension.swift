@@ -7,7 +7,7 @@
 
 import simd
 
-extension simd_float4x4: CustomStringConvertible {
+extension simd_float4x4 {
     
     static let rotationAboutXAxisByPiRad = simd_float4x4( simd_quatf(angle: .pi, axis: SIMD3(x: 1, y: 0, z: 0)) )
 

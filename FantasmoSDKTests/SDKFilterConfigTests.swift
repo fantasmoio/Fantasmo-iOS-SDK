@@ -69,4 +69,13 @@ class SDKFilterConfigTests: XCTestCase {
         XCTAssertEqual(blurFilter.suddenDropThreshold, config.blurFilterSuddenDropThreshold)
         XCTAssertEqual(blurFilter.averageThroughputThreshold, config.blurFilterAverageThroughputThreshold)
     }
+    
+    func testImageQualityFilter() throws {
+        let config = getTestConfig("image-quality-filter")
+        let filterChain = FMFrameFilterChain(config: config)
+        XCTAssertEqual(filterChain.filters.count, 1)
+        
+        let imageQualityFilter = filterChain.filters.first as! FantasmoSDK.FMImageQualityFilter
+        XCTAssertEqual(imageQualityFilter.scoreThreshold, config.imageQualityFilterScoreThreshold)
+    }
 }

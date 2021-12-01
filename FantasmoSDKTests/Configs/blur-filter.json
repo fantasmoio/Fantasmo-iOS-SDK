@@ -12,5 +12,6 @@
     "frame_acceptance_threshold_timeout": 0,
     "camera_pitch_filter_max_upward_tilt": 0,
     "camera_pitch_filter_max_downward_tilt": 0,
-    "image_quality_filter_score_threshold": 0
+    "image_quality_filter_score_threshold": 0,
+    "movement_filter_threshold": 0,
 }

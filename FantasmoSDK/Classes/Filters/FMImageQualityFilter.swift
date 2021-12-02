@@ -53,7 +53,7 @@ class FMImageQualityFilter: FMFrameFilter {
         mlModel = try? ImageQualityModel(configuration: MLModelConfiguration())
     }
     
-    private func makeResizedPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> UnsafeMutablePointer<UInt8>? {
+    func makeResizedPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> CGContext? {
         var cgImage: CGImage?
         VTCreateCGImageFromCVPixelBuffer(pixelBuffer, options: nil, imageOut: &cgImage)
         guard let cgImage = cgImage else {
@@ -75,7 +75,7 @@ class FMImageQualityFilter: FMFrameFilter {
         
         let targetRect = CGRect(x: 0, y: 0, width: CGFloat(imageWidth), height: CGFloat(imageHeight))
         context.draw(cgImage, in: targetRect)
-        return newPixelBuffer
+        return context
     }
     
     public func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
@@ -89,7 +89,8 @@ class FMImageQualityFilter: FMFrameFilter {
         }
         
         // Resize the pixel buffer down to the expected input size
-        guard let resizedPixelBuffer = makeResizedPixelBuffer(frame.capturedImage) else {
+        guard let resizedPixelBufferContext = makeResizedPixelBuffer(frame.capturedImage),
+              let resizedPixelBuffer = UnsafePointer<UInt8>(OpaquePointer(resizedPixelBufferContext.data)) else {
             log.error("failed to resize pixel buffer")
             return .accepted
         }

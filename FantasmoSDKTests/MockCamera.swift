@@ -7,8 +7,10 @@
 
 import Foundation
 import ARKit
+@testable import FantasmoSDK
 
-class MockCamera : FMCamera {
+class MockCamera : FantasmoSDK.FMCamera {
+    
     var transform: simd_float4x4
     
     var eulerAngles: simd_float3

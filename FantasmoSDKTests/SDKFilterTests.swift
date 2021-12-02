@@ -8,6 +8,9 @@
 import XCTest
 import CoreLocation
 import ARKit
+@testable import FantasmoSDK
+
+typealias FMFrameFilterResult = FantasmoSDK.FMFrameFilterResult
 
 class SDKFilterTests: XCTestCase {
 
@@ -29,7 +32,7 @@ class SDKFilterTests: XCTestCase {
     
     // note: this test will not fail and not throw an error code if the pixelBuffer assignment fails
     func testMovementFilter() {
-        let filter = FMMovementFilter(threshold: 0.001)
+        let filter = FantasmoSDK.FMMovementFilter(threshold: 0.001)
         var transform = simd_float4x4(1)
         var pixelBuffer: CVPixelBuffer? = nil
         CVPixelBufferCreate(kCFAllocatorDefault, 64, 64, kCVPixelFormatType_OneComponent8, nil, &pixelBuffer)
@@ -48,32 +51,32 @@ class SDKFilterTests: XCTestCase {
 
     // note: this test will not fail and not throw an error code if the nonnilBuffer assignment fails
     func testCameraPitchFilter() {
-        let filter = FMCameraPitchFilter(maxUpwardTiltDegrees: 30, maxDownwardTiltDegrees: 65)
+        let filter = FantasmoSDK.FMCameraPitchFilter(maxUpwardTiltDegrees: 30, maxDownwardTiltDegrees: 65)
         var pixelBuffer: CVPixelBuffer? = nil
         CVPixelBufferCreate(kCFAllocatorDefault, 64, 64, kCVPixelFormatType_OneComponent8, nil, &pixelBuffer)
         var pitch : Float = deg2rad(-90)
         if let nonnilBuffer = pixelBuffer {
             var frame = MockFrame(fmCamera: MockCamera(pitch: pitch), capturedImage: nonnilBuffer)
-            XCTAssertEqual(filter.accepts(frame), FMFrameFilterResult.rejected(reason: .pitchTooLow))
+            XCTAssertEqual(filter.accepts(frame), .rejected(reason: .pitchTooLow))
             pitch = deg2rad(-65)
             frame = MockFrame(fmCamera: MockCamera(pitch: pitch), capturedImage: nonnilBuffer)
-            XCTAssertEqual(filter.accepts(frame), FMFrameFilterResult.accepted)
+            XCTAssertEqual(filter.accepts(frame), .accepted)
             pitch = deg2rad(0)
             frame = MockFrame(fmCamera: MockCamera(pitch: pitch), capturedImage: nonnilBuffer)
-            XCTAssertEqual(filter.accepts(frame), FMFrameFilterResult.accepted)
+            XCTAssertEqual(filter.accepts(frame), .accepted)
             pitch = deg2rad(30)
             frame = MockFrame(fmCamera: MockCamera(pitch: pitch), capturedImage: nonnilBuffer)
-            XCTAssertEqual(filter.accepts(frame), FMFrameFilterResult.accepted)
+            XCTAssertEqual(filter.accepts(frame), .accepted)
             pitch = deg2rad(60)
             frame = MockFrame(fmCamera: MockCamera(pitch: pitch), capturedImage: nonnilBuffer)
-            XCTAssertEqual(filter.accepts(frame), FMFrameFilterResult.rejected(reason: .pitchTooHigh))
+            XCTAssertEqual(filter.accepts(frame), .rejected(reason: .pitchTooHigh))
        } else {
             print ("Couldn't allocate mock pixel buffer")
         }
     }
     
     func testBlurFilter() {
-        let filter = FMBlurFilter(varianceThreshold: 250, suddenDropThreshold: 0.4, averageThroughputThreshold: 0.25)
+        let filter = FantasmoSDK.FMBlurFilter(varianceThreshold: 250, suddenDropThreshold: 0.4, averageThroughputThreshold: 0.25)
         let dayScan = UIImage(named: "dayScan", in: Bundle(for: type(of: self)), compatibleWith: nil)
         let dayScanFrame = MockFrame(capturedImage: dayScan!.pixelBuffer()!)
         let nightScan = UIImage(named: "nightScan", in: Bundle(for: type(of: self)), compatibleWith: nil)
@@ -99,5 +102,44 @@ class SDKFilterTests: XCTestCase {
         XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
         XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
         XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
+    }
+    
+    func testImageQualityFilterResizesPixelBuffer() {
+        let inParkingImage = UIImage(named: "inParking", in: Bundle(for: type(of: self)), compatibleWith: nil)
+        let testPixelBuffer = inParkingImage!.pixelBuffer()!
+        let imageQualityFilter = FantasmoSDK.FMImageQualityFilter(scoreThreshold: 0)
+        let resizedPixelBufferContext = imageQualityFilter.makeResizedPixelBuffer(testPixelBuffer)
+        // Check the returned context has a buffer pointer
+        XCTAssertNotNil(resizedPixelBufferContext?.data)
+        let cgImage = resizedPixelBufferContext!.makeImage()
+        XCTAssertNotNil(cgImage)
+        // Check we can create an image from the buffer and that it's the correct size
+        let resizedImage = UIImage(cgImage: cgImage!)
+        XCTAssertEqual(resizedImage.size.width, 320)
+        XCTAssertEqual(resizedImage.size.height, 240)
+    }
+    
+    func testImageQualityFilterScoreAboveThreshold() {
+        let inParkingImage = UIImage(named: "inParking", in: Bundle(for: type(of: self)), compatibleWith: nil)
+        let pixelBuffer = inParkingImage!.pixelBuffer()!
+        let mockFrame = MockFrame(capturedImage: pixelBuffer)
+        let imageQualityFilter = FantasmoSDK.FMImageQualityFilter(scoreThreshold: 0.0)
+        let filterResult = imageQualityFilter.accepts(mockFrame)
+        XCTAssertEqual(filterResult, .accepted)
+        // Check that a image quality score was given
+        XCTAssertGreaterThan(imageQualityFilter.lastImageQualityScore, 0.0)
+        XCTAssertLessThanOrEqual(imageQualityFilter.lastImageQualityScore, 1.0)
+    }
+
+    func testImageQualityFilterScoreBelowThreshold() {
+        let inParkingImage = UIImage(named: "inParking", in: Bundle(for: type(of: self)), compatibleWith: nil)
+        let pixelBuffer = inParkingImage!.pixelBuffer()!
+        let mockFrame = MockFrame(capturedImage: pixelBuffer)
+        let imageQualityFilter = FantasmoSDK.FMImageQualityFilter(scoreThreshold: 1.0)
+        let filterResult = imageQualityFilter.accepts(mockFrame)
+        XCTAssertEqual(filterResult, .rejected(reason: .imageQualityScoreBelowThreshold))
+        // Check that a image quality score was given
+        XCTAssertGreaterThan(imageQualityFilter.lastImageQualityScore, 0.0)
+        XCTAssertLessThanOrEqual(imageQualityFilter.lastImageQualityScore, 1.0)
     }
 }

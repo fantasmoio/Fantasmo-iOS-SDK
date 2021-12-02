@@ -7,9 +7,11 @@
 
 import Foundation
 import ARKit
+@testable import FantasmoSDK
 
-class MockFrame : FMFrame {
-    var fmCamera: FMCamera
+class MockFrame : FantasmoSDK.FMFrame {
+    
+    var fmCamera: FantasmoSDK.FMCamera
     
     var capturedImage: CVPixelBuffer
     
@@ -19,7 +21,7 @@ class MockFrame : FMFrame {
     
     var deviceOrientation: UIDeviceOrientation
     
-    init(fmCamera: FMCamera = MockCamera(), capturedImage: CVPixelBuffer, transformOfDeviceInWorldCS: simd_float4x4 = simd_float4x4(1), transformOfVirtualDeviceInWorldCS: simd_float4x4 = simd_float4x4(1), deviceOrientation: UIDeviceOrientation = .portrait) {
+    init(fmCamera: FantasmoSDK.FMCamera = MockCamera(), capturedImage: CVPixelBuffer, transformOfDeviceInWorldCS: simd_float4x4 = simd_float4x4(1), transformOfVirtualDeviceInWorldCS: simd_float4x4 = simd_float4x4(1), deviceOrientation: UIDeviceOrientation = .portrait) {
         self.fmCamera = fmCamera
         self.capturedImage = capturedImage
         self.transformOfDeviceInWorldCS = transformOfDeviceInWorldCS

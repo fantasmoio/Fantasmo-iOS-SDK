@@ -8,6 +8,7 @@
 import XCTest
 import CoreLocation
 import ARKit
+@testable import FantasmoSDK
 
 class SDKGeometricTests: XCTestCase {
 

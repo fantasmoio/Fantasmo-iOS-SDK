@@ -1,6 +1,8 @@
 name: Swift Integration Tests
 
 on:
+  workflow_dispatch:
+    branches:
   pull_request:
     branches:
   push:
@@ -27,4 +29,4 @@ jobs:
           scheme: FantasmoSDKTests
           destination: ${{ matrix.destination }}
           action: test
-          # skip-testing: 'FantasmoSDKTests/SDKFilterTests/testBlurFilter'
+          skip-testing: 'FantasmoSDKTests/SDKFilterTests/testBlurFilter'

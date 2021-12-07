@@ -1,6 +1,8 @@
 name: Swift Integration Tests
 
 on:
+  workflow_dispatch:
+    branches:
   pull_request:
     branches:
   push:
@@ -14,7 +16,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        destination: ['platform=iOS Simulator,OS=14.4,name=iPhone 12 Pro Max']
+        destination: ['platform=iOS Simulator,OS=15.0,name=iPhone 12 Pro Max']
 
     steps:
       - name: Checkout Code

@@ -28,5 +28,5 @@ jobs:
           project: FantasmoSDK.xcodeproj
           scheme: FantasmoSDKTests
           destination: ${{ matrix.destination }}
-          action: clean test
+          action: test
           skip-testing: 'FantasmoSDKTests/SDKFilterTests/testBlurFilter'

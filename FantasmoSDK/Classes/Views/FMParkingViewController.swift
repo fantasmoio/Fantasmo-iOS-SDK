@@ -179,13 +179,17 @@ public final class FMParkingViewController: UIViewController {
         }
     }
     
-    /// Allows host apps to manually provide a location update.
+    /// Allows host apps to manually provide a location update when `usesInternalLocationManager` is set to `false`.
     ///
     /// - Parameter location: the device's current location.
     ///
-    /// This method can only be used when `usesInternalLocationManager` is set to `false`.
+    /// This method has no effect when `usesInternalLocationManager` is set to `true`.
     public func updateLocation(_ location: CLLocation) {
-        guard !usesInternalLocationManager, state == .localizing else {
+        guard !usesInternalLocationManager else {
+            log.warning("`updateLocation:` has no effect when `usesInternalLocationManager` is set to `true`.")
+            return
+        }
+        guard state == .localizing else {
             return
         }
         fmLocationManager.updateLocation(location)

@@ -115,6 +115,18 @@ public final class FMParkingViewController: UIViewController {
         delegate?.parkingViewControllerDidStartQRScanning(self)
     }
     
+    /// Skips the QR-code scanning step and starts localizing.
+    ///
+    /// This method can be used if a QR code is illegible or after a code was manually entered by the user.
+    public func skipQRScanning() {
+        if state != .qrScanning {
+            return
+        }
+        // Set an AR anchor now, since we didn't scan a QR code
+        fmLocationManager.setAnchor()
+        startLocalizing()
+    }
+    
     // MARK: -
     // MARK: Localization
         

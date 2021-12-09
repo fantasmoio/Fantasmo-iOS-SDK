@@ -13,7 +13,7 @@ import UIKit
 struct FMLocalizationRequest {
     var isSimulation: Bool
     var simulationZone: FMZone.ZoneType
-    var approximateCoordinate: CLLocationCoordinate2D
+    var approximateLocation: CLLocation
     var relativeOpenCVAnchorPose: FMPose?
     var analytics: FMLocalizationAnalytics
 }
@@ -84,7 +84,7 @@ class FMApi {
             return
         }
         
-        let params = getParams(for: frame, image: image, request: request)
+        let params = getLocalizeParams(for: frame, image: image, request: request)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -211,7 +211,7 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func getParams(for frame: ARFrame, image: ImageEncoder.Image, request: FMLocalizationRequest) -> [String : String?] {
+    private func getLocalizeParams(for frame: ARFrame, image: ImageEncoder.Image, request: FMLocalizationRequest) -> [String : String?] {
         var params: [String : String?]
         
         // mock if simulation
@@ -230,7 +230,7 @@ class FMApi {
                                           withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                           withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
             
-            let coordinate = request.approximateCoordinate
+            let location = request.approximateLocation
 
             let events = request.analytics.frameEvents
             let frameEventCounts = [
@@ -242,12 +242,14 @@ class FMApi {
                 "total": events.total,
             ]
             
+            // TODO - serialize these params in one go instead of using individual json encoders for each property
             params = [
                 "intrinsics" : intrinsics.toJson(),
                 "gravity" : pose.orientation.toJson(),
                 "capturedAt" : String(NSDate().timeIntervalSince1970),
                 "uuid" : UUID().uuidString,
-                "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
+                
+                "location": location.toJson(),
 
                 // device characteristics
                 "udid": UIDevice.current.identifierForVendor?.uuidString,

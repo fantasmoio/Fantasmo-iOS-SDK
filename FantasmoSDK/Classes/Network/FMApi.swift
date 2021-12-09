@@ -163,17 +163,17 @@ class FMApi {
         
         // set up request parameters
         let params: [String: Any] = [
-            "coordinate": [
-                "latitude": location.coordinate.latitude,
-                "longitude": location.coordinate.longitude,
-            ],
-            "altitude": location.altitude,
-            "horizontalAccuracy": location.horizontalAccuracy,
-            "verticalAccuracy": location.verticalAccuracy,
-            "timestamp": location.timestamp.timeIntervalSince1970
+            "location": [
+                "coordinate": [
+                    "latitude": location.coordinate.latitude,
+                    "longitude": location.coordinate.longitude,
+                ],
+                "altitude": location.altitude,
+                "horizontalAccuracy": location.horizontalAccuracy,
+                "verticalAccuracy": location.verticalAccuracy,
+                "timestamp": location.timestamp.timeIntervalSince1970
+            ]
         ]
-        
-        // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
             // handle valid but erroneous response
             guard let data = data else {

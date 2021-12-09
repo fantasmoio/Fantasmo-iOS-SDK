@@ -148,25 +148,29 @@ class FMApi {
         )
     }
     
-    /// Check if a given zone is within a radius of our location.
+    /// Check if a given zone is *near* the supplied location.
     /// Currently only `parking` is supported.
     ///
     /// - Parameters:
     ///   - zone: The zone to search for
-    ///   - coordinate: Center of area to search for
-    ///   - radius: Radius, in meters, within which to search
+    ///   - location: Center of area to search
     ///   - completion: Completion closure
     ///   - error: Error closure
     func sendZoneInRadiusRequest(_ zone: FMZone.ZoneType,
-                                 coordinate: CLLocationCoordinate2D,
-                                 radius: Int,
+                                 location: CLLocation,
                                  completion: @escaping RadiusResult,
                                  error: @escaping ErrorResult) {
         
         // set up request parameters
-        let params = [
-            "radius": String(radius),
-            "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
+        let params: [String: Any] = [
+            "coordinate": [
+                "latitude": location.coordinate.latitude,
+                "longitude": location.coordinate.longitude,
+            ],
+            "altitude": location.altitude,
+            "horizontalAccuracy": location.horizontalAccuracy,
+            "verticalAccuracy": location.verticalAccuracy,
+            "timestamp": location.timestamp.timeIntervalSince1970
         ]
         
         // set up completion closure

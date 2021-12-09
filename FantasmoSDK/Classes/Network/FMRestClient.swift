@@ -12,6 +12,7 @@ import Foundation
 struct FMRestClient {
     
     enum RestClientError: Error {
+        case badRequest
         case badResponse
     }
     
@@ -20,7 +21,35 @@ struct FMRestClient {
     
     // MARK: - internal methods
 
-    /// Post a query with an optional image to the CPS server
+    /// Make a POST request with parameters encoded as JSON
+    ///
+    /// - Parameters:
+    ///   - endpoint: The API endpoint to post to
+    ///   - parameters: Parameters to be JSON encoded and sent in the request body
+    ///   - token: Optional API security token
+    ///   - completion: Completion closure
+    ///   - error: Error closure
+    static func post(_ endpoint: FMApiRouter.ApiEndpoint,
+                     parameters: [String: Any],
+                     token: String?,
+                     completion: RestResult? = nil,
+                     error: RestError? = nil) {
+        
+        var request = Self.postRequestForEndpoint(endpoint, token: token)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        log.info(String(describing: request.url), parameters: parameters)
+                
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: parameters, options: []) else {
+            let badRequestError = FMError(RestClientError.badRequest)
+            log.error(badRequestError)
+            error?(badRequestError)
+            return
+        }
+        
+        Self.post(data: jsonData, with: request, completion: completion, error: error)
+    }
+    
+    /// Make a POST request with image data and parameters
     ///
     /// - Parameters:
     ///   - endpoint: The API endpoint to post to
@@ -31,19 +60,18 @@ struct FMRestClient {
     ///   - error: Error closure
     static func post(_ endpoint: FMApiRouter.ApiEndpoint,
                      parameters: [String : String?],
-                     imageData: Data? = nil,
+                     imageData: Data,
                      token: String?,
                      completion: RestResult? = nil,
                      error: RestError? = nil) {
         
-        let request = Self.requestForEndpoint(endpoint, token: token)
+        var request = Self.postRequestForEndpoint(endpoint, token: token)
+        request.setValue("multipart/form-data; boundary=\(Data.boundary)", forHTTPHeaderField: "Content-Type")
         log.info(String(describing: request.url), parameters: parameters)
         
         var data = Data()
         data.appendParameters(parameters)
-        if let imageData = imageData {
-            data.appendImage(imageData)
-        }
+        data.appendImage(imageData)
         data.appendFinalBoundary()
         
         Self.post(data: data, with: request, completion: completion, error: error)
@@ -84,14 +112,13 @@ struct FMRestClient {
     ///   - endpoint: The API endpoint to post to
     ///   - token: Optional API security token
     /// - Returns: POST request containing server URL, endpoint, token header, and `multipart/from-data` header
-    private static func requestForEndpoint(_ endpoint: FMApiRouter.ApiEndpoint, token: String?) -> URLRequest {
+    private static func postRequestForEndpoint(_ endpoint: FMApiRouter.ApiEndpoint, token: String?) -> URLRequest {
         var request = URLRequest(url: FMApiRouter.urlForEndpoint(endpoint))
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         request.httpMethod = "POST"
         if let token = token {
             request.setValue(token, forHTTPHeaderField: "Fantasmo-Key")
         }
-        request.setValue("multipart/form-data; boundary=\(Data.boundary)", forHTTPHeaderField: "Content-Type")
         return request
     }
 }

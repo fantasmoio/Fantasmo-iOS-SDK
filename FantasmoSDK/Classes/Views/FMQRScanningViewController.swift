@@ -13,6 +13,22 @@ public class FMQRScanningViewController: UIViewController {
 
     var toolbar: FMToolbar!
     
+    var skipButton: UIButton!
+    
+    @objc func handleSkipButton(_ sender: UIButton) {
+        guard let parkingViewController = self.parent as? FMParkingViewController else {
+            return
+        }
+        parkingViewController.skipQRScanning()
+    }
+    
+    @objc func handleCloseButton(_ sender: UIButton) {
+        guard let parkingViewController = self.parent as? FMParkingViewController else {
+            return
+        }
+        parkingViewController.dismiss(animated: true, completion: nil)
+    }
+        
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,15 +42,22 @@ public class FMQRScanningViewController: UIViewController {
         toolbar.title = "VERIFY PARKING"
         toolbar.closeButton.addTarget(self, action: #selector(handleCloseButton(_:)), for: .touchUpInside)
         view.addSubview(toolbar)
+        
+        let skipButtonTitle = "Skip"
+        let skipButtonRange = NSRange(location: 0, length: skipButtonTitle.count)
+        let skipButtonTitleString = NSMutableAttributedString(string: skipButtonTitle)
+        skipButtonTitleString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: skipButtonRange)
+        skipButtonTitleString.addAttribute(.foregroundColor, value: UIColor.systemGray.cgColor, range: skipButtonRange)
+        skipButtonTitleString.addAttribute(.font, value: UIFont.systemFont(ofSize: 14.0), range: skipButtonRange)
+        
+        skipButton = UIButton()
+        skipButton.addTarget(self, action: #selector(handleSkipButton(_:)), for: .touchUpInside)
+        skipButton.setAttributedTitle(skipButtonTitleString, for: .normal)
+        skipButton.contentEdgeInsets = .init(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+        skipButton.sizeToFit()
+        view.addSubview(skipButton)
     }
     
-    @objc private func handleCloseButton(_ sender: UIButton) {
-        guard let parkingViewController = self.parent as? FMParkingViewController else {
-            return
-        }
-        parkingViewController.dismiss(animated: true, completion: nil)
-    }
-        
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -77,6 +100,11 @@ public class FMQRScanningViewController: UIViewController {
         let labelAreaHeight = (bounds.midY - 0.5 * cutoutSize) - toolbarRect.maxY
         labelRect.origin.y = toolbarRect.maxY + 0.5 * labelAreaHeight - 0.5 * labelRect.height
         label.frame = labelRect
+        
+        var skipButtonRect = skipButton.frame
+        skipButtonRect.origin.x = floor(safeAreaBounds.midX - 0.5 * skipButtonRect.width)
+        skipButtonRect.origin.y = cutoutRect.maxY + 30.0
+        skipButton.frame = skipButtonRect
     }
 }
 

@@ -167,10 +167,14 @@ If this occurs you should check that you're correctly providing the location upd
 
 ### QR Codes
 
-Scanning a QR code is the first and only step before localizing. Because we are trying to localize a vehicle and not the device itself, we need a way to determine the vehicle's position relative to the device. This is accomplished by setting an anchor in the ARSession and it's done automatically when the user scans a QR code. The SDK doesn't care about the contents of the QR code and by default will start localizing after any QR code is detected. If your app _does_ care about the contents of the QR code, they can be validated by implementing the the `FMParkingViewControllerDelegate` method:
+Scanning a QR code is the first and only step before localizing. Because we are trying to localize a vehicle and not the device itself, we need a way to determine the vehicle's position relative to the device. This is accomplished by setting an anchor in the ARSession and it's done automatically when the user scans a QR code. 
+
+The SDK doesn't care about the contents of the QR code and by default will start localizing after any QR code is detected. If your app _does_ care about the contents of the QR code, they can be validated by implementing the the `FMParkingViewControllerDelegate` method:
 
 ```swift
-func parkingViewController(_ parkingViewController: FMParkingViewController, didScanQRCode qrCode: CIQRCodeFeature, continueBlock: @escaping ((Bool) -> Void)) {
+func parkingViewController(_ parkingViewController: FMParkingViewController,
+                           didScanQRCode qrCode: CIQRCodeFeature,
+                           continueBlock: @escaping ((Bool) -> Void)) {
     // Validate the QR code
     let isValidCode = qrCode.messageString != nil
     
@@ -185,6 +189,14 @@ func parkingViewController(_ parkingViewController: FMParkingViewController, did
 ```
 
 **Important:** If you implement this method, you must call the `continueBlock` with a boolean value. A value of `true` indicates the QR code is valid and that localization should start. Passing `false` to this block indicates the code is invalid and instructs the parking view to scan for more QR codes. This block may be called synchronously or asynchronously but must be done so on the main queue.
+
+If a QR code cannot be scanned and/or you've collected the necessary info from the user manually, then you may skip this step and proceed directly to localization.
+
+```swift
+ @objc func handleSkipButton(_ sender: UIButton) {
+     parkingViewController.skipQRScanning()
+ }
+```
 
 ### Localizing 
 
@@ -219,24 +231,6 @@ func parkingViewController(_ parkingViewController: FMParkingViewController,
 }
 ```
 
-### Behavior Requests
-
-To help the user localize successfully and to maximize the result quality, camera input is filtered against common problems and behavior requests are displayed to the user. These are messages explaining what the user should be doing with their device in order to localize properly. For example, if the users device is aimed at the ground, you may receive a `"Tilt your device up"` request. 
-
-If you're using the default localization UI, these requests are already displayed to the user. If you've registered your own custom UI, you should use the `didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest)` method of `FMLocalizingViewControllerProtocol` to display these requests to users. 
-
-```swift
-class MyCustomLocalizingViewController: UIViewController, FMLocalizingViewControllerProtocol {
-  
-    @IBOutlet var label: UILabel!
-  
-    func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest) {
-        // display the requested behavior to the user
-        label.text = behavior.description
-    }
-}
-```
-
 As of right now behavior requests are only available in English. More languages coming soon.
 
 ### Customizing UI
@@ -265,7 +259,32 @@ parkingViewController.registerQRScanningViewController(MyCustomQRScanningViewCon
 parkingViewController.registerLocalizingViewController(MyCustomLocalizingViewController.self)
 ```
 
-**Important:** Your custom views are child view controllers of the `FMParkingViewController` and will be placed on top of a view that displays a live camera feed. Therefore your custom views should be semi-transparent, or contain some transparency to allow the user to see the camera underneath.
+*Tip:* Your custom views are child views of the `FMParkingViewController` and you can access the parking view from within your custom views.
+
+```swift
+// MyCustomViewController.swift
+let parkingViewController = self.parent as? FMParkingViewController
+```
+
+**Important:** Your custom views will be placed on top of a view that displays a live camera feed. Therefore your custom views should be semi-transparent, or contain some areas of transparency to allow the user to see the camera underneath.
+
+### Behavior Requests
+
+To help the user localize successfully and to maximize the result quality, camera input is filtered against common problems and behavior requests are displayed to the user. These are messages explaining what the user should be doing with their device in order to localize properly. For example, if the users device is aimed at the ground, you may receive a `"Tilt your device up"` request. 
+
+If you're using the default localization UI, these requests are already displayed to the user. If you've registered your own custom UI, you should use the `didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest)` method of `FMLocalizingViewControllerProtocol` to display these requests to users. 
+
+```swift
+class MyCustomLocalizingViewController: UIViewController, FMLocalizingViewControllerProtocol {
+  
+    @IBOutlet var label: UILabel!
+  
+    func didRequestLocalizationBehavior(_ behavior: FMBehaviorRequest) {
+        // display the requested behavior to the user
+        label.text = behavior.description
+    }
+}
+```
 
 ### Testing and Debugging 
 

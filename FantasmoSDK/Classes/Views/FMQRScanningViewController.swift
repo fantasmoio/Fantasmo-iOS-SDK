@@ -13,13 +13,28 @@ public class FMQRScanningViewController: UIViewController {
 
     var toolbar: FMToolbar!
     
-    var skipButton: UIButton!
+    var manualEntryButton: UIButton!
     
-    @objc func handleSkipButton(_ sender: UIButton) {
+    @objc func handleManualEntryButton(_ sender: UIButton) {
         guard let parkingViewController = self.parent as? FMParkingViewController else {
             return
         }
-        parkingViewController.skipQRScanning()
+        
+        let inputAlertControler = UIAlertController(title: "Enter QR Code", message: nil, preferredStyle: .alert)
+        inputAlertControler.addTextField()
+        let submitAction = UIAlertAction(title: "Submit", style: .default) { _ in
+            guard let qrCodeString = inputAlertControler.textFields?.first?.text else {
+                return
+            }
+            parkingViewController.enterQRCode(string: qrCodeString)
+        }
+        inputAlertControler.addAction(submitAction)
+        inputAlertControler.preferredAction = submitAction
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        inputAlertControler.addAction(cancelAction)
+        
+        present(inputAlertControler, animated: true)
     }
     
     @objc func handleCloseButton(_ sender: UIButton) {
@@ -43,19 +58,19 @@ public class FMQRScanningViewController: UIViewController {
         toolbar.closeButton.addTarget(self, action: #selector(handleCloseButton(_:)), for: .touchUpInside)
         view.addSubview(toolbar)
         
-        let skipButtonTitle = "Skip"
-        let skipButtonRange = NSRange(location: 0, length: skipButtonTitle.count)
-        let skipButtonTitleString = NSMutableAttributedString(string: skipButtonTitle)
-        skipButtonTitleString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: skipButtonRange)
-        skipButtonTitleString.addAttribute(.foregroundColor, value: UIColor.systemGray.cgColor, range: skipButtonRange)
-        skipButtonTitleString.addAttribute(.font, value: UIFont.systemFont(ofSize: 14.0), range: skipButtonRange)
+        let manualEntryButtonTitle = "Enter Manually"
+        let manualEntryButtonRange = NSRange(location: 0, length: manualEntryButtonTitle.count)
+        let manualEntryButtonTitleString = NSMutableAttributedString(string: manualEntryButtonTitle)
+        manualEntryButtonTitleString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: manualEntryButtonRange)
+        manualEntryButtonTitleString.addAttribute(.foregroundColor, value: UIColor.systemGray.cgColor, range: manualEntryButtonRange)
+        manualEntryButtonTitleString.addAttribute(.font, value: UIFont.systemFont(ofSize: 14.0), range: manualEntryButtonRange)
         
-        skipButton = UIButton()
-        skipButton.addTarget(self, action: #selector(handleSkipButton(_:)), for: .touchUpInside)
-        skipButton.setAttributedTitle(skipButtonTitleString, for: .normal)
-        skipButton.contentEdgeInsets = .init(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
-        skipButton.sizeToFit()
-        view.addSubview(skipButton)
+        manualEntryButton = UIButton()
+        manualEntryButton.addTarget(self, action: #selector(handleManualEntryButton(_:)), for: .touchUpInside)
+        manualEntryButton.setAttributedTitle(manualEntryButtonTitleString, for: .normal)
+        manualEntryButton.contentEdgeInsets = .init(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+        manualEntryButton.sizeToFit()
+        view.addSubview(manualEntryButton)
     }
     
     public override func viewDidLayoutSubviews() {
@@ -101,10 +116,10 @@ public class FMQRScanningViewController: UIViewController {
         labelRect.origin.y = toolbarRect.maxY + 0.5 * labelAreaHeight - 0.5 * labelRect.height
         label.frame = labelRect
         
-        var skipButtonRect = skipButton.frame
-        skipButtonRect.origin.x = floor(safeAreaBounds.midX - 0.5 * skipButtonRect.width)
-        skipButtonRect.origin.y = cutoutRect.maxY + 30.0
-        skipButton.frame = skipButtonRect
+        var manualEntryButtonRect = manualEntryButton.frame
+        manualEntryButtonRect.origin.x = floor(safeAreaBounds.midX - 0.5 * manualEntryButtonRect.width)
+        manualEntryButtonRect.origin.y = cutoutRect.maxY + 30.0
+        manualEntryButton.frame = manualEntryButtonRect
     }
 }
 

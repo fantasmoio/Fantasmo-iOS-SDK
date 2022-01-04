@@ -115,16 +115,41 @@ public final class FMParkingViewController: UIViewController {
         delegate?.parkingViewControllerDidStartQRScanning(self)
     }
     
-    /// Skips the QR-code scanning step and starts localizing.
+    /// Provide a manually-entered QR code string and proceed to localization.
     ///
-    /// This method can be used if a QR code is illegible or after a code was manually entered by the user.
-    public func skipQRScanning() {
+    /// If validation of the entered string is needed, it should be done in `parkingViewController(_:didEnterQRCodeString:continueBlock:)`
+    /// of your `FMParkingViewControllerDelegate`. This method does nothing if the QR-code scanner is inactive, or if another code is being
+    /// validated.
+    public func enterQRCode(string: String) {
         if state != .qrScanning {
             return
         }
-        // Set an AR anchor now, since we didn't scan a QR code
+        guard qrCodeAwaitingContinue == false, qrCodeDetector.detectedQRCode == nil else {
+            return  // Another code is being validated
+        }
+        // Set an AR anchor to use when localizing
         fmLocationManager.setAnchor()
-        startLocalizing()
+        guard let delegate = delegate else {
+            // No delegate set, continue immediately to localization
+            startLocalizing()
+            return
+        }
+        // Pass the entered code to the delegate along with a continueBlock
+        qrCodeAwaitingContinue = true
+        delegate.parkingViewController(self, didEnterQRCodeString: string) { [weak self] shouldContinue in
+            guard Thread.isMainThread else {
+                fatalError("continueBlock must be invoked on main thread")
+            }
+            guard let state = self?.state, state == .qrScanning else {
+                return
+            }
+            if shouldContinue {
+                self?.startLocalizing()
+            } else {
+                self?.qrCodeAwaitingContinue = false
+                self?.fmLocationManager.unsetAnchor()
+            }
+        }
     }
     
     // MARK: -
@@ -311,6 +336,7 @@ public final class FMParkingViewController: UIViewController {
     
     private func showChildViewController(_ childViewController: UIViewController?, animated: Bool) {
         let fromViewController = self.children.first
+        fromViewController?.presentedViewController?.dismiss(animated: animated, completion: nil)
         fromViewController?.willMove(toParent: nil)
         fromViewController?.removeFromParent()
                 
@@ -414,13 +440,13 @@ extension FMParkingViewController: ARSessionDelegate {
             }
             // A code has been detected, notify the scanning view
             qrScanningViewController?.didScanQRCode(qrCode)
+            // Set an AR anchor to use when localizing
+            fmLocationManager.setAnchor()
             guard let delegate = delegate else {
                 // No delegate set, continue immediately to localization.
                 startLocalizing()
                 return
             }
-            // Set an AR anchor to use when localizing
-            fmLocationManager.setAnchor()
             // Pass the scanned code to the delegate along with a continueBlock
             qrCodeAwaitingContinue = true
             delegate.parkingViewController(self, didScanQRCode: qrCode) { [weak self] shouldContinue in

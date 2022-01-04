@@ -65,9 +65,21 @@ class ParkingExampleViewController: UIViewController {
 extension ParkingExampleViewController: FMParkingViewControllerDelegate {
     
     func parkingViewController(_ parkingViewController: FMParkingViewController, didScanQRCode qrCode: CIQRCodeFeature, continueBlock: @escaping ((Bool) -> Void)) {
-        /// Optional validation of the QR code can be done here
+        /// Optional validation of a scanned QR code can be done here
         /// Note: If you choose to implement this method, you *must* call the `continueBlock` with the validation result
         let isValidCode = qrCode.messageString != nil
+        continueBlock(isValidCode)
+        /// Validation can also be done asynchronously.
+        ///
+        ///     APIService.validateQRCode(qrCode) { isValidCode in
+        ///         continueBlock(isValidCode)
+        ///     }
+    }
+    
+    func parkingViewController(_ parkingViewController: FMParkingViewController, didEnterQRCodeString qrCodeString: String, continueBlock: @escaping ((Bool) -> Void)) {
+        /// Optional validation of a manually-entered QR code string can be done here
+        /// Note: If you choose to implement this method, you *must* call the `continueBlock` with the validation result
+        let isValidCode = qrCodeString.isEmpty == false
         continueBlock(isValidCode)
         /// Validation can also be done asynchronously.
         ///

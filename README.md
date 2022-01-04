@@ -167,7 +167,7 @@ If this occurs you should check that you're correctly providing the location upd
 
 ### QR Codes
 
-Scanning a QR code is the first and only step before localizing. Because we are trying to localize a vehicle and not the device itself, we need a way to determine the vehicle's position relative to the device. This is accomplished by setting an anchor in the ARSession and it's done automatically when the user scans a QR code. 
+Scanning a QR code is the first and only step before localizing. Because we are trying to localize a vehicle and not the device itself, we need a way to determine the vehicle's position relative to the device. This is accomplished by setting an anchor in the `ARSession` and it's done automatically when the user scans a QR code. 
 
 The SDK doesn't care about the contents of the QR code and by default will start localizing after any QR code is detected. If your app _does_ care about the contents of the QR code, they can be validated by implementing the following method in your `FMParkingViewControllerDelegate`.
 

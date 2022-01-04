@@ -211,6 +211,8 @@ func parkingViewController(_ parkingViewController: FMParkingViewController,
 }
 ```
 
+**Important:** If you implement either of the QR code validation methods, you must call the `continueBlock` with a boolean value. A value of `true` indicates the QR code is valid and that localization should start. Passing `false` to this block indicates the code is invalid and allows the user to scan, or enter in a new code. This block may be called synchronously or asynchronously but must be done so on the main queue.
+
 ### Localizing 
 
 During localization, frames are continuously captured and sent to the server. Filtering logic in the SDK will automatically select the best frames, and it will issue behavior requests to the user to help improve the incoming images. Confidence in the location result increases during successive updates and clients can choose to stop localizing by dismissing the view, when a desired confidence level is reached.

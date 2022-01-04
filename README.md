@@ -169,7 +169,7 @@ If this occurs you should check that you're correctly providing the location upd
 
 Scanning a QR code is the first and only step before localizing. Because we are trying to localize a vehicle and not the device itself, we need a way to determine the vehicle's position relative to the device. This is accomplished by setting an anchor in the ARSession and it's done automatically when the user scans a QR code. 
 
-The SDK doesn't care about the contents of the QR code and by default will start localizing after any QR code is detected. If your app _does_ care about the contents of the QR code, they can be validated by implementing the the `FMParkingViewControllerDelegate` method:
+The SDK doesn't care about the contents of the QR code and by default will start localizing after any QR code is detected. If your app _does_ care about the contents of the QR code, they can be validated by implementing the following method in your `FMParkingViewControllerDelegate`.
 
 ```swift
 func parkingViewController(_ parkingViewController: FMParkingViewController,
@@ -188,14 +188,27 @@ func parkingViewController(_ parkingViewController: FMParkingViewController,
 }
 ```
 
-**Important:** If you implement this method, you must call the `continueBlock` with a boolean value. A value of `true` indicates the QR code is valid and that localization should start. Passing `false` to this block indicates the code is invalid and instructs the parking view to scan for more QR codes. This block may be called synchronously or asynchronously but must be done so on the main queue.
+### Manual QR Code Entry
 
-If a QR code cannot be scanned and/or you've collected the necessary info from the user manually, then you may skip this step and proceed directly to localization.
+If a code is unable to be scanned, you may want to have the user enter it manually. When using the default QR code scanning UI, this feature is implemented for you. Simply tap the _Enter Manually_ button and enter the code into the prompt. If you are using a custom UI, then you should prompt the user to enter the code and pass the string to the `enterQRCode(string:)` method of your parking view controller.
+
+Validating a manually-entered QR code is also optional and works the same as a validating a scanned one. Implement the following method in your `FMParkingViewControllerDelegate`.
 
 ```swift
- @objc func handleSkipButton(_ sender: UIButton) {
-     parkingViewController.skipQRScanning()
- }
+func parkingViewController(_ parkingViewController: FMParkingViewController,
+                           didEnterQRCodeString qrCodeString: String,
+                           continueBlock: @escaping ((Bool) -> Void)) {
+    // Validate the entered QR code
+    let isValidCode = qrCodeString.isEmpty == false
+    
+    // Call the continue block with the result
+    continueBlock(isValidCode)
+    
+    // Alternatively, validation can be done asynchronously
+    APIService.validateQRCode(qrCode) { isValidCode in
+        continueBlock(isValidCode)
+    }
+}
 ```
 
 ### Localizing 

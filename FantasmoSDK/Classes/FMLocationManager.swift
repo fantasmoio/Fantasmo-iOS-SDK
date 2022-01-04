@@ -69,10 +69,10 @@ class FMLocationManager: NSObject {
                 if let latitude = Double(components[0]), let longitude = Double(components[1]) {
                     return CLLocation(latitude: latitude, longitude: longitude)
                 } else {
-                    return CLLocation()
+                    return CLLocation.invalid
                 }
             } else {
-                return lastCLLocation ?? CLLocation()
+                return lastCLLocation ?? CLLocation.invalid
             }
         }
     }

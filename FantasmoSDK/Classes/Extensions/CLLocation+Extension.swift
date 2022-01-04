@@ -10,6 +10,11 @@ import CoreLocation
 
 extension CLLocation {
 
+    static var invalid: CLLocation {
+        let coord = kCLLocationCoordinate2DInvalid
+        return CLLocation(latitude: coord.latitude, longitude: coord.longitude)
+    }
+    
     /// Calculate distance treating lat and long as unitless Cartesian coordinates
     func degreeDistance(from: CLLocation) -> Double {
         let dLat = coordinate.latitude - from.coordinate.latitude

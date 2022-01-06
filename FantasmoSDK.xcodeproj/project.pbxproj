@@ -86,6 +86,7 @@
 		01A3A501270F14B200B7679F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01A3A4FF270F14B200B7679F /* LaunchScreen.storyboard */; };
 		01A3A509270F14EA00B7679F /* FantasmoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; };
 		01A3A50A270F14EA00B7679F /* FantasmoSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		01C0DB3E27626A5400FE6FB4 /* CLLocation+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C0DB3D27626A5400FE6FB4 /* CLLocation+Codable.swift */; };
 		406437FB26E7864300B38B45 /* FMFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FA26E7864300B38B45 /* FMFrame.swift */; };
 		406437FE26E787A300B38B45 /* FMCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FD26E787A200B38B45 /* FMCamera.swift */; };
 		4064380526E79C8100B38B45 /* MockCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4064380226E79C7A00B38B45 /* MockCamera.swift */; };
@@ -204,6 +205,7 @@
 		01A3A4FD270F14B200B7679F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01A3A500270F14B200B7679F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		01A3A502270F14B200B7679F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		01C0DB3D27626A5400FE6FB4 /* CLLocation+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocation+Codable.swift"; sourceTree = "<group>"; };
 		406437FA26E7864300B38B45 /* FMFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrame.swift; sourceTree = "<group>"; };
 		406437FD26E787A200B38B45 /* FMCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCamera.swift; sourceTree = "<group>"; };
 		4064380026E79C0D00B38B45 /* MockFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFrame.swift; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 				A36BAA48265431A50041E875 /* AssociatedObject.swift */,
 				A3590999269DAAC300A7BF5F /* UIDevice+Extension.swift */,
 				A02EA34826B9253900525308 /* Array+Extension.swift */,
+				01C0DB3D27626A5400FE6FB4 /* CLLocation+Codable.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -791,6 +794,7 @@
 				A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */,
 				A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */,
 				A3BA03BB263B6C7D00524D66 /* Angle.swift in Sources */,
+				01C0DB3E27626A5400FE6FB4 /* CLLocation+Codable.swift in Sources */,
 				A02646BB260CE44900A7FA6B /* FMApiRouter.swift in Sources */,
 				0123A4DF270F520800763758 /* FMLocationError.swift in Sources */,
 				A3B57315269C3B2D0089B5F5 /* BehaviorRequester.swift in Sources */,

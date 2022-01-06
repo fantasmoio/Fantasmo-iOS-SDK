@@ -61,18 +61,18 @@ class FMLocationManager: NSObject {
 
     /// An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
     /// Current implementation returns most recent location received from CoreLocation unless an override was set.
-    var approximateCoordinate: CLLocationCoordinate2D {
+    var approximateLocation: CLLocation {
         get {
             if let override = FMConfiguration.stringForInfoKey(.gpsLatLong) {
                 log.warning("Using location override", parameters: ["override": override])
                 let components = override.components(separatedBy:",")
                 if let latitude = Double(components[0]), let longitude = Double(components[1]) {
-                    return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+                    return CLLocation(latitude: latitude, longitude: longitude)
                 } else {
-                    return CLLocationCoordinate2D()
+                    return CLLocation.invalid
                 }
             } else {
-                return lastCLLocation?.coordinate ?? kCLLocationCoordinate2DInvalid
+                return lastCLLocation ?? CLLocation.invalid
             }
         }
     }
@@ -254,7 +254,7 @@ class FMLocationManager: NSObject {
         )
         
         // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second
-        guard CLLocationCoordinate2DIsValid(approximateCoordinate) else {
+        guard CLLocationCoordinate2DIsValid(approximateLocation.coordinate) else {
             let error = FMError(FMLocationError.invalidCoordinate)
             self.errors.append(error)
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
@@ -268,7 +268,7 @@ class FMLocationManager: NSObject {
         let localizationRequest = FMLocalizationRequest(
             isSimulation: isSimulation,
             simulationZone: simulationZone,
-            approximateCoordinate: approximateCoordinate,
+            approximateLocation: approximateLocation,
             relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
             analytics: localizationAnalytics
         )

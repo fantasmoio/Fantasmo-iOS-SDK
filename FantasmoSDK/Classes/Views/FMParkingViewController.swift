@@ -108,6 +108,43 @@ public final class FMParkingViewController: UIViewController {
         delegate?.parkingViewControllerDidStartQRScanning(self)
     }
     
+    /// Provide a manually-entered QR code string and proceed to localization.
+    ///
+    /// If validation of the entered string is needed, it should be done in `parkingViewController(_:didEnterQRCodeString:continueBlock:)`
+    /// of your `FMParkingViewControllerDelegate`. This method does nothing if the QR-code scanner is inactive, or if another code is being
+    /// validated.
+    public func enterQRCode(string: String) {
+        if state != .qrScanning {
+            return
+        }
+        guard qrCodeAwaitingContinue == false, qrCodeDetector.detectedQRCode == nil else {
+            return  // Another code is being validated
+        }
+        // Set an AR anchor to use when localizing
+        fmLocationManager.setAnchor()
+        guard let delegate = delegate else {
+            // No delegate set, continue immediately to localization
+            startLocalizing()
+            return
+        }
+        // Pass the entered code to the delegate along with a continueBlock
+        qrCodeAwaitingContinue = true
+        delegate.parkingViewController(self, didEnterQRCodeString: string) { [weak self] shouldContinue in
+            guard Thread.isMainThread else {
+                fatalError("continueBlock must be invoked on main thread")
+            }
+            guard let state = self?.state, state == .qrScanning else {
+                return
+            }
+            if shouldContinue {
+                self?.startLocalizing()
+            } else {
+                self?.qrCodeAwaitingContinue = false
+                self?.fmLocationManager.unsetAnchor()
+            }
+        }
+    }
+    
     // MARK: -
     // MARK: Localization
         
@@ -172,13 +209,17 @@ public final class FMParkingViewController: UIViewController {
         }
     }
     
-    /// Allows host apps to manually provide a location update.
+    /// Allows host apps to manually provide a location update when `usesInternalLocationManager` is set to `false`.
     ///
     /// - Parameter location: the device's current location.
     ///
-    /// This method can only be used when `usesInternalLocationManager` is set to `false`.
+    /// This method has no effect when `usesInternalLocationManager` is set to `true`.
     public func updateLocation(_ location: CLLocation) {
-        guard !usesInternalLocationManager, state == .localizing else {
+        guard !usesInternalLocationManager else {
+            log.warning("`updateLocation:` has no effect when `usesInternalLocationManager` is set to `true`.")
+            return
+        }
+        guard state == .localizing else {
             return
         }
         fmLocationManager.updateLocation(location)
@@ -288,6 +329,7 @@ public final class FMParkingViewController: UIViewController {
     
     private func showChildViewController(_ childViewController: UIViewController?, animated: Bool) {
         let fromViewController = self.children.first
+        fromViewController?.presentedViewController?.dismiss(animated: animated, completion: nil)
         fromViewController?.willMove(toParent: nil)
         fromViewController?.removeFromParent()
                 
@@ -391,13 +433,13 @@ extension FMParkingViewController: ARSessionDelegate {
             }
             // A code has been detected, notify the scanning view
             qrScanningViewController?.didScanQRCode(qrCode)
+            // Set an AR anchor to use when localizing
+            fmLocationManager.setAnchor()
             guard let delegate = delegate else {
                 // No delegate set, continue immediately to localization.
                 startLocalizing()
                 return
             }
-            // Set an AR anchor to use when localizing
-            fmLocationManager.setAnchor()
             // Pass the scanned code to the delegate along with a continueBlock
             qrCodeAwaitingContinue = true
             delegate.parkingViewController(self, didScanQRCode: qrCode) { [weak self] shouldContinue in

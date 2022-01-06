@@ -7,8 +7,7 @@
 
 import Foundation
 
-/// REST client for communication wiht CPS server
-/// Only supports POST with multipart-form data, as that's what the server needs
+/// REST client for communication with bff server
 struct FMRestClient {
     
     enum RestClientError: Error {
@@ -113,7 +112,7 @@ struct FMRestClient {
     ///   - token: Optional API security token
     /// - Returns: POST request containing server URL, endpoint, token header, and `multipart/from-data` header
     private static func postRequestForEndpoint(_ endpoint: FMApiRouter.ApiEndpoint, token: String?) -> URLRequest {
-        var request = URLRequest(url: FMApiRouter.urlForEndpoint(endpoint))
+        var request = URLRequest(url: endpoint.url)
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         request.httpMethod = "POST"
         if let token = token {

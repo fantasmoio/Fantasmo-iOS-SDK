@@ -23,7 +23,7 @@ public struct FMError: LocalizedError {
         self.type = type
         do {
             let decoded = try JSONDecoder().decode(ErrorResponse.self, from: errorResponse)
-            self.errorDescription = decoded.message
+            self.errorDescription = decoded.description
             self.cause = nil
         } catch {
             self.errorDescription = "JSON decoding error"

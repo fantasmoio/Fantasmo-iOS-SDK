@@ -33,7 +33,7 @@ public final class FMParkingViewController: UIViewController {
             return
         }
         FMApi.shared.token = FMConfiguration.accessToken()
-        FMApi.shared.sendZoneInRadiusRequest(.parking, location: location, completion: completion) { error in
+        FMApi.shared.sendIsLocalizationAvailableRequest(location: location, completion: completion) { error in
             // For now, clients only care if a zone was found, so an error condition can be treated as a `false` completion
             log.error(error)
             completion(false)

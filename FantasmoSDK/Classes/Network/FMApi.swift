@@ -54,7 +54,7 @@ class FMApi {
     var imageEncoder = ImageEncoder(largestSingleOutputDimension: 1280)
     
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
-    typealias RadiusResult = (Bool) -> Void
+    typealias IsLocalizationAvailableResult = (Bool) -> Void
     typealias ErrorResult = (FMError) -> Void
 
     enum ApiError: Error {
@@ -148,25 +148,29 @@ class FMApi {
         )
     }
     
-    /// Check if a given zone is within a radius of our location.
-    /// Currently only `parking` is supported.
+    /// Check if localization is available *near* the supplied location.
     ///
     /// - Parameters:
-    ///   - zone: The zone to search for
-    ///   - coordinate: Center of area to search for
-    ///   - radius: Radius, in meters, within which to search
+    ///   - location: Center of area to search
     ///   - completion: Completion closure
     ///   - error: Error closure
-    func sendZoneInRadiusRequest(_ zone: FMZone.ZoneType,
-                                 coordinate: CLLocationCoordinate2D,
-                                 radius: Int,
-                                 completion: @escaping RadiusResult,
-                                 error: @escaping ErrorResult) {
+    func sendIsLocalizationAvailableRequest(location: CLLocation,
+                                            completion: @escaping IsLocalizationAvailableResult,
+                                            error: @escaping ErrorResult) {
         
         // set up request parameters
-        let params = [
-            "radius": String(radius),
-            "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
+        let params: [String: Any] = [
+            "location": [
+                "coordinate": [
+                    "latitude": location.coordinate.latitude,
+                    "longitude": location.coordinate.longitude,
+                ],
+                "altitude": location.altitude,
+                "horizontalAccuracy": location.horizontalAccuracy,
+                "verticalAccuracy": location.verticalAccuracy,
+                "timestamp": location.timestamp.timeIntervalSince1970
+            ],
+            "deviceOs": "iOS"
         ]
         
         // set up completion closure
@@ -182,8 +186,8 @@ class FMApi {
             }
             do {
                 // decode server response
-                let radiusResponse = try JSONDecoder().decode(RadiusResponse.self, from: data)
-                completion(radiusResponse.result == "true")
+                let response = try JSONDecoder().decode(IsLocalizationAvailableResponse.self, from: data)
+                completion(response.available)
             } catch let jsonError {
                 error(FMError(ApiError.invalidResponse, cause: jsonError))
             }
@@ -196,7 +200,7 @@ class FMApi {
         
         // send request
         FMRestClient.post(
-            .zoneInRadius,
+            .isLocalizationAvailable,
             parameters: params,
             token: token,
             completion: postCompletion,

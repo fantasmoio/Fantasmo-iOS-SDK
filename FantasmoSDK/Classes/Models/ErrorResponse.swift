@@ -9,11 +9,13 @@ import Foundation
 class ErrorResponse: Decodable {
     let code: Int
     let message: String?
+    let details: String?
 
     enum CodingKeys: String, CodingKey {
         case code
         case statusCode
         case message
+        case details
     }
     
     required init(from decoder: Decoder) throws {
@@ -26,5 +28,12 @@ class ErrorResponse: Decodable {
             code = 0
         }
         message = try values.decodeIfPresent(String.self, forKey: .message)
+        details = try values.decodeIfPresent(String.self, forKey: .details)
+    }
+    
+    var description: String {
+        return [message, details]
+            .compactMap { $0 }
+            .joined(separator: ", ")
     }
 }

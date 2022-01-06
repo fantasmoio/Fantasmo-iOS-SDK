@@ -8,23 +8,57 @@
 import Foundation
 
 struct FMApiRouter {
-    enum ApiEndpoint: String {
-        case localize = "image.localize"
-        case zoneInRadius = "parking.in.radius"
-    }
     
-    private static var apiBaseUrl: String {
-        get {
-            if let override = FMConfiguration.stringForInfoKey(.apiBaseUrl) {
-                log.warning("Using url override", parameters: ["override": override])
-                return "http://\(override)"
+    enum ApiVersion {
+        
+        case v1
+        case v2
+        
+        var baseUrl: URL {
+            let urlString: String
+            if let overrideUrlString = FMConfiguration.stringForInfoKey(.apiBaseUrl) {
+                log.warning("Using base url override", parameters: ["override": overrideUrlString])
+                urlString = overrideUrlString
             } else {
-                return "https://api.fantasmo.io/v1/"
+                urlString = "https://api.fantasmo.io"
             }
+            guard let url = URL(string: urlString) else {
+                fatalError("api base url is invalid")
+            }
+            let version: String
+            switch self {
+            case .v1:
+                version = "v1"
+            case .v2:
+                version = "v2"
+            }
+            return url.appendingPathComponent(version)
         }
     }
     
-    static func urlForEndpoint(_ endpoint: ApiEndpoint) -> URL {
-        return URL(string: Self.apiBaseUrl)!.appendingPathComponent(endpoint.rawValue)
+    enum ApiEndpoint {
+        
+        case localize
+        case isLocalizationAvailable
+        
+        var path: String {
+            switch self {
+            case .isLocalizationAvailable:
+                return "isLocalizationAvailable"
+            case .localize:
+                return "image.localize"
+            }
+        }
+        
+        var url: URL {
+            let apiVersion: ApiVersion
+            switch self {
+            case .isLocalizationAvailable:
+                apiVersion = .v2
+            case .localize:
+                apiVersion = .v1
+            }
+            return apiVersion.baseUrl.appendingPathComponent(self.path)
+        }
     }
 }

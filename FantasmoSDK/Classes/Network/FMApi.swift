@@ -242,7 +242,7 @@ class FMApi {
                 "total": events.total,
             ]
             
-            // TODO - serialize these params in one go instead of using individual json encoders for each property
+            // TODO - in v2 api we should serialize these as a single named json object
             params = [
                 "intrinsics" : intrinsics.toJson(),
                 "gravity" : pose.orientation.toJson(),

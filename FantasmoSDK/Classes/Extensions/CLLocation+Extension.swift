@@ -11,8 +11,7 @@ import CoreLocation
 extension CLLocation {
 
     static var invalid: CLLocation {
-        let coord = kCLLocationCoordinate2DInvalid
-        return CLLocation(latitude: coord.latitude, longitude: coord.longitude)
+        return CLLocation(coordinate: kCLLocationCoordinate2DInvalid, altitude: 0, horizontalAccuracy: -1, verticalAccuracy: -1, timestamp: Date())
     }
     
     /// Calculate distance treating lat and long as unitless Cartesian coordinates

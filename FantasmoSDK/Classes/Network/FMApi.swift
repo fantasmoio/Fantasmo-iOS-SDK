@@ -154,19 +154,7 @@ class FMApi {
                                             completion: @escaping IsLocalizationAvailableResult,
                                             error: @escaping ErrorResult) {
         // set up request parameters
-        let params: [String: Any] = [
-            "location": [
-                "coordinate": [
-                    "latitude": location.coordinate.latitude,
-                    "longitude": location.coordinate.longitude,
-                ],
-                "altitude": location.altitude,
-                "horizontalAccuracy": location.horizontalAccuracy,
-                "verticalAccuracy": location.verticalAccuracy,
-                "timestamp": location.timestamp.timeIntervalSince1970
-            ],
-            "deviceOs": "iOS"
-        ]
+        let params = getInitializeParams(for: location)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -212,15 +200,7 @@ class FMApi {
                                    completion: @escaping InitializationResult,
                                    error: @escaping ErrorResult) {
         // set up request parameters
-        let params = [
-            "coordinate":
-                [
-                    "latitude": location.coordinate.latitude,
-                    "longitude": location.coordinate.longitude,
-                    "horizontalAccuracy": location.horizontalAccuracy,
-                    "verticalAccuracy": location.verticalAccuracy
-                ]
-        ]
+        let params = getInitializeParams(for: location)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -264,6 +244,22 @@ class FMApi {
     }
     
     // MARK: - private methods
+    
+    private func getInitializeParams(for location: CLLocation) -> [String: Any] {
+        let params: [String: Any] = [
+            "location": [
+                "coordinate": [
+                    "latitude": location.coordinate.latitude,
+                    "longitude": location.coordinate.longitude,
+                ],
+                "altitude": location.altitude,
+                "horizontalAccuracy": location.horizontalAccuracy,
+                "verticalAccuracy": location.verticalAccuracy,
+                "timestamp": location.timestamp.timeIntervalSince1970
+            ]
+        ]
+        return params.merging(getDeviceAndHostAppInfo()) { (_, new) in new }
+    }
     
     /// Calculate parameters of the "Localize" request for the given `ARFrame`.
     ///
@@ -309,14 +305,7 @@ class FMApi {
                 "uuid" : UUID().uuidString,
                 
                 "location": location.toJson(),
-
-                // device characteristics
-                "udid": UIDevice.current.identifierForVendor?.uuidString,
-                "deviceModel": UIDevice.current.identifier,
-                "deviceOs": UIDevice.current.correctedSystemName,
-                "deviceOsVersion": UIDevice.current.systemVersion,
-                "sdkVersion": FMSDKInfo.fullVersion,
-
+                
                 // session identifiers
                 "appSessionId": request.analytics.appSessionId,
                 "localizationSessionId": request.analytics.localizationSessionId,
@@ -343,7 +332,7 @@ class FMApi {
             params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
         }
                 
-        return params
+        return params.merging(getDeviceAndHostAppInfo()) { (_, new) in new }
     }
     
     /// Generate the image data used to perform "localize" HTTP request .
@@ -364,5 +353,20 @@ class FMApi {
 
         let encodedImage = imageEncoder.encodedImage(from: frame)
         return encodedImage
-    }    
+    }
+    
+    /// Returns a dictionary of common device and host app info that can be added to request parameters.
+    private func getDeviceAndHostAppInfo() -> [String: String] {
+        let info: [String: String] = [
+            "udid": UIDevice.current.identifierForVendor?.uuidString ?? "",
+            "deviceModel": UIDevice.current.identifier,
+            "deviceOs": UIDevice.current.correctedSystemName,
+            "deviceOsVersion": UIDevice.current.systemVersion,
+            "sdkVersion": FMSDKInfo.fullVersion,
+            "hostAppBundleIdentifier": FMSDKInfo.hostAppBundleIdentifier,
+            "hostAppMarketingVersion": FMSDKInfo.hostAppMarketingVersion,
+            "hostAppBuildNumber": FMSDKInfo.hostAppBuildNumber
+        ]
+        return info
+    }
 }

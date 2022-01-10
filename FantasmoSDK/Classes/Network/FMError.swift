@@ -7,35 +7,30 @@
 
 import Foundation
 
-public struct FMError: LocalizedError {
+public struct FMError {
     
     public let type: Error
-    public let errorDescription: String?
     public let cause: Error?
     
-    init(_ type: Error, errorDescription: String? = nil, cause: Error? = nil) {
+    let errorResponse: ErrorResponse?
+    
+    init(_ type: Error, cause: Error? = nil) {
         self.type = type
-        self.errorDescription = errorDescription ?? type.localizedDescription
         self.cause = cause
+        self.errorResponse = nil
     }
     
     init(_ type: Error, _ errorResponse: Data) {
         self.type = type
-        do {
-            let decoded = try JSONDecoder().decode(ErrorResponse.self, from: errorResponse)
-            self.errorDescription = decoded.description
-            self.cause = nil
-        } catch {
-            self.errorDescription = "JSON decoding error"
-            self.cause = error
-        }
+        self.cause = nil
+        self.errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: errorResponse)
     }
 }
 
-extension FMError: CustomStringConvertible {
-    public var description: String {
-        if let errorDescription = errorDescription {
-            return String(describing: type) + " " + errorDescription
+extension FMError: LocalizedError {
+    public var errorDescription: String? {
+        if let errorMessage = errorResponse?.message {
+            return errorMessage
         } else {
             return String(describing: type)
         }
@@ -44,10 +39,8 @@ extension FMError: CustomStringConvertible {
 
 extension FMError: CustomDebugStringConvertible {
     public var debugDescription: String {
-        if let cause = cause {
-            return self.description + " caused by " + String(describing: cause)
-        } else {
-            return self.description
-        }
+        return [String(describing: type), errorResponse?.message, errorResponse?.details, cause?.localizedDescription]
+            .compactMap { $0 }
+            .joined(separator: ", ")
     }
 }

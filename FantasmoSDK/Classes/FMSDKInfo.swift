@@ -23,4 +23,22 @@ public class FMSDKInfo {
 
         return version
     }
+    
+    /// Returns the host app's bundle identifer.
+    /// Example: "com.example.MyApp"
+    static var hostAppBundleIdentifier: String {
+        return Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String ?? ""
+    }
+    
+    /// Returns the host app's marketing version as a string in the format "major.minor.patch".
+    /// Example: "2.0.1".
+    static var hostAppMarketingVersion: String {
+        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    }
+
+    /// Returns the host app's build number as a string.
+    /// Example: "123"
+    static var hostAppBuildNumber: String {
+        return Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+    }
 }

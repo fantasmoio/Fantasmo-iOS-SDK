@@ -29,9 +29,11 @@ class ErrorResponse: Decodable {
         }
         message = try values.decodeIfPresent(String.self, forKey: .message)
         details = try values.decodeIfPresent(String.self, forKey: .details)
-    }
-    
-    var description: String {
+    }    
+}
+
+extension ErrorResponse: CustomStringConvertible {
+    public var description: String {
         return [message, details]
             .compactMap { $0 }
             .joined(separator: ", ")

@@ -50,6 +50,8 @@
 		0144B7A427047CEB009A4042 /* FMLocalizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */; };
 		015BA28A2705B47400194E9E /* QRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015BA2892705B47400194E9E /* QRCodeDetector.swift */; };
 		0166C0A12746BEC3001D871E /* FMImageQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */; };
+		017C5ED3278C53A2000DEBCE /* IsLocalizationAvailableResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017C5ED2278C53A2000DEBCE /* IsLocalizationAvailableResponse.swift */; };
+		017C5ED5278C540F000DEBCE /* CLLocation+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017C5ED4278C540F000DEBCE /* CLLocation+Codable.swift */; };
 		01827D292758E0B5006D21CE /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389F25921BF3005B1145 /* MockData.swift */; };
 		01827D2A2758E926006D21CE /* SDKFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */; };
 		01827D2B2758E92E006D21CE /* SDKFilterConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01296D052756656C00636BBE /* SDKFilterConfigTests.swift */; };
@@ -218,6 +220,8 @@
 		0144B7A327047CEB009A4042 /* FMLocalizingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewController.swift; sourceTree = "<group>"; };
 		015BA2892705B47400194E9E /* QRCodeDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeDetector.swift; sourceTree = "<group>"; };
 		0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMImageQualityFilter.swift; sourceTree = "<group>"; };
+		017C5ED2278C53A2000DEBCE /* IsLocalizationAvailableResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IsLocalizationAvailableResponse.swift; sourceTree = "<group>"; };
+		017C5ED4278C540F000DEBCE /* CLLocation+Codable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocation+Codable.swift"; sourceTree = "<group>"; };
 		01984382271590A9004CAC3A /* FMToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMToolbar.swift; sourceTree = "<group>"; };
 		019C16DB27451E40008B6002 /* FMDeviceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMDeviceError.swift; sourceTree = "<group>"; };
 		01A3A4F2270F14B000B7679F /* FantasmoSDKParkingExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKParkingExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -553,6 +557,7 @@
 				946838AA25921BF3005B1145 /* FMZone.swift */,
 				946838A925921BF3005B1145 /* Geofence.swift */,
 				01B58686274D45DE0082FFF7 /* InitializeResponse.swift */,
+				017C5ED2278C53A2000DEBCE /* IsLocalizationAvailableResponse.swift */,
 				946838A625921BF3005B1145 /* LocalizeResponse.swift */,
 				946838A825921BF3005B1145 /* Location.swift */,
 				946838B025921BF3005B1145 /* Orientation.swift */,
@@ -570,6 +575,7 @@
 				A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */,
 				A3798CA426AAF52D007CB41F /* ARCamera+Extension.swift */,
 				946838B825921BF3005B1145 /* CGImage+Extension.swift */,
+				017C5ED4278C540F000DEBCE /* CLLocation+Codable.swift */,
 				A02EA34A26BA7D8700525308 /* CLLocation+Extension.swift */,
 				946838B725921BF3005B1145 /* Codable+Extension.swift */,
 				946838B625921BF3005B1145 /* Dictionary+Extension.swift */,
@@ -938,6 +944,7 @@
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,
 				A3BA02D9263919DF00524D66 /* FMBlurFilter.swift in Sources */,
 				406437FE26E787A300B38B45 /* FMCamera.swift in Sources */,
+				017C5ED3278C53A2000DEBCE /* IsLocalizationAvailableResponse.swift in Sources */,
 				0144B7A427047CEB009A4042 /* FMLocalizingViewController.swift in Sources */,
 				01B58681274BF8DF0082FFF7 /* RemoteConfig.swift in Sources */,
 				A359099A269DAAC300A7BF5F /* UIDevice+Extension.swift in Sources */,
@@ -959,6 +966,7 @@
 				011589E62742957100CFC368 /* ImageEncoder.swift in Sources */,
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,
+				017C5ED5278C540F000DEBCE /* CLLocation+Codable.swift in Sources */,
 				01827D292758E0B5006D21CE /* MockData.swift in Sources */,
 				A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */,
 				A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */,

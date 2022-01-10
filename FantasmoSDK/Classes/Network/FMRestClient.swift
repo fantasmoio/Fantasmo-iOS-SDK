@@ -7,8 +7,7 @@
 
 import Foundation
 
-/// REST client for communication wiht CPS server
-/// Only supports POST with multipart-form data, as that's what the server needs
+/// REST client for communication with bff server
 struct FMRestClient {
     
     enum RestClientError: Error {

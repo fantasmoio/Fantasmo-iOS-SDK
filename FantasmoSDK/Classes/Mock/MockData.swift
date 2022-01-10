@@ -56,14 +56,14 @@ class MockData {
                        "x": 0.026177782246603,
                        "y": 0.6329531644390612,
                        "z": -0.03595580186787759]
-        let coordinate = ["longitude" : 11.572596873561112,
-                          "latitude": 48.12844364094412]
+        
+        let location = CLLocation(latitude: 48.12844364094412, longitude: 11.572596873561112)
 
         return ["intrinsics" : intrinsic.json,
                 "gravity" : gravity.json,
                 "capturedAt" : String(NSDate().timeIntervalSince1970 * 1000.0),
                 "uuid" : "C6241E04-974A-4131-8B36-044A11E2C7F0",
-                "coordinate": coordinate.json]
+                "location": location.toJson()]
     }
 
     private static var streetMockParameters: [String: String] {
@@ -76,13 +76,13 @@ class MockData {
                        "x": 0.05583266127506817,
                        "y": 0.6407979294057553,
                        "z": -0.058735161414937516]
-        let coordinate = ["longitude" : 11.572596873561112,
-                          "latitude": 48.12844364094412]
+        
+        let location = CLLocation(latitude: 48.12844364094412, longitude: 11.572596873561112)
 
         return ["intrinsics" : intrinsic.json,
                 "gravity" : gravity.json,
                 "capturedAt" : String(NSDate().timeIntervalSince1970 * 1000.0),
                 "uuid" : "A87E55CB-0649-4F87-A42F-8A33970F421E",
-                "coordinate": coordinate.json]
+                "location": location.toJson()]
     }
 }

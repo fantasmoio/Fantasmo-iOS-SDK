@@ -13,7 +13,7 @@ import UIKit
 struct FMLocalizationRequest {
     var isSimulation: Bool
     var simulationZone: FMZone.ZoneType
-    var approximateCoordinate: CLLocationCoordinate2D
+    var approximateLocation: CLLocation
     var relativeOpenCVAnchorPose: FMPose?
     var analytics: FMLocalizationAnalytics
 }
@@ -55,6 +55,7 @@ class FMApi {
     
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
     typealias InitializationResult = (Bool) -> Void
+    typealias IsLocalizationAvailableResult = (Bool) -> Void
     typealias ErrorResult = (FMError) -> Void
     
     enum ApiError: LocalizedError {
@@ -85,7 +86,7 @@ class FMApi {
             return
         }
         
-        let params = getParams(for: frame, image: image, request: request)
+        let params = getLocalizeParams(for: frame, image: image, request: request)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -142,7 +143,65 @@ class FMApi {
             error: postError
         )
     }
-    
+
+    /// Check if localization is available *near* the supplied location.
+    ///
+    /// - Parameters:
+    ///   - location: Center of area to search
+    ///   - completion: Completion closure
+    ///   - error: Error closure
+    func sendIsLocalizationAvailableRequest(location: CLLocation,
+                                            completion: @escaping IsLocalizationAvailableResult,
+                                            error: @escaping ErrorResult) {
+        // set up request parameters
+        let params: [String: Any] = [
+            "location": [
+                "coordinate": [
+                    "latitude": location.coordinate.latitude,
+                    "longitude": location.coordinate.longitude,
+                ],
+                "altitude": location.altitude,
+                "horizontalAccuracy": location.horizontalAccuracy,
+                "verticalAccuracy": location.verticalAccuracy,
+                "timestamp": location.timestamp.timeIntervalSince1970
+            ],
+            "deviceOs": "iOS"
+        ]
+        
+        // set up completion closure
+        let postCompletion: FMRestClient.RestResult = { code, data in
+            guard let code = code, let data = data else {
+                error(FMError(ApiError.noResponseData))
+                return
+            }
+            guard code == 200 else {
+                error(FMError(ApiError.httpError(code), data))
+                return
+            }
+            do {
+                // decode server response
+                let response = try JSONDecoder().decode(IsLocalizationAvailableResponse.self, from: data)
+                completion(response.available)
+            } catch let jsonError {
+                error(FMError(ApiError.jsonDecodingError, cause: jsonError))
+            }
+        }
+        
+        // set up error closure
+        let postError: FMRestClient.RestError = { errorResponse in
+            error(FMError(errorResponse))
+        }
+        
+        // send request
+        FMRestClient.post(
+            .isLocalizationAvailable,
+            parameters: params,
+            token: token,
+            completion: postCompletion,
+            error: postError
+        )
+    }
+
     /// Initialize Fantasmo at a specified location
     ///
     /// - Parameters:
@@ -152,7 +211,6 @@ class FMApi {
     func sendInitializationRequest(location: CLLocation,
                                    completion: @escaping InitializationResult,
                                    error: @escaping ErrorResult) {
-                
         // set up request parameters
         let params = [
             "coordinate":
@@ -166,7 +224,6 @@ class FMApi {
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
-            // handle valid but erroneous response
             guard let code = code, let data = data else {
                 error(FMError(ApiError.noResponseData))
                 return
@@ -213,7 +270,7 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func getParams(for frame: ARFrame, image: ImageEncoder.Image, request: FMLocalizationRequest) -> [String : String?] {
+    private func getLocalizeParams(for frame: ARFrame, image: ImageEncoder.Image, request: FMLocalizationRequest) -> [String : String?] {
         var params: [String : String?]
         
         // mock if simulation
@@ -232,7 +289,7 @@ class FMApi {
                                           withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
                                           withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
             
-            let coordinate = request.approximateCoordinate
+            let location = request.approximateLocation
 
             let events = request.analytics.frameEvents
             let frameEventCounts = [
@@ -244,12 +301,14 @@ class FMApi {
                 "total": events.total,
             ]
             
+            // TODO - in v2 api we should serialize these as a single named json object
             params = [
                 "intrinsics" : intrinsics.toJson(),
                 "gravity" : pose.orientation.toJson(),
                 "capturedAt" : String(NSDate().timeIntervalSince1970 * 1000.0),
                 "uuid" : UUID().uuidString,
-                "coordinate": "{\"longitude\" : \(coordinate.longitude), \"latitude\": \(coordinate.latitude)}",
+                
+                "location": location.toJson(),
 
                 // device characteristics
                 "udid": UIDevice.current.identifierForVendor?.uuidString,

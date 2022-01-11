@@ -107,6 +107,7 @@ class FMLocationManager: NSObject {
     private var accumulatedARKitInfo = AccumulatedARKitInfo()
     private var frameEventAccumulator = FrameFilterRejectionStatisticsAccumulator()
     private var appSessionId: String? // provided by client
+    private var appSessionTags: [String]? // provided by client
     private var localizationSessionId: String? // created by SDK
     private let motionManager = MotionManager()
     
@@ -165,11 +166,13 @@ class FMLocationManager: NSObject {
     
     /// Starts the generation of updates that report the user’s current location.
     /// - Parameter sessionId: Identifier for a unique localization session for use by analytics and billing.
-    ///                 The max length of the string is 64 characters.
-    public func startUpdatingLocation(sessionId: String) {
+    /// The max length of the string is 64 characters.
+    /// - Parameter sessionTags: Optional, freeform list of tags to associate with the session for use by analytics.
+    public func startUpdatingLocation(sessionId: String, sessionTags: [String]?) {
         log.debug()
 
         appSessionId = String(sessionId.prefix(64))
+        appSessionTags = sessionTags
         localizationSessionId = UUID().uuidString
 
         accumulatedARKitInfo.reset()
@@ -255,6 +258,7 @@ class FMLocationManager: NSObject {
 
         let localizationAnalytics =  FMLocalizationAnalytics(
             appSessionId: appSessionId,
+            appSessionTags: appSessionTags,
             localizationSessionId: localizationSessionId,
             frameEvents: frameEvents,
             rotationSpread: rotationSpread,

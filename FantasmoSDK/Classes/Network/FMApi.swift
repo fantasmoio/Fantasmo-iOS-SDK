@@ -20,6 +20,7 @@ struct FMLocalizationRequest {
 
 struct FMLocalizationAnalytics {
     var appSessionId: String?
+    var appSessionTags: [String]?
     var localizationSessionId: String?
     var frameEvents: FMFrameEvents
     var rotationSpread: FMRotationSpread
@@ -323,6 +324,9 @@ class FMApi {
         else {
             params = MockData.params(request)
         }
+        
+        let appSessionTags: [String] = request.analytics.appSessionTags ?? []
+        params["appSessionTags"] = appSessionTags.toJson()
         
         let imageResolution = FMFrameResolution(height: Int(image.resolution.height), width: Int(image.resolution.width))
         params["imageResolution"] = imageResolution.toJson()

@@ -55,18 +55,24 @@ public final class FMParkingViewController: UIViewController {
     
     public let sessionId: String
     
+    public let sessionTags: [String]?
+    
     public let accessToken: String
     
     /// Designated initializer.
     ///
-    /// - Parameter sessionId: an identifier for the parking session
+    /// - Parameter sessionId: This parameter allows you to associate localization results with your own session identifier.
+    /// Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking session
+    /// might involve multiple localization attempts. For analytics and billing purposes this identifier allows you to link a
+    /// set of attempts with a single parking session.
     ///
-    /// The `sessionId` parameter allows you to associate localization results with your own session identifier.
-    /// Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking
-    /// session might involve multiple localization attempts. For analytics and billing purposes this identifier allows
-    /// you to link a set of attempts with a single parking session.
-    public init(sessionId: String) {
+    /// - Parameter sessionTags: An optional list of tags for the parking session. This parameter can be used to label and group
+    /// parking sessions that have something in common. For example parking sessions that take place in the same city might have
+    /// the city's name as a tag. These are used for analytics purposes only and will be included in usage reports. Each tag must
+    /// be a string and there is no limit to the number of tags a session can have.
+    public init(sessionId: String, sessionTags: [String]? = nil) {
         self.sessionId = sessionId
+        self.sessionTags = sessionTags
         self.accessToken = FMConfiguration.accessToken()
         super.init(nibName: nil, bundle: nil)
     }
@@ -186,7 +192,7 @@ public final class FMParkingViewController: UIViewController {
         }
         
         fmLocationManager.connect(accessToken: accessToken, delegate: self)
-        fmLocationManager.startUpdatingLocation(sessionId: sessionId)
+        fmLocationManager.startUpdatingLocation(sessionId: sessionId, sessionTags: sessionTags)
         
         localizingViewController?.didStartLocalizing()
         delegate?.parkingViewControllerDidStartLocalizing(self)

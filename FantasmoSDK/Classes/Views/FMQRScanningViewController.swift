@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 public class FMQRScanningViewController: UIViewController {
         
@@ -15,6 +16,10 @@ public class FMQRScanningViewController: UIViewController {
     
     var manualEntryButton: UIButton!
     
+    var torchButton: UIButton!
+    
+    var isTorchOn: Bool = false
+            
     @objc func handleManualEntryButton(_ sender: UIButton) {
         guard let parkingViewController = self.parent as? FMParkingViewController else {
             return
@@ -44,10 +49,34 @@ public class FMQRScanningViewController: UIViewController {
         parkingViewController.dismiss(animated: true, completion: nil)
     }
         
+    @objc func handleTorchButton(_ sender: UIButton) {
+        toggleTorch(on: !isTorchOn)
+    }
+    
+    private func toggleTorch(on: Bool) {
+        guard let device = AVCaptureDevice.default(for: AVMediaType.video), device.hasTorch else {
+            return
+        }
+        do {
+            try device.lockForConfiguration()
+            device.torchMode = on ? .on : .off
+            device.unlockForConfiguration()
+            isTorchOn = on
+        } catch {
+            log.info("Torch cannot be used")
+        }
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        toggleTorch(on: false)
+    }
+        
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.init(white: 0.0, alpha: 0.5)
+        view.backgroundColor = UIColor.init(white: 0.0, alpha: 0.6)
                 
         label = FMTipLabel()
         label.setText("Scan QR Code")
@@ -58,19 +87,15 @@ public class FMQRScanningViewController: UIViewController {
         toolbar.closeButton.addTarget(self, action: #selector(handleCloseButton(_:)), for: .touchUpInside)
         view.addSubview(toolbar)
         
-        let manualEntryButtonTitle = "Enter Manually"
-        let manualEntryButtonRange = NSRange(location: 0, length: manualEntryButtonTitle.count)
-        let manualEntryButtonTitleString = NSMutableAttributedString(string: manualEntryButtonTitle)
-        manualEntryButtonTitleString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: manualEntryButtonRange)
-        manualEntryButtonTitleString.addAttribute(.foregroundColor, value: UIColor.systemGray.cgColor, range: manualEntryButtonRange)
-        manualEntryButtonTitleString.addAttribute(.font, value: UIFont.systemFont(ofSize: 14.0), range: manualEntryButtonRange)
-        
-        manualEntryButton = UIButton()
+        manualEntryButton = buttonWithTitle("Enter Code", systemImageName: "keyboard.fill")
         manualEntryButton.addTarget(self, action: #selector(handleManualEntryButton(_:)), for: .touchUpInside)
-        manualEntryButton.setAttributedTitle(manualEntryButtonTitleString, for: .normal)
-        manualEntryButton.contentEdgeInsets = .init(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
-        manualEntryButton.sizeToFit()
         view.addSubview(manualEntryButton)
+        manualEntryButton.sizeToFit()
+
+        torchButton = buttonWithTitle("Torch", systemImageName: "flashlight.on.fill")
+        torchButton.addTarget(self, action: #selector(handleTorchButton(_:)), for: .touchUpInside)
+        view.addSubview(torchButton)
+        torchButton.sizeToFit()
     }
     
     public override func viewDidLayoutSubviews() {
@@ -117,9 +142,33 @@ public class FMQRScanningViewController: UIViewController {
         label.frame = labelRect
         
         var manualEntryButtonRect = manualEntryButton.frame
-        manualEntryButtonRect.origin.x = floor(safeAreaBounds.midX - 0.5 * manualEntryButtonRect.width)
-        manualEntryButtonRect.origin.y = cutoutRect.maxY + 30.0
+        manualEntryButtonRect.origin.x = cutoutRect.maxX - manualEntryButtonRect.width
+        manualEntryButtonRect.origin.y = safeAreaBounds.maxY - manualEntryButtonRect.height
         manualEntryButton.frame = manualEntryButtonRect
+
+        var torchButtonRect = torchButton.frame
+        torchButtonRect.origin.x = cutoutRect.minX
+        torchButtonRect.origin.y = safeAreaBounds.maxY - torchButtonRect.height
+        torchButton.frame = torchButtonRect
+    }
+    
+    private func buttonWithTitle(_ buttonTitle: String, systemImageName: String) -> FMImageButton {
+        let buttonRange = NSRange(location: 0, length: buttonTitle.count)
+        let buttonTitleString = NSMutableAttributedString(string: buttonTitle)
+        buttonTitleString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: buttonRange)
+        buttonTitleString.addAttribute(.foregroundColor, value: UIColor.white.cgColor, range: buttonRange)
+        buttonTitleString.addAttribute(.font, value: UIFont.systemFont(ofSize: 14.0), range: buttonRange)
+
+        let button = FMImageButton()
+        button.setAttributedTitle(buttonTitleString, for: .normal)
+        button.contentEdgeInsets = .init(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+        button.tintColor = .white
+        
+        if #available(iOS 13.0, *) {
+            button.setImage(UIImage(systemName: systemImageName), for: .normal)
+        }
+        
+        return button
     }
 }
 

@@ -52,6 +52,7 @@
 		0166C0A12746BEC3001D871E /* FMImageQualityFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */; };
 		017C5ED3278C53A2000DEBCE /* IsLocalizationAvailableResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017C5ED2278C53A2000DEBCE /* IsLocalizationAvailableResponse.swift */; };
 		017C5ED5278C540F000DEBCE /* CLLocation+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017C5ED4278C540F000DEBCE /* CLLocation+Codable.swift */; };
+		017C5ED7278DC7F7000DEBCE /* FMImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017C5ED6278DC7F7000DEBCE /* FMImageButton.swift */; };
 		01827D292758E0B5006D21CE /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389F25921BF3005B1145 /* MockData.swift */; };
 		01827D2A2758E926006D21CE /* SDKFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */; };
 		01827D2B2758E92E006D21CE /* SDKFilterConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01296D052756656C00636BBE /* SDKFilterConfigTests.swift */; };
@@ -222,6 +223,7 @@
 		0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMImageQualityFilter.swift; sourceTree = "<group>"; };
 		017C5ED2278C53A2000DEBCE /* IsLocalizationAvailableResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IsLocalizationAvailableResponse.swift; sourceTree = "<group>"; };
 		017C5ED4278C540F000DEBCE /* CLLocation+Codable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocation+Codable.swift"; sourceTree = "<group>"; };
+		017C5ED6278DC7F7000DEBCE /* FMImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMImageButton.swift; sourceTree = "<group>"; };
 		01984382271590A9004CAC3A /* FMToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMToolbar.swift; sourceTree = "<group>"; };
 		019C16DB27451E40008B6002 /* FMDeviceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMDeviceError.swift; sourceTree = "<group>"; };
 		01A3A4F2270F14B000B7679F /* FantasmoSDKParkingExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKParkingExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -415,6 +417,7 @@
 			children = (
 				0134BF862705E8F400DDEF7A /* FMTipLabel.swift */,
 				01984382271590A9004CAC3A /* FMToolbar.swift */,
+				017C5ED6278DC7F7000DEBCE /* FMImageButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -931,6 +934,7 @@
 				0166C0A12746BEC3001D871E /* FMImageQualityFilter.swift in Sources */,
 				01172678274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift in Sources */,
 				A3CB77342636B496009625BB /* FMPosition.swift in Sources */,
+				017C5ED7278DC7F7000DEBCE /* FMImageButton.swift in Sources */,
 				946838C725921BF3005B1145 /* LocalizeResponse.swift in Sources */,
 				0117268E274FEEA5005EA7C0 /* ImageQualityModel.mlmodel in Sources */,
 				A354BA6026A4B88300AF2023 /* EulerAngles.swift in Sources */,

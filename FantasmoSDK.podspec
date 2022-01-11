@@ -8,14 +8,14 @@
 
 Pod::Spec.new do |s|
   s.name             		= 'FantasmoSDK'
-  s.version          		= '2.0.3'
+  s.version          		= '2.1.0'
   s.summary          		= 'Hyper-accurate global positioning for cameras.'
   s.description      		= 'FantasmoSDK provide hyper-accurate global positioning for cameras.'
 
   s.homepage         		= 'https://github.com/fantasmoio/Fantasmo-iOS-SDK'
   s.license          		= { :type => 'MIT', :file => 'LICENSE' }
-  s.author           		= { 'krishn' => 'krishn@github.io' }
-  s.source           		= { :git => 'https://krishn-fantasmo@github.com/fantasmoio/Fantasmo-iOS-SDK.git', :branch => 'master', :tag => s.version.to_s }
+  s.author           		= { 'Nick Jensen' => 'nick@fantasmo.io' }
+  s.source           		= { :git => 'https://github.com/fantasmoio/Fantasmo-iOS-SDK.git', :branch => 'master', :tag => s.version.to_s }
 
   s.ios.deployment_target 	= '11.0'
   s.swift_version    		= '5'

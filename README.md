@@ -112,7 +112,8 @@ The above method also checks that the device supports ARKit. If the device is no
 func startParkingFlow() {            
     // construct a new parking view controller with a sessionId
     let sessionId = UUID().uuidString
-    let parkingViewController = FMParkingViewController(sessionId: sessionId)
+    let sessionTags = ["berlin", "e-scooter"]  // optionally add tags
+    let parkingViewController = FMParkingViewController(sessionId: sessionId, sessionTags: sessionTags)
 
     // configure delegation
     parkingViewController.delegate = self
@@ -123,9 +124,11 @@ func startParkingFlow() {
 }
 ```
 
-### Providing a `sessionId`
+### Providing `sessionId` and `sessionTags`
 
 The `sessionId` parameter allows you to associate localization results with your own session identifier. Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking session might take multiple localization attempts. For analytics and billing purposes, this identifier allows you to link multiple attempts with a single parking session.
+
+Similar to `sessionId`, you may also provide a list of `sessionTags`. This optional parameter can be used to label and group parking sessions that have something in common. For example sessions that take place in the same city might have the city name as a tag. These are used for analytics purposes only and will be included in your usage reports. Each tag must be a string and there is currently no limit to the number of tags a session can have.
 
 ### Providing Location Updates
 

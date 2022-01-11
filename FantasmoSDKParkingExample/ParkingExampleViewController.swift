@@ -35,11 +35,12 @@ class ParkingExampleViewController: UIViewController {
     }
     
     func startParkingFlow() {
-        /// Create a new `FMParkingViewController` and `sessionId`. This is typically a UUID string
-        /// but it can also follow your own format. It is used for analytics and billing purposes and
-        /// should represent a single parking session.
+        /// Create a new `FMParkingViewController` with a `sessionId`. This is typically a UUID string
+        /// but it can also follow your own format. You may also provide an optional list of `sessionTags`
+        /// for the session. Both of these params are only used for analytics and/or billing purposes.
         let sessionId = UUID().uuidString
-        let parkingViewController = FMParkingViewController(sessionId: sessionId)
+        let sessionTags = ["ios-sdk-parking-example"]
+        let parkingViewController = FMParkingViewController(sessionId: sessionId, sessionTags: sessionTags)
                 
         /// Assign a delegate
         parkingViewController.delegate = self

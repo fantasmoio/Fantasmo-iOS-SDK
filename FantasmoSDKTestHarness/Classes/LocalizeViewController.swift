@@ -98,8 +98,9 @@ class LocalizeViewController: UIViewController {
     }
     
     func startParkingFlow() {
-        let sessionId = "FTH-\(UUID().uuidString)"
-        let parkingViewController = FMParkingViewController(sessionId: sessionId)
+        let sessionId = UUID().uuidString
+        let sessionTags = ["ios-sdk-test-harness"]
+        let parkingViewController = FMParkingViewController(sessionId: sessionId, sessionTags: sessionTags)
         parkingViewController.delegate = self
         parkingViewController.isSimulation = isSimulationSwitch.isOn
         parkingViewController.showsStatistics = showsStatisticsSwitch.isOn

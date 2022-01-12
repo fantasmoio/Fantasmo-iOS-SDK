@@ -126,7 +126,7 @@ func startParkingFlow() {
 
 ### Providing `sessionId` and `sessionTags`
 
-The `sessionId` parameter allows you to associate localization results with your own session identifier. Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking session might take multiple localization attempts. For analytics and billing purposes, this identifier allows you to link multiple attempts with a single parking session.
+The `sessionId` parameter allows you to associate localization results with your own session identifier. Typically this would be a UUID string, but it can also follow your own format. For example, a scooter parking session might take multiple localization attempts. For analytics and billing purposes, this identifier allows you to link multiple attempts with a single parking session. This string is currently limited to 64 characters.
 
 Similar to `sessionId`, you may also provide a list of `sessionTags`. This optional parameter can be used to label and group parking sessions that have something in common. For example sessions that take place in the same city might have the city name as a tag. These are used for analytics purposes only and will be included in your usage reports. Each tag must be a string and there is currently no limit to the number of tags a session can have.
 

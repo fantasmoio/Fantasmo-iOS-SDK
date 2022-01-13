@@ -256,6 +256,14 @@ class FMLocationManager: NSObject {
             roll: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.roll.spread
         )
 
+        var imageQualityFilterInfo: FMImageQualityFilterInfo?
+        if #available(iOS 13.0, *), let imageQualityFilter = frameFilterChain.getFilter(ofType: FMImageQualityFilter.self) {
+            imageQualityFilterInfo = FMImageQualityFilterInfo(
+                modelVersion: imageQualityFilter.modelVersion,
+                lastImageQualityScore: imageQualityFilter.lastImageQualityScore
+            )
+        }
+        
         let localizationAnalytics =  FMLocalizationAnalytics(
             appSessionId: appSessionId,
             appSessionTags: appSessionTags,
@@ -263,7 +271,8 @@ class FMLocationManager: NSObject {
             frameEvents: frameEvents,
             rotationSpread: rotationSpread,
             totalDistance: accumulatedARKitInfo.totalTranslation,
-            magneticField: motionManager.magneticField
+            magneticField: motionManager.magneticField,
+            imageQualityFilterInfo: imageQualityFilterInfo
         )
         
         // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second

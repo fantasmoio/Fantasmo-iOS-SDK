@@ -79,6 +79,9 @@ class FMImageQualityFilter: FMFrameFilter {
     }
     
     public func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
+        // Reset the last score
+        lastImageQualityScore = 0
+        
         guard let mlModel = mlModel else {
             log.error("failed to create model")
             return .accepted

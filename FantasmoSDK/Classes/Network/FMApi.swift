@@ -26,6 +26,12 @@ struct FMLocalizationAnalytics {
     var rotationSpread: FMRotationSpread
     var totalDistance: Float
     var magneticField: MotionManager.MagneticField?
+    var imageQualityFilterInfo: FMImageQualityFilterInfo?
+}
+
+struct FMImageQualityFilterInfo: Codable {
+    var modelVersion: String?
+    var lastImageQualityScore: Float
 }
 
 struct FMRotationSpread: Codable {
@@ -316,6 +322,12 @@ class FMApi {
                 "totalDistance": String(request.analytics.totalDistance),
                 "rotationSpread": request.analytics.rotationSpread.toJson(),
             ]
+            
+            // add image quality filter info if enabled
+            if let imageQualityFilterInfo = request.analytics.imageQualityFilterInfo {
+                params["imageQualityModelVersion"] = imageQualityFilterInfo.modelVersion
+                params["imageQualityScore"] = String(imageQualityFilterInfo.lastImageQualityScore)
+            }
             
             if let magneticData = request.analytics.magneticField?.toJson() {
                 params["magneticData"] = magneticData

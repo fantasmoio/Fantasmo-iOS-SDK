@@ -17,6 +17,7 @@ class FMSessionStatisticsView: UIView {
     
     @IBOutlet var cameraTranslationLabel: UILabel!
     @IBOutlet var distanceTraveledLabel : UILabel!
+    @IBOutlet var remoteConfigLabel : UILabel!
     
     @IBOutlet var eulerAnglesLabel: UILabel!
     @IBOutlet var eulerAngleSpreadsLabel: UILabel!
@@ -45,6 +46,7 @@ class FMSessionStatisticsView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         sdkVersionLabel.text = "Fantasmo SDK \(FMSDKInfo.fullVersion)"
+        remoteConfigLabel.text = "Remote Config: \(RemoteConfig.config().remoteConfigId)"
     }
         
     public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {

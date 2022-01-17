@@ -27,6 +27,7 @@ struct FMLocalizationAnalytics {
     var totalDistance: Float
     var magneticField: MotionManager.MagneticField?
     var imageQualityFilterInfo: FMImageQualityFilterInfo?
+    var remoteConfigId: String
 }
 
 struct FMImageQualityFilterInfo: Codable {
@@ -336,6 +337,8 @@ class FMApi {
         else {
             params = MockData.params(request)
         }
+        
+        params["remoteConfigId"] = request.analytics.remoteConfigId
         
         let appSessionTags: [String] = request.analytics.appSessionTags ?? []
         params["appSessionTags"] = appSessionTags.toJson()

@@ -272,7 +272,8 @@ class FMLocationManager: NSObject {
             rotationSpread: rotationSpread,
             totalDistance: accumulatedARKitInfo.totalTranslation,
             magneticField: motionManager.magneticField,
-            imageQualityFilterInfo: imageQualityFilterInfo
+            imageQualityFilterInfo: imageQualityFilterInfo,
+            remoteConfigId: RemoteConfig.config().remoteConfigId
         )
         
         // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second

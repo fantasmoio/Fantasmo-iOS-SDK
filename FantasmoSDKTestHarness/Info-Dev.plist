@@ -4,6 +4,8 @@
 <dict>
 	<key>FM_ACCESS_TOKEN</key>
 	<string>a0fc7aa1e1144f1e81eaa2ad47794a9e</string>
+	<key>FM_API_BASE_URL</key>
+	<string>https://mobility-bff-dev.fantasmo.dev</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

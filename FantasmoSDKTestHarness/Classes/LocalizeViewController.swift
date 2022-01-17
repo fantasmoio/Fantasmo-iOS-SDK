@@ -36,8 +36,12 @@ class LocalizeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
        
-        title = "Localize"
-                
+        var viewTitle = "Localize"
+        #if DEV
+        viewTitle += " (Dev)"
+        #endif
+        title = viewTitle
+        
         networkMonitor.start(queue: DispatchQueue.main)
         networkMonitor.pathUpdateHandler = { [weak self] path in
             self?.isConnectedToTheInternet = path.status == .satisfied

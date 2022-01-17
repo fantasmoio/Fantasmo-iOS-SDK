@@ -1,4 +1,5 @@
 {
+    "remote_config_id": "test-config",
     "is_image_quality_filter_enabled": true,
     "image_quality_filter_score_threshold": 0.5,
     

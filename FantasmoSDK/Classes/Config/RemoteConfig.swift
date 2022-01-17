@@ -10,6 +10,7 @@ import Foundation
 class RemoteConfig {
             
     struct Config: Codable {
+        let remoteConfigId: String
         let frameAcceptanceThresholdTimeout: Float
         let isBehaviorRequesterEnabled: Bool
         let isTrackingStateFilterEnabled: Bool

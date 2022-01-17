@@ -1,5 +1,5 @@
 {
-    "remote_config_id": "default-ios",
+    "remote_config_id": "default-ios_17.01.22",
     "frame_acceptance_threshold_timeout": 1.0,
     "is_behavior_requester_enabled": true,
     "is_tracking_state_filter_enabled": true,

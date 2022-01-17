@@ -1234,7 +1234,7 @@
 				DEVELOPMENT_TEAM = 8V8339VAMG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FantasmoSDKTestHarness/Info-Dev.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Test Harness";
+				INFOPLIST_KEY_CFBundleDisplayName = "Test Harness Dev";
 				INFOPLIST_KEY_NSCameraUsageDescription = "For QR code scanning and localization.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "For localization.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1249,7 +1249,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKTestHarness;
+				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKTestHarnessDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG DEV";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1269,7 +1269,7 @@
 				DEVELOPMENT_TEAM = 8V8339VAMG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FantasmoSDKTestHarness/Info-Dev.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Test Harness";
+				INFOPLIST_KEY_CFBundleDisplayName = "Test Harness Dev";
 				INFOPLIST_KEY_NSCameraUsageDescription = "For QR code scanning and localization.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "For localization.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1284,7 +1284,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKTestHarness;
+				PRODUCT_BUNDLE_IDENTIFIER = io.fantasmo.FantasmoSDKTestHarnessDev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEV;
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -38,7 +38,7 @@ public class FMSDKInfo {
 
     /// Returns the host app's build number as a string.
     /// Example: "123"
-    static var hostAppBuildNumber: String {
+    static var hostAppBuild: String {
         return Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
     }
 }

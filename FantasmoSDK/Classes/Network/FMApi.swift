@@ -275,67 +275,60 @@ class FMApi {
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
     private func getLocalizeParams(for frame: ARFrame, image: ImageEncoder.Image, request: FMLocalizationRequest) -> [String : String?] {
-        var params: [String : String?]
         
-        // mock if simulation
-        if !request.isSimulation {
-            let interfaceOrientation = UIApplication.shared.statusBarOrientation
-            
-            let pose = FMPose(frame.openCVTransformOfVirtualDeviceInWorldCS)
-            
-            let imageSize = max(image.resolution.width, image.resolution.height)
-            let originalImageSize = max(image.originalResolution.width, image.originalResolution.height)
-            let imageScaleFactor = originalImageSize > 0 ? imageSize / originalImageSize : 0
-            let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
-                                          atScale: Float(imageScaleFactor),
-                                          withStatusBarOrientation: interfaceOrientation,
-                                          withDeviceOrientation: frame.deviceOrientation,
-                                          withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
-                                          withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
-            
-            let location = request.approximateLocation
+        let interfaceOrientation = UIApplication.shared.statusBarOrientation
+        
+        let pose = FMPose(frame.openCVTransformOfVirtualDeviceInWorldCS)
+        
+        let imageSize = max(image.resolution.width, image.resolution.height)
+        let originalImageSize = max(image.originalResolution.width, image.originalResolution.height)
+        let imageScaleFactor = originalImageSize > 0 ? imageSize / originalImageSize : 0
+        let intrinsics = FMIntrinsics(fromIntrinsics: frame.camera.intrinsics,
+                                      atScale: Float(imageScaleFactor),
+                                      withStatusBarOrientation: interfaceOrientation,
+                                      withDeviceOrientation: frame.deviceOrientation,
+                                      withFrameWidth: CVPixelBufferGetWidth(frame.capturedImage),
+                                      withFrameHeight: CVPixelBufferGetHeight(frame.capturedImage))
+        
+        let location = request.approximateLocation
 
-            let events = request.analytics.frameEvents
-            let frameEventCounts = [
-                "excessiveTilt": events.excessiveTilt,
-                "excessiveBlur": events.excessiveBlur,
-                "excessiveMotion": events.excessiveMotion,
-                "insufficientFeatures": events.insufficientFeatures,
-                "lossOfTracking": events.lossOfTracking,
-                "total": events.total,
-            ]
+        let events = request.analytics.frameEvents
+        let frameEventCounts = [
+            "excessiveTilt": events.excessiveTilt,
+            "excessiveBlur": events.excessiveBlur,
+            "excessiveMotion": events.excessiveMotion,
+            "insufficientFeatures": events.insufficientFeatures,
+            "lossOfTracking": events.lossOfTracking,
+            "total": events.total,
+        ]
+        
+        // TODO - in v2 api we should serialize these as a single named json object
+        var params: [String : String?] = [
+            "intrinsics" : intrinsics.toJson(),
+            "gravity" : pose.orientation.toJson(),
+            "capturedAt" : String(NSDate().timeIntervalSince1970 * 1000.0),
+            "uuid" : UUID().uuidString,
             
-            // TODO - in v2 api we should serialize these as a single named json object
-            params = [
-                "intrinsics" : intrinsics.toJson(),
-                "gravity" : pose.orientation.toJson(),
-                "capturedAt" : String(NSDate().timeIntervalSince1970 * 1000.0),
-                "uuid" : UUID().uuidString,
-                
-                "location": location.toJson(),
-                
-                // session identifiers
-                "appSessionId": request.analytics.appSessionId,
-                "localizationSessionId": request.analytics.localizationSessionId,
+            "location": location.toJson(),
+            
+            // session identifiers
+            "appSessionId": request.analytics.appSessionId,
+            "localizationSessionId": request.analytics.localizationSessionId,
 
-                // other analytics
-                "frameEventCounts": frameEventCounts.toJson(),
-                "totalDistance": String(request.analytics.totalDistance),
-                "rotationSpread": request.analytics.rotationSpread.toJson(),
-            ]
-            
-            // add image quality filter info if enabled
-            if let imageQualityFilterInfo = request.analytics.imageQualityFilterInfo {
-                params["imageQualityModelVersion"] = imageQualityFilterInfo.modelVersion
-                params["imageQualityScore"] = String(imageQualityFilterInfo.lastImageQualityScore)
-            }
-            
-            if let magneticData = request.analytics.magneticField?.toJson() {
-                params["magneticData"] = magneticData
-            }
+            // other analytics
+            "frameEventCounts": frameEventCounts.toJson(),
+            "totalDistance": String(request.analytics.totalDistance),
+            "rotationSpread": request.analytics.rotationSpread.toJson(),
+        ]
+        
+        // add image quality filter info if enabled
+        if let imageQualityFilterInfo = request.analytics.imageQualityFilterInfo {
+            params["imageQualityModelVersion"] = imageQualityFilterInfo.modelVersion
+            params["imageQualityScore"] = String(imageQualityFilterInfo.lastImageQualityScore)
         }
-        else {
-            params = MockData.params(request)
+        
+        if let magneticData = request.analytics.magneticField?.toJson() {
+            params["magneticData"] = magneticData
         }
         
         params["remoteConfigId"] = request.analytics.remoteConfigId
@@ -350,8 +343,16 @@ class FMApi {
         if let relativeOpenCVAnchorPose = request.relativeOpenCVAnchorPose {
             params["referenceFrame"] = relativeOpenCVAnchorPose.toJson()
         }
-                
-        return params.merging(getDeviceAndHostAppInfo()) { (_, new) in new }
+        
+        // add device and host app info
+        params.merge(getDeviceAndHostAppInfo()) { (_, new) in new }
+        
+        // add fixed simulated data if simulating
+        if request.isSimulation {
+            params.merge(MockData.params(request)) { (_, new) in new }
+        }
+        
+        return params
     }
     
     /// Generate the image data used to perform "localize" HTTP request .
@@ -384,7 +385,7 @@ class FMApi {
             "sdkVersion": FMSDKInfo.fullVersion,
             "hostAppBundleIdentifier": FMSDKInfo.hostAppBundleIdentifier,
             "hostAppMarketingVersion": FMSDKInfo.hostAppMarketingVersion,
-            "hostAppBuildNumber": FMSDKInfo.hostAppBuildNumber
+            "hostAppBuild": FMSDKInfo.hostAppBuild
         ]
         return info
     }

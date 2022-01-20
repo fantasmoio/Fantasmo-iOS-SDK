@@ -61,8 +61,6 @@ class MockData {
 
         return ["intrinsics" : intrinsic.json,
                 "gravity" : gravity.json,
-                "capturedAt" : String(NSDate().timeIntervalSince1970 * 1000.0),
-                "uuid" : "C6241E04-974A-4131-8B36-044A11E2C7F0",
                 "location": location.toJson()]
     }
 
@@ -81,8 +79,6 @@ class MockData {
 
         return ["intrinsics" : intrinsic.json,
                 "gravity" : gravity.json,
-                "capturedAt" : String(NSDate().timeIntervalSince1970 * 1000.0),
-                "uuid" : "A87E55CB-0649-4F87-A42F-8A33970F421E",
                 "location": location.toJson()]
     }
 }

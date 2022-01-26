@@ -29,6 +29,7 @@
 		011589E62742957100CFC368 /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011589E52742957100CFC368 /* ImageEncoder.swift */; };
 		01172678274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */; };
 		0117268E274FEEA5005EA7C0 /* ImageQualityModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0117268D274FEEA5005EA7C0 /* ImageQualityModel.mlmodel */; };
+		011A10E527A173C800B84A0F /* FMGammaCorrector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011A10E427A173C800B84A0F /* FMGammaCorrector.swift */; };
 		0123A4D7270F2E7E00763758 /* FMParkingViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */; };
 		0123A4D9270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */; };
 		0123A4DC270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */; };
@@ -238,6 +239,7 @@
 		011589E52742957100CFC368 /* ImageEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoder.swift; sourceTree = "<group>"; };
 		01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQualityModelUpdater.swift; sourceTree = "<group>"; };
 		0117268D274FEEA5005EA7C0 /* ImageQualityModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ImageQualityModel.mlmodel; sourceTree = "<group>"; };
+		011A10E427A173C800B84A0F /* FMGammaCorrector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMGammaCorrector.swift; sourceTree = "<group>"; };
 		0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMParkingViewControllerDelegate.swift; sourceTree = "<group>"; };
 		0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewControllerProtocol.swift; sourceTree = "<group>"; };
@@ -699,9 +701,10 @@
 				A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */,
 				A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */,
 				A3B57316269C3B6D0089B5F5 /* FMFrameFilterChain.swift */,
+				011A10E427A173C800B84A0F /* FMGammaCorrector.swift */,
+				0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */,
 				A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */,
 				A3C7657B26B29F4F0062E932 /* FMTrackingStateFilter.swift */,
-				0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -1009,6 +1012,7 @@
 				A3CB77302636B3D5009625BB /* FMPose.swift in Sources */,
 				A35909A2269EE73E00A7BF5F /* FMCameraPitchFilter.swift in Sources */,
 				01343E97271D8376003A4716 /* FMSDKInfo.swift in Sources */,
+				011A10E527A173C800B84A0F /* FMGammaCorrector.swift in Sources */,
 				A3CB774226372A9B009625BB /* simd_quatf+Extension.swift in Sources */,
 				A3CB77372636BDB8009625BB /* FMOrientation.swift in Sources */,
 				A3798CA526AAF52D007CB41F /* ARCamera+Extension.swift in Sources */,

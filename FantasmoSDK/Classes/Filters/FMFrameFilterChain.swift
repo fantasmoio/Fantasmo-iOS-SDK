@@ -69,31 +69,26 @@ class FMFrameFilterChain {
     }
     
     /// Accepted frames should be used for the localization.
-    func evaluateAsync(_ frame: FMFrame, state: FMLocationManager.State, completion: @escaping ((FMFrameFilterResult) -> Void)) {
-        guard Thread.isMainThread else { fatalError("evaluateAsync not called from main thread") }
+    func evaluate(_ frame: FMFrame) -> FMFrameFilterResult {
+        guard !Thread.isMainThread else { fatalError("evaluate called from main thread") }
         
         if shouldForceAccept() {
             lastAcceptTime = clock()
-            completion(.accepted)
-            return
+            return .accepted
+        }
+                
+        var result: FMFrameFilterResult = .accepted
+        for filter in self.filters {
+            if case let .rejected(reason) = filter.accepts(frame) {
+                result = .rejected(reason: reason)
+                break
+            }
         }
         
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            var result: FMFrameFilterResult = .accepted
-            let filters: [FMFrameFilter] = self?.filters ?? []
-            for filter in filters {
-                if case let .rejected(reason) = filter.accepts(frame) {
-                    result = .rejected(reason: reason)
-                    break
-                }
-            }
-            DispatchQueue.main.async {
-                if result == .accepted {
-                    self?.lastAcceptTime = clock()
-                }
-                completion(result)
-            }
+        if result == .accepted {
+            lastAcceptTime = clock()
         }
+        return result
     }
     
     func getFilter<T:FMFrameFilter>(ofType type: T.Type) -> T? {

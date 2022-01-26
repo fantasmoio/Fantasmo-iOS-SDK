@@ -85,7 +85,11 @@ class FMLocationManager: NSObject {
         }
     }
     
+    private var frameFilterQueue = DispatchQueue(label: "io.fantasmo.frameFilterQueue", qos: .userInteractive)
+    
     private var frameFilterChain = FMFrameFilterChain(config: RemoteConfig.config())
+    
+    private var gammaCorrector = FMGammaCorrector()
     
     private var behaviorRequester: BehaviorRequester?
     
@@ -220,7 +224,7 @@ class FMLocationManager: NSObject {
     /// provides a response via the delegate.
     ///
     /// - Parameter frame: Frame to localize.
-    public func localize(frame: ARFrame, from session: ARSession) {
+    public func localize(frame: ARFrame) {
         guard isConnected else { return }
         
         log.debug(parameters: ["simulation": isSimulation])
@@ -355,21 +359,32 @@ class FMLocationManager: NSObject {
 
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        // TODO - what is this used for? should it be the gamme corrected frame
         lastFrame = frame
         
         guard !isEvaluatingFrame, state != .stopped else {
             return
         }
         
-        // run the frame through the configured filters
         isEvaluatingFrame = true
-        frameFilterChain.evaluateAsync(frame, state: state) { [weak self] filterResult in
-            self?.processFrame(frame, from: session, filterResult: filterResult)
-            self?.isEvaluatingFrame = false
+        
+        frameFilterQueue.async { [weak self] in
+            
+            // adjust gamma
+            let frameToEvaluate = self?.gammaCorrector.process(frame: frame) ?? frame
+            
+            // run the frame through the configured filters
+            let filterResult = self?.frameFilterChain.evaluate(frameToEvaluate) ?? .accepted
+            
+            // handle the result on the main queue
+            DispatchQueue.main.async {
+                self?.handleFrameFilterResult(filterResult, frame: frameToEvaluate)
+                self?.isEvaluatingFrame = false
+            }
         }
     }
     
-    private func processFrame(_ frame: ARFrame, from session: ARSession, filterResult: FMFrameFilterResult) {
+    private func handleFrameFilterResult(_ filterResult: FMFrameFilterResult, frame: ARFrame) {
         behaviorRequester?.processResult(filterResult)
         accumulatedARKitInfo.update(with: frame)
         
@@ -377,7 +392,7 @@ extension FMLocationManager : ARSessionDelegate {
             frameEventAccumulator.accumulate(filterRejectionReason: reason)
         } else {
             if state == .localizing {
-                localize(frame: frame, from: session)
+                localize(frame: frame)
             }
         }
         

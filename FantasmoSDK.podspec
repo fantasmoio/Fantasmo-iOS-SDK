@@ -20,7 +20,9 @@ Pod::Spec.new do |s|
   s.ios.deployment_target 	= '11.0'
   s.swift_version    		= '5'
 
-  s.source_files = 'FantasmoSDK/Classes/**/*.{h,m,swift}'
+  s.source_files = 'FantasmoSDK/Classes/**/*.{h,m,swift,mlmodel,mlmodelc}'
   s.resources = 'FantasmoSDK/Assets/**'
-  
+
+  s.xcconfig = {'COREML_CODEGEN_LANGUAGE' => 'Swift', 'COREML_CODEGEN_SWIFT_GLOBAL_MODULE' => 'NO'}
+
 end

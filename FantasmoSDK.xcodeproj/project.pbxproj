@@ -44,6 +44,7 @@
 		01343E97271D8376003A4716 /* FMSDKInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01343E96271D8376003A4716 /* FMSDKInfo.swift */; };
 		0134BF872705E8F400DDEF7A /* FMTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0134BF862705E8F400DDEF7A /* FMTipLabel.swift */; };
 		0134BF8A270610E800DDEF7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
+		013BF22627A2A745001DE841 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 013BF22527A2A745001DE841 /* Shaders.metal */; };
 		0143E8D4270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */; };
 		0143E8D8270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */; };
 		0144B79E27047C38009A4042 /* FMParkingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B79D27047C38009A4042 /* FMParkingViewController.swift */; };
@@ -251,6 +252,7 @@
 		01296D0B2756779300636BBE /* blur-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "blur-filter.json"; sourceTree = "<group>"; };
 		01343E96271D8376003A4716 /* FMSDKInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSDKInfo.swift; sourceTree = "<group>"; };
 		0134BF862705E8F400DDEF7A /* FMTipLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMTipLabel.swift; sourceTree = "<group>"; };
+		013BF22527A2A745001DE841 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSessionStatisticsView.swift; sourceTree = "<group>"; };
 		0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FMSessionStatisticsView.xib; sourceTree = "<group>"; };
 		0144B79D27047C38009A4042 /* FMParkingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMParkingViewController.swift; sourceTree = "<group>"; };
@@ -574,6 +576,7 @@
 				010C274B273556BC00EF34A3 /* FMQRCodeDetector.swift */,
 				A02646BF260CE46C00A7FA6B /* FMLog.swift */,
 				01343E96271D8376003A4716 /* FMSDKInfo.swift */,
+				013BF22527A2A745001DE841 /* Shaders.metal */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1071,6 +1074,7 @@
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,
 				017C5ED5278C540F000DEBCE /* CLLocation+Codable.swift in Sources */,
+				013BF22627A2A745001DE841 /* Shaders.metal in Sources */,
 				01827D292758E0B5006D21CE /* MockData.swift in Sources */,
 				A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */,
 				A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */,

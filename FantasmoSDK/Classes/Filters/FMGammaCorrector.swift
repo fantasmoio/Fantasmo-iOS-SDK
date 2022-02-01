@@ -7,135 +7,165 @@
 
 import Foundation
 import Metal
+import MetalPerformanceShaders
 import ARKit
+import CoreVideo
+import VideoToolbox
+import MetalKit
 
 class FMGammaCorrector {
     
-    let metalDevice: MTLDevice?
-    let metalCommandQueue: MTLCommandQueue?
-
-    init() {
-        metalDevice = MTLCreateSystemDefaultDevice()
-        metalCommandQueue = metalDevice?.makeCommandQueue()
-    }
+    let device: MTLDevice
+    let library: MTLLibrary
+    let commandQueue: MTLCommandQueue
+    let gammaComputePipelineState: MTLComputePipelineState
+    let textureCache: CVMetalTextureCache
     
-    func process(frame originalFrame: ARFrame) -> ARFrame {
+    init?() {
+        guard let device = MTLCreateSystemDefaultDevice() else {
+            log.error("error creating metal device")
+            return nil
+        }
+        self.device = device
+        
+        guard let commandQueue = device.makeCommandQueue() else {
+            log.error("error creating metal command queue")
+            return nil
+        }
+        self.commandQueue = commandQueue
+        
+        do {
+            let bundle = Bundle(for: type(of: self))
+            self.library = try device.makeDefaultLibrary(bundle: bundle)
+        } catch {
+            log.error("error creating metal library: \(error.localizedDescription)")
+            return nil
+        }
+        
+        let gammaComputeFunctionName = "compute_gamma_correction"
+        guard let gammaComputeFunction = library.makeFunction(name: gammaComputeFunctionName) else {
+            log.error("unable to find compute shader: \(gammaComputeFunctionName)")
+            return nil
+        }
+        
+        do {
+            self.gammaComputePipelineState = try device.makeComputePipelineState(function: gammaComputeFunction)
+        } catch {
+            log.error("error creating compute pipeline state: \(error.localizedDescription)")
+            return nil
+        }
+        
+        var textureCache: CVMetalTextureCache?
+        let cvReturn = CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &textureCache)
+        guard cvReturn == kCVReturnSuccess, let textureCache = textureCache else {
+            log.error("error creating cv metal texture cache - code \(cvReturn)")
+            return nil
+        }
+        self.textureCache = textureCache
+    }
+
+    func process(frame originalFrame: FMFrame) -> FMFrame {
+        guard let commandBuffer = commandQueue.makeCommandBuffer() else {
+            log.error("error creating metal command buffer")
+            return originalFrame
+        }
+        
+        // texture containing just the Luma (Y) channel from the pixel buffer
+        guard let yTexture = getMetalTexture(from: originalFrame.capturedImage, pixelFormat: .r8Unorm, planeIndex: 0) else {
+            log.error("error creating metal texture from pixel buffer")
+            return originalFrame
+        }
+        
+        // calculate histogram for the source texture
+        var numberOfBins: Int = 256
+        var imageHistogramInfo = MPSImageHistogramInfo(numberOfHistogramEntries: numberOfBins,
+                                                       histogramForAlpha: false,
+                                                       minPixelValue: vector_float4(0,0,0,0),
+                                                       maxPixelValue: vector_float4(1,1,1,1))
+        
+        let imageHistogram = MPSImageHistogram(device: device, histogramInfo: &imageHistogramInfo)
+        let imageHistogramLength = imageHistogram.histogramSize(forSourceFormat: yTexture.pixelFormat)
+        
+        guard let imageHistogramBuffer = device.makeBuffer(length: imageHistogramLength, options: [.storageModePrivate]) else {
+            log.error("error creating image histogram buffer")
+            return originalFrame
+        }
+        
+        imageHistogram.encode(to: commandBuffer,
+                              sourceTexture: yTexture,
+                              histogram: imageHistogramBuffer,
+                              histogramOffset: 0)
+        
+        guard let gammaComputeEncoder = commandBuffer.makeComputeCommandEncoder() else {
+            log.error("error creating gamma compute encoder")
+            return originalFrame
+        }
+        guard let gammaCorrectionResultBuffer = device.makeBuffer(length: MemoryLayout<Float>.size, options: [.storageModeShared]) else {
+            log.error("error allocating gamme correction result buffer")
+            return originalFrame
+        }
+                
+        var targetBrightness: Float = 0.15
+        gammaComputeEncoder.setComputePipelineState(gammaComputePipelineState)
+        gammaComputeEncoder.setBuffer(imageHistogramBuffer, offset: 0, index: 0)
+        gammaComputeEncoder.setBytes(&numberOfBins, length: MemoryLayout<Int>.size, index: 1)
+        gammaComputeEncoder.setBytes(&targetBrightness, length: MemoryLayout<Float>.size, index: 2)
+        gammaComputeEncoder.setBuffer(gammaCorrectionResultBuffer, offset: 0, index: 3)
+        gammaComputeEncoder.dispatchThreads(MTLSizeMake(1, 1, 1), threadsPerThreadgroup: MTLSizeMake(1, 1, 1))
+        gammaComputeEncoder.endEncoding()
+            
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+
+        let gamma = gammaCorrectionResultBuffer.contents().assumingMemoryBound(to: Float.self).pointee
+        print("gammaCorrectionResult = \(gamma)")
         
         return originalFrame
     }
+    
+    private func getMetalTexture(from pixelBuffer: CVPixelBuffer, pixelFormat: MTLPixelFormat, planeIndex: Int) -> MTLTexture? {
+        // Expects `pixelBuffer` to be bi-planar YCbCr
+        if (CVPixelBufferGetPlaneCount(pixelBuffer) < 2) {
+            return nil
+        }
+        let width = CVPixelBufferGetWidthOfPlane(pixelBuffer, planeIndex)
+        let height = CVPixelBufferGetHeightOfPlane(pixelBuffer, planeIndex)
+        var cvMetalTexture: CVMetalTexture?
+        let status = CVMetalTextureCacheCreateTextureFromImage(nil,
+                                                               textureCache,
+                                                               pixelBuffer,
+                                                               nil,
+                                                               pixelFormat,
+                                                               width,
+                                                               height,
+                                                               planeIndex,
+                                                               &cvMetalTexture)
+        guard status == kCVReturnSuccess, let cvMetalTexture = cvMetalTexture else {
+            return nil
+        }
+        return CVMetalTextureGetTexture(cvMetalTexture)
+    }
+
+    /*
+    var debugCaptureScope: MTLCaptureScope?
+    
+    func setUpDebugCaptureIfNeeded() {
+        if #available(iOS 13.0, *) {
+            if debugCaptureScope == nil {
+                debugCaptureScope = MTLCaptureManager.shared().makeCaptureScope(device: device)
+                debugCaptureScope?.label = "Gamma Corrector"
+                guard let debugCaptureScope = debugCaptureScope else { return }
+                let captureManager = MTLCaptureManager.shared()
+                let captureDescriptor = MTLCaptureDescriptor()
+                captureDescriptor.captureObject = debugCaptureScope
+                do {
+                    try captureManager.startCapture(with: captureDescriptor)
+                }
+                catch {
+                    fatalError("error when trying to capture: \(error)")
+                }
+            }
+        }
+    }
+    */
 }
-
-/*
-class FMBlurFilter: FMFrameFilter {
-    
-    var variance: Float = 0.0
-    var varianceAverager = MovingAverage()
-    var averageVariance: Float {
-        varianceAverager.average
-    }
-
-    let varianceThreshold: Float
-    let suddenDropThreshold: Float
-    let averageThroughputThreshold: Float
-    
-    var throughputAverager = MovingAverage(period: 8)
-    var averageThroughput: Float {
-        throughputAverager.average
-    }
-    
-    let metalDevice = MTLCreateSystemDefaultDevice()
-    let metalCommandQueue: MTLCommandQueue?
-
-    init(varianceThreshold: Float, suddenDropThreshold: Float, averageThroughputThreshold: Float) {
-        self.varianceThreshold = varianceThreshold
-        self.suddenDropThreshold = suddenDropThreshold
-        self.averageThroughputThreshold = averageThroughputThreshold
-        metalCommandQueue = metalDevice?.makeCommandQueue()
-    }
-    
-    func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
-        variance = calculateVariance(frame: frame)
-        _ = varianceAverager.addSample(value: variance)
-        
-        var isLowVariance = false
-        var isBlurry = false
-
-        let isBelowThreshold = variance < varianceThreshold
-        let isSuddenDrop = variance < (averageVariance * suddenDropThreshold)
-        isLowVariance = isBelowThreshold || isSuddenDrop
-        
-        if isLowVariance {
-            _ = throughputAverager.addSample(value: 0.0)
-        } else {
-            _ = throughputAverager.addSample(value: 1.0)
-        }
-        
-        // if not enough images are passing, pass regardless of variance
-        if averageThroughput < averageThroughputThreshold {
-            isBlurry = false
-        } else {
-            isBlurry = isLowVariance
-        }
-        
-        return isBlurry ? .rejected(reason: .imageTooBlurry) : .accepted
-    }
-    
-    func calculateVariance(frame: FMFrame) -> Float {
-        guard let metalDevice = metalDevice, let metalCommandBuffer = self.metalCommandQueue?.makeCommandBuffer() else {
-            return 0
-        }
-
-        // Set up shaders
-        let laplacian = MPSImageLaplacian(device: metalDevice)
-        let meanAndVariance = MPSImageStatisticsMeanAndVariance(device: metalDevice)
-
-        // load frame buffer as texture
-        let pixelBuffer = frame.capturedImage
-        var cgImage: CGImage?
-        VTCreateCGImageFromCVPixelBuffer(pixelBuffer, options: nil, imageOut: &cgImage)
-        let textureLoader = MTKTextureLoader(device: metalDevice)
-        let sourceTexture = try! textureLoader.newTexture(cgImage: cgImage!, options: nil)
-
-        // convert image to black-and-white
-        let srcColorSpace = CGColorSpaceCreateDeviceRGB();
-        let dstColorSpace = CGColorSpaceCreateDeviceGray();
-        let conversionInfo = CGColorConversionInfo(src: srcColorSpace, dst: dstColorSpace);
-        let conversion = MPSImageConversion(device: metalDevice,
-                                            srcAlpha: .alphaIsOne,
-                                            destAlpha: .alphaIsOne,
-                                            backgroundColor: nil,
-                                            conversionInfo: conversionInfo)
-        let grayTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Unorm, width: sourceTexture.width, height: sourceTexture.height, mipmapped: false)
-        grayTextureDescriptor.usage = [.shaderWrite, .shaderRead]
-        let grayTexture = metalDevice.makeTexture(descriptor: grayTextureDescriptor)!
-        conversion.encode(commandBuffer: metalCommandBuffer, sourceTexture: sourceTexture, destinationTexture: grayTexture)
-
-        // set up destination texture
-        let laplacianTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: grayTexture.pixelFormat, width: grayTexture.width, height: grayTexture.height, mipmapped: false)
-        laplacianTextureDescriptor.usage = [.shaderWrite, .shaderRead]
-        let lapTexture = metalDevice.makeTexture(descriptor: laplacianTextureDescriptor)!
-
-        // encode the laplacian command
-        laplacian.encode(commandBuffer: metalCommandBuffer, sourceTexture: grayTexture, destinationTexture: lapTexture)
-
-        // set up destination texture
-        let varianceTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r32Float, width: 2, height: 1, mipmapped: false)
-        varianceTextureDescriptor.usage = [.shaderWrite, .shaderRead]
-        let varianceTexture = metalDevice.makeTexture(descriptor: varianceTextureDescriptor)!
-
-        // encode the mean and variance command
-        meanAndVariance.encode(commandBuffer: metalCommandBuffer, sourceTexture: lapTexture, destinationTexture: varianceTexture)
-
-        // run the buffer
-        metalCommandBuffer.commit()
-        metalCommandBuffer.waitUntilCompleted()
-
-        // grab results
-        var result = [Float](repeatElement(0, count: 2))
-        let region = MTLRegionMake2D(0, 0, 2, 1)
-        varianceTexture.getBytes(&result, bytesPerRow: 1 * 2 * 4, from: region, mipmapLevel: 0)
-
-        return Float(result.last! * 255.0 * 255.0)
-    }
-}
-*/

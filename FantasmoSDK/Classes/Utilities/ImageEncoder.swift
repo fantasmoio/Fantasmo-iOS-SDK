@@ -36,15 +36,15 @@ class ImageEncoder {
         self.ciContext = CIContext(options: [.highQualityDownsample: true, .priorityRequestLow: true])
     }
     
-    func encodedImage(from arFrame: ARFrame) -> ImageEncoder.Image? {
-        let ciImage = CIImage(cvPixelBuffer: arFrame.capturedImage)
+    func encodedImage(from frame: FMFrame) -> ImageEncoder.Image? {
+        let ciImage = CIImage(cvPixelBuffer: frame.capturedImage)
         guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else {
             log.error("error creating cgImage")
             return nil
         }
         
         let imageOrientation: UIImage.Orientation
-        switch arFrame.deviceOrientation {
+        switch frame.deviceOrientation {
         case .landscapeLeft:
             imageOrientation = .up
         case .landscapeRight:

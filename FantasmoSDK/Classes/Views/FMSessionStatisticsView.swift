@@ -49,7 +49,7 @@ class FMSessionStatisticsView: UIView {
         remoteConfigLabel.text = "Remote Config: \(RemoteConfig.config().remoteConfigId)"
     }
         
-    public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
+    public func updateThrottled(frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
         let shouldUpdate = frame.timestamp - lastFrameTimestamp > (1.0 / refreshRate)
         guard shouldUpdate else {
             return

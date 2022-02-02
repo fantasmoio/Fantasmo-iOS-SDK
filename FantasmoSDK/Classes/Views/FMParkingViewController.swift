@@ -414,7 +414,7 @@ extension FMParkingViewController: FMLocationManagerDelegate {
         statisticsView?.update(state: state)
     }
     
-    func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator) {
+    func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator) {
         statisticsView?.updateThrottled(frame: frame, info: info, rejections: rejections)
     }
 }

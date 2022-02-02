@@ -17,10 +17,10 @@ class FMCameraPitchFilter: FMFrameFilter {
     }
     
     func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
-        switch frame.fmCamera.pitch {
-        case _ where frame.fmCamera.pitch > maxUpwardTiltRadians:
+        switch frame.camera.pitch {
+        case _ where frame.camera.pitch > maxUpwardTiltRadians:
             return .rejected(reason: .pitchTooHigh)
-        case _ where frame.fmCamera.pitch < -maxDownwardTiltRadians:
+        case _ where frame.camera.pitch < -maxDownwardTiltRadians:
             return .rejected(reason: .pitchTooLow)
         default:
             return .accepted

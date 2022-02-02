@@ -83,7 +83,7 @@ class FMApi {
     ///   - request: Localization request struct
     ///   - completion: Completion closure
     ///   - error: Error closure
-    func sendLocalizationRequest(frame: ARFrame,
+    func sendLocalizationRequest(frame: FMFrame,
                                  request: FMLocalizationRequest,
                                  completion: @escaping LocalizationResult,
                                  error: @escaping ErrorResult) {
@@ -94,7 +94,7 @@ class FMApi {
             return
         }
         
-        let params = getLocalizeParams(for: frame, image: image, request: request)
+        let params = getLocalizeParams(frame: frame, image: image, request: request)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -162,7 +162,7 @@ class FMApi {
                                             completion: @escaping IsLocalizationAvailableResult,
                                             error: @escaping ErrorResult) {
         // set up request parameters
-        let params = getInitializeParams(for: location)
+        let params = getInitializeParams(location: location)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -208,7 +208,7 @@ class FMApi {
                                    completion: @escaping InitializationResult,
                                    error: @escaping ErrorResult) {
         // set up request parameters
-        let params = getInitializeParams(for: location)
+        let params = getInitializeParams(location: location)
         
         // set up completion closure
         let postCompletion: FMRestClient.RestResult = { code, data in
@@ -253,7 +253,7 @@ class FMApi {
     
     // MARK: - private methods
     
-    private func getInitializeParams(for location: CLLocation) -> [String: Any] {
+    private func getInitializeParams(location: CLLocation) -> [String: Any] {
         let params: [String: Any] = [
             "location": [
                 "coordinate": [
@@ -274,7 +274,7 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func getLocalizeParams(for frame: ARFrame, image: ImageEncoder.Image, request: FMLocalizationRequest) -> [String : String?] {
+    private func getLocalizeParams(frame:FMFrame, image: ImageEncoder.Image, request: FMLocalizationRequest) -> [String : String?] {
         
         let interfaceOrientation = UIApplication.shared.statusBarOrientation
         
@@ -364,7 +364,7 @@ class FMApi {
     ///   - frame: Frame to localize
     ///   - request: Localization request struct
     ///   - Returns: Prepared localization image
-    private func encodedImage(from frame: ARFrame, request: FMLocalizationRequest) -> ImageEncoder.Image? {
+    private func encodedImage(from frame: FMFrame, request: FMLocalizationRequest) -> ImageEncoder.Image? {
         
         // mock if simulation
         guard !request.isSimulation else {

@@ -14,14 +14,14 @@ class FMFrame {
     
     public private(set) var camera: FMCamera
     public private(set) var capturedImage: CVPixelBuffer
-    public private(set) var appliedGammaCorrection: Float
     public private(set) var timestamp: TimeInterval
     
-    init(camera: FMCamera, capturedImage: CVPixelBuffer, timestamp: TimeInterval = Date().timeIntervalSince1970, appliedGammaCorrection: Float = 1.0) {
+    public var enhancedImage: CVPixelBuffer?
+    
+    init(camera: FMCamera, capturedImage: CVPixelBuffer, timestamp: TimeInterval = Date().timeIntervalSince1970) {
         self.camera = camera
         self.capturedImage = capturedImage
         self.timestamp = timestamp
-        self.appliedGammaCorrection = appliedGammaCorrection
     }
     
     convenience init(arFrame: ARFrame) {

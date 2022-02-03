@@ -359,14 +359,14 @@ extension FMLocationManager : ARSessionDelegate {
         frameFilterQueue.async { [weak self] in
             
             // adjust gamma
-            let enhancedFrame = self?.gammaCorrector?.process(frame: fmFrame) ?? fmFrame
+            fmFrame.enhancedImage = self?.gammaCorrector?.enhance(fmFrame.capturedImage)
             
             // run the frame through the configured filters
-            let filterResult = self?.frameFilterChain.evaluate(enhancedFrame) ?? .accepted
+            let filterResult = self?.frameFilterChain.evaluate(fmFrame) ?? .accepted
             
             // handle the result on the main queue
             DispatchQueue.main.async {
-                self?.handleFrameFilterResult(filterResult, frame: enhancedFrame)
+                self?.handleFrameFilterResult(filterResult, frame: fmFrame)
                 self?.isEvaluatingFrame = false
             }
         }

@@ -82,18 +82,19 @@ class FMGammaCorrector {
         self.textureCache = textureCache
     }
 
-    func process(frame originalFrame: FMFrame) -> FMFrame {
+    func enhance(_ capturedImage: CVPixelBuffer) -> CVPixelBuffer? {
+        let startDate = Date()
         guard let commandBuffer = commandQueue.makeCommandBuffer() else {
             log.error("error creating metal command buffer")
-            return originalFrame
+            return nil
         }
         
         // create separate Y (Luma) and CbCr (Chroma) metal textures
-        guard let yTexture = getMetalTexture(from: originalFrame.capturedImage, pixelFormat: .r8Unorm, planeIndex: 0),
-              let cbcrTexture = getMetalTexture(from: originalFrame.capturedImage, pixelFormat: .rg8Unorm, planeIndex: 1)
+        guard let yTexture = getMetalTexture(from: capturedImage, pixelFormat: .r8Unorm, planeIndex: 0),
+              let cbcrTexture = getMetalTexture(from: capturedImage, pixelFormat: .rg8Unorm, planeIndex: 1)
         else {
             log.error("error creating YCbCr metal textures from pixel buffer")
-            return originalFrame
+            return nil
         }
         
         // calculate histogram for the Y texture
@@ -106,7 +107,7 @@ class FMGammaCorrector {
         
         guard let histogramBuffer = device.makeBuffer(length: histogramLength, options: [.storageModePrivate]) else {
             log.error("error creating image histogram buffer")
-            return originalFrame
+            return nil
         }
         
         histogram.encode(to: commandBuffer,
@@ -117,13 +118,13 @@ class FMGammaCorrector {
         // calculate gamma correction using the histogram data
         guard let gammaCorrectionEncoder = commandBuffer.makeComputeCommandEncoder() else {
             log.error("error creating gamma correction encoder")
-            return originalFrame
+            return nil
         }
         
         // create a result buffer for our gamma correction
         guard let gammaCorrectionResult = device.makeBuffer(length: MemoryLayout<Float>.size, options: [.storageModeShared]) else {
             log.error("error allocating gamme correction result buffer")
-            return originalFrame
+            return nil
         }
         
         var targetBrightness: Float = 0.15
@@ -138,19 +139,19 @@ class FMGammaCorrector {
         // create a writable RGB texture
         let rgbTextureDesc = MTLTextureDescriptor()
         rgbTextureDesc.pixelFormat = .bgra8Unorm
-        rgbTextureDesc.width = CVPixelBufferGetWidth(originalFrame.capturedImage)
-        rgbTextureDesc.height = CVPixelBufferGetHeight(originalFrame.capturedImage)
+        rgbTextureDesc.width = CVPixelBufferGetWidth(capturedImage)
+        rgbTextureDesc.height = CVPixelBufferGetHeight(capturedImage)
         rgbTextureDesc.usage = [.shaderWrite]
         
         guard let rgbTexture = device.makeTexture(descriptor: rgbTextureDesc) else {
             log.error("error creating RGB texture")
-            return originalFrame
+            return nil
         }
         
         // convert the Y + CbCr textures into RGB and apply gamma correction
         guard let convertYCbCrToRGBEncoder = commandBuffer.makeComputeCommandEncoder() else {
             log.error("error creating YCbCr to RGB encoder")
-            return originalFrame
+            return nil
         }
         
         convertYCbCrToRGBEncoder.setComputePipelineState(convertYCbCrToRGBPipelineState)
@@ -173,9 +174,11 @@ class FMGammaCorrector {
         let appliedGammaCorrection = gammaCorrectionResult.contents()
             .bindMemory(to: Float.self, capacity: 1).pointee
         
-        print("appliedGammaCorrection: \(appliedGammaCorrection)")
+        // print("appliedGammaCorrection: \(appliedGammaCorrection)")
         
-        return originalFrame
+        print("time: \(Date().timeIntervalSince(startDate))")
+        
+        return nil
     }
     
     private func getMetalTexture(from pixelBuffer: CVPixelBuffer, pixelFormat: MTLPixelFormat, planeIndex: Int) -> MTLTexture? {

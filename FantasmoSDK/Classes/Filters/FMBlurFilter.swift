@@ -6,10 +6,7 @@
 //
 
 import ARKit
-import Metal
 import MetalPerformanceShaders
-import MetalKit
-import VideoToolbox
 
 /// Rejects low variance images. Because an absolute threshold is not always
 /// appropriate, also rejects frames that have a lower than average variance.
@@ -34,12 +31,17 @@ class FMBlurFilter: FMFrameFilter {
     
     let metalDevice = MTLCreateSystemDefaultDevice()
     let metalCommandQueue: MTLCommandQueue?
+    var metalTextureCache: CVMetalTextureCache?
 
     init(varianceThreshold: Float, suddenDropThreshold: Float, averageThroughputThreshold: Float) {
         self.varianceThreshold = varianceThreshold
         self.suddenDropThreshold = suddenDropThreshold
         self.averageThroughputThreshold = averageThroughputThreshold
         metalCommandQueue = metalDevice?.makeCommandQueue()
+        if let metalDevice = metalDevice {
+            // create a texture cache for CV-backed metal textures
+            CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, metalDevice, nil, &metalTextureCache)
+        }
     }
     
     func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
@@ -74,36 +76,19 @@ class FMBlurFilter: FMFrameFilter {
             return 0
         }
 
+        guard let grayTexture = getMetalTexture(from: frame.capturedImage, pixelFormat: .r8Unorm, planeIndex: 0) else {
+            log.error("error getting luma texture from pixel buffer")
+            return 0
+        }
+        
         // Set up shaders
         let laplacian = MPSImageLaplacian(device: metalDevice)
         let meanAndVariance = MPSImageStatisticsMeanAndVariance(device: metalDevice)
-
-        // load frame buffer as texture
-        let pixelBuffer = frame.capturedImage
-        var cgImage: CGImage?
-        VTCreateCGImageFromCVPixelBuffer(pixelBuffer, options: nil, imageOut: &cgImage)
-        let textureLoader = MTKTextureLoader(device: metalDevice)
-        let sourceTexture = try! textureLoader.newTexture(cgImage: cgImage!, options: nil)
-
-        // convert image to black-and-white
-        let srcColorSpace = CGColorSpaceCreateDeviceRGB();
-        let dstColorSpace = CGColorSpaceCreateDeviceGray();
-        let conversionInfo = CGColorConversionInfo(src: srcColorSpace, dst: dstColorSpace);
-        let conversion = MPSImageConversion(device: metalDevice,
-                                            srcAlpha: .alphaIsOne,
-                                            destAlpha: .alphaIsOne,
-                                            backgroundColor: nil,
-                                            conversionInfo: conversionInfo)
-        let grayTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .r16Unorm, width: sourceTexture.width, height: sourceTexture.height, mipmapped: false)
-        grayTextureDescriptor.usage = [.shaderWrite, .shaderRead]
-        let grayTexture = metalDevice.makeTexture(descriptor: grayTextureDescriptor)!
-        conversion.encode(commandBuffer: metalCommandBuffer, sourceTexture: sourceTexture, destinationTexture: grayTexture)
-
+        
         // set up destination texture
         let laplacianTextureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: grayTexture.pixelFormat, width: grayTexture.width, height: grayTexture.height, mipmapped: false)
         laplacianTextureDescriptor.usage = [.shaderWrite, .shaderRead]
         let lapTexture = metalDevice.makeTexture(descriptor: laplacianTextureDescriptor)!
-
         // encode the laplacian command
         laplacian.encode(commandBuffer: metalCommandBuffer, sourceTexture: grayTexture, destinationTexture: lapTexture)
 
@@ -125,5 +110,28 @@ class FMBlurFilter: FMFrameFilter {
         varianceTexture.getBytes(&result, bytesPerRow: 1 * 2 * 4, from: region, mipmapLevel: 0)
 
         return Float(result.last! * 255.0 * 255.0)
+    }
+    
+    private func getMetalTexture(from pixelBuffer: CVPixelBuffer, pixelFormat: MTLPixelFormat, planeIndex: Int) -> MTLTexture? {
+        // Expects `pixelBuffer` to be bi-planar YCbCr
+        guard let metalTextureCache = metalTextureCache, CVPixelBufferGetPlaneCount(pixelBuffer) >= 2 else {
+            return nil
+        }
+        let width = CVPixelBufferGetWidthOfPlane(pixelBuffer, planeIndex)
+        let height = CVPixelBufferGetHeightOfPlane(pixelBuffer, planeIndex)
+        var cvMetalTexture: CVMetalTexture?
+        let status = CVMetalTextureCacheCreateTextureFromImage(nil,
+                                                               metalTextureCache,
+                                                               pixelBuffer,
+                                                               nil,
+                                                               pixelFormat,
+                                                               width,
+                                                               height,
+                                                               planeIndex,
+                                                               &cvMetalTexture)
+        guard status == kCVReturnSuccess, let cvMetalTexture = cvMetalTexture else {
+            return nil
+        }
+        return CVMetalTextureGetTexture(cvMetalTexture)
     }
 }

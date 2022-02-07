@@ -14,7 +14,7 @@ typealias FMFrameFilterResult = FantasmoSDK.FMFrameFilterResult
 typealias FMFrame = FantasmoSDK.FMFrame
 
 class SDKFilterTests: XCTestCase {
-
+    
     override class func setUp() {
         // Put setup code here that is run once (equal to mocha "before" hook)
     }
@@ -35,74 +35,73 @@ class SDKFilterTests: XCTestCase {
     func testMovementFilter() {
         let filter = FantasmoSDK.FMMovementFilter(threshold: 0.001)
         var transform = simd_float4x4(1)
-        var pixelBuffer: CVPixelBuffer? = nil
+        var pixelBuffer: CVPixelBuffer?
         CVPixelBufferCreate(kCFAllocatorDefault, 64, 64, kCVPixelFormatType_OneComponent8, nil, &pixelBuffer)
-        if let pixelBuffer = pixelBuffer {
-            var frame = FMFrame(camera: MockCamera(transform: transform), capturedImage: pixelBuffer)
-            XCTAssertEqual(filter.accepts(frame), .rejected(reason: .movingTooLittle))
-            transform = simd_float4x4(1.1)
-            frame = FMFrame(camera: MockCamera(transform: transform), capturedImage: pixelBuffer)
-            XCTAssertEqual(filter.accepts(frame), .accepted)
-            transform = simd_float4x4(1.099)
-            XCTAssertEqual(filter.accepts(frame), .rejected(reason: .movingTooLittle))
-        } else {
-            print ("Couldn't allocate mock pixel buffer")
-        }
+        var frame = FMFrame(camera: MockCamera(transform: transform), capturedImage: pixelBuffer!)
+        XCTAssertEqual(filter.accepts(frame), .rejected(reason: .movingTooLittle))
+        transform = simd_float4x4(1.1)
+        frame = FMFrame(camera: MockCamera(transform: transform), capturedImage: pixelBuffer!)
+        XCTAssertEqual(filter.accepts(frame), .accepted)
+        transform = simd_float4x4(1.099)
+        XCTAssertEqual(filter.accepts(frame), .rejected(reason: .movingTooLittle))
     }
 
     // note: this test will not fail and not throw an error code if the nonnilBuffer assignment fails
     func testCameraPitchFilter() {
         let filter = FantasmoSDK.FMCameraPitchFilter(maxUpwardTiltDegrees: 30, maxDownwardTiltDegrees: 65)
-        var pixelBuffer: CVPixelBuffer? = nil
+        var pixelBuffer: CVPixelBuffer?
         CVPixelBufferCreate(kCFAllocatorDefault, 64, 64, kCVPixelFormatType_OneComponent8, nil, &pixelBuffer)
         var pitch : Float = deg2rad(-90)
-        if let nonnilBuffer = pixelBuffer {
-            var frame = FMFrame(camera: MockCamera(pitch: pitch), capturedImage: nonnilBuffer)
-            XCTAssertEqual(filter.accepts(frame), .rejected(reason: .pitchTooLow))
-            pitch = deg2rad(-65)
-            frame = FMFrame(camera: MockCamera(pitch: pitch), capturedImage: nonnilBuffer)
-            XCTAssertEqual(filter.accepts(frame), .accepted)
-            pitch = deg2rad(0)
-            frame = FMFrame(camera: MockCamera(pitch: pitch), capturedImage: nonnilBuffer)
-            XCTAssertEqual(filter.accepts(frame), .accepted)
-            pitch = deg2rad(30)
-            frame = FMFrame(camera: MockCamera(pitch: pitch), capturedImage: nonnilBuffer)
-            XCTAssertEqual(filter.accepts(frame), .accepted)
-            pitch = deg2rad(60)
-            frame = FMFrame(camera: MockCamera(pitch: pitch), capturedImage: nonnilBuffer)
-            XCTAssertEqual(filter.accepts(frame), .rejected(reason: .pitchTooHigh))
-       } else {
-            print ("Couldn't allocate mock pixel buffer")
-        }
+        var frame = FMFrame(camera: MockCamera(pitch: pitch), capturedImage: pixelBuffer!)
+        XCTAssertEqual(filter.accepts(frame), .rejected(reason: .pitchTooLow))
+        pitch = deg2rad(-65)
+        frame = FMFrame(camera: MockCamera(pitch: pitch), capturedImage: pixelBuffer!)
+        XCTAssertEqual(filter.accepts(frame), .accepted)
+        pitch = deg2rad(0)
+        frame = FMFrame(camera: MockCamera(pitch: pitch), capturedImage: pixelBuffer!)
+        XCTAssertEqual(filter.accepts(frame), .accepted)
+        pitch = deg2rad(30)
+        frame = FMFrame(camera: MockCamera(pitch: pitch), capturedImage: pixelBuffer!)
+        XCTAssertEqual(filter.accepts(frame), .accepted)
+        pitch = deg2rad(60)
+        frame = FMFrame(camera: MockCamera(pitch: pitch), capturedImage: pixelBuffer!)
+        XCTAssertEqual(filter.accepts(frame), .rejected(reason: .pitchTooHigh))
     }
     
     func testBlurFilter() {
         let filter = FantasmoSDK.FMBlurFilter(varianceThreshold: 250, suddenDropThreshold: 0.4, averageThroughputThreshold: 0.25)
-        let dayScan = UIImage(named: "dayScan", in: Bundle(for: type(of: self)), compatibleWith: nil)
-        let dayScanFrame = FMFrame(camera: MockCamera(), capturedImage: dayScan!.pixelBuffer()!)
-        let nightScan = UIImage(named: "nightScan", in: Bundle(for: type(of: self)), compatibleWith: nil)
-        let nightScanFrame = FMFrame(camera: MockCamera(), capturedImage: nightScan!.pixelBuffer()!)
+        let daytimeSession = MockARSession(videoName: "parking-daytime")
+        let nighttimeSession = MockARSession(videoName: "parking-nighttime")
 
+        // check the filter is actually making calculations for the input frames
+        let daytimeVariance = filter.calculateVariance(frame: daytimeSession.nextFrame()!)
+        XCTAssertNotEqual(daytimeVariance, 0.0)
+        let nighttimeVariance = filter.calculateVariance(frame: nighttimeSession.nextFrame()!)
+        XCTAssertNotEqual(nighttimeVariance, 0.0)
+        
         // nighttime passes twice because of no throughput
-        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
-        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .accepted)
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .accepted)
+        
         // daytime passes because it has enough variance
-        XCTAssertEqual(filter.accepts(dayScanFrame), .accepted)
-        XCTAssertEqual(filter.accepts(dayScanFrame), .accepted)
-        XCTAssertEqual(filter.accepts(dayScanFrame), .accepted)
-        XCTAssertEqual(filter.accepts(dayScanFrame), .accepted)
+        XCTAssertEqual(filter.accepts(daytimeSession.nextFrame()!), .accepted)
+        XCTAssertEqual(filter.accepts(daytimeSession.nextFrame()!), .accepted)
+        XCTAssertEqual(filter.accepts(daytimeSession.nextFrame()!), .accepted)
+        XCTAssertEqual(filter.accepts(daytimeSession.nextFrame()!), .accepted)
+        
         // nighttime is rejected 6 times because it is too blurry and the throughput is superior to 0.25 on the last 8 frames
-        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
-        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
-        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
-        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
-        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
-        XCTAssertEqual(filter.accepts(nightScanFrame), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .rejected(reason: .imageTooBlurry))
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .rejected(reason: .imageTooBlurry))
+        
         // on the 7th nighttime picture in a row, throughput gets back under 0.25 and it passes again
-        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
-        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
-        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
-        XCTAssertEqual(filter.accepts(nightScanFrame), .accepted)
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .accepted)
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .accepted)
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .accepted)
+        XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .accepted)
     }
     
     func testImageQualityFilterResizesPixelBuffer() {

@@ -89,7 +89,7 @@ class SDKFilterTests: XCTestCase {
         XCTAssertEqual(filter.accepts(daytimeSession.nextFrame()!), .accepted)
         XCTAssertEqual(filter.accepts(daytimeSession.nextFrame()!), .accepted)
         
-        // nighttime is rejected 6 times because it is too blurry and the throughput is superior to 0.25 on the last 8 frames
+        // nighttime is rejected 6 times because it is too blurry and the throughput is superior to 0.25 on the last 6 frames
         XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .rejected(reason: .imageTooBlurry))
         XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .rejected(reason: .imageTooBlurry))
         XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .rejected(reason: .imageTooBlurry))

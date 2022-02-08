@@ -70,12 +70,25 @@ class SDKFilterConfigTests: XCTestCase {
         XCTAssertEqual(blurFilter.averageThroughputThreshold, config.blurFilterAverageThroughputThreshold)
     }
     
-    func testImageQualityFilter() throws {
+    func testImageQualityFilterConfig() throws {
         let config = getTestConfig("image-quality-filter")
         let filterChain = FMFrameFilterChain(config: config)
         XCTAssertEqual(filterChain.filters.count, 1)
         
         let imageQualityFilter = filterChain.filters.first as! FantasmoSDK.FMImageQualityFilter
         XCTAssertEqual(imageQualityFilter.scoreThreshold, config.imageQualityFilterScoreThreshold)
+    }
+
+    func testImageEnhancerConfig() throws {
+        let config = getTestConfig("image-enhancer")
+        let filterChain = FMFrameFilterChain(config: config)
+        XCTAssertNotNil(filterChain.imageEnhancer)
+        XCTAssertEqual(filterChain.imageEnhancer!.targetBrightness, config.imageEnhancerTargetBrightness)
+    }
+    
+    func testImageEnhancerDisabledConfig() throws {
+        let config = getTestConfig("image-enhancer-disabled")
+        let filterChain = FMFrameFilterChain(config: config)
+        XCTAssertNil(filterChain.imageEnhancer)
     }
 }

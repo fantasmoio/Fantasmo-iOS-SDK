@@ -85,9 +85,7 @@ class FMLocationManager: NSObject {
     private var frameFilterQueue = DispatchQueue(label: "io.fantasmo.frameFilterQueue", qos: .userInteractive)
     
     private var frameFilterChain = FMFrameFilterChain(config: RemoteConfig.config())
-    
-    private var imageEnhancer = FMImageEnhancer()
-    
+        
     private var behaviorRequester: BehaviorRequester?
     
     /// Read-only vars, used to populate the statistics view
@@ -357,10 +355,7 @@ extension FMLocationManager : ARSessionDelegate {
         isEvaluatingFrame = true
         
         frameFilterQueue.async { [weak self] in
-            
-            // enhance image, applies gamma correction
-            self?.imageEnhancer?.enhance(fmFrame)
-            
+                        
             // run the frame through the configured filters
             let filterResult = self?.frameFilterChain.evaluate(fmFrame) ?? .accepted
             

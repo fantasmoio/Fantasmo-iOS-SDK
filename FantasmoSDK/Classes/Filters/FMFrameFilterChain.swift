@@ -17,9 +17,13 @@ class FMFrameFilterChain {
     /// The number of seconds after which we forcibly accept a frame, bypassing the filters
     private let acceptanceThreshold: Float
     
-    /// Active frame filters, in order of increasing computational cost
+    /// Active frame filters
     let filters: [FMFrameFilter]
     
+    /// Frame image enhancer, nil if disabled via remote config
+    let imageEnhancer: FMImageEnhancer?
+    
+        
     init(config: RemoteConfig.Config) {
 
         acceptanceThreshold = config.frameAcceptanceThresholdTimeout
@@ -61,6 +65,12 @@ class FMFrameFilterChain {
         }
         
         filters = enabledFilters
+        
+        if config.isImageEnhancerEnabled {
+            imageEnhancer = FMImageEnhancer(targetBrightness: config.imageEnhancerTargetBrightness)
+        } else {
+            imageEnhancer = nil
+        }
     }
 
     /// Start or restart filtering

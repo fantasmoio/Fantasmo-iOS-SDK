@@ -22,8 +22,18 @@ class FMImageEnhancer {
     private let calculateGammaCorrectionPipelineState: MTLComputePipelineState
     private let convertYCbCrToRGBPipelineState: MTLComputePipelineState
     private let textureCache: CVMetalTextureCache
-        
-    init?() {
+    
+    public var targetBrightness: Float
+    
+    /// Designated initializer.
+    ///
+    /// - Parameter targetBrightness: The target averge brightness from 0.0 - 1.0, to use when enhancing images.
+    /// This value is used by `enhance(frame:)` when calculating gamma. If a frame's average brightness is at or
+    /// above this value, then no gamma correction will be applied. If a frame's average brightness is below this
+    /// value, then the gamma calculated will be that which raises the frame's average brightness to approximately
+    /// this value. A higher `targetBrightness` will result in stronger gamma correction.
+    init?(targetBrightness: Float) {
+        self.targetBrightness = targetBrightness
         // create a metal device
         guard let device = MTLCreateSystemDefaultDevice() else {
             log.error("error creating metal device")
@@ -83,19 +93,15 @@ class FMImageEnhancer {
         self.textureCache = textureCache
     }
 
-    /// Attempts to enhances the image contents of the supplied `FMFrame` (currently) by applying gamma correction.
-    /// On success, the frame's `enhancedImage` property will contain the gamma corrected image and `enhancedImageGamma`
-    /// will contain the gamma correction that was used.
+    /// Attempts to enhances the image contents of the supplied `FMFrame` (currently) by applying gamma correction using
+    /// the `targetBrightness` passed to the constructor. When successful, the `enhancedImage` property of the input `FMFrame`
+    /// will contain the gamma-corrected image and `enhancedImageGamma` will contain the gamma value used.
     ///
     /// - Parameter frame: The frame whose `capturedImage` should be enhanced.
-    /// - Parameter targetAverageBrightness: The target averge brightness from 0.0 - 1.0, 1.0 being the brightest.
-    /// This value is used when calculating gamma. If the input frame's average brightness is at or above this value then
-    /// no gamma correction is applied. If the frame's average brightness is below this value, then an appropriate gamma
-    /// will be calculated in order to _raise_ the frame's average brightness to approximately this value.
     ///
-    /// The input frame's `capturedImage` pixel format must be bi-planar YCbCr with 4:2:0 subsampling. This is the default
+    /// Note: The frame's `capturedImage` pixel format must be bi-planar YCbCr with 4:2:0 subsampling. This is the default
     /// for pixel buffers coming from ARKit. The resulting `enchancedImage` pixel format will be BGRA32.
-    func enhance(_ frame: FMFrame, targetAverageBrightness: Float = 0.15) {
+    func enhance(frame: FMFrame) {
         guard let commandBuffer = commandQueue.makeCommandBuffer() else {
             log.error("error creating metal command buffer")
             return
@@ -138,7 +144,7 @@ class FMImageEnhancer {
             return
         }
         
-        var targetBrightness = targetAverageBrightness
+        var targetBrightness = self.targetBrightness
         gammaEncoder.setComputePipelineState(calculateGammaCorrectionPipelineState)
         gammaEncoder.setBuffer(histogramBuffer, offset: 0, index: 0)
         gammaEncoder.setBytes(&histogramInfo.numberOfHistogramEntries, length: MemoryLayout<Int>.size, index: 1)

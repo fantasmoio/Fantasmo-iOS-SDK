@@ -14,5 +14,7 @@
     "blur_filter_sudden_drop_threshold": 0,
     "blur_filter_average_throughput_threshold": 0,
     "camera_pitch_filter_max_upward_tilt": 0,
-    "camera_pitch_filter_max_downward_tilt": 0
+    "camera_pitch_filter_max_downward_tilt": 0,
+    "is_image_enhancer_enabled": false,
+    "image_enhancer_target_brightness": 0,
 }

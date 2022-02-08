@@ -15,4 +15,6 @@
     "camera_pitch_filter_max_downward_tilt": 0,
     "image_quality_filter_score_threshold": 0,
     "movement_filter_threshold": 0,
+    "is_image_enhancer_enabled": false,
+    "image_enhancer_target_brightness": 0,
 }

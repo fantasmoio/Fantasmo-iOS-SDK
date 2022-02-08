@@ -1,5 +1,5 @@
 //
-//  FMGammaCorrector.swift
+//  FMImageEnhancer.swift
 //  FantasmoSDK
 //
 //  Created by Nicholas Jensen on 26.01.22.
@@ -13,15 +13,16 @@ import CoreVideo
 import VideoToolbox
 import MetalKit
 
-class FMGammaCorrector {
-    
-    let device: MTLDevice
-    let library: MTLLibrary
-    let commandQueue: MTLCommandQueue
-    let calculateGammaCorrectionPipelineState: MTLComputePipelineState
-    let convertYCbCrToRGBPipelineState: MTLComputePipelineState
-    let textureCache: CVMetalTextureCache
-    
+/// Utility for enhancing image contents of an `FMFrame` (currently) by applying gamma correction.
+class FMImageEnhancer {
+        
+    private let device: MTLDevice
+    private let library: MTLLibrary
+    private let commandQueue: MTLCommandQueue
+    private let calculateGammaCorrectionPipelineState: MTLComputePipelineState
+    private let convertYCbCrToRGBPipelineState: MTLComputePipelineState
+    private let textureCache: CVMetalTextureCache
+        
     init?() {
         // create a metal device
         guard let device = MTLCreateSystemDefaultDevice() else {
@@ -82,21 +83,33 @@ class FMGammaCorrector {
         self.textureCache = textureCache
     }
 
-    func enhance(_ capturedImage: CVPixelBuffer) -> CVPixelBuffer? {
-        let startDate = Date()
+    /// Attempts to enhances the image contents of the supplied `FMFrame` (currently) by applying gamma correction.
+    /// On success, the frame's `enhancedImage` property will contain the gamma corrected image and `enhancedImageGamma`
+    /// will contain the gamma correction that was used.
+    ///
+    /// - Parameter frame: The frame whose `capturedImage` should be enhanced.
+    /// - Parameter targetAverageBrightness: The target averge brightness from 0.0 - 1.0, 1.0 being the brightest.
+    /// This value is used when calculating gamma. If the input frame's average brightness is at or above this value then
+    /// no gamma correction is applied. If the frame's average brightness is below this value, then an appropriate gamma
+    /// will be calculated in order to _raise_ the frame's average brightness to approximately this value.
+    ///
+    /// The input frame's `capturedImage` pixel format must be bi-planar YCbCr with 4:2:0 subsampling. This is the default
+    /// for pixel buffers coming from ARKit. The resulting `enchancedImage` pixel format will be BGRA32.
+    func enhance(_ frame: FMFrame, targetAverageBrightness: Float = 0.15) {
         guard let commandBuffer = commandQueue.makeCommandBuffer() else {
             log.error("error creating metal command buffer")
-            return nil
+            return
         }
         
-        // create separate Y (Luma) and CbCr (Chroma) metal textures
+        // get luma (Y) and chroma (CbCr) metal textures
+        let capturedImage = frame.capturedImage
         guard let yTexture = getMetalTexture(from: capturedImage, pixelFormat: .r8Unorm, planeIndex: 0),
               let cbcrTexture = getMetalTexture(from: capturedImage, pixelFormat: .rg8Unorm, planeIndex: 1)
         else {
-            log.error("error creating YCbCr metal textures from pixel buffer")
-            return nil
+            log.error("error getting luma and chroma textures from pixel buffer")
+            return
         }
-        
+                
         // calculate histogram for the Y texture
         var histogramInfo = MPSImageHistogramInfo(numberOfHistogramEntries: 256,
                                                   histogramForAlpha: false,
@@ -104,61 +117,57 @@ class FMGammaCorrector {
                                                   maxPixelValue: vector_float4(1,1,1,1))
         let histogram = MPSImageHistogram(device: device, histogramInfo: &histogramInfo)
         let histogramLength = histogram.histogramSize(forSourceFormat: yTexture.pixelFormat)
-        
         guard let histogramBuffer = device.makeBuffer(length: histogramLength, options: [.storageModePrivate]) else {
             log.error("error creating image histogram buffer")
-            return nil
+            return
         }
         
         histogram.encode(to: commandBuffer,
                          sourceTexture: yTexture,
                          histogram: histogramBuffer,
                          histogramOffset: 0)
-        
-        // calculate gamma correction using the histogram data
-        guard let gammaCorrectionEncoder = commandBuffer.makeComputeCommandEncoder() else {
-            log.error("error creating gamma correction encoder")
-            return nil
-        }
-        
+                
         // create a result buffer for our gamma correction
-        guard let gammaCorrectionResult = device.makeBuffer(length: MemoryLayout<Float>.size, options: [.storageModeShared]) else {
-            log.error("error allocating gamme correction result buffer")
-            return nil
+        guard let gammaResult = device.makeBuffer(length: MemoryLayout<Float>.size, options: [.storageModeShared]) else {
+            log.error("error creating gamme result buffer")
+            return
+        }
+        // create a gamma compute encoder and pass it the histogram data
+        guard let gammaEncoder = commandBuffer.makeComputeCommandEncoder() else {
+            log.error("error creating gamma encoder")
+            return
         }
         
-        var targetBrightness: Float = 0.15
-        gammaCorrectionEncoder.setComputePipelineState(calculateGammaCorrectionPipelineState)
-        gammaCorrectionEncoder.setBuffer(histogramBuffer, offset: 0, index: 0)
-        gammaCorrectionEncoder.setBytes(&histogramInfo.numberOfHistogramEntries, length: MemoryLayout<Int>.size, index: 1)
-        gammaCorrectionEncoder.setBytes(&targetBrightness, length: MemoryLayout<Float>.size, index: 2)
-        gammaCorrectionEncoder.setBuffer(gammaCorrectionResult, offset: 0, index: 3)
-        gammaCorrectionEncoder.dispatchThreads(MTLSizeMake(1, 1, 1), threadsPerThreadgroup: MTLSizeMake(1, 1, 1))
-        gammaCorrectionEncoder.endEncoding()
+        var targetBrightness = targetAverageBrightness
+        gammaEncoder.setComputePipelineState(calculateGammaCorrectionPipelineState)
+        gammaEncoder.setBuffer(histogramBuffer, offset: 0, index: 0)
+        gammaEncoder.setBytes(&histogramInfo.numberOfHistogramEntries, length: MemoryLayout<Int>.size, index: 1)
+        gammaEncoder.setBytes(&targetBrightness, length: MemoryLayout<Float>.size, index: 2)
+        gammaEncoder.setBuffer(gammaResult, offset: 0, index: 3)
+        gammaEncoder.dispatchThreads(MTLSizeMake(1, 1, 1), threadsPerThreadgroup: MTLSizeMake(1, 1, 1))
+        gammaEncoder.endEncoding()
         
         // create a writable RGB texture
         let rgbTextureDesc = MTLTextureDescriptor()
         rgbTextureDesc.pixelFormat = .bgra8Unorm
         rgbTextureDesc.width = CVPixelBufferGetWidth(capturedImage)
         rgbTextureDesc.height = CVPixelBufferGetHeight(capturedImage)
-        rgbTextureDesc.usage = [.shaderWrite]
-        
+        rgbTextureDesc.usage = [.shaderWrite, .shaderRead]
         guard let rgbTexture = device.makeTexture(descriptor: rgbTextureDesc) else {
             log.error("error creating RGB texture")
-            return nil
+            return
         }
         
-        // convert the Y + CbCr textures into RGB and apply gamma correction
+        // convert the Y + CbCr textures into RGB with applied gamma correction
         guard let convertYCbCrToRGBEncoder = commandBuffer.makeComputeCommandEncoder() else {
             log.error("error creating YCbCr to RGB encoder")
-            return nil
+            return
         }
-        
         convertYCbCrToRGBEncoder.setComputePipelineState(convertYCbCrToRGBPipelineState)
         convertYCbCrToRGBEncoder.setTexture(yTexture, index: 0)
         convertYCbCrToRGBEncoder.setTexture(cbcrTexture, index: 1)
         convertYCbCrToRGBEncoder.setTexture(rgbTexture, index: 2)
-        convertYCbCrToRGBEncoder.setBuffer(gammaCorrectionResult, offset: 0, index: 0)
+        convertYCbCrToRGBEncoder.setBuffer(gammaResult, offset: 0, index: 0)
 
         let threadsPerGrid = MTLSize(width: rgbTexture.width, height: rgbTexture.height, depth: 1)
         let threadExecutionWidth = convertYCbCrToRGBPipelineState.threadExecutionWidth
@@ -168,17 +177,49 @@ class FMGammaCorrector {
         convertYCbCrToRGBEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
         convertYCbCrToRGBEncoder.endEncoding()
         
+        // create a blit encoder to copy the pixel data from the gpu to a buffer
+        guard let blitEncoder = commandBuffer.makeBlitCommandEncoder() else {
+            log.error("error creating blit command encoder")
+            return
+        }
+        let bytesPerRow = 4 * rgbTexture.width
+        guard let blitDestinationBuffer = device.makeBuffer(length: bytesPerRow * rgbTexture.height, options: .storageModeShared) else {
+            log.error("error creating blit command destination buffer")
+            return
+        }
+        blitEncoder.copy(from: rgbTexture,
+                         sourceSlice: 0,
+                         sourceLevel: 0,
+                         sourceOrigin: MTLOrigin.init(x: 0, y: 0, z: 0),
+                         sourceSize: MTLSize.init(width: rgbTexture.width, height: rgbTexture.height, depth: 1),
+                         to: blitDestinationBuffer,
+                         destinationOffset: 0,
+                         destinationBytesPerRow: bytesPerRow,
+                         destinationBytesPerImage: blitDestinationBuffer.length)
+        blitEncoder.endEncoding()
+        
+        // execute shaders
         commandBuffer.commit()
         commandBuffer.waitUntilCompleted()
-                        
-        let appliedGammaCorrection = gammaCorrectionResult.contents()
-            .bindMemory(to: Float.self, capacity: 1).pointee
         
-        // print("appliedGammaCorrection: \(appliedGammaCorrection)")
+        // create a pixel buffer for the resulting image data
+        var enhancedImage: CVPixelBuffer?
+        CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
+                                     rgbTexture.width,
+                                     rgbTexture.height,
+                                     kCVPixelFormatType_32BGRA,
+                                     blitDestinationBuffer.contents(),
+                                     bytesPerRow,
+                                     nil,
+                                     nil,
+                                     nil,
+                                     &enhancedImage)
         
-        print("time: \(Date().timeIntervalSince(startDate))")
-        
-        return nil
+        if let enhancedImage = enhancedImage {
+            // add the enhanced pixel buffer to the frame along with gamma
+            frame.enhancedImage = enhancedImage
+            frame.enhancedImageGamma = gammaResult.contents().bindMemory(to: Float.self, capacity: 1).pointee
+        }
     }
     
     private func getMetalTexture(from pixelBuffer: CVPixelBuffer, pixelFormat: MTLPixelFormat, planeIndex: Int) -> MTLTexture? {
@@ -203,27 +244,4 @@ class FMGammaCorrector {
         }
         return CVMetalTextureGetTexture(cvMetalTexture)
     }
-
-    /*
-    var debugCaptureScope: MTLCaptureScope?
-    
-    func setUpDebugCaptureIfNeeded() {
-        if #available(iOS 13.0, *) {
-            if debugCaptureScope == nil {
-                debugCaptureScope = MTLCaptureManager.shared().makeCaptureScope(device: device)
-                debugCaptureScope?.label = "Gamma Corrector"
-                guard let debugCaptureScope = debugCaptureScope else { return }
-                let captureManager = MTLCaptureManager.shared()
-                let captureDescriptor = MTLCaptureDescriptor()
-                captureDescriptor.captureObject = debugCaptureScope
-                do {
-                    try captureManager.startCapture(with: captureDescriptor)
-                }
-                catch {
-                    fatalError("error when trying to capture: \(error)")
-                }
-            }
-        }
-    }
-    */
 }

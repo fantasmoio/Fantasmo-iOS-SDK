@@ -86,7 +86,7 @@ class FMLocationManager: NSObject {
     
     private var frameFilterChain = FMFrameFilterChain(config: RemoteConfig.config())
     
-    private var gammaCorrector = FMGammaCorrector()
+    private var imageEnhancer = FMImageEnhancer()
     
     private var behaviorRequester: BehaviorRequester?
     
@@ -358,8 +358,8 @@ extension FMLocationManager : ARSessionDelegate {
         
         frameFilterQueue.async { [weak self] in
             
-            // adjust gamma
-            fmFrame.enhancedImage = self?.gammaCorrector?.enhance(fmFrame.capturedImage)
+            // enhance image, applies gamma correction
+            self?.imageEnhancer?.enhance(fmFrame)
             
             // run the frame through the configured filters
             let filterResult = self?.frameFilterChain.evaluate(fmFrame) ?? .accepted

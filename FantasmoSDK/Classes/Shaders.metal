@@ -12,7 +12,7 @@ using namespace metal;
 kernel void convert_ycbcr_to_rgb(texture2d<float, access::read> y_texture [[texture(0)]],
                                  texture2d<float, access::read> cbcr_texture [[texture(1)]],
                                  texture2d<float, access::write> rgb_texture [[texture(2)]],
-                                 device const float& gamma_correction [[ buffer(0) ]],
+                                 device const float& gamma [[ buffer(0) ]],
                                  uint2 gid [[thread_position_in_grid]])
 {
     float3 color_offset = float3(-(16.0 / 255.0), -0.5, -0.5);
@@ -28,8 +28,8 @@ kernel void convert_ycbcr_to_rgb(texture2d<float, access::read> y_texture [[text
     float3 ycbcr = float3(y, cbcr);
     float3 rgb = color_transform * (ycbcr + color_offset);
     
-    if (gamma_correction != 1.0) {
-        rgb = pow(rgb, gamma_correction);
+    if (gamma != 1.0) {
+        rgb = pow(rgb, gamma);
     }
     
     rgb_texture.write(float4(float3(rgb), 1.0), gid);
@@ -38,7 +38,7 @@ kernel void convert_ycbcr_to_rgb(texture2d<float, access::read> y_texture [[text
 kernel void calculate_gamma_correction(device const uint32_t* histogram_data [[ buffer(0) ]],
                                        device const int& number_of_bins [[ buffer(1) ]],
                                        device const float& target_brightness [[ buffer(2) ]],
-                                       device float& gamma_correction_result [[ buffer(3) ]])
+                                       device float& gamma_result [[ buffer(3) ]])
 {
     // calculate the average brightness from the histogram data
     int pixel_count = 0;
@@ -51,7 +51,7 @@ kernel void calculate_gamma_correction(device const uint32_t* histogram_data [[ 
     
     if (average_brightness >= target_brightness) {
         // image is bright enough, no correction needed
-        gamma_correction_result = 1.0;
+        gamma_result = 1.0;
         return;
     }
     
@@ -100,5 +100,5 @@ kernel void calculate_gamma_correction(device const uint32_t* histogram_data [[ 
         mod /= 2.0;
     }
     
-    gamma_correction_result = gamma;
+    gamma_result = gamma;
 }

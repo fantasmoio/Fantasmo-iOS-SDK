@@ -13,10 +13,11 @@ import CoreVideo
 class FMFrame {
     
     public private(set) var camera: FMCamera
-    public private(set) var capturedImage: CVPixelBuffer
+    public private(set) var capturedImage: CVPixelBuffer  // bi-planar YCbCr from ARKit
     public private(set) var timestamp: TimeInterval
     
-    public var enhancedImage: CVPixelBuffer?
+    public var enhancedImage: CVPixelBuffer?  /// BGRA32
+    public var enhancedImageGamma: Float?     /// 0.0 - 1.0 (1.0 meaning no correction)
     
     init(camera: FMCamera, capturedImage: CVPixelBuffer, timestamp: TimeInterval = Date().timeIntervalSince1970) {
         self.camera = camera

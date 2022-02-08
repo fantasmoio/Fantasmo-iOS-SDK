@@ -27,12 +27,17 @@ struct FMLocalizationAnalytics {
     var totalDistance: Float
     var magneticField: MotionManager.MagneticField?
     var imageQualityFilterInfo: FMImageQualityFilterInfo?
+    var imageEnhancementInfo: FMImageEnhancementInfo?
     var remoteConfigId: String
 }
 
 struct FMImageQualityFilterInfo: Codable {
     var modelVersion: String?
     var lastImageQualityScore: Float
+}
+
+struct FMImageEnhancementInfo: Codable {
+    var gamma: Float
 }
 
 struct FMRotationSpread: Codable {
@@ -274,7 +279,7 @@ class FMApi {
     /// - Parameters:
     ///   - frame: Frame to localize
     ///   - Returns: Formatted localization parameters
-    private func getLocalizeParams(frame:FMFrame, image: ImageEncoder.Image, request: FMLocalizationRequest) -> [String : String?] {
+    private func getLocalizeParams(frame: FMFrame, image: ImageEncoder.Image, request: FMLocalizationRequest) -> [String : String?] {
         
         let interfaceOrientation = UIApplication.shared.statusBarOrientation
         
@@ -321,10 +326,15 @@ class FMApi {
             "rotationSpread": request.analytics.rotationSpread.toJson(),
         ]
         
-        // add image quality filter info if enabled
+        // add image quality filter info if available
         if let imageQualityFilterInfo = request.analytics.imageQualityFilterInfo {
             params["imageQualityModelVersion"] = imageQualityFilterInfo.modelVersion
             params["imageQualityScore"] = String(imageQualityFilterInfo.lastImageQualityScore)
+        }
+        
+        // add image enhancement info if available
+        if let imageEnhancementInfo = request.analytics.imageEnhancementInfo?.toJson() {
+            params["imageEnhancementInfo"] = imageEnhancementInfo
         }
         
         if let magneticData = request.analytics.magneticField?.toJson() {

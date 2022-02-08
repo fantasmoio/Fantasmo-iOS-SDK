@@ -37,7 +37,7 @@ class ImageEncoder {
     }
     
     func encodedImage(from frame: FMFrame) -> ImageEncoder.Image? {
-        let ciImage = CIImage(cvPixelBuffer: frame.capturedImage)
+        let ciImage = CIImage(cvPixelBuffer: frame.enhancedImageOrCapturedImage)
         guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else {
             log.error("error creating cgImage")
             return nil

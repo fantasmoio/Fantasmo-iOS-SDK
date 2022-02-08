@@ -18,6 +18,14 @@ class FMFrame {
     
     public var enhancedImage: CVPixelBuffer?  /// BGRA32
     public var enhancedImageGamma: Float?     /// 0.0 - 1.0 (1.0 meaning no correction)
+
+    /// convenience getter for the pixel buffer, preferring the enhanced one
+    var enhancedImageOrCapturedImage: CVPixelBuffer {
+        if let enhancedImage = enhancedImage {
+            return enhancedImage
+        }
+        return capturedImage
+    }
     
     init(camera: FMCamera, capturedImage: CVPixelBuffer, timestamp: TimeInterval = Date().timeIntervalSince1970) {
         self.camera = camera

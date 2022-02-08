@@ -257,6 +257,13 @@ class FMLocationManager: NSObject {
             )
         }
         
+        var imageEnhancementInfo: FMImageEnhancementInfo?
+        if frame.enhancedImage != nil, let gamma = frame.enhancedImageGamma {
+            imageEnhancementInfo = FMImageEnhancementInfo(
+                gamma: gamma
+            )
+        }
+        
         let localizationAnalytics =  FMLocalizationAnalytics(
             appSessionId: appSessionId,
             appSessionTags: appSessionTags,
@@ -266,6 +273,7 @@ class FMLocationManager: NSObject {
             totalDistance: accumulatedARKitInfo.totalTranslation,
             magneticField: motionManager.magneticField,
             imageQualityFilterInfo: imageQualityFilterInfo,
+            imageEnhancementInfo: imageEnhancementInfo,
             remoteConfigId: RemoteConfig.config().remoteConfigId
         )
         

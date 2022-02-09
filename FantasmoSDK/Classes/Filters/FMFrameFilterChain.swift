@@ -35,7 +35,9 @@ class FMFrameFilterChain {
         acceptanceThreshold = config.frameAcceptanceThresholdTimeout
             
         // configure pre image enhancement filters
+        
         var enabledPreImageEnhancementFilters: [FMFrameFilter] = []
+        
         if config.isTrackingStateFilterEnabled {
             enabledPreImageEnhancementFilters.append(FMTrackingStateFilter())
         }
@@ -55,17 +57,20 @@ class FMFrameFilterChain {
             enabledPreImageEnhancementFilters.append(movementFilter)
         }
         
-        self.preImageEnhancementFilters = enabledPreImageEnhancementFilters
-        
-        var enabledPostImageEnhancementFilters: [FMFrameFilter] = []
         if config.isBlurFilterEnabled {
             let blurFilter = FMBlurFilter(
                 varianceThreshold: config.blurFilterVarianceThreshold,
                 suddenDropThreshold: config.blurFilterSuddenDropThreshold,
                 averageThroughputThreshold: config.blurFilterAverageThroughputThreshold
             )
-            enabledPostImageEnhancementFilters.append(blurFilter)
+            enabledPreImageEnhancementFilters.append(blurFilter)
         }
+        
+        self.preImageEnhancementFilters = enabledPreImageEnhancementFilters
+        
+        // configure post image enhancement filters
+        
+        var enabledPostImageEnhancementFilters: [FMFrameFilter] = []
         
         if config.isImageQualityFilterEnabled, #available(iOS 13, *) {
             let imageQualityFilter = FMImageQualityFilter(
@@ -75,6 +80,8 @@ class FMFrameFilterChain {
         }
         
         self.postImageEnhancementFilters = enabledPostImageEnhancementFilters
+        
+        // configure the image enhancer, if enabled
         
         if config.isImageEnhancerEnabled {
             imageEnhancer = FMImageEnhancer(targetBrightness: config.imageEnhancerTargetBrightness)

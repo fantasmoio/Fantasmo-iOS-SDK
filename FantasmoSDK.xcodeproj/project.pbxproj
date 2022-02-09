@@ -96,6 +96,7 @@
 		01BB298927B2A1B900BAE286 /* SDKImageEnhancerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */; };
 		01BB298B27B2CD6B00BAE286 /* image-enhancer.json in Resources */ = {isa = PBXBuildFile; fileRef = 01BB298A27B2CC9200BAE286 /* image-enhancer.json */; };
 		01BB298D27B2D08B00BAE286 /* image-enhancer-disabled.json in Resources */ = {isa = PBXBuildFile; fileRef = 01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */; };
+		01BB298F27B3CC2800BAE286 /* SDKImageEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */; };
 		01F9D2032757805100525BDF /* image-quality-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F9D2022757805100525BDF /* image-quality-filter.json */; };
 		406437FB26E7864300B38B45 /* FMFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FA26E7864300B38B45 /* FMFrame.swift */; };
 		406437FE26E787A300B38B45 /* FMCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FD26E787A200B38B45 /* FMCamera.swift */; };
@@ -290,6 +291,7 @@
 		01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKImageEnhancerTests.swift; sourceTree = "<group>"; };
 		01BB298A27B2CC9200BAE286 /* image-enhancer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "image-enhancer.json"; sourceTree = "<group>"; };
 		01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "image-enhancer-disabled.json"; sourceTree = "<group>"; };
+		01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKImageEncoderTests.swift; sourceTree = "<group>"; };
 		01F9D2022757805100525BDF /* image-quality-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "image-quality-filter.json"; sourceTree = "<group>"; };
 		406437FA26E7864300B38B45 /* FMFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrame.swift; sourceTree = "<group>"; };
 		406437FD26E787A200B38B45 /* FMCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCamera.swift; sourceTree = "<group>"; };
@@ -680,6 +682,7 @@
 				FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */,
 				01296D052756656C00636BBE /* SDKFilterConfigTests.swift */,
 				FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */,
+				01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */,
 				01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */,
 				A0D5E88926BA97DA00CE5B1C /* SDKLocationTests.swift */,
 				012C7BF627B19B29003DC67F /* MockARSession.swift */,
@@ -1125,6 +1128,7 @@
 				01343E5E271D7864003A4716 /* SDKLocationTests.swift in Sources */,
 				01827D2E2758EF1F006D21CE /* MockCamera.swift in Sources */,
 				01BB298927B2A1B900BAE286 /* SDKImageEnhancerTests.swift in Sources */,
+				01BB298F27B3CC2800BAE286 /* SDKImageEncoderTests.swift in Sources */,
 				01827D2B2758E92E006D21CE /* SDKFilterConfigTests.swift in Sources */,
 				012C7BFA27B19B29003DC67F /* MockARSession.swift in Sources */,
 			);

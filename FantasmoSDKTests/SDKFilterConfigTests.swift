@@ -26,9 +26,9 @@ class SDKFilterConfigTests: XCTestCase {
         // Put teardown code that is run once (equal to mocha "after" hook)
     }
         
-    func getTestConfig(_ name: String) -> FantasmoSDK.RemoteConfig.Config {
+    func getTestConfig(_ name: String) -> RemoteConfig.Config {
         let fileUrl = Bundle(for: SDKFilterConfigTests.self).url(forResource: name, withExtension: "json")!
-        return FantasmoSDK.RemoteConfig.Config(from: fileUrl)!
+        return RemoteConfig.Config(from: fileUrl)!
     }
     
     func testMovementFilterConfig() throws {
@@ -83,8 +83,9 @@ class SDKFilterConfigTests: XCTestCase {
         XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 0)
         XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 1)
         
-        let imageQualityFilter = filterChain.allFilters.first as! FantasmoSDK.FMImageQualityFilter
-        XCTAssertEqual(imageQualityFilter.scoreThreshold, config.imageQualityFilterScoreThreshold)
+        let imageQualityFilter = filterChain.getFilter(ofType: FMImageQualityFilter.self)
+        XCTAssertNotNil(imageQualityFilter)
+        XCTAssertEqual(imageQualityFilter!.scoreThreshold, config.imageQualityFilterScoreThreshold)
     }
 
     func testImageEnhancerConfig() throws {

@@ -37,11 +37,11 @@ class MockARSession {
         videoAssetReader.startReading()
     }
     
-    func nextFrame() -> FantasmoSDK.FMFrame? {
+    func nextFrame() -> FMFrame? {
         while let sampleBuffer = videoTrackOutput.copyNextSampleBuffer() {
             let formatDesc = CMSampleBufferGetFormatDescription(sampleBuffer)
             if formatDesc?.mediaType == .video, let capturedImage = sampleBuffer.imageBuffer {
-                return FantasmoSDK.FMFrame(camera: MockCamera(), capturedImage: capturedImage)
+                return FMFrame(camera: MockCamera(), capturedImage: capturedImage)
             }
         }
         return nil

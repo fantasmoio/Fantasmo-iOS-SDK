@@ -9,7 +9,7 @@ import Foundation
 import ARKit
 @testable import FantasmoSDK
 
-class MockCamera : FantasmoSDK.FMCamera {
+class MockCamera : FMCamera {
     
     var transform: simd_float4x4
     

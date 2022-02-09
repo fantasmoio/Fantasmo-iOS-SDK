@@ -91,7 +91,7 @@ class FMImageQualityFilter: FMFrameFilter {
             return .accepted
         }
         
-        // Resize the pixel buffer down to the expected input size
+        // Resize the pixel buffer down to the expected input size, use the enhanced image if available
         guard let resizedPixelBufferContext = makeResizedPixelBuffer(frame.enhancedImageOrCapturedImage),
               let resizedPixelBuffer = UnsafePointer<UInt8>(OpaquePointer(resizedPixelBufferContext.data)) else {
             log.error("failed to resize pixel buffer")

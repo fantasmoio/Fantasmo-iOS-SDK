@@ -19,7 +19,7 @@ class SDKImageEnhancerTests: XCTestCase {
     }
 
     func testImageEnhancer() throws {
-        let imageEnhancer = FantasmoSDK.FMImageEnhancer(targetBrightness: 0.15)!
+        let imageEnhancer = FMImageEnhancer(targetBrightness: 0.15)!
         
         // test enhancement on daytime frame
         let daytimeSession = MockARSession(videoName: "parking-daytime")

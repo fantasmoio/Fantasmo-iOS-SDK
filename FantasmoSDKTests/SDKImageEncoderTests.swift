@@ -19,7 +19,7 @@ class SDKImageEncoderTests: XCTestCase {
     }
 
     func testImageEncoderReturnsValidImage() throws {
-        let imageEncoder = FantasmoSDK.ImageEncoder(largestSingleOutputDimension: 1280)
+        let imageEncoder = ImageEncoder(largestSingleOutputDimension: 1280)
         let mockSession = MockARSession(videoName: "parking-daytime")
         let mockFrame = mockSession.nextFrame()!
         let encodedImage = imageEncoder.encodedImage(from: mockFrame)
@@ -28,7 +28,7 @@ class SDKImageEncoderTests: XCTestCase {
     }
 
     func testImageEncoderResizes() throws {
-        let imageEncoder = FantasmoSDK.ImageEncoder(largestSingleOutputDimension: 640)
+        let imageEncoder = ImageEncoder(largestSingleOutputDimension: 640)
         let mockSession = MockARSession(videoName: "parking-daytime")
         let mockFrame = mockSession.nextFrame()!
         let encodedImage = imageEncoder.encodedImage(from: mockFrame)

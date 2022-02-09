@@ -34,48 +34,56 @@ class SDKFilterConfigTests: XCTestCase {
     func testMovementFilterConfig() throws {
         let config = getTestConfig("movement-filter")
         let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertEqual(filterChain.filters.count, 1)
-        
-        let movementFilter = filterChain.filters.first as! FantasmoSDK.FMMovementFilter
-        XCTAssertEqual(movementFilter.threshold, config.movementFilterThreshold)
+        XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 1)
+        XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 0)
+
+        let movementFilter = filterChain.getFilter(ofType: FMMovementFilter.self)
+        XCTAssertNotNil(movementFilter)
+        XCTAssertEqual(movementFilter!.threshold, config.movementFilterThreshold)
     }
 
     func testTrackingStateFilterConfig() throws {
         let config = getTestConfig("tracking-state-filter")
         let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertEqual(filterChain.filters.count, 1)
-        
-        let trackingStateFilter = filterChain.filters.first as? FantasmoSDK.FMTrackingStateFilter
+        XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 1)
+        XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 0)
+
+        let trackingStateFilter = filterChain.getFilter(ofType: FMTrackingStateFilter.self)
         XCTAssertNotNil(trackingStateFilter)
     }
     
     func testCameraPitchFilterConfig() throws {
         let config = getTestConfig("camera-pitch-filter")
         let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertEqual(filterChain.filters.count, 1)
-        
-        let cameraPitchFilter = filterChain.filters.first as! FantasmoSDK.FMCameraPitchFilter
-        XCTAssertEqual(cameraPitchFilter.maxUpwardTiltRadians, deg2rad(config.cameraPitchFilterMaxUpwardTilt))
-        XCTAssertEqual(cameraPitchFilter.maxDownwardTiltRadians, deg2rad(config.cameraPitchFilterMaxDownwardTilt))
+        XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 1)
+        XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 0)
+
+        let cameraPitchFilter = filterChain.getFilter(ofType: FMCameraPitchFilter.self)
+        XCTAssertNotNil(cameraPitchFilter)
+        XCTAssertEqual(cameraPitchFilter!.maxUpwardTiltRadians, deg2rad(config.cameraPitchFilterMaxUpwardTilt))
+        XCTAssertEqual(cameraPitchFilter!.maxDownwardTiltRadians, deg2rad(config.cameraPitchFilterMaxDownwardTilt))
     }
     
     func testBlurFilterConfig() throws {
         let config = getTestConfig("blur-filter")
         let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertEqual(filterChain.filters.count, 1)
-        
-        let blurFilter = filterChain.filters.first as! FantasmoSDK.FMBlurFilter
-        XCTAssertEqual(blurFilter.varianceThreshold, config.blurFilterVarianceThreshold)
-        XCTAssertEqual(blurFilter.suddenDropThreshold, config.blurFilterSuddenDropThreshold)
-        XCTAssertEqual(blurFilter.averageThroughputThreshold, config.blurFilterAverageThroughputThreshold)
+        XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 1)
+        XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 0)
+
+        let blurFilter = filterChain.getFilter(ofType: FMBlurFilter.self)
+        XCTAssertNotNil(blurFilter)
+        XCTAssertEqual(blurFilter!.varianceThreshold, config.blurFilterVarianceThreshold)
+        XCTAssertEqual(blurFilter!.suddenDropThreshold, config.blurFilterSuddenDropThreshold)
+        XCTAssertEqual(blurFilter!.averageThroughputThreshold, config.blurFilterAverageThroughputThreshold)
     }
     
     func testImageQualityFilterConfig() throws {
         let config = getTestConfig("image-quality-filter")
         let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertEqual(filterChain.filters.count, 1)
+        XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 0)
+        XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 1)
         
-        let imageQualityFilter = filterChain.filters.first as! FantasmoSDK.FMImageQualityFilter
+        let imageQualityFilter = filterChain.allFilters.first as! FantasmoSDK.FMImageQualityFilter
         XCTAssertEqual(imageQualityFilter.scoreThreshold, config.imageQualityFilterScoreThreshold)
     }
 

@@ -16,6 +16,7 @@ protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
     func locationManager(didChangeState state: FMLocationManager.State)
     func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
+    func locationManager(willUploadFrame frame: FMFrame)
 }
 
 class FMLocationManager: NSObject {
@@ -383,6 +384,7 @@ extension FMLocationManager : ARSessionDelegate {
             frameEventAccumulator.accumulate(filterRejectionReason: reason)
         } else {
             if state == .localizing {
+                delegate?.locationManager(willUploadFrame: frame)
                 localize(frame: frame)
             }
         }

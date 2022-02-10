@@ -55,7 +55,7 @@ kernel void calculate_gamma_correction(device const uint32_t* histogram_data [[ 
         return;
     }
     
-    // prepare a bisection loop to find the appropriate gamma
+    // prepare a bisection loop to find an appropriate gamma
     const int max_iterations = 50;
     int iterations = 0;
     float gamma = 1.0;

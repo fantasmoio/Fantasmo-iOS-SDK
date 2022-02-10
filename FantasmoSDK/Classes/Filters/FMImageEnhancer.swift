@@ -25,6 +25,7 @@ class FMImageEnhancer {
     
     public var targetBrightness: Float
     
+    
     /// Designated initializer.
     ///
     /// - Parameter targetBrightness: The target averge brightness from 0.0 - 1.0, to use when enhancing images.
@@ -93,16 +94,20 @@ class FMImageEnhancer {
         self.textureCache = textureCache
     }
 
-    /// Attempts to enhances the image contents of the supplied `FMFrame` (currently) by applying gamma correction using
-    /// the `targetBrightness` passed to the constructor. When successful, the `enhancedImage` property of the input `FMFrame`
-    /// will contain the gamma-corrected image and `enhancedImageGamma` will contain the gamma value used.
+    
+    /// Attempts to enhance the image contents of the supplied `FMFrame` (currently) by applying gamma correction.
+    /// This function uses the `targetBrightness` value passed to the constructor, to calculate an appropriate gamma.
+    /// If the gamma calculated is less than 1.0, a gamma-corrected copy of the frame's image will be assigned to the
+    /// `enhancedImage` property on the frame.
     ///
     /// - Parameter frame: The frame whose `capturedImage` should be enhanced.
     ///
     /// Note: The frame's `capturedImage` pixel format must be bi-planar YCbCr with 4:2:0 subsampling. This is the default
     /// for pixel buffers coming from ARKit. The resulting `enchancedImage` pixel format will be BGRA32.
     func enhance(frame: FMFrame) {
-        guard let commandBuffer = commandQueue.makeCommandBuffer() else {
+        // create a new metal command buffer
+        var commandBuffer: MTLCommandBuffer! = commandQueue.makeCommandBuffer()
+        guard commandBuffer != nil else {
             log.error("error creating metal command buffer")
             return
         }
@@ -116,7 +121,7 @@ class FMImageEnhancer {
             return
         }
                 
-        // calculate histogram for the Y texture
+        // calculate histogram for the luma plane
         var histogramInfo = MPSImageHistogramInfo(numberOfHistogramEntries: 256,
                                                   histogramForAlpha: false,
                                                   minPixelValue: vector_float4(0,0,0,0),
@@ -138,6 +143,7 @@ class FMImageEnhancer {
             log.error("error creating gamme result buffer")
             return
         }
+        
         // create a gamma compute encoder and pass it the histogram data
         guard let gammaEncoder = commandBuffer.makeComputeCommandEncoder() else {
             log.error("error creating gamma encoder")
@@ -153,6 +159,23 @@ class FMImageEnhancer {
         gammaEncoder.dispatchThreads(MTLSizeMake(1, 1, 1), threadsPerThreadgroup: MTLSizeMake(1, 1, 1))
         gammaEncoder.endEncoding()
         
+        // execute histogram and gamma shaders
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+
+        var gamma = gammaResult.contents().bindMemory(to: Float.self, capacity: 1).pointee
+        guard gamma < 1.0 else {
+            // image is bright enough
+            return
+        }
+        
+        // image is too dark, create a new command buffer for gamma correction
+        commandBuffer = commandQueue.makeCommandBuffer()
+        guard commandBuffer != nil else {
+            log.error("error creating metal command buffer")
+            return
+        }
+
         // create a writable RGB texture
         let rgbTextureDesc = MTLTextureDescriptor()
         rgbTextureDesc.pixelFormat = .bgra8Unorm
@@ -173,7 +196,7 @@ class FMImageEnhancer {
         convertYCbCrToRGBEncoder.setTexture(yTexture, index: 0)
         convertYCbCrToRGBEncoder.setTexture(cbcrTexture, index: 1)
         convertYCbCrToRGBEncoder.setTexture(rgbTexture, index: 2)
-        convertYCbCrToRGBEncoder.setBuffer(gammaResult, offset: 0, index: 0)
+        convertYCbCrToRGBEncoder.setBytes(&gamma, length: MemoryLayout<Float>.size, index: 0)
 
         let threadsPerGrid = MTLSize(width: rgbTexture.width, height: rgbTexture.height, depth: 1)
         let threadExecutionWidth = convertYCbCrToRGBPipelineState.threadExecutionWidth
@@ -204,11 +227,11 @@ class FMImageEnhancer {
                          destinationBytesPerImage: blitDestinationBuffer.length)
         blitEncoder.endEncoding()
         
-        // execute shaders
+        // execute gamma and blit shaders
         commandBuffer.commit()
         commandBuffer.waitUntilCompleted()
         
-        // create a pixel buffer for the resulting image data
+        // create a pixel buffer for the enhanced image data
         var enhancedImage: CVPixelBuffer?
         CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
                                      rgbTexture.width,
@@ -224,7 +247,7 @@ class FMImageEnhancer {
         if let enhancedImage = enhancedImage {
             // add the enhanced pixel buffer to the frame along with gamma
             frame.enhancedImage = enhancedImage
-            frame.enhancedImageGamma = gammaResult.contents().bindMemory(to: Float.self, capacity: 1).pointee
+            frame.enhancedImageGamma = gamma
         }
     }
     

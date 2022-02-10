@@ -140,4 +140,21 @@ class SDKFilterTests: XCTestCase {
         XCTAssertGreaterThan(imageQualityFilter.lastImageQualityScore, 0.0)
         XCTAssertLessThanOrEqual(imageQualityFilter.lastImageQualityScore, 1.0)
     }
+    
+    func testGammaCorrectionImprovesImageQualityScore() {
+        let nighttimeSession = MockARSession(videoName: "parking-nighttime")
+        let imageQualityFilter = FMImageQualityFilter(scoreThreshold: 1.0)
+        
+        let nighttimeFrame = nighttimeSession.nextFrame()!
+        let _ = imageQualityFilter.accepts(nighttimeFrame)
+        let originalScore = imageQualityFilter.lastImageQualityScore
+
+        let imageEnhancer = FMImageEnhancer(targetBrightness: 0.15)
+        imageEnhancer!.enhance(frame: nighttimeFrame)
+        let _ = imageQualityFilter.accepts(nighttimeFrame)
+        let enhancedScore = imageQualityFilter.lastImageQualityScore
+        
+        // check the score increased
+        XCTAssertGreaterThan(enhancedScore, originalScore)
+    }
 }

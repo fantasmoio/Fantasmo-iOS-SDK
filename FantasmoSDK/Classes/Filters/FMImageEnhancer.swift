@@ -231,7 +231,7 @@ class FMImageEnhancer {
         commandBuffer.commit()
         commandBuffer.waitUntilCompleted()
         
-        // create a pixel buffer for the enhanced image data
+        // create a CVPixelBuffer for the enhanced image, does not copy or retain
         var enhancedImage: CVPixelBuffer?
         CVPixelBufferCreateWithBytes(kCFAllocatorDefault,
                                      rgbTexture.width,
@@ -245,9 +245,12 @@ class FMImageEnhancer {
                                      &enhancedImage)
         
         if let enhancedImage = enhancedImage {
-            // add the enhanced pixel buffer to the frame along with gamma
+            // set the enhanced pixel buffer to the frame along with gamma
             frame.enhancedImage = enhancedImage
             frame.enhancedImageGamma = gamma
+            // since CVPixelBufferCreateWithBytes does not copy or retain the bytes
+            // we need to keep a strong reference to the metal buffer
+            frame.enhancedImageBackingBuffer = blitDestinationBuffer
         }
     }
     

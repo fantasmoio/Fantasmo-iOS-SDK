@@ -31,7 +31,7 @@ class AccumulatedARKitInfo {
     
     public init() {}
     
-    func update(with nextFrame: ARFrame) {
+    func update(with nextFrame: FMFrame) {
         elapsedFrames += 1
         trackingStateStatistics.accumulate(nextTrackingState: nextFrame.camera.trackingState)
         translationAccumulator.update(with: nextFrame)

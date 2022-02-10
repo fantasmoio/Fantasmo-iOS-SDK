@@ -26,7 +26,7 @@ class SDKRemoteConfigTests: XCTestCase {
         // Put teardown code that is run once (equal to mocha "after" hook)
     }
     
-    func getTestConfig(_ name: String) -> RemoteConfig.Config? {
+    private func getTestConfig(_ name: String) -> RemoteConfig.Config? {
         let fileUrl = Bundle(for: SDKRemoteConfigTests.self).url(forResource: name, withExtension: "json")!
         return RemoteConfig.Config(from: fileUrl)
     }
@@ -98,7 +98,7 @@ class SDKRemoteConfigTests: XCTestCase {
         XCTAssertNotNil(imageQualityFilter)
         XCTAssertEqual(imageQualityFilter!.scoreThreshold, config.imageQualityFilterScoreThreshold)
     }
-
+    
     func testImageEnhancerConfig() throws {
         let config = getTestConfig("image-enhancer")!
         let filterChain = FMFrameFilterChain(config: config)

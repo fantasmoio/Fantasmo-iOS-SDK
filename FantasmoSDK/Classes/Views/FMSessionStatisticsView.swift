@@ -36,6 +36,7 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var filterStatsFeaturesLabel: UILabel!
     
     @IBOutlet var imageQualityFilterLabel: UILabel!
+    @IBOutlet var imageEnhancementLabel: UILabel!
     
     @IBOutlet var lastResultLabel: UILabel!
     @IBOutlet var errorsLabel: UILabel!
@@ -49,12 +50,13 @@ class FMSessionStatisticsView: UIView {
         remoteConfigLabel.text = "Remote Config: \(RemoteConfig.config().remoteConfigId)"
     }
         
-    public func updateThrottled(frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
+    public func updateThrottled(frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
         let shouldUpdate = frame.timestamp - lastFrameTimestamp > (1.0 / refreshRate)
         guard shouldUpdate else {
             return
         }
         lastFrameTimestamp = frame.timestamp
+        
         let translationVector = frame.camera.transform.columns.3
         let translationFormatted = String(format: "Translation: %.2f, %.2f, %.2f",
                                           translationVector.x, translationVector.y, translationVector.z)
@@ -90,12 +92,23 @@ class FMSessionStatisticsView: UIView {
         
         if let lastImageQualityFilterScore = info.imageQualityFilterScores.last {
             var imageQualityFilterText = "Image Quality Filter: enabled\n"
-            imageQualityFilterText += "\tScore: \(String(format: "%.5f", lastImageQualityFilterScore))\n"
+            imageQualityFilterText += "\tLive Score: \(String(format: "%.5f", lastImageQualityFilterScore))\n"
             imageQualityFilterText += "\tThreshold: \(String(format: "%.2f", info.imageQualityFilterScoreThreshold ?? 0))\n"
             imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)\n"
             imageQualityFilterText += "\tVersion: \(info.imageQualityFilterModelVersion ?? "n/a")"
             imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
         }
+    }
+    
+    /// non-throttled update
+    public func update(frame: FMFrame) {
+        var imageEnhancementText = "Gamma correction: "
+        if let gamma = frame.enhancedImageGamma {
+            imageEnhancementText += "\(gamma)"
+        } else {
+            imageEnhancementText += "none"
+        }
+        imageEnhancementLabel.text = imageEnhancementText
     }
     
     var localizingStart: Date?

@@ -36,7 +36,7 @@ class TotalDeviceTranslationAccumulator {
     }
 
     /// Every n-th frame is taken, where n = `decimationFactor`. Frames with limited tracking state are omitted.
-    func update(with nextFrame: ARFrame) {
+    func update(with nextFrame: FMFrame) {
         if previousTranslation == nil {
             previousTranslation = nextFrame.camera.transform.translation
         }

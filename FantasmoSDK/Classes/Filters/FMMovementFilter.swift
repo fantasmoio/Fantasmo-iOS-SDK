@@ -16,8 +16,8 @@ class FMMovementFilter: FMFrameFilter {
     }
     
     public func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
-        if exceededThreshold(frame.fmCamera.transform) {
-            lastTransform = frame.fmCamera.transform
+        if exceededThreshold(frame.camera.transform) {
+            lastTransform = frame.camera.transform
             return .accepted
         } else {
             return .rejected(reason: .movingTooLittle)

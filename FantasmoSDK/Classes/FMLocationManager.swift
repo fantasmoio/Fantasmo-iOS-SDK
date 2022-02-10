@@ -15,7 +15,8 @@ protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
     func locationManager(didChangeState state: FMLocationManager.State)
-    func locationManager(didUpdateFrame frame: ARFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
+    func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
+    func locationManager(willUploadFrame frame: FMFrame)
 }
 
 class FMLocationManager: NSObject {
@@ -39,9 +40,6 @@ class FMLocationManager: NSObject {
         }
     }
     
-    // Clients can use this to mock the localization call
-    public var mockLocalize: ((ARFrame) -> Void)?
-
     public var logLevel = FMLog.LogLevel.warning {
         didSet {
             log.logLevel = logLevel
@@ -79,18 +77,20 @@ class FMLocationManager: NSObject {
         }
     }
     
-    private var anchorFrame: ARFrame? {
+    private var anchorFrame: FMFrame? {
         didSet {
             locationFuser.reset()
         }
     }
     
-    private var frameFilterChain = FMFrameFilterChain(config: RemoteConfig.config())
+    private var frameFilterQueue = DispatchQueue(label: "io.fantasmo.frameFilterQueue", qos: .userInteractive)
     
+    private var frameFilterChain = FMFrameFilterChain(config: RemoteConfig.config())
+        
     private var behaviorRequester: BehaviorRequester?
     
     /// Read-only vars, used to populate the statistics view
-    public private(set) var lastFrame: ARFrame?
+    public private(set) var lastFrame: FMFrame?
     public private(set) var lastCLLocation: CLLocation?
     public private(set) var lastResult: FMLocationResult?
     public private(set) var errors: [FMError] = []
@@ -220,18 +220,12 @@ class FMLocationManager: NSObject {
     /// provides a response via the delegate.
     ///
     /// - Parameter frame: Frame to localize.
-    public func localize(frame: ARFrame, from session: ARSession) {
+    public func localize(frame: FMFrame) {
         guard isConnected else { return }
         
         log.debug(parameters: ["simulation": isSimulation])
         state = .uploading
-        
-        // Run mock version of localization if one is set
-        guard mockLocalize == nil else {
-            mockLocalize?(frame)
-            return
-        }
-                
+                        
         let openCVRelativeAnchorTransform = openCVPoseOfAnchorInVirtualDeviceCS(for: frame)
         let openCVRelativeAnchorPose = openCVRelativeAnchorTransform.map { FMPose($0) }
 
@@ -264,6 +258,13 @@ class FMLocationManager: NSObject {
             )
         }
         
+        var imageEnhancementInfo: FMImageEnhancementInfo?
+        if frame.enhancedImage != nil, let gamma = frame.enhancedImageGamma {
+            imageEnhancementInfo = FMImageEnhancementInfo(
+                gamma: gamma
+            )
+        }
+        
         let localizationAnalytics =  FMLocalizationAnalytics(
             appSessionId: appSessionId,
             appSessionTags: appSessionTags,
@@ -273,6 +274,7 @@ class FMLocationManager: NSObject {
             totalDistance: accumulatedARKitInfo.totalTranslation,
             magneticField: motionManager.magneticField,
             imageQualityFilterInfo: imageQualityFilterInfo,
+            imageEnhancementInfo: imageEnhancementInfo,
             remoteConfigId: RemoteConfig.config().remoteConfigId
         )
         
@@ -331,14 +333,10 @@ class FMLocationManager: NSObject {
            state = .localizing
         }
     }
-    
-    public func mockLocalizeDone() {
-        localizeDone()
-    }
-    
+        
     // MARK: - Helpers
     
-    private func openCVPoseOfAnchorInVirtualDeviceCS(for frame: ARFrame) -> simd_float4x4? {
+    private func openCVPoseOfAnchorInVirtualDeviceCS(for frame: FMFrame) -> simd_float4x4? {
         if let anchorFrame = anchorFrame {
             let openCVVirtualDeviceTransform = frame.openCVTransformOfVirtualDeviceInWorldCS
             let openCVAnchorTransformInDeviceCS = openCVVirtualDeviceTransform.calculateRelativeTransformInTheCsOfSelf(
@@ -355,21 +353,30 @@ class FMLocationManager: NSObject {
 
 extension FMLocationManager : ARSessionDelegate {
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        lastFrame = frame
+        
+        let fmFrame = FMFrame(arFrame: frame)
+        lastFrame = fmFrame
         
         guard !isEvaluatingFrame, state != .stopped else {
             return
         }
         
-        // run the frame through the configured filters
         isEvaluatingFrame = true
-        frameFilterChain.evaluateAsync(frame, state: state) { [weak self] filterResult in
-            self?.processFrame(frame, from: session, filterResult: filterResult)
-            self?.isEvaluatingFrame = false
+        
+        frameFilterQueue.async { [weak self] in
+                        
+            // run the frame through the configured filters
+            let filterResult = self?.frameFilterChain.evaluate(fmFrame) ?? .accepted
+            
+            // handle the result on the main queue
+            DispatchQueue.main.async {
+                self?.handleFrameFilterResult(filterResult, frame: fmFrame)
+                self?.isEvaluatingFrame = false
+            }
         }
     }
     
-    private func processFrame(_ frame: ARFrame, from session: ARSession, filterResult: FMFrameFilterResult) {
+    private func handleFrameFilterResult(_ filterResult: FMFrameFilterResult, frame: FMFrame) {
         behaviorRequester?.processResult(filterResult)
         accumulatedARKitInfo.update(with: frame)
         
@@ -377,7 +384,8 @@ extension FMLocationManager : ARSessionDelegate {
             frameEventAccumulator.accumulate(filterRejectionReason: reason)
         } else {
             if state == .localizing {
-                localize(frame: frame, from: session)
+                delegate?.locationManager(willUploadFrame: frame)
+                localize(frame: frame)
             }
         }
         

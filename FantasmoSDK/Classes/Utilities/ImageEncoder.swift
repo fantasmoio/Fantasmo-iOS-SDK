@@ -7,8 +7,8 @@
 
 import UIKit
 import ARKit
-import CoreImage
 import CoreVideo
+import VideoToolbox
 
 class ImageEncoder {
     
@@ -27,24 +27,22 @@ class ImageEncoder {
     var imageRenderer: UIGraphicsImageRenderer?
     /// The current configured output size of the `imageRenderer`
     var currentOutputSize: CGSize = .zero
-    /// Reusable CoreImage context
-    let ciContext: CIContext
     
     init(largestSingleOutputDimension: CGFloat, compressionQuality: CGFloat = 0.9) {
         self.largestSingleOutputDimension = largestSingleOutputDimension
         self.compressionQuality = compressionQuality
-        self.ciContext = CIContext(options: [.highQualityDownsample: true, .priorityRequestLow: true])
     }
     
-    func encodedImage(from arFrame: ARFrame) -> ImageEncoder.Image? {
-        let ciImage = CIImage(cvPixelBuffer: arFrame.capturedImage)
-        guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else {
+    func encodedImage(from frame: FMFrame) -> ImageEncoder.Image? {
+        var cgImage: CGImage?
+        VTCreateCGImageFromCVPixelBuffer(frame.enhancedImageOrCapturedImage, options: nil, imageOut: &cgImage)
+        guard let cgImage = cgImage else {
             log.error("error creating cgImage")
             return nil
         }
         
         let imageOrientation: UIImage.Orientation
-        switch arFrame.deviceOrientation {
+        switch frame.deviceOrientation {
         case .landscapeLeft:
             imageOrientation = .up
         case .landscapeRight:

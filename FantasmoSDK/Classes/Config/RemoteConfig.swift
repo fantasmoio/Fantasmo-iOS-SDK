@@ -27,6 +27,8 @@ class RemoteConfig {
         let imageQualityFilterScoreThreshold: Float
         let imageQualityFilterModelUri: String?
         let imageQualityFilterModelVersion: String?
+        let isImageEnhancerEnabled: Bool
+        let imageEnhancerTargetBrightness: Float
     }
         
     private static let userDefaultsKey = "FantasmoSDK.RemoteConfig"

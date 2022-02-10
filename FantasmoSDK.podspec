@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             		= 'FantasmoSDK'
-  s.version          		= '2.1.0'
+  s.version          		= '2.2.0'
   s.summary          		= 'Hyper-accurate global positioning for cameras.'
   s.description      		= 'FantasmoSDK provide hyper-accurate global positioning for cameras.'
 
@@ -19,8 +19,8 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target 	= '11.0'
   s.swift_version    		= '5'
-
-  s.source_files = 'FantasmoSDK/Classes/**/*.{h,m,swift,mlmodel,mlmodelc}'
+  
+  s.source_files = 'FantasmoSDK/Classes/**/*.{h,m,swift,mlmodel,mlmodelc,metal}'
   s.resources = 'FantasmoSDK/Assets/**'
 
   s.xcconfig = {'COREML_CODEGEN_LANGUAGE' => 'Swift', 'COREML_CODEGEN_SWIFT_GLOBAL_MODULE' => 'NO'}

@@ -17,16 +17,29 @@ class FMFrameFilterChain {
     /// The number of seconds after which we forcibly accept a frame, bypassing the filters
     private let acceptanceThreshold: Float
     
-    /// Active frame filters, in order of increasing computational cost
-    let filters: [FMFrameFilter]
+    /// Active filters that are run in order before image enhancement
+    let preImageEnhancementFilters: [FMFrameFilter]
     
+    /// Active filters that are run in order after image enhancement
+    let postImageEnhancementFilters: [FMFrameFilter]
+    
+    /// All active filters, pre + post image enhancement
+    var allFilters: [FMFrameFilter] { return preImageEnhancementFilters + postImageEnhancementFilters }
+    
+    /// Frame image enhancer, nil if disabled via remote config
+    let imageEnhancer: FMImageEnhancer?
+    
+        
     init(config: RemoteConfig.Config) {
 
         acceptanceThreshold = config.frameAcceptanceThresholdTimeout
-                
-        var enabledFilters: [FMFrameFilter] = []
+            
+        // configure pre image enhancement filters
+        
+        var enabledPreImageEnhancementFilters: [FMFrameFilter] = []
+        
         if config.isTrackingStateFilterEnabled {
-            enabledFilters.append(FMTrackingStateFilter())
+            enabledPreImageEnhancementFilters.append(FMTrackingStateFilter())
         }
         
         if config.isCameraPitchFilterEnabled {
@@ -34,14 +47,14 @@ class FMFrameFilterChain {
                 maxUpwardTiltDegrees: config.cameraPitchFilterMaxUpwardTilt,
                 maxDownwardTiltDegrees: config.cameraPitchFilterMaxDownwardTilt
             )
-            enabledFilters.append(cameraPitchFilter)
+            enabledPreImageEnhancementFilters.append(cameraPitchFilter)
         }
         
         if config.isMovementFilterEnabled {
             let movementFilter = FMMovementFilter(
                 threshold: config.movementFilterThreshold
             )
-            enabledFilters.append(movementFilter)
+            enabledPreImageEnhancementFilters.append(movementFilter)
         }
         
         if config.isBlurFilterEnabled {
@@ -50,17 +63,31 @@ class FMFrameFilterChain {
                 suddenDropThreshold: config.blurFilterSuddenDropThreshold,
                 averageThroughputThreshold: config.blurFilterAverageThroughputThreshold
             )
-            enabledFilters.append(blurFilter)
+            enabledPreImageEnhancementFilters.append(blurFilter)
         }
+        
+        self.preImageEnhancementFilters = enabledPreImageEnhancementFilters
+        
+        // configure post image enhancement filters
+        
+        var enabledPostImageEnhancementFilters: [FMFrameFilter] = []
         
         if config.isImageQualityFilterEnabled, #available(iOS 13, *) {
             let imageQualityFilter = FMImageQualityFilter(
                 scoreThreshold: config.imageQualityFilterScoreThreshold
             )
-            enabledFilters.append(imageQualityFilter)
+            enabledPostImageEnhancementFilters.append(imageQualityFilter)
         }
         
-        filters = enabledFilters
+        self.postImageEnhancementFilters = enabledPostImageEnhancementFilters
+        
+        // configure the image enhancer, if enabled
+        
+        if config.isImageEnhancerEnabled {
+            imageEnhancer = FMImageEnhancer(targetBrightness: config.imageEnhancerTargetBrightness)
+        } else {
+            imageEnhancer = nil
+        }
     }
 
     /// Start or restart filtering
@@ -69,35 +96,46 @@ class FMFrameFilterChain {
     }
     
     /// Accepted frames should be used for the localization.
-    func evaluateAsync(_ frame: FMFrame, state: FMLocationManager.State, completion: @escaping ((FMFrameFilterResult) -> Void)) {
-        guard Thread.isMainThread else { fatalError("evaluateAsync not called from main thread") }
+    func evaluate(_ frame: FMFrame) -> FMFrameFilterResult {
+        guard !Thread.isMainThread else { fatalError("evaluate called from main thread") }
         
         if shouldForceAccept() {
+            // enhance the image before force accepting
+            imageEnhancer?.enhance(frame: frame)
             lastAcceptTime = clock()
-            completion(.accepted)
-            return
+            return .accepted
+        }
+                
+        // evaluate pre image enhancement filters
+        var result: FMFrameFilterResult = .accepted
+        for filter in self.preImageEnhancementFilters {
+            if case let .rejected(reason) = filter.accepts(frame) {
+                // return if any rejected the frame
+                return .rejected(reason: reason)
+            }
         }
         
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            var result: FMFrameFilterResult = .accepted
-            let filters: [FMFrameFilter] = self?.filters ?? []
-            for filter in filters {
-                if case let .rejected(reason) = filter.accepts(frame) {
-                    result = .rejected(reason: reason)
-                    break
-                }
-            }
-            DispatchQueue.main.async {
-                if result == .accepted {
-                    self?.lastAcceptTime = clock()
-                }
-                completion(result)
+        // enhance the image applying gamma correction
+        // this makes the `enhancedImage` and `enhancedImageGamma`
+        // frame properties available to the next filters
+        imageEnhancer?.enhance(frame: frame)
+        
+        // evaluate post image enhancement filters
+        for filter in self.postImageEnhancementFilters {
+            if case let .rejected(reason) = filter.accepts(frame) {
+                result = .rejected(reason: reason)
+                break
             }
         }
+        
+        if result == .accepted {
+            lastAcceptTime = clock()
+        }
+        return result
     }
     
     func getFilter<T:FMFrameFilter>(ofType type: T.Type) -> T? {
-        return filters.first(where: { $0 is T }) as? T
+        return allFilters.first(where: { $0 is T }) as? T
     }
     
     /// If there are a lot of continuous rejections, we force an acceptance

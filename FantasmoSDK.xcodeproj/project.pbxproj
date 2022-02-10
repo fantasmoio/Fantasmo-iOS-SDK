@@ -29,6 +29,7 @@
 		011589E62742957100CFC368 /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011589E52742957100CFC368 /* ImageEncoder.swift */; };
 		01172678274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */; };
 		0117268E274FEEA5005EA7C0 /* ImageQualityModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0117268D274FEEA5005EA7C0 /* ImageQualityModel.mlmodel */; };
+		011A10E527A173C800B84A0F /* FMImageEnhancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011A10E427A173C800B84A0F /* FMImageEnhancer.swift */; };
 		0123A4D7270F2E7E00763758 /* FMParkingViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */; };
 		0123A4D9270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */; };
 		0123A4DC270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */; };
@@ -37,12 +38,16 @@
 		01296D08275672FB00636BBE /* tracking-state-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01296D07275672FB00636BBE /* tracking-state-filter.json */; };
 		01296D0A2756744500636BBE /* camera-pitch-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01296D092756744500636BBE /* camera-pitch-filter.json */; };
 		01296D0C2756779300636BBE /* blur-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01296D0B2756779300636BBE /* blur-filter.json */; };
+		012C7BF727B19B29003DC67F /* parking-nighttime.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 012C7BF327B19B29003DC67F /* parking-nighttime.mp4 */; };
+		012C7BF827B19B29003DC67F /* parking-daytime.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 012C7BF427B19B29003DC67F /* parking-daytime.mp4 */; };
+		012C7BF927B19B29003DC67F /* qr-code.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 012C7BF527B19B29003DC67F /* qr-code.mp4 */; };
+		012C7BFA27B19B29003DC67F /* MockARSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012C7BF627B19B29003DC67F /* MockARSession.swift */; };
 		01343E5E271D7864003A4716 /* SDKLocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D5E88926BA97DA00CE5B1C /* SDKLocationTests.swift */; };
 		01343E8B271D7E5C003A4716 /* Codable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B725921BF3005B1145 /* Codable+Extension.swift */; };
-		01343E8E271D7ECC003A4716 /* ARFrame+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */; };
 		01343E97271D8376003A4716 /* FMSDKInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01343E96271D8376003A4716 /* FMSDKInfo.swift */; };
 		0134BF872705E8F400DDEF7A /* FMTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0134BF862705E8F400DDEF7A /* FMTipLabel.swift */; };
 		0134BF8A270610E800DDEF7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
+		013BF22627A2A745001DE841 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 013BF22527A2A745001DE841 /* Shaders.metal */; };
 		0143E8D4270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */; };
 		0143E8D8270C695C00A3CF35 /* FMSessionStatisticsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */; };
 		0144B79E27047C38009A4042 /* FMParkingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0144B79D27047C38009A4042 /* FMParkingViewController.swift */; };
@@ -55,9 +60,8 @@
 		017C5ED7278DC7F7000DEBCE /* FMImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017C5ED6278DC7F7000DEBCE /* FMImageButton.swift */; };
 		01827D292758E0B5006D21CE /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389F25921BF3005B1145 /* MockData.swift */; };
 		01827D2A2758E926006D21CE /* SDKFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */; };
-		01827D2B2758E92E006D21CE /* SDKFilterConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01296D052756656C00636BBE /* SDKFilterConfigTests.swift */; };
+		01827D2B2758E92E006D21CE /* SDKRemoteConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */; };
 		01827D2C2758E939006D21CE /* SDKGeometricTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */; };
-		01827D2D2758EF1F006D21CE /* MockFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4064380026E79C0D00B38B45 /* MockFrame.swift */; };
 		01827D2E2758EF1F006D21CE /* MockCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4064380226E79C7A00B38B45 /* MockCamera.swift */; };
 		018EF3902795A16A005A1381 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A34275533D400AB31DF /* UIViewController+Extensions.swift */; };
 		018EF3912795A16A005A1381 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A1827551D5F00AB31DF /* AppDelegate.swift */; };
@@ -89,6 +93,11 @@
 		01B58681274BF8DF0082FFF7 /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B58680274BF8DF0082FFF7 /* RemoteConfig.swift */; };
 		01B58683274BFF3C0082FFF7 /* default-config.json in Resources */ = {isa = PBXBuildFile; fileRef = 01B58682274BFF3C0082FFF7 /* default-config.json */; };
 		01B58687274D45DE0082FFF7 /* InitializeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B58686274D45DE0082FFF7 /* InitializeResponse.swift */; };
+		01BB298927B2A1B900BAE286 /* SDKImageEnhancerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */; };
+		01BB298B27B2CD6B00BAE286 /* image-enhancer.json in Resources */ = {isa = PBXBuildFile; fileRef = 01BB298A27B2CC9200BAE286 /* image-enhancer.json */; };
+		01BB298D27B2D08B00BAE286 /* image-enhancer-disabled.json in Resources */ = {isa = PBXBuildFile; fileRef = 01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */; };
+		01BB298F27B3CC2800BAE286 /* SDKImageEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */; };
+		01BB299527B5313E00BAE286 /* server-added-fields.json in Resources */ = {isa = PBXBuildFile; fileRef = 01BB299427B52F9D00BAE286 /* server-added-fields.json */; };
 		01F9D2032757805100525BDF /* image-quality-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01F9D2022757805100525BDF /* image-quality-filter.json */; };
 		406437FB26E7864300B38B45 /* FMFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FA26E7864300B38B45 /* FMFrame.swift */; };
 		406437FE26E787A300B38B45 /* FMCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FD26E787A200B38B45 /* FMCamera.swift */; };
@@ -238,17 +247,23 @@
 		011589E52742957100CFC368 /* ImageEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoder.swift; sourceTree = "<group>"; };
 		01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQualityModelUpdater.swift; sourceTree = "<group>"; };
 		0117268D274FEEA5005EA7C0 /* ImageQualityModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ImageQualityModel.mlmodel; sourceTree = "<group>"; };
+		011A10E427A173C800B84A0F /* FMImageEnhancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMImageEnhancer.swift; sourceTree = "<group>"; };
 		0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMParkingViewControllerDelegate.swift; sourceTree = "<group>"; };
 		0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewControllerProtocol.swift; sourceTree = "<group>"; };
 		0123A4DE270F520800763758 /* FMLocationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationError.swift; sourceTree = "<group>"; };
 		01296D012756627500636BBE /* movement-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "movement-filter.json"; sourceTree = "<group>"; };
-		01296D052756656C00636BBE /* SDKFilterConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKFilterConfigTests.swift; sourceTree = "<group>"; };
+		01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKRemoteConfigTests.swift; sourceTree = "<group>"; };
 		01296D07275672FB00636BBE /* tracking-state-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tracking-state-filter.json"; sourceTree = "<group>"; };
 		01296D092756744500636BBE /* camera-pitch-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "camera-pitch-filter.json"; sourceTree = "<group>"; };
 		01296D0B2756779300636BBE /* blur-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "blur-filter.json"; sourceTree = "<group>"; };
+		012C7BF327B19B29003DC67F /* parking-nighttime.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "parking-nighttime.mp4"; sourceTree = "<group>"; };
+		012C7BF427B19B29003DC67F /* parking-daytime.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "parking-daytime.mp4"; sourceTree = "<group>"; };
+		012C7BF527B19B29003DC67F /* qr-code.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "qr-code.mp4"; sourceTree = "<group>"; };
+		012C7BF627B19B29003DC67F /* MockARSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockARSession.swift; sourceTree = "<group>"; };
 		01343E96271D8376003A4716 /* FMSDKInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSDKInfo.swift; sourceTree = "<group>"; };
 		0134BF862705E8F400DDEF7A /* FMTipLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMTipLabel.swift; sourceTree = "<group>"; };
+		013BF22527A2A745001DE841 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.metal; };
 		0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSessionStatisticsView.swift; sourceTree = "<group>"; };
 		0143E8D7270C695C00A3CF35 /* FMSessionStatisticsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FMSessionStatisticsView.xib; sourceTree = "<group>"; };
 		0144B79D27047C38009A4042 /* FMParkingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMParkingViewController.swift; sourceTree = "<group>"; };
@@ -274,10 +289,14 @@
 		01B58680274BF8DF0082FFF7 /* RemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfig.swift; sourceTree = "<group>"; };
 		01B58682274BFF3C0082FFF7 /* default-config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "default-config.json"; sourceTree = "<group>"; };
 		01B58686274D45DE0082FFF7 /* InitializeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeResponse.swift; sourceTree = "<group>"; };
+		01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKImageEnhancerTests.swift; sourceTree = "<group>"; };
+		01BB298A27B2CC9200BAE286 /* image-enhancer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "image-enhancer.json"; sourceTree = "<group>"; };
+		01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "image-enhancer-disabled.json"; sourceTree = "<group>"; };
+		01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKImageEncoderTests.swift; sourceTree = "<group>"; };
+		01BB299427B52F9D00BAE286 /* server-added-fields.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "server-added-fields.json"; sourceTree = "<group>"; };
 		01F9D2022757805100525BDF /* image-quality-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "image-quality-filter.json"; sourceTree = "<group>"; };
 		406437FA26E7864300B38B45 /* FMFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrame.swift; sourceTree = "<group>"; };
 		406437FD26E787A200B38B45 /* FMCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCamera.swift; sourceTree = "<group>"; };
-		4064380026E79C0D00B38B45 /* MockFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFrame.swift; sourceTree = "<group>"; };
 		4064380226E79C7A00B38B45 /* MockCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCamera.swift; sourceTree = "<group>"; };
 		9468388B25921BAF005B1145 /* FantasmoSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FantasmoSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9468388E25921BAF005B1145 /* FantasmoSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FantasmoSDK.h; sourceTree = "<group>"; };
@@ -306,7 +325,6 @@
 		A02646B9260CE44900A7FA6B /* FMRestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMRestClient.swift; sourceTree = "<group>"; };
 		A02646BA260CE44900A7FA6B /* FMApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMApi.swift; sourceTree = "<group>"; };
 		A02646BF260CE46C00A7FA6B /* FMLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLog.swift; sourceTree = "<group>"; };
-		A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ARFrame+Extension.swift"; sourceTree = "<group>"; };
 		A02EA34426B9154D00525308 /* FMLocationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationDelegate.swift; sourceTree = "<group>"; };
 		A02EA34626B91D1F00525308 /* LocationFuser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationFuser.swift; sourceTree = "<group>"; };
 		A02EA34826B9253900525308 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
@@ -450,12 +468,25 @@
 			isa = PBXGroup;
 			children = (
 				01F9D2022757805100525BDF /* image-quality-filter.json */,
+				01BB298A27B2CC9200BAE286 /* image-enhancer.json */,
+				01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */,
 				01296D0B2756779300636BBE /* blur-filter.json */,
 				01296D092756744500636BBE /* camera-pitch-filter.json */,
 				01296D012756627500636BBE /* movement-filter.json */,
+				01BB299427B52F9D00BAE286 /* server-added-fields.json */,
 				01296D07275672FB00636BBE /* tracking-state-filter.json */,
 			);
 			path = Configs;
+			sourceTree = "<group>";
+		};
+		012C7BF227B19B29003DC67F /* Videos */ = {
+			isa = PBXGroup;
+			children = (
+				012C7BF327B19B29003DC67F /* parking-nighttime.mp4 */,
+				012C7BF427B19B29003DC67F /* parking-daytime.mp4 */,
+				012C7BF527B19B29003DC67F /* qr-code.mp4 */,
+			);
+			path = Videos;
 			sourceTree = "<group>";
 		};
 		0134BF8927060C1D00DDEF7A /* Components */ = {
@@ -572,6 +603,7 @@
 				010C274B273556BC00EF34A3 /* FMQRCodeDetector.swift */,
 				A02646BF260CE46C00A7FA6B /* FMLog.swift */,
 				01343E96271D8376003A4716 /* FMSDKInfo.swift */,
+				013BF22527A2A745001DE841 /* Shaders.metal */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -622,7 +654,6 @@
 		946838B325921BF3005B1145 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				A02646C5260CE58600A7FA6B /* ARFrame+Extension.swift */,
 				A3798CA426AAF52D007CB41F /* ARCamera+Extension.swift */,
 				946838B825921BF3005B1145 /* CGImage+Extension.swift */,
 				017C5ED4278C540F000DEBCE /* CLLocation+Codable.swift */,
@@ -649,12 +680,15 @@
 		A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */ = {
 			isa = PBXGroup;
 			children = (
+				012C7BF227B19B29003DC67F /* Videos */,
 				01296D002756528900636BBE /* Configs */,
 				FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */,
-				01296D052756656C00636BBE /* SDKFilterConfigTests.swift */,
+				01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */,
 				FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */,
+				01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */,
+				01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */,
 				A0D5E88926BA97DA00CE5B1C /* SDKLocationTests.swift */,
-				4064380026E79C0D00B38B45 /* MockFrame.swift */,
+				012C7BF627B19B29003DC67F /* MockARSession.swift */,
 				4064380226E79C7A00B38B45 /* MockCamera.swift */,
 				A0D5E88B26BA97DA00CE5B1C /* Info.plist */,
 			);
@@ -699,9 +733,10 @@
 				A35909A1269EE73E00A7BF5F /* FMCameraPitchFilter.swift */,
 				A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */,
 				A3B57316269C3B6D0089B5F5 /* FMFrameFilterChain.swift */,
+				011A10E427A173C800B84A0F /* FMImageEnhancer.swift */,
+				0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */,
 				A3BA02D3263919DF00524D66 /* FMMovementFilter.swift */,
 				A3C7657B26B29F4F0062E932 /* FMTrackingStateFilter.swift */,
-				0166C0A02746BEC3001D871E /* FMImageQualityFilter.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -937,12 +972,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01BB299527B5313E00BAE286 /* server-added-fields.json in Resources */,
+				01BB298B27B2CD6B00BAE286 /* image-enhancer.json in Resources */,
+				01BB298D27B2D08B00BAE286 /* image-enhancer-disabled.json in Resources */,
 				01296D08275672FB00636BBE /* tracking-state-filter.json in Resources */,
 				01F9D2032757805100525BDF /* image-quality-filter.json in Resources */,
 				01296D0C2756779300636BBE /* blur-filter.json in Resources */,
 				01296D0A2756744500636BBE /* camera-pitch-filter.json in Resources */,
-				40EA810526E7C6A8002E96A6 /* Assets.xcassets in Resources */,
 				01296D032756627500636BBE /* movement-filter.json in Resources */,
+				012C7BF827B19B29003DC67F /* parking-daytime.mp4 in Resources */,
+				012C7BF927B19B29003DC67F /* qr-code.mp4 in Resources */,
+				012C7BF727B19B29003DC67F /* parking-nighttime.mp4 in Resources */,
+				40EA810526E7C6A8002E96A6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1009,6 +1050,7 @@
 				A3CB77302636B3D5009625BB /* FMPose.swift in Sources */,
 				A35909A2269EE73E00A7BF5F /* FMCameraPitchFilter.swift in Sources */,
 				01343E97271D8376003A4716 /* FMSDKInfo.swift in Sources */,
+				011A10E527A173C800B84A0F /* FMImageEnhancer.swift in Sources */,
 				A3CB774226372A9B009625BB /* simd_quatf+Extension.swift in Sources */,
 				A3CB77372636BDB8009625BB /* FMOrientation.swift in Sources */,
 				A3798CA526AAF52D007CB41F /* ARCamera+Extension.swift in Sources */,
@@ -1059,7 +1101,6 @@
 				946838D425921BF3005B1145 /* UIImage+Extension.swift in Sources */,
 				946838C625921BF3005B1145 /* FMError.swift in Sources */,
 				946838D125921BF3005B1145 /* Orientation.swift in Sources */,
-				01343E8E271D7ECC003A4716 /* ARFrame+Extension.swift in Sources */,
 				406437FB26E7864300B38B45 /* FMFrame.swift in Sources */,
 				A3798CA926AEA844007CB41F /* FrameFilterRejectionStatistics.swift in Sources */,
 				019C16DC27451E40008B6002 /* FMDeviceError.swift in Sources */,
@@ -1067,6 +1108,7 @@
 				946838D325921BF3005B1145 /* Position.swift in Sources */,
 				A3BA02D8263919DF00524D66 /* FMMovementFilter.swift in Sources */,
 				017C5ED5278C540F000DEBCE /* CLLocation+Codable.swift in Sources */,
+				013BF22627A2A745001DE841 /* Shaders.metal in Sources */,
 				01827D292758E0B5006D21CE /* MockData.swift in Sources */,
 				A02EA34726B91D1F00525308 /* LocationFuser.swift in Sources */,
 				A02EA34B26BA7D8700525308 /* CLLocation+Extension.swift in Sources */,
@@ -1088,9 +1130,11 @@
 				01827D2A2758E926006D21CE /* SDKFilterTests.swift in Sources */,
 				01827D2C2758E939006D21CE /* SDKGeometricTests.swift in Sources */,
 				01343E5E271D7864003A4716 /* SDKLocationTests.swift in Sources */,
-				01827D2D2758EF1F006D21CE /* MockFrame.swift in Sources */,
 				01827D2E2758EF1F006D21CE /* MockCamera.swift in Sources */,
-				01827D2B2758E92E006D21CE /* SDKFilterConfigTests.swift in Sources */,
+				01BB298927B2A1B900BAE286 /* SDKImageEnhancerTests.swift in Sources */,
+				01BB298F27B3CC2800BAE286 /* SDKImageEncoderTests.swift in Sources */,
+				01827D2B2758E92E006D21CE /* SDKRemoteConfigTests.swift in Sources */,
+				012C7BFA27B19B29003DC67F /* MockARSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1494,7 +1538,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fantasmo.sdk.FantasmoSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
@@ -1523,7 +1567,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.fantasmo.sdk.FantasmoSDK;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";

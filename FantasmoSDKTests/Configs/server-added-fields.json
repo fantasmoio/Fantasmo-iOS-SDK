@@ -1,5 +1,8 @@
 {
-    "remote_config_id": "default-ios_08.02.22",
+    "some_new_added_field": "",
+    "another_new_field_not_in_the_model": 99.0,
+    
+    "remote_config_id": "test-config",
     "frame_acceptance_threshold_timeout": 1.0,
     "is_behavior_requester_enabled": true,
     "is_tracking_state_filter_enabled": true,
@@ -15,5 +18,5 @@
     "is_image_quality_filter_enabled": true,
     "image_quality_filter_score_threshold": 0.0,
     "is_image_enhancer_enabled": true,
-    "image_enhancer_target_brightness": 0.15
+    "image_enhancer_target_brightness": 0.15,
 }

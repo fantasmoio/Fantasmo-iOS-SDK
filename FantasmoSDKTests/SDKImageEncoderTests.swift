@@ -28,6 +28,8 @@ class SDKImageEncoderTests: XCTestCase {
     }
 
     func testImageEncoderReturnsValidEnhancedImage() throws {
+        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
+        
         let imageEncoder = ImageEncoder(largestSingleOutputDimension: 1280)
         let mockSession = MockARSession(videoName: "parking-nighttime")
         let mockFrame = mockSession.nextFrame()!

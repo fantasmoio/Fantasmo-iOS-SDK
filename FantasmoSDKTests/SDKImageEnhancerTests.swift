@@ -19,6 +19,8 @@ class SDKImageEnhancerTests: XCTestCase {
     }
 
     func testImageEnhancerNighttime() throws {
+        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
+        
         let imageEnhancer = FMImageEnhancer(targetBrightness: 0.15)!
         let nighttimeSession = MockARSession(videoName: "parking-nighttime")
         
@@ -43,6 +45,8 @@ class SDKImageEnhancerTests: XCTestCase {
     }
     
     func testImageEnhancerDaytime() throws {
+        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
+        
         let imageEnhancer = FMImageEnhancer(targetBrightness: 0.15)!
         let daytimeSession = MockARSession(videoName: "parking-daytime")
                 

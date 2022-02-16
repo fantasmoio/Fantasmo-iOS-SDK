@@ -100,6 +100,8 @@ class SDKRemoteConfigTests: XCTestCase {
     }
     
     func testImageEnhancerConfig() throws {
+        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
+        
         let config = getTestConfig("image-enhancer")!
         let filterChain = FMFrameFilterChain(config: config)
         XCTAssertNotNil(filterChain.imageEnhancer)
@@ -107,6 +109,8 @@ class SDKRemoteConfigTests: XCTestCase {
     }
     
     func testImageEnhancerDisabledConfig() throws {
+        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
+        
         let config = getTestConfig("image-enhancer-disabled")!
         let filterChain = FMFrameFilterChain(config: config)
         XCTAssertNil(filterChain.imageEnhancer)

@@ -29,4 +29,3 @@ jobs:
           scheme: FantasmoSDKTests
           destination: ${{ matrix.destination }}
           action: test
-          skip-testing: 'FantasmoSDKTests/SDKFilterTests/testBlurFilter'

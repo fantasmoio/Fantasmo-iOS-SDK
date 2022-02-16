@@ -67,6 +67,8 @@ class SDKFilterTests: XCTestCase {
     }
     
     func testBlurFilter() {
+        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
+        
         let filter = FMBlurFilter(varianceThreshold: 250, suddenDropThreshold: 0.4, averageThroughputThreshold: 0.25)
         let daytimeSession = MockARSession(videoName: "parking-daytime")
         let nighttimeSession = MockARSession(videoName: "parking-nighttime")
@@ -142,6 +144,8 @@ class SDKFilterTests: XCTestCase {
     }
     
     func testGammaCorrectionImprovesImageQualityScore() {
+        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
+        
         let nighttimeSession = MockARSession(videoName: "parking-nighttime")
         let imageQualityFilter = FMImageQualityFilter(scoreThreshold: 1.0)
         

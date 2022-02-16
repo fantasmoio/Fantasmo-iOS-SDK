@@ -66,7 +66,7 @@ class SDKFilterTests: XCTestCase {
         XCTAssertEqual(filter.accepts(frame), .rejected(reason: .pitchTooHigh))
     }
     
-    func testBlurFilter() {
+    func testBlurFilter() throws {
         try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
         
         let filter = FMBlurFilter(varianceThreshold: 250, suddenDropThreshold: 0.4, averageThroughputThreshold: 0.25)
@@ -104,7 +104,7 @@ class SDKFilterTests: XCTestCase {
         XCTAssertEqual(filter.accepts(nighttimeSession.nextFrame()!), .accepted)
     }
     
-    func testImageQualityFilterResizesPixelBuffer() {
+    func testImageQualityFilterResizesPixelBuffer() throws {
         let inParkingImage = UIImage(named: "inParking", in: Bundle(for: type(of: self)), compatibleWith: nil)
         let testPixelBuffer = inParkingImage!.pixelBuffer()!
         let imageQualityFilter = FMImageQualityFilter(scoreThreshold: 0)
@@ -119,7 +119,7 @@ class SDKFilterTests: XCTestCase {
         XCTAssertEqual(resizedImage.size.height, 240)
     }
     
-    func testImageQualityFilterScoreAboveThreshold() {
+    func testImageQualityFilterScoreAboveThreshold() throws {
         let inParkingImage = UIImage(named: "inParking", in: Bundle(for: type(of: self)), compatibleWith: nil)
         let pixelBuffer = inParkingImage!.pixelBuffer()!
         let mockFrame = FMFrame(camera: MockCamera(), capturedImage: pixelBuffer)
@@ -131,7 +131,7 @@ class SDKFilterTests: XCTestCase {
         XCTAssertLessThanOrEqual(imageQualityFilter.lastImageQualityScore, 1.0)
     }
 
-    func testImageQualityFilterScoreBelowThreshold() {
+    func testImageQualityFilterScoreBelowThreshold() throws {
         let inParkingImage = UIImage(named: "inParking", in: Bundle(for: type(of: self)), compatibleWith: nil)
         let pixelBuffer = inParkingImage!.pixelBuffer()!
         let mockFrame = FMFrame(camera: MockCamera(), capturedImage: pixelBuffer)
@@ -143,7 +143,7 @@ class SDKFilterTests: XCTestCase {
         XCTAssertLessThanOrEqual(imageQualityFilter.lastImageQualityScore, 1.0)
     }
     
-    func testGammaCorrectionImprovesImageQualityScore() {
+    func testGammaCorrectionImprovesImageQualityScore() throws {
         try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
         
         let nighttimeSession = MockARSession(videoName: "parking-nighttime")

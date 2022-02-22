@@ -90,16 +90,17 @@ class FMFrameEvaluatorChain: FMFrameEvaluator {
             fatalError("evaluate not called on main thread")
         }
         
+        if windowStart == nil {
+            // start a new window
+            windowStart = Date()
+        }
+        
         // if already evaluating a frame, return
         guard !isEvaluatingFrame else {
             delegate?.frameEvaluatorChain(self, didEvaluateFrame: frame, result: .discarded(reason: .otherEvaluationInProgress))
             return
         }
-        
-        if windowStart == nil {
-            windowStart = Date()
-        }
-        
+                
         // run frame through filters
         var filterResult: FMFrameFilterResult = .accepted
         for filter in preEvaluationFilters {

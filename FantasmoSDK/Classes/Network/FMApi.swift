@@ -26,14 +26,8 @@ struct FMLocalizationAnalytics {
     var rotationSpread: FMRotationSpread
     var totalDistance: Float
     var magneticField: MotionManager.MagneticField?
-    var imageQualityFilterInfo: FMImageQualityFilterInfo?
     var imageEnhancementInfo: FMImageEnhancementInfo?
     var remoteConfigId: String
-}
-
-struct FMImageQualityFilterInfo: Codable {
-    var modelVersion: String?
-    var lastImageQualityScore: Float
 }
 
 struct FMImageEnhancementInfo: Codable {
@@ -327,9 +321,8 @@ class FMApi {
         ]
         
         // add image quality filter info if available
-        if let imageQualityFilterInfo = request.analytics.imageQualityFilterInfo {
-            params["imageQualityModelVersion"] = imageQualityFilterInfo.modelVersion
-            params["imageQualityScore"] = String(imageQualityFilterInfo.lastImageQualityScore)
+        if frame.evaluation?.type == .imageQualityEstimation, let imageQualityInfo = frame.evaluation?.userInfo {
+            params.merge(imageQualityInfo) { (_, new) in new }
         }
         
         // add image enhancement info if available

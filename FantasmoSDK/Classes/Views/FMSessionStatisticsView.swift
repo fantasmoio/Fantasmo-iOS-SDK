@@ -90,14 +90,15 @@ class FMSessionStatisticsView: UIView {
         filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
         filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
         
-        if let lastImageQualityFilterScore = info.imageQualityFilterScores.last {
-            var imageQualityFilterText = "Image Quality Filter: enabled\n"
-            imageQualityFilterText += "\tLive Score: \(String(format: "%.5f", lastImageQualityFilterScore))\n"
-            imageQualityFilterText += "\tThreshold: \(String(format: "%.2f", info.imageQualityFilterScoreThreshold ?? 0))\n"
-            imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)\n"
-            imageQualityFilterText += "\tVersion: \(info.imageQualityFilterModelVersion ?? "n/a")"
-            imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
-        }
+// TODO - fix this
+//        if let lastImageQualityFilterScore = info.imageQualityFilterScores.last {
+//            var imageQualityFilterText = "Image Quality Filter: enabled\n"
+//            imageQualityFilterText += "\tLive Score: \(String(format: "%.5f", lastImageQualityFilterScore))\n"
+//            imageQualityFilterText += "\tThreshold: \(String(format: "%.2f", info.imageQualityFilterScoreThreshold ?? 0))\n"
+//            imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)\n"
+//            imageQualityFilterText += "\tVersion: \(info.imageQualityFilterModelVersion ?? "n/a")"
+//            imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
+//        }
     }
     
     /// non-throttled update

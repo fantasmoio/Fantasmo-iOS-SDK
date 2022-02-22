@@ -16,6 +16,8 @@ class FMFrame {
     public private(set) var capturedImage: CVPixelBuffer  // bi-planar YCbCr from ARKit
     public private(set) var timestamp: TimeInterval
     
+    public var evaluation: FMFrameEvaluation?  // nil if no evaluation has been done, or evaluator error
+    
     public var enhancedImage: CVPixelBuffer?  // BGRA32
     public var enhancedImageBackingBuffer: MTLBuffer? // owner of `enhancedImage` bytes
     public var enhancedImageGamma: Float?  // 0.0 - 1.0 (1.0 meaning no correction)

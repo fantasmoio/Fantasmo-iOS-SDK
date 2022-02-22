@@ -10,6 +10,7 @@ import UIKit
 import ARKit
 import CoreLocation
 
+// TODO - replaced with debug stats delegate
 protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didUpdateLocation result: FMLocationResult)
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
@@ -27,9 +28,7 @@ class FMLocationManager: NSObject {
         case uploading      // uploading image while localizing
         case paused         // paused
    }
-    
-    private var isEvaluatingFrame: Bool = false
-    
+        
     // MARK: - Properties
     
     public private(set) var state: State = .stopped {
@@ -83,9 +82,7 @@ class FMLocationManager: NSObject {
         }
     }
     
-    private var frameFilterQueue = DispatchQueue(label: "io.fantasmo.frameFilterQueue", qos: .userInteractive)
-    
-    private var frameFilterChain = FMFrameFilterChain(config: RemoteConfig.config())
+    private var frameEvaluatorChain = FMFrameEvaluatorChain(config: RemoteConfig.config())
         
     private var behaviorRequester: BehaviorRequester?
     
@@ -177,7 +174,7 @@ class FMLocationManager: NSObject {
 
         accumulatedARKitInfo.reset()
         frameEventAccumulator.reset()
-        frameFilterChain.restart()
+        frameEvaluatorChain.reset()
         behaviorRequester?.restart()
         motionManager.restart()
         locationFuser.reset()
@@ -249,14 +246,6 @@ class FMLocationManager: NSObject {
             yaw: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.yaw.spread,
             roll: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.roll.spread
         )
-
-        var imageQualityFilterInfo: FMImageQualityFilterInfo?
-        if #available(iOS 13.0, *), let imageQualityFilter = frameFilterChain.getFilter(ofType: FMImageQualityFilter.self) {
-            imageQualityFilterInfo = FMImageQualityFilterInfo(
-                modelVersion: imageQualityFilter.modelVersion,
-                lastImageQualityScore: imageQualityFilter.lastImageQualityScore
-            )
-        }
         
         var imageEnhancementInfo: FMImageEnhancementInfo?
         if frame.enhancedImage != nil, let gamma = frame.enhancedImageGamma {
@@ -273,7 +262,6 @@ class FMLocationManager: NSObject {
             rotationSpread: rotationSpread,
             totalDistance: accumulatedARKitInfo.totalTranslation,
             magneticField: motionManager.magneticField,
-            imageQualityFilterInfo: imageQualityFilterInfo,
             imageEnhancementInfo: imageEnhancementInfo,
             remoteConfigId: RemoteConfig.config().remoteConfigId
         )
@@ -357,42 +345,46 @@ extension FMLocationManager : ARSessionDelegate {
         let fmFrame = FMFrame(arFrame: frame)
         lastFrame = fmFrame
         
-        guard !isEvaluatingFrame, state != .stopped else {
+        guard state != .stopped else {
             return
         }
         
-        isEvaluatingFrame = true
+        frameEvaluatorChain.evaluate(frame: fmFrame)
         
-        frameFilterQueue.async { [weak self] in
-                        
-            // run the frame through the configured filters
-            let filterResult = self?.frameFilterChain.evaluate(fmFrame) ?? .accepted
-            
-            // handle the result on the main queue
-            DispatchQueue.main.async {
-                self?.handleFrameFilterResult(filterResult, frame: fmFrame)
-                self?.isEvaluatingFrame = false
-            }
+        if let frameToLocalize = frameEvaluatorChain.dequeueBestFrame() {
+            delegate?.locationManager(willUploadFrame: frameToLocalize)
+            localize(frame: frameToLocalize)
         }
+        
+        accumulatedARKitInfo.update(with: fmFrame)
     }
+}
+
+// MARK: - FMFrameEvaluationChainDelegate
+
+extension FMLocationManager : FMFrameEvaluatorChainDelegate {
     
-    private func handleFrameFilterResult(_ filterResult: FMFrameFilterResult, frame: FMFrame) {
-        behaviorRequester?.processResult(filterResult)
-        accumulatedARKitInfo.update(with: frame)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, result: FMFrameEvaluationResult) {
         
-        if case let .rejected(reason) = filterResult {
+        switch result {
+        case .newCurrentBest:
+            break
+        
+        case .discarded(.rejectedByFilter(let reason)):
+            behaviorRequester?.processFilterRejection(reason: reason)
             frameEventAccumulator.accumulate(filterRejectionReason: reason)
-        } else {
-            if state == .localizing {
-                delegate?.locationManager(willUploadFrame: frame)
-                localize(frame: frame)
-            }
-        }
+                
+        case .discarded(.belowCurrentBestScore):
+            break
         
-        if #available(iOS 13, *), let imageQualityFilter = frameFilterChain.getFilter(ofType: FMImageQualityFilter.self) {
-            accumulatedARKitInfo.imageQualityFilterScores.append(imageQualityFilter.lastImageQualityScore)
-            accumulatedARKitInfo.imageQualityFilterScoreThreshold = imageQualityFilter.scoreThreshold
-            accumulatedARKitInfo.imageQualityFilterModelVersion = imageQualityFilter.modelVersion
+        case .discarded(.belowMinScoreThreshold):
+            break
+        
+        case .discarded(.otherEvaluationInProgress):
+            break
+            
+        case .discarded(.evaluatorError):
+            break
         }
         
         delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)

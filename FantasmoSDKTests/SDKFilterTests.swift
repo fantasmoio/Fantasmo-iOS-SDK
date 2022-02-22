@@ -107,7 +107,7 @@ class SDKFilterTests: XCTestCase {
     func testImageQualityFilterResizesPixelBuffer() throws {
         let inParkingImage = UIImage(named: "inParking", in: Bundle(for: type(of: self)), compatibleWith: nil)
         let testPixelBuffer = inParkingImage!.pixelBuffer()!
-        let imageQualityFilter = FMImageQualityFilter(scoreThreshold: 0)
+        let imageQualityFilter = FMImageQualityEvaluator(scoreThreshold: 0)
         let resizedPixelBufferContext = imageQualityFilter.makeResizedPixelBuffer(testPixelBuffer)
         // Check the returned context has a buffer pointer
         XCTAssertNotNil(resizedPixelBufferContext?.data)
@@ -123,7 +123,7 @@ class SDKFilterTests: XCTestCase {
         let inParkingImage = UIImage(named: "inParking", in: Bundle(for: type(of: self)), compatibleWith: nil)
         let pixelBuffer = inParkingImage!.pixelBuffer()!
         let mockFrame = FMFrame(camera: MockCamera(), capturedImage: pixelBuffer)
-        let imageQualityFilter = FMImageQualityFilter(scoreThreshold: 0.0)
+        let imageQualityFilter = FMImageQualityEvaluator(scoreThreshold: 0.0)
         let filterResult = imageQualityFilter.accepts(mockFrame)
         XCTAssertEqual(filterResult, .accepted)
         // Check that a image quality score was given
@@ -135,7 +135,7 @@ class SDKFilterTests: XCTestCase {
         let inParkingImage = UIImage(named: "inParking", in: Bundle(for: type(of: self)), compatibleWith: nil)
         let pixelBuffer = inParkingImage!.pixelBuffer()!
         let mockFrame = FMFrame(camera: MockCamera(), capturedImage: pixelBuffer)
-        let imageQualityFilter = FMImageQualityFilter(scoreThreshold: 1.0)
+        let imageQualityFilter = FMImageQualityEvaluator(scoreThreshold: 1.0)
         let filterResult = imageQualityFilter.accepts(mockFrame)
         XCTAssertEqual(filterResult, .rejected(reason: .imageQualityScoreBelowThreshold))
         // Check that a image quality score was given
@@ -147,7 +147,7 @@ class SDKFilterTests: XCTestCase {
         try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
         
         let nighttimeSession = MockARSession(videoName: "parking-nighttime")
-        let imageQualityFilter = FMImageQualityFilter(scoreThreshold: 1.0)
+        let imageQualityFilter = FMImageQualityEvaluator(scoreThreshold: 1.0)
         
         let nighttimeFrame = nighttimeSession.nextFrame()!
         let _ = imageQualityFilter.accepts(nighttimeFrame)

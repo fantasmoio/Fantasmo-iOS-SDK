@@ -13,11 +13,7 @@ class AccumulatedARKitInfo {
     
     public private(set) var trackingStateStatistics = TrackingStateFrameStatistics()
     public private(set) var elapsedFrames = 0
-    
-    var imageQualityFilterScores: [Float] = []
-    var imageQualityFilterScoreThreshold: Float?
-    var imageQualityFilterModelVersion: String?
-    
+        
     /// Current value of total translation in meters
     public var totalTranslation: Float {
         translationAccumulator.totalTranslation
@@ -47,8 +43,5 @@ class AccumulatedARKitInfo {
         trackingStateStatistics.reset()
         translationAccumulator.reset()
         eulerAngleSpreadsAccumulator = EulerAngleSpreadsAccumulator()
-        imageQualityFilterScores.removeAll()
-        imageQualityFilterScoreThreshold = nil
-        imageQualityFilterModelVersion = nil
     }
 }

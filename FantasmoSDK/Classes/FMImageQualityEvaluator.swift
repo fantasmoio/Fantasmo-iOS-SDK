@@ -1,5 +1,5 @@
 //
-//  FMImageQualityFilter.swift
+//  FMImageQualityEvaluator.swift
 //  FantasmoSDK
 //
 //  Created by Nicholas Jensen on 18.11.21.
@@ -9,22 +9,22 @@ import ARKit
 import CoreML
 import VideoToolbox
 
+
 @available(iOS 13.0, *)
-class FMImageQualityFilter: FMFrameFilter {
-        
+class FMImageQualityEvaluator: FMFrameEvaluator {
+      
+    public static let scoreUserInfoKey = "imageQualityScore"
+    public static let versionUserInfoKey = "imageQualityModelVersion"
+    
     private let mlModel: ImageQualityModel?
     private let mlInputShape: [NSNumber] = [1, 3, 320, 240]
     private let imageWidth: Int = 320
     private let imageHeight: Int = 240
     private var isCheckingForUpdates: Bool = false
     
-    public private(set) var scoreThreshold: Float
     public private(set) var modelVersion: String?
-    public private(set) var lastImageQualityScore: Float = 0.0
     
-    init(scoreThreshold: Float) {
-        self.scoreThreshold = scoreThreshold
-        
+    init() {        
         let fileManager = FileManager.default
         let modelName = String(describing: ImageQualityModel.self)
         let appSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
@@ -78,24 +78,21 @@ class FMImageQualityFilter: FMFrameFilter {
         return context
     }
     
-    public func accepts(_ frame: FMFrame) -> FMFrameFilterResult {
-        // Reset the last score
-        lastImageQualityScore = 0
-        
+    func evaluate(frame: FMFrame) {
         guard let mlModel = mlModel else {
             log.error("failed to create model")
-            return .accepted
+            return
         }
         guard let mlInputArray = try? MLMultiArray(shape: mlInputShape, dataType: MLMultiArrayDataType.float32) else {
             log.error("failed to create input array")
-            return .accepted
+            return
         }
         
         // Resize the pixel buffer down to the expected input size, use the enhanced image if available
         guard let resizedPixelBufferContext = makeResizedPixelBuffer(frame.enhancedImageOrCapturedImage),
               let resizedPixelBuffer = UnsafePointer<UInt8>(OpaquePointer(resizedPixelBufferContext.data)) else {
             log.error("failed to resize pixel buffer")
-            return .accepted
+            return
         }
         defer {
             resizedPixelBuffer.deallocate()
@@ -137,20 +134,24 @@ class FMImageQualityFilter: FMFrameFilter {
         let imageQualityInput = ImageQualityModelInput(input_1: mlInputArray)
         guard let prediction = try? mlModel.prediction(input: imageQualityInput) else {
             log.error("no prediction")
-            return .accepted
+            return
         }
         
         guard let featureName = prediction.featureNames.first, let featureValue = prediction.featureValue(for: featureName)?.multiArrayValue, featureValue.count == 2 else {
             log.error("invalid feature value")
-            return .accepted
+            return
         }
 
         let y1Exp = exp(Float32(truncating: featureValue[0]))
         let y2Exp = exp(Float32(truncating: featureValue[1]))
         let score = 1.0 / (1.0 + y2Exp / y1Exp)
+     
+        let userInfo: [String: String?] = [
+            FMImageQualityEvaluator.scoreUserInfoKey: String(score),
+            FMImageQualityEvaluator.versionUserInfoKey: modelVersion
+        ]
         
-        lastImageQualityScore = score
-        
-        return score >= scoreThreshold ? .accepted : .rejected(reason: .imageQualityScoreBelowThreshold)
+        frame.evaluation = FMFrameEvaluation(type: .imageQualityEstimation, score: score, userInfo: userInfo)
     }
 }
+

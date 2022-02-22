@@ -15,7 +15,7 @@ class FMFrameEvaluatorChain: FMFrameEvaluator {
         
     private let minWindowTime: TimeInterval
     private let maxWindowTime: TimeInterval
-    private let minScore: Float
+    private let minScoreThreshold: Float
     private let minHighQualityScore: Float
 
     private let frameEvaluator: FMFrameEvaluator?
@@ -41,7 +41,7 @@ class FMFrameEvaluatorChain: FMFrameEvaluator {
         // TODO - get these from remote config
         self.minWindowTime = 0.04
         self.maxWindowTime = 1.2
-        self.minScore = 0.0
+        self.minScoreThreshold = 0.0
         self.minHighQualityScore = 0.9
         
         // configure pre evaluation filters
@@ -158,7 +158,7 @@ class FMFrameEvaluatorChain: FMFrameEvaluator {
         }
         
         // check if the frame is above the min score threshold, otherwise throw it away
-        if evaluation.score < minScore {
+        if evaluation.score < minScoreThreshold {
             delegate?.frameEvaluatorChain(self, didEvaluateFrame: frame, result: .discarded(reason: .belowMinScoreThreshold))
             return
         }

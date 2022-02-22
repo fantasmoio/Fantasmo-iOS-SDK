@@ -26,7 +26,8 @@ class FMLocationManager: NSObject {
         case stopped        // doing nothing
         case localizing     // localizing
         case uploading      // uploading image while localizing
-        case paused         // paused
+        
+        // TODO - need to reprsent somehow multiple uploads happening at once here...
    }
         
     // MARK: - Properties
@@ -266,15 +267,11 @@ class FMLocationManager: NSObject {
             remoteConfigId: RemoteConfig.config().remoteConfigId
         )
         
-        // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second
+        // If no valid approximate coordinate is found, throw an error
         guard CLLocationCoordinate2DIsValid(approximateLocation.coordinate) else {
             let error = FMError(FMLocationError.invalidCoordinate)
             self.errors.append(error)
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
-            self.state = .paused
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.state = .localizing
-            }
             return
         }
         

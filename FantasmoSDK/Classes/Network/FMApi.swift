@@ -320,9 +320,9 @@ class FMApi {
             "rotationSpread": request.analytics.rotationSpread.toJson(),
         ]
         
-        // add image quality filter info if available
-        if frame.evaluation?.type == .imageQualityEstimation, let imageQualityInfo = frame.evaluation?.userInfo {
-            params.merge(imageQualityInfo) { (_, new) in new }
+        // add frame evaluation info, if available
+        if let evaluation = frame.evaluation {
+            params["frameEvaluation"] = evaluation.toJson()
         }
         
         // add image enhancement info if available

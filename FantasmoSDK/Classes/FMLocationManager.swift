@@ -346,7 +346,7 @@ extension FMLocationManager : ARSessionDelegate {
             return
         }
         
-        frameEvaluatorChain.evaluate(frame: fmFrame)
+        frameEvaluatorChain.evaluateAsync(frame: fmFrame)
         
         if let frameToLocalize = frameEvaluatorChain.dequeueBestFrame() {
             delegate?.locationManager(willUploadFrame: frameToLocalize)
@@ -354,37 +354,39 @@ extension FMLocationManager : ARSessionDelegate {
         }
         
         accumulatedARKitInfo.update(with: fmFrame)
+        delegate?.locationManager(didUpdateFrame: fmFrame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
     }
 }
 
 // MARK: - FMFrameEvaluationChainDelegate
 
 extension FMLocationManager : FMFrameEvaluatorChainDelegate {
+
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame) {
+        // evaluator successfully evaluated and assigned an `evaluation` object on the frame, show info in debug view
+    }
     
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, result: FMFrameEvaluationResult) {
-        
-        switch result {
-        case .newCurrentBest:
-            break
-        
-        case .discarded(.rejectedByFilter(let reason)):
-            behaviorRequester?.processFilterRejection(reason: reason)
-            frameEventAccumulator.accumulate(filterRejectionReason: reason)
-                
-        case .discarded(.belowCurrentBestScore):
-            break
-        
-        case .discarded(.belowMinScoreThreshold):
-            break
-        
-        case .discarded(.otherEvaluationInProgress):
-            break
-            
-        case .discarded(.evaluatorError):
-            break
-        }
-        
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFindNewBestFrame newBestFrame: FMFrame) {
+        // evaluator found a new best frame, show info in debug view
+    }
+    
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didDiscardFrame frame: FMFrame) {
+        // evaluator was busy and discarded the frame, show info in debug view
+    }
+    
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter reason: FMFrameFilterRejectionReason) {
+        // evaluator filter rejected the frame, show info in debug view
+        behaviorRequester?.processFilterRejection(reason: reason)
+        frameEventAccumulator.accumulate(filterRejectionReason: reason)
         delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
+    }
+    
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float) {
+        // evaluator rejected the frame because it was below the min score threshold, show info in debug view
+    }
+    
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float) {
+        // evaluator rejected the frame because it was below the current best score, show info in debug view
     }
 }
 

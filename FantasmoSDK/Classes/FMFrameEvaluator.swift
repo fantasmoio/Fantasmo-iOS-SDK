@@ -8,7 +8,5 @@
 import Foundation
 
 protocol FMFrameEvaluator: AnyObject {
-    /// performs in-place evaluation
-    /// when evaluation is succesful, sets `FMFrameEvaluation` object on frame
-    func evaluate(frame: FMFrame)
+    func evaluate(frame: FMFrame) -> FMFrameEvaluation
 }

@@ -1,20 +1,13 @@
 {
-    "remote_config_id": "test-config",
+    "remote_config_id": "test-camera-pitch-filter-config",
     "is_camera_pitch_filter_enabled": true,
     "camera_pitch_filter_max_upward_tilt": 30,
     "camera_pitch_filter_max_downward_tilt": 60,
 
     "is_tracking_state_filter_enabled": false,
     "is_movement_filter_enabled": false,
-    "is_blur_filter_enabled": false,
-    "is_image_quality_filter_enabled": false,
     "is_behavior_requester_enabled": false,
     "movement_filter_threshold": 0,
-    "frame_acceptance_threshold_timeout": 0,
-    "blur_filter_variance_threshold": 0,
-    "blur_filter_sudden_drop_threshold": 0,
-    "blur_filter_average_throughput_threshold": 0,
-    "image_quality_filter_score_threshold": 0,
     "is_image_enhancer_enabled": false,
     "image_enhancer_target_brightness": 0,
 }

@@ -11,7 +11,6 @@ enum FMFrameFilterRejectionReason: CaseIterable {
     case pitchTooLow
     case pitchTooHigh
     case imageTooBlurry
-    case imageQualityScoreBelowThreshold
     case movingTooFast
     case movingTooLittle
     case insufficientFeatures
@@ -26,7 +25,7 @@ enum FMFrameFilterRejectionReason: CaseIterable {
             return .panSlowly
         case .movingTooLittle:
             return .panAround
-        case .insufficientFeatures, .imageQualityScoreBelowThreshold:
+        case .insufficientFeatures:
             return .panAround
         }
     }

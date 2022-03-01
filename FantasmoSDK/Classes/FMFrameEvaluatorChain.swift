@@ -11,7 +11,7 @@ protocol FMFrameEvaluatorChainDelegate: AnyObject {
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame)
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFindNewBestFrame newBestFrame: FMFrame)
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didDiscardFrame frame: FMFrame)
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter reason: FMFrameFilterRejectionReason)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason)
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float)
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float)
 }
@@ -28,7 +28,7 @@ class FMFrameEvaluatorChain {
     private let frameEvaluationQueue = DispatchQueue(label: "io.fantasmo.frameEvaluationQueue", qos: .userInteractive)
     
     /// Active filters that are run in order before enhancement and evaluation
-    let preEvaluationFilters: [FMFrameFilter]
+    let filters: [FMFrameFilter]
     
     /// Image enhancer, applies gamma correction, nil if disabled via remote config
     let imageEnhancer: FMImageEnhancer?
@@ -72,7 +72,7 @@ class FMFrameEvaluatorChain {
             enabledFilters.append(movementFilter)
         }
                 
-        self.preEvaluationFilters = enabledFilters
+        self.filters = enabledFilters
         
         // configure the image enhancer, if enabled
         
@@ -101,17 +101,12 @@ class FMFrameEvaluatorChain {
                 
         // run frame through filters
         var filterResult: FMFrameFilterResult = .accepted
-        for filter in preEvaluationFilters {
+        for filter in filters {
             filterResult = filter.accepts(frame)
-            if filterResult != .accepted {
-                break
+            if case let .rejected(reason) = filterResult {
+                delegate?.frameEvaluatorChain(self, didRejectFrame: frame, withFilter: filter, reason: reason)
+                return
             }
-        }
-        
-        // if any filter rejects the frame, return
-        if case let .rejected(rejectionReason) = filterResult {
-            delegate?.frameEvaluatorChain(self, didRejectFrame: frame, withFilter: rejectionReason)
-            return
         }
         
         // set a flag so we can only process one frame at a time
@@ -188,5 +183,9 @@ class FMFrameEvaluatorChain {
     func reset() {
         windowStart = Date()
         currentBestFrame = nil
+    }
+    
+    func getFilter<T:FMFrameFilter>(ofType type: T.Type) -> T? {
+        return filters.first(where: { $0 is T }) as? T
     }
 }

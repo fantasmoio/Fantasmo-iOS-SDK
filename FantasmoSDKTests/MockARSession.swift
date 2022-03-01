@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import ARKit
 @testable import FantasmoSDK
 
 class MockARSession {
@@ -36,12 +37,12 @@ class MockARSession {
         videoAssetReader.add(videoTrackOutput)
         videoAssetReader.startReading()
     }
-    
-    func nextFrame() -> FMFrame? {
+        
+    func nextFrame(camera: FMCamera = MockCamera()) -> FMFrame? {
         while let sampleBuffer = videoTrackOutput.copyNextSampleBuffer() {
             let formatDesc = CMSampleBufferGetFormatDescription(sampleBuffer)
             if formatDesc?.mediaType == .video, let capturedImage = sampleBuffer.imageBuffer {
-                return FMFrame(camera: MockCamera(), capturedImage: capturedImage)
+                return FMFrame(camera: camera, capturedImage: capturedImage)
             }
         }
         return nil

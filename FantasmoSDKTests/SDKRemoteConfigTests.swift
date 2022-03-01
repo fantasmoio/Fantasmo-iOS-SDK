@@ -44,75 +44,48 @@ class SDKRemoteConfigTests: XCTestCase {
     
     func testMovementFilterConfig() throws {
         let config = getTestConfig("movement-filter")!
-        let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 1)
-        XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 0)
+        let frameEvaluatorChain = FMFrameEvaluatorChain(config: config)
+        XCTAssertEqual(frameEvaluatorChain.filters.count, 1)
 
-        let movementFilter = filterChain.getFilter(ofType: FMMovementFilter.self)
+        let movementFilter = frameEvaluatorChain.getFilter(ofType: FMMovementFilter.self)
         XCTAssertNotNil(movementFilter)
         XCTAssertEqual(movementFilter!.threshold, config.movementFilterThreshold)
     }
 
     func testTrackingStateFilterConfig() throws {
         let config = getTestConfig("tracking-state-filter")!
-        let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 1)
-        XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 0)
+        let frameEvaluatorChain = FMFrameEvaluatorChain(config: config)
+        XCTAssertEqual(frameEvaluatorChain.filters.count, 1)
 
-        let trackingStateFilter = filterChain.getFilter(ofType: FMTrackingStateFilter.self)
+        let trackingStateFilter = frameEvaluatorChain.getFilter(ofType: FMTrackingStateFilter.self)
         XCTAssertNotNil(trackingStateFilter)
     }
     
     func testCameraPitchFilterConfig() throws {
         let config = getTestConfig("camera-pitch-filter")!
-        let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 1)
-        XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 0)
+        let frameEvaluatorChain = FMFrameEvaluatorChain(config: config)
+        XCTAssertEqual(frameEvaluatorChain.filters.count, 1)
 
-        let cameraPitchFilter = filterChain.getFilter(ofType: FMCameraPitchFilter.self)
+        let cameraPitchFilter = frameEvaluatorChain.getFilter(ofType: FMCameraPitchFilter.self)
         XCTAssertNotNil(cameraPitchFilter)
         XCTAssertEqual(cameraPitchFilter!.maxUpwardTiltRadians, deg2rad(config.cameraPitchFilterMaxUpwardTilt))
         XCTAssertEqual(cameraPitchFilter!.maxDownwardTiltRadians, deg2rad(config.cameraPitchFilterMaxDownwardTilt))
     }
-    
-    func testBlurFilterConfig() throws {
-        let config = getTestConfig("blur-filter")!
-        let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 1)
-        XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 0)
-
-        let blurFilter = filterChain.getFilter(ofType: FMBlurFilter.self)
-        XCTAssertNotNil(blurFilter)
-        XCTAssertEqual(blurFilter!.varianceThreshold, config.blurFilterVarianceThreshold)
-        XCTAssertEqual(blurFilter!.suddenDropThreshold, config.blurFilterSuddenDropThreshold)
-        XCTAssertEqual(blurFilter!.averageThroughputThreshold, config.blurFilterAverageThroughputThreshold)
-    }
-    
-    func testImageQualityFilterConfig() throws {
-        let config = getTestConfig("image-quality-filter")!
-        let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertEqual(filterChain.preImageEnhancementFilters.count, 0)
-        XCTAssertEqual(filterChain.postImageEnhancementFilters.count, 1)
-        
-        let imageQualityFilter = filterChain.getFilter(ofType: FMImageQualityFilter.self)
-        XCTAssertNotNil(imageQualityFilter)
-        XCTAssertEqual(imageQualityFilter!.scoreThreshold, config.imageQualityFilterScoreThreshold)
-    }
-    
+            
     func testImageEnhancerConfig() throws {
         try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
         
         let config = getTestConfig("image-enhancer")!
-        let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertNotNil(filterChain.imageEnhancer)
-        XCTAssertEqual(filterChain.imageEnhancer!.targetBrightness, config.imageEnhancerTargetBrightness)
+        let frameEvaluatorChain = FMFrameEvaluatorChain(config: config)
+        XCTAssertNotNil(frameEvaluatorChain.imageEnhancer)
+        XCTAssertEqual(frameEvaluatorChain.imageEnhancer!.targetBrightness, config.imageEnhancerTargetBrightness)
     }
     
     func testImageEnhancerDisabledConfig() throws {
         try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
         
         let config = getTestConfig("image-enhancer-disabled")!
-        let filterChain = FMFrameFilterChain(config: config)
-        XCTAssertNil(filterChain.imageEnhancer)
+        let frameEvaluatorChain = FMFrameEvaluatorChain(config: config)
+        XCTAssertNil(frameEvaluatorChain.imageEnhancer)
     }
 }

@@ -374,7 +374,7 @@ extension FMLocationManager : FMFrameEvaluatorChainDelegate {
         // evaluator was busy and discarded the frame, show info in debug view
     }
     
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter reason: FMFrameFilterRejectionReason) {
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason) {
         // evaluator filter rejected the frame, show info in debug view
         behaviorRequester?.processFilterRejection(reason: reason)
         frameEventAccumulator.accumulate(filterRejectionReason: reason)

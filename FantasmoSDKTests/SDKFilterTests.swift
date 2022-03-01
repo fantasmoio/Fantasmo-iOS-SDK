@@ -29,7 +29,7 @@ class SDKFilterTests: XCTestCase {
         // Put teardown code that is run once (equal to mocha "after" hook)
     }
     
-    // note: this test will not fail and not throw an error code if the pixelBuffer assignment fails
+    /*
     func testMovementFilter() {
         let filter = FMMovementFilter(threshold: 0.001)
         var transform = simd_float4x4(1)
@@ -43,8 +43,7 @@ class SDKFilterTests: XCTestCase {
         transform = simd_float4x4(1.099)
         XCTAssertEqual(filter.accepts(frame), .rejected(reason: .movingTooLittle))
     }
-
-    // note: this test will not fail and not throw an error code if the nonnilBuffer assignment fails
+    
     func testCameraPitchFilter() {
         let filter = FMCameraPitchFilter(maxUpwardTiltDegrees: 30, maxDownwardTiltDegrees: 65)
         var pixelBuffer: CVPixelBuffer?
@@ -161,4 +160,5 @@ class SDKFilterTests: XCTestCase {
         // check the score increased
         XCTAssertGreaterThan(enhancedScore, originalScore)
     }
+     */
 }

@@ -60,7 +60,6 @@
 		017C5ED5278C540F000DEBCE /* CLLocation+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017C5ED4278C540F000DEBCE /* CLLocation+Codable.swift */; };
 		017C5ED7278DC7F7000DEBCE /* FMImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017C5ED6278DC7F7000DEBCE /* FMImageButton.swift */; };
 		01827D292758E0B5006D21CE /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389F25921BF3005B1145 /* MockData.swift */; };
-		01827D2A2758E926006D21CE /* SDKFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */; };
 		01827D2B2758E92E006D21CE /* SDKRemoteConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */; };
 		01827D2C2758E939006D21CE /* SDKGeometricTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */; };
 		01827D2E2758EF1F006D21CE /* MockCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4064380226E79C7A00B38B45 /* MockCamera.swift */; };
@@ -363,7 +362,6 @@
 		A3CB773E263710D2009625BB /* simd_float4x4+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "simd_float4x4+Extension.swift"; sourceTree = "<group>"; };
 		A3CB774126372A9B009625BB /* simd_quatf+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "simd_quatf+Extension.swift"; sourceTree = "<group>"; };
 		A3EEC0852664EFC6008BCCF2 /* FMFrameFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameFilter.swift; sourceTree = "<group>"; };
-		FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKFilterTests.swift; sourceTree = "<group>"; };
 		FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKGeometricTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -471,12 +469,12 @@
 		01296D002756528900636BBE /* Configs */ = {
 			isa = PBXGroup;
 			children = (
-				01BB298A27B2CC9200BAE286 /* image-enhancer.json */,
-				01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */,
 				01296D092756744500636BBE /* camera-pitch-filter.json */,
 				01296D012756627500636BBE /* movement-filter.json */,
-				01BB299427B52F9D00BAE286 /* server-added-fields.json */,
 				01296D07275672FB00636BBE /* tracking-state-filter.json */,
+				01BB298A27B2CC9200BAE286 /* image-enhancer.json */,
+				01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */,
+				01BB299427B52F9D00BAE286 /* server-added-fields.json */,
 			);
 			path = Configs;
 			sourceTree = "<group>";
@@ -694,19 +692,18 @@
 		A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */ = {
 			isa = PBXGroup;
 			children = (
-				012C7BF227B19B29003DC67F /* Videos */,
 				01296D002756528900636BBE /* Configs */,
-				FFA8586B2701D5D20069EB5D /* SDKFilterTests.swift */,
+				012C7BF627B19B29003DC67F /* MockARSession.swift */,
+				4064380226E79C7A00B38B45 /* MockCamera.swift */,
+				0131340827CE5FCB00CA4242 /* MockFrameEvaluatorDelegate.swift */,
 				0131340627CE570B00CA4242 /* SDKFrameEvaluatorTests.swift */,
-				01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */,
 				FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */,
 				01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */,
 				01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */,
 				A0D5E88926BA97DA00CE5B1C /* SDKLocationTests.swift */,
-				012C7BF627B19B29003DC67F /* MockARSession.swift */,
-				4064380226E79C7A00B38B45 /* MockCamera.swift */,
-				0131340827CE5FCB00CA4242 /* MockFrameEvaluatorDelegate.swift */,
+				01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */,
 				A0D5E88B26BA97DA00CE5B1C /* Info.plist */,
+				012C7BF227B19B29003DC67F /* Videos */,
 			);
 			path = FantasmoSDKTests;
 			sourceTree = "<group>";
@@ -1141,7 +1138,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01827D2A2758E926006D21CE /* SDKFilterTests.swift in Sources */,
 				01827D2C2758E939006D21CE /* SDKGeometricTests.swift in Sources */,
 				0131340927CE5FCB00CA4242 /* MockFrameEvaluatorDelegate.swift in Sources */,
 				01343E5E271D7864003A4716 /* SDKLocationTests.swift in Sources */,

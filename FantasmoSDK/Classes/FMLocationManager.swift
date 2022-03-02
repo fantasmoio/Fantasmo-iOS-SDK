@@ -362,15 +362,7 @@ extension FMLocationManager : ARSessionDelegate {
 
 extension FMLocationManager : FMFrameEvaluatorChainDelegate {
 
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame) {
-        // evaluator successfully evaluated and assigned an `evaluation` object on the frame, show info in debug view
-    }
-    
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFindNewBestFrame newBestFrame: FMFrame) {
-        // evaluator found a new best frame, show info in debug view
-    }
-    
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didDiscardFrame frame: FMFrame) {
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame) {
         // evaluator was busy and discarded the frame, show info in debug view
     }
     
@@ -381,12 +373,20 @@ extension FMLocationManager : FMFrameEvaluatorChainDelegate {
         delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
     }
     
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float) {
-        // evaluator rejected the frame because it was below the min score threshold, show info in debug view
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateNewBestFrame newBestFrame: FMFrame) {
+        // evaluated a new best frame, show info in debug view
     }
     
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float) {
-        // evaluator rejected the frame because it was below the current best score, show info in debug view
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float) {
+        // evaluated a frame below the current best score, show info in debug view
+    }
+    
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float) {
+        // evaluated a frame below the min score threshold, show info in debug view
+    }
+            
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFinishEvaluatingFrame frame: FMFrame) {
+        // finished evaluating a frame, evaluator is ready to evaluate new frames, show info in debug view
     }
 }
 

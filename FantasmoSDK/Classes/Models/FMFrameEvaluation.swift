@@ -8,7 +8,7 @@
 import Foundation
 
 enum FMFrameEvaluationType: String {
-    case imageQualityEstimation
+    case imageQuality
 }
 
 struct FMFrameEvaluation: Encodable {

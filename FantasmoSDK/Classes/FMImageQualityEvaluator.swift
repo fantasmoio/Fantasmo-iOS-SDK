@@ -34,12 +34,12 @@ class FMImageQualityEvaluator {
     }
     
     static func makeEvaluation(score: Float, modelVersion: String? = nil) -> FMFrameEvaluation {
-        return FMFrameEvaluation(type: .imageQualityEstimation, score: score, userInfo: [versionUserInfoKey: modelVersion])
+        return FMFrameEvaluation(type: .imageQuality, score: score, userInfo: [versionUserInfoKey: modelVersion])
     }
     
     static func makeEvaluation(error: Error, modelVersion: String? = nil) -> FMFrameEvaluation {
         // We use a score of 1.0 so the frame is always accepted
-        return FMFrameEvaluation(type: .imageQualityEstimation, score: 1.0, userInfo: [versionUserInfoKey: modelVersion, errorUserInfoKey: error.rawValue])
+        return FMFrameEvaluation(type: .imageQuality, score: 1.0, userInfo: [versionUserInfoKey: modelVersion, errorUserInfoKey: error.rawValue])
     }
 }
 

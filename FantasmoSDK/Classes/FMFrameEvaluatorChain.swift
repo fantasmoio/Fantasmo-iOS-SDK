@@ -8,20 +8,21 @@
 import Foundation
 
 protocol FMFrameEvaluatorChainDelegate: AnyObject {
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame)
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFindNewBestFrame newBestFrame: FMFrame)
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didDiscardFrame frame: FMFrame)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame)
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason)
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float)
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateNewBestFrame newBestFrame: FMFrame)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFinishEvaluatingFrame frame: FMFrame)
 }
 
 class FMFrameEvaluatorChain {
         
-    private let minWindowTime: TimeInterval
-    private let maxWindowTime: TimeInterval
-    private let minScoreThreshold: Float
-    private let minHighQualityScore: Float
+    // TODO - make these constants when we're able to get them from remote config
+    var minWindowTime: TimeInterval
+    var maxWindowTime: TimeInterval
+    var minScoreThreshold: Float
+    var minHighQualityScore: Float
 
     private let frameEvaluator: FMFrameEvaluator
 
@@ -33,11 +34,11 @@ class FMFrameEvaluatorChain {
     /// Image enhancer, applies gamma correction, nil if disabled via remote config
     let imageEnhancer: FMImageEnhancer?
     
-    private var currentBestFrame: FMFrame?
+    private(set) var evaluatingFrame: FMFrame?
     
-    private var windowStart: Date
+    private(set) var currentBestFrame: FMFrame?
     
-    private var isEvaluatingFrame: Bool = false
+    private(set) var windowStart: Date
     
     weak var delegate: FMFrameEvaluatorChainDelegate?
             
@@ -93,9 +94,9 @@ class FMFrameEvaluatorChain {
             fatalError("evaluateAsync not called on main thread")
         }
                 
-        // if we're already evaluating a frame, discard it
-        guard !isEvaluatingFrame else {
-            delegate?.frameEvaluatorChain(self, didDiscardFrame: frame)
+        // if we're already evaluating a frame, reject it
+        if let evaluatingFrame = evaluatingFrame {
+            delegate?.frameEvaluatorChain(self, didRejectFrame: frame, whileEvaluatingOtherFrame: evaluatingFrame)
             return
         }
                 
@@ -104,15 +105,16 @@ class FMFrameEvaluatorChain {
         for filter in filters {
             filterResult = filter.accepts(frame)
             if case let .rejected(reason) = filterResult {
+                // filter rejected the frame
                 delegate?.frameEvaluatorChain(self, didRejectFrame: frame, withFilter: filter, reason: reason)
                 return
             }
         }
         
-        // set a flag so we can only process one frame at a time
-        isEvaluatingFrame = true
+        // keep a reference to the frame we're evaluating
+        evaluatingFrame = frame
         
-        // begin async stuff
+        // begin async frame evaluation
         frameEvaluationQueue.async {
             // TODO - make sure retaining `self` isn't a problem here
             
@@ -124,40 +126,41 @@ class FMFrameEvaluatorChain {
             
             DispatchQueue.main.async {
                 // process the evaluation on the main thread
-                self.processEvaluation(evaluation, frame: frame)
-                // unset flag to allow new frames to be evaluated
-                self.isEvaluatingFrame = false
+                self.processEvaluation(evaluation)
             }
         }
     }
     
-    private func processEvaluation(_ evaluation: FMFrameEvaluation, frame: FMFrame) {
+    private func processEvaluation(_ evaluation: FMFrameEvaluation) {
         guard Thread.isMainThread else {
             fatalError("processEvaluation not called on main thread")
         }
-        guard isEvaluatingFrame else {
-            fatalError("not evaluating frame")
+        guard let frame = evaluatingFrame else {
+            fatalError("evaluatingFrame is nil")
         }
         
-        // store the evaluation on the frame and notify the delegate
+        // store the evaluation object on the frame
         frame.evaluation = evaluation
-        delegate?.frameEvaluatorChain(self, didEvaluateFrame: frame)
         
-        // check if the frame is above the min score threshold, otherwise return
         if evaluation.score < minScoreThreshold {
-            delegate?.frameEvaluatorChain(self, didRejectFrame: frame, belowMinScoreThreshold: minScoreThreshold)
-            return
+            // score is below the min threshold
+            delegate?.frameEvaluatorChain(self, didEvaluateFrame: frame, belowMinScoreThreshold: minScoreThreshold)
+        }
+        else if let currentBestScore = currentBestFrame?.evaluation?.score, currentBestScore > evaluation.score {
+            // score is below the current best score
+            delegate?.frameEvaluatorChain(self, didEvaluateFrame: frame, belowCurrentBestScore: currentBestScore)
+        }
+        else {
+            // score is the new best, update our current best frame
+            currentBestFrame = frame
+            delegate?.frameEvaluatorChain(self, didEvaluateNewBestFrame: frame)
         }
         
-        // check if the new frame score is better than our current best frame score, otherwise return
-        if let currentBestEvaluation = currentBestFrame?.evaluation, currentBestEvaluation.score > evaluation.score {
-            delegate?.frameEvaluatorChain(self, didRejectFrame: frame, belowCurrentBestScore: currentBestEvaluation.score)
-            return
-        }
+        // unset the evaluating frame to allow new frames to be evaluated
+        self.evaluatingFrame = nil
         
-        // frame is the new best, update our saved reference and notify the delegate
-        currentBestFrame = frame
-        delegate?.frameEvaluatorChain(self, didFindNewBestFrame: frame)
+        // notify the delegate that we're finished and can accept new frames
+        delegate?.frameEvaluatorChain(self, didFinishEvaluatingFrame: frame)
     }
 
     func dequeueBestFrame() -> FMFrame? {
@@ -170,14 +173,15 @@ class FMFrameEvaluatorChain {
         if timeElapsed < minWindowTime {
             return nil
         }
-        
-        // return the frame if it's high quality or the max window time has passed
-        if evaluation.score >= minHighQualityScore || timeElapsed >= maxWindowTime {
-            reset()
-            return currentBestFrame
+        // check if the max window time has passed, or if the frame is high quality
+        if timeElapsed < maxWindowTime && evaluation.score < minHighQualityScore {
+            return nil
         }
-        
-        return nil
+        // return best frame and start new window
+        defer {
+            reset()
+        }
+        return currentBestFrame
     }
 
     func reset() {
@@ -187,5 +191,13 @@ class FMFrameEvaluatorChain {
     
     func getFilter<T:FMFrameFilter>(ofType type: T.Type) -> T? {
         return filters.first(where: { $0 is T }) as? T
+    }
+    
+    func getMinWindowDate() -> Date {
+        return windowStart.addingTimeInterval(minWindowTime)
+    }
+    
+    func getMaxWindowDate() -> Date {
+        return windowStart.addingTimeInterval(maxWindowTime)
     }
 }

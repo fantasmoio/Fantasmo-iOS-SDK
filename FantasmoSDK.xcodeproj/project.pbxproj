@@ -41,7 +41,7 @@
 		012C7BF827B19B29003DC67F /* parking-daytime.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 012C7BF427B19B29003DC67F /* parking-daytime.mp4 */; };
 		012C7BF927B19B29003DC67F /* qr-code.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 012C7BF527B19B29003DC67F /* qr-code.mp4 */; };
 		012C7BFA27B19B29003DC67F /* MockARSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012C7BF627B19B29003DC67F /* MockARSession.swift */; };
-		0131340727CE570B00CA4242 /* SDKFrameEvaluatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0131340627CE570B00CA4242 /* SDKFrameEvaluatorTests.swift */; };
+		0131340727CE570B00CA4242 /* SDKFrameFilterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0131340627CE570B00CA4242 /* SDKFrameFilterTests.swift */; };
 		0131340927CE5FCB00CA4242 /* MockFrameEvaluatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0131340827CE5FCB00CA4242 /* MockFrameEvaluatorDelegate.swift */; };
 		01343E5E271D7864003A4716 /* SDKLocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D5E88926BA97DA00CE5B1C /* SDKLocationTests.swift */; };
 		01343E8B271D7E5C003A4716 /* Codable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946838B725921BF3005B1145 /* Codable+Extension.swift */; };
@@ -80,6 +80,8 @@
 		018EF3A02795A16A005A1381 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01138A2127551D6000AB31DF /* Assets.xcassets */; };
 		018EF3A12795A16A005A1381 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01138A1E27551D5F00AB31DF /* Main.storyboard */; };
 		018EF3A32795A16A005A1381 /* FantasmoSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9468388B25921BAF005B1145 /* FantasmoSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		01933FBB27CE8B910089796C /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01933FBA27CE8B910089796C /* TestUtils.swift */; };
+		01933FBE27CE910D0089796C /* SDKImageQualityEvaluatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01933FBD27CE910D0089796C /* SDKImageQualityEvaluatorTests.swift */; };
 		01984383271590A9004CAC3A /* FMToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01984382271590A9004CAC3A /* FMToolbar.swift */; };
 		0199417F27C3A45600118BD9 /* FMFrameEvaluation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0199417E27C3A45600118BD9 /* FMFrameEvaluation.swift */; };
 		0199418127C3C65D00118BD9 /* FMFrameEvaluatorChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0199418027C3C65D00118BD9 /* FMFrameEvaluatorChain.swift */; };
@@ -101,6 +103,7 @@
 		01BB298D27B2D08B00BAE286 /* image-enhancer-disabled.json in Resources */ = {isa = PBXBuildFile; fileRef = 01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */; };
 		01BB298F27B3CC2800BAE286 /* SDKImageEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */; };
 		01BB299527B5313E00BAE286 /* server-added-fields.json in Resources */ = {isa = PBXBuildFile; fileRef = 01BB299427B52F9D00BAE286 /* server-added-fields.json */; };
+		01F9B62227CF7E1500260FFF /* SDKFrameEvaluatorChainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F9B62127CF7E1500260FFF /* SDKFrameEvaluatorChainTests.swift */; };
 		406437FB26E7864300B38B45 /* FMFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FA26E7864300B38B45 /* FMFrame.swift */; };
 		406437FE26E787A300B38B45 /* FMCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406437FD26E787A200B38B45 /* FMCamera.swift */; };
 		40EA810526E7C6A8002E96A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
@@ -261,7 +264,7 @@
 		012C7BF427B19B29003DC67F /* parking-daytime.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "parking-daytime.mp4"; sourceTree = "<group>"; };
 		012C7BF527B19B29003DC67F /* qr-code.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "qr-code.mp4"; sourceTree = "<group>"; };
 		012C7BF627B19B29003DC67F /* MockARSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockARSession.swift; sourceTree = "<group>"; };
-		0131340627CE570B00CA4242 /* SDKFrameEvaluatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKFrameEvaluatorTests.swift; sourceTree = "<group>"; };
+		0131340627CE570B00CA4242 /* SDKFrameFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKFrameFilterTests.swift; sourceTree = "<group>"; };
 		0131340827CE5FCB00CA4242 /* MockFrameEvaluatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFrameEvaluatorDelegate.swift; sourceTree = "<group>"; };
 		01343E96271D8376003A4716 /* FMSDKInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSDKInfo.swift; sourceTree = "<group>"; };
 		0134BF862705E8F400DDEF7A /* FMTipLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMTipLabel.swift; sourceTree = "<group>"; };
@@ -278,6 +281,8 @@
 		017C5ED6278DC7F7000DEBCE /* FMImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMImageButton.swift; sourceTree = "<group>"; };
 		018EF3A72795A16A005A1381 /* FantasmoSDKTestHarnessDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKTestHarnessDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		018EF3A92795A19D005A1381 /* Info-Dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-Dev.plist"; sourceTree = "<group>"; };
+		01933FBA27CE8B910089796C /* TestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
+		01933FBD27CE910D0089796C /* SDKImageQualityEvaluatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKImageQualityEvaluatorTests.swift; sourceTree = "<group>"; };
 		01984382271590A9004CAC3A /* FMToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMToolbar.swift; sourceTree = "<group>"; };
 		0199417E27C3A45600118BD9 /* FMFrameEvaluation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameEvaluation.swift; sourceTree = "<group>"; };
 		0199418027C3C65D00118BD9 /* FMFrameEvaluatorChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameEvaluatorChain.swift; sourceTree = "<group>"; };
@@ -299,6 +304,7 @@
 		01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "image-enhancer-disabled.json"; sourceTree = "<group>"; };
 		01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKImageEncoderTests.swift; sourceTree = "<group>"; };
 		01BB299427B52F9D00BAE286 /* server-added-fields.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "server-added-fields.json"; sourceTree = "<group>"; };
+		01F9B62127CF7E1500260FFF /* SDKFrameEvaluatorChainTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKFrameEvaluatorChainTests.swift; sourceTree = "<group>"; };
 		406437FA26E7864300B38B45 /* FMFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrame.swift; sourceTree = "<group>"; };
 		406437FD26E787A200B38B45 /* FMCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCamera.swift; sourceTree = "<group>"; };
 		4064380226E79C7A00B38B45 /* MockCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCamera.swift; sourceTree = "<group>"; };
@@ -514,6 +520,17 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		01933FBC27CE90130089796C /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				012C7BF627B19B29003DC67F /* MockARSession.swift */,
+				4064380226E79C7A00B38B45 /* MockCamera.swift */,
+				0131340827CE5FCB00CA4242 /* MockFrameEvaluatorDelegate.swift */,
+				01933FBA27CE8B910089796C /* TestUtils.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		0199418427C3EB1200118BD9 /* Evaluators */ = {
 			isa = PBXGroup;
 			children = (
@@ -693,17 +710,17 @@
 			isa = PBXGroup;
 			children = (
 				01296D002756528900636BBE /* Configs */,
-				012C7BF627B19B29003DC67F /* MockARSession.swift */,
-				4064380226E79C7A00B38B45 /* MockCamera.swift */,
-				0131340827CE5FCB00CA4242 /* MockFrameEvaluatorDelegate.swift */,
-				0131340627CE570B00CA4242 /* SDKFrameEvaluatorTests.swift */,
+				01933FBC27CE90130089796C /* Utils */,
+				012C7BF227B19B29003DC67F /* Videos */,
+				01F9B62127CF7E1500260FFF /* SDKFrameEvaluatorChainTests.swift */,
+				0131340627CE570B00CA4242 /* SDKFrameFilterTests.swift */,
 				FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */,
 				01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */,
 				01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */,
+				01933FBD27CE910D0089796C /* SDKImageQualityEvaluatorTests.swift */,
 				A0D5E88926BA97DA00CE5B1C /* SDKLocationTests.swift */,
 				01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */,
 				A0D5E88B26BA97DA00CE5B1C /* Info.plist */,
-				012C7BF227B19B29003DC67F /* Videos */,
 			);
 			path = FantasmoSDKTests;
 			sourceTree = "<group>";
@@ -1140,12 +1157,15 @@
 			files = (
 				01827D2C2758E939006D21CE /* SDKGeometricTests.swift in Sources */,
 				0131340927CE5FCB00CA4242 /* MockFrameEvaluatorDelegate.swift in Sources */,
+				01F9B62227CF7E1500260FFF /* SDKFrameEvaluatorChainTests.swift in Sources */,
 				01343E5E271D7864003A4716 /* SDKLocationTests.swift in Sources */,
+				01933FBB27CE8B910089796C /* TestUtils.swift in Sources */,
 				01827D2E2758EF1F006D21CE /* MockCamera.swift in Sources */,
-				0131340727CE570B00CA4242 /* SDKFrameEvaluatorTests.swift in Sources */,
+				0131340727CE570B00CA4242 /* SDKFrameFilterTests.swift in Sources */,
 				01BB298927B2A1B900BAE286 /* SDKImageEnhancerTests.swift in Sources */,
 				01BB298F27B3CC2800BAE286 /* SDKImageEncoderTests.swift in Sources */,
 				01827D2B2758E92E006D21CE /* SDKRemoteConfigTests.swift in Sources */,
+				01933FBE27CE910D0089796C /* SDKImageQualityEvaluatorTests.swift in Sources */,
 				012C7BFA27B19B29003DC67F /* MockARSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

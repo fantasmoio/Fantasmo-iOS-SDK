@@ -37,14 +37,26 @@ class MockARSession {
         videoAssetReader.add(videoTrackOutput)
         videoAssetReader.startReading()
     }
-        
-    func nextFrame(camera: FMCamera = MockCamera()) -> FMFrame? {
+    
+    func getFrameSequence(length: Int) throws -> [FMFrame] {
+        guard length > 0 else {
+            return []
+        }
+        var sequence: [FMFrame] = []
+        for _ in 1...length {
+            sequence.append(try getNextFrame())
+        }
+        return sequence
+    }
+    
+    func getNextFrame(_ camera: FMCamera = MockCamera()) throws -> FMFrame {
         while let sampleBuffer = videoTrackOutput.copyNextSampleBuffer() {
             let formatDesc = CMSampleBufferGetFormatDescription(sampleBuffer)
             if formatDesc?.mediaType == .video, let capturedImage = sampleBuffer.imageBuffer {
                 return FMFrame(camera: camera, capturedImage: capturedImage)
             }
         }
-        return nil
+        throw NSError(domain: String(describing: type(of: self)), code: -1,
+                      userInfo: [NSLocalizedDescriptionKey: "next frame not found"])
     }
 }

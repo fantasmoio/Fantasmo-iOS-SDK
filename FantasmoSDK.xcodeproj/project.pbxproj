@@ -99,7 +99,6 @@
 		01B58683274BFF3C0082FFF7 /* default-config.json in Resources */ = {isa = PBXBuildFile; fileRef = 01B58682274BFF3C0082FFF7 /* default-config.json */; };
 		01B58687274D45DE0082FFF7 /* InitializeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B58686274D45DE0082FFF7 /* InitializeResponse.swift */; };
 		01BB298927B2A1B900BAE286 /* SDKImageEnhancerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */; };
-		01BB298B27B2CD6B00BAE286 /* image-enhancer.json in Resources */ = {isa = PBXBuildFile; fileRef = 01BB298A27B2CC9200BAE286 /* image-enhancer.json */; };
 		01BB298D27B2D08B00BAE286 /* image-enhancer-disabled.json in Resources */ = {isa = PBXBuildFile; fileRef = 01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */; };
 		01BB298F27B3CC2800BAE286 /* SDKImageEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */; };
 		01BB299527B5313E00BAE286 /* server-added-fields.json in Resources */ = {isa = PBXBuildFile; fileRef = 01BB299427B52F9D00BAE286 /* server-added-fields.json */; };
@@ -300,7 +299,6 @@
 		01B58682274BFF3C0082FFF7 /* default-config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "default-config.json"; sourceTree = "<group>"; };
 		01B58686274D45DE0082FFF7 /* InitializeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeResponse.swift; sourceTree = "<group>"; };
 		01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKImageEnhancerTests.swift; sourceTree = "<group>"; };
-		01BB298A27B2CC9200BAE286 /* image-enhancer.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "image-enhancer.json"; sourceTree = "<group>"; };
 		01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "image-enhancer-disabled.json"; sourceTree = "<group>"; };
 		01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKImageEncoderTests.swift; sourceTree = "<group>"; };
 		01BB299427B52F9D00BAE286 /* server-added-fields.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "server-added-fields.json"; sourceTree = "<group>"; };
@@ -478,7 +476,6 @@
 				01296D092756744500636BBE /* camera-pitch-filter.json */,
 				01296D012756627500636BBE /* movement-filter.json */,
 				01296D07275672FB00636BBE /* tracking-state-filter.json */,
-				01BB298A27B2CC9200BAE286 /* image-enhancer.json */,
 				01BB298C27B2D07400BAE286 /* image-enhancer-disabled.json */,
 				01BB299427B52F9D00BAE286 /* server-added-fields.json */,
 			);
@@ -1001,7 +998,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				01BB299527B5313E00BAE286 /* server-added-fields.json in Resources */,
-				01BB298B27B2CD6B00BAE286 /* image-enhancer.json in Resources */,
 				01BB298D27B2D08B00BAE286 /* image-enhancer-disabled.json in Resources */,
 				01296D08275672FB00636BBE /* tracking-state-filter.json in Resources */,
 				01296D0A2756744500636BBE /* camera-pitch-filter.json in Resources */,

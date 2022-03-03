@@ -59,7 +59,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         wait(for: [frameEvaluated, newBestFrameCalled], timeout: 5.0)
         
         // check we are currently before the min window
-        let minWindow = frameEvaluatorChain.getMinWindowDate()
+        let minWindow = frameEvaluatorChain.getMinWindow()
         XCTAssertTrue(Date() < minWindow)
         
         // check that no frame is returned before the min window
@@ -70,14 +70,14 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         _ = XCTWaiter.wait(for: [expectation(description: "")], timeout: timeUntilMinWindow)
         
         // check we are currently between the min and max window
-        let maxWindowDate = frameEvaluatorChain.getMaxWindowDate()
-        XCTAssertTrue(Date() > minWindow && Date() < maxWindowDate)
+        let maxWindow = frameEvaluatorChain.getMaxWindow()
+        XCTAssertTrue(Date() > minWindow && Date() < maxWindow)
         
         // check that no frame is returned before the max window
         XCTAssertNil(frameEvaluatorChain.dequeueBestFrame())
         
         // wait until the max window
-        let timeUntilMaxWindow = maxWindowDate.timeIntervalSince(Date())
+        let timeUntilMaxWindow = maxWindow.timeIntervalSince(Date())
         _ = XCTWaiter.wait(for: [expectation(description: "")], timeout: timeUntilMaxWindow)
         
         // check the best frame is now returned
@@ -89,7 +89,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         
         // check the window was reset
         XCTAssertNil(frameEvaluatorChain.currentBestFrame)
-        XCTAssertTrue(frameEvaluatorChain.getMaxWindowDate() > maxWindowDate)
+        XCTAssertTrue(frameEvaluatorChain.getMaxWindow() > maxWindow)
     }
     
     func testReturnsHighQualityFrameEarlier() throws {
@@ -131,7 +131,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         wait(for: [highQualityFrameEvaluated, newBestFrameCalled], timeout: 3.0)
         
         // check we are currently before the min window
-        let minWindow = frameEvaluatorChain.getMinWindowDate()
+        let minWindow = frameEvaluatorChain.getMinWindow()
         XCTAssertTrue(Date() < minWindow)
         
         // check the high quality frame is not returned before the min window
@@ -142,7 +142,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         _ = XCTWaiter.wait(for: [expectation(description: "")], timeout: timeUntilMinWindow)
         
         // check we are currently between the min and max window
-        XCTAssertTrue(Date() > minWindow && Date() < frameEvaluatorChain.getMaxWindowDate())
+        XCTAssertTrue(Date() > minWindow && Date() < frameEvaluatorChain.getMaxWindow())
         
         // check the high quality frame was returned after the min window but before the max window
         XCTAssertTrue(frameEvaluatorChain.dequeueBestFrame()! === highQualityFrame)
@@ -176,7 +176,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         wait(for: [lowQualityFrameEvaluated, belowMinScoreCalled], timeout: 3.0)
         
         // wait until the max window
-        let maxWindow = frameEvaluatorChain.getMaxWindowDate()
+        let maxWindow = frameEvaluatorChain.getMaxWindow()
         let timeUntilMaxWindow = maxWindow.timeIntervalSince(Date())
         _ = XCTWaiter.wait(for: [expectation(description: "")], timeout: timeUntilMaxWindow)
         
@@ -184,7 +184,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         XCTAssertNil(frameEvaluatorChain.dequeueBestFrame())
         
         // check the window was _not_ reset
-        XCTAssertEqual(maxWindow, frameEvaluatorChain.getMaxWindowDate())
+        XCTAssertEqual(maxWindow, frameEvaluatorChain.getMaxWindow())
     }
     
     func testRejectsFrameWhileEvaluatingAnotherFrame() throws {
@@ -354,8 +354,6 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         frameEvaluatorChain.evaluateAsync(frame: normalFrame)
         
         wait(for: [badFrameRejected, normalFrameRejected], timeout: 0.0)
-        
-        XCTAssertNil(frameEvaluatorChain.dequeueBestFrame())
     }
     
     func testFramePassesAllFilters() throws {
@@ -380,42 +378,120 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
     
     // MARK: - Image Enhancer
     
-    func testImageEnhancerConfigured() throws {
-        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
-
-        let config = TestUtils.getTestConfig("image-enhancer")!
-        let frameEvaluatorChain = FMFrameEvaluatorChain(config: config)
-        XCTAssertNotNil(frameEvaluatorChain.imageEnhancer)
-        XCTAssertEqual(frameEvaluatorChain.imageEnhancer!.targetBrightness, config.imageEnhancerTargetBrightness)
-    }
-
     func testImageEnhancerDisabled() throws {
-        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
-        
-        let config = TestUtils.getTestConfig("image-enhancer-disabled")!
-        let frameEvaluatorChain = FMFrameEvaluatorChain(config: config)
+        // create a frame evaluator chain with the image enhancer disabled
+        let config = try XCTUnwrap(TestUtils.getTestConfig("image-enhancer-disabled"))
+        let (frameEvaluatorChain, delegate) = TestUtils.makeFrameEvaluatorChainAndDelegate(config: config)
         XCTAssertNil(frameEvaluatorChain.imageEnhancer)
         
-        // test we get an evaluation of nighttime frame that is not enhanced
+        // mock session with dark frames that normally would be enhanced
+        let mockSession = MockARSession(videoName: "parking-nighttime")
+        let darkFrame = try mockSession.getNextFrame()
+        
+        // expect that the dark frame is evaluated but not enhanced
+        let frameEvaluated = expectation(description: "frame evaluated")
+        let frameNotEnhanced = expectation(description: "frame not enhanced")
+        
+        delegate.didFinishEvaluatingFrame = { frame in
+            if frame.evaluation != nil, frame === darkFrame {
+                frameEvaluated.fulfill()
+            }
+            if frame.enhancedImage == nil, frame === darkFrame {
+                frameNotEnhanced.fulfill()
+            }
+        }
+        
+        // evaluate the dark frame and wait
+        frameEvaluatorChain.evaluateAsync(frame: darkFrame)
+        wait(for: [frameEvaluated, frameNotEnhanced], timeout: 1.0)
     }
-
+    
     func testImageEnhancerEnhancesFrame() throws {
         try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
         
-        // test we get an evaluation of a nighttime frame that is enhanced
-    }
-    
-    func testImageEnhancerDoesNotEnhanceFrame() throws {
-        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
+        // create a frame evaluator chain with the default config
+        let config = try XCTUnwrap(TestUtils.getDefaultConfig())
+        let (frameEvaluatorChain, delegate) = TestUtils.makeFrameEvaluatorChainAndDelegate(config: config)
         
-        // test we get an evaluation of a daytime frame that is not enhanced
+        // check the image enhancer is enabled and configured correctly
+        XCTAssertNotNil(frameEvaluatorChain.imageEnhancer)
+        XCTAssertEqual(frameEvaluatorChain.imageEnhancer!.targetBrightness, config.imageEnhancerTargetBrightness)
+        
+        // mock session with dark frames that should be enhanced
+        let mockSession = MockARSession(videoName: "parking-nighttime")
+        let darkFrame = try mockSession.getNextFrame()
+        
+        // expect that the dark frame is evaluated and enhanced
+        let frameEvaluated = expectation(description: "frame evaluated")
+        let frameEnhanced = expectation(description: "frame enhanced")
+        
+        delegate.didFinishEvaluatingFrame = { frame in
+            if frame.evaluation != nil, frame === darkFrame {
+                frameEvaluated.fulfill()
+            }
+            if frame.enhancedImage != nil, frame === darkFrame {
+                frameEnhanced.fulfill()
+            }
+        }
+        
+        // evaluate the dark frame and wait
+        frameEvaluatorChain.evaluateAsync(frame: darkFrame)
+        wait(for: [frameEvaluated, frameEnhanced], timeout: 1.0)
     }
         
     func testFrameEvaluationScoreHigherForEnhancedImage() throws {
+        try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
         
-    }
-    
-    func testFrameEvaluationError() throws {
+        // create a frame evaluator chain with image enhancement disabled
+        let config = try XCTUnwrap(TestUtils.getTestConfig("image-enhancer-disabled"))
+        let (nonEnhancingChain, nonEnhancingDelegate) = TestUtils.makeFrameEvaluatorChainAndDelegate(config: config)
+        XCTAssertNil(nonEnhancingChain.imageEnhancer)
+                        
+        // create a single dark frame to evaluate
+        let mockSession = MockARSession(videoName: "parking-nighttime")
+        let darkFrame = try mockSession.getNextFrame()
         
+        // expect that we will evaluate an unenhanced frame
+        let unenhancedFrameEvaluated = expectation(description: "unenhanced frame evaluated")
+        var unenhancedScore: Float = 0
+        
+        nonEnhancingDelegate.didFinishEvaluatingFrame = { frame in
+            if let evaluation = frame.evaluation, frame.enhancedImage == nil, frame === darkFrame {
+                // save the score of the unenhanced frame
+                unenhancedScore = evaluation.score
+                unenhancedFrameEvaluated.fulfill()
+            }
+        }
+        
+        // wait for dark frame to be evaluated
+        nonEnhancingChain.evaluateAsync(frame: darkFrame)
+        wait(for: [unenhancedFrameEvaluated], timeout: 1.0)
+        
+        // create a frame evaluator chain with image enhancement enabled
+        let (enhancingChain, enhancingDelegate) = TestUtils.makeFrameEvaluatorChainAndDelegate()
+        XCTAssertNotNil(enhancingChain.imageEnhancer)
+        
+        // expect that we will evaluate an enhanced frame
+        let enhancedFrameEvaluated = expectation(description: "enhanced frame evaluated")
+        var enhancedScore: Float = 0
+        
+        enhancingDelegate.didFinishEvaluatingFrame = { frame in
+            if let evaluation = frame.evaluation, frame.enhancedImage != nil, frame === darkFrame {
+                // save the score of the enhanced frame
+                enhancedScore = evaluation.score
+                enhancedFrameEvaluated.fulfill()
+            }
+        }
+        
+        // wait for the dark frame to be enhanced and evaluated
+        enhancingChain.evaluateAsync(frame: darkFrame)
+        wait(for: [enhancedFrameEvaluated], timeout: 1.0)
+        
+        // check that we have two valid evaluation scores
+        XCTAssertTrue(enhancedScore > 0.0 && enhancedScore < 1.0)
+        XCTAssertTrue(unenhancedScore > 0.0 && unenhancedScore < 1.0)
+        
+        // check that the enhanced score is better
+        XCTAssertGreaterThan(enhancedScore, unenhancedScore)
     }
 }

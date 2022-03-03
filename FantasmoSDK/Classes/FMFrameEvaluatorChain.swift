@@ -45,7 +45,7 @@ class FMFrameEvaluatorChain {
     init(config: RemoteConfig.Config) {
         
         // TODO - get these from remote config
-        self.minWindowTime = 0.04
+        self.minWindowTime = 0.4
         self.maxWindowTime = 1.2
         self.minScoreThreshold = 0.0
         self.minHighQualityScore = 0.9
@@ -193,11 +193,11 @@ class FMFrameEvaluatorChain {
         return filters.first(where: { $0 is T }) as? T
     }
     
-    func getMinWindowDate() -> Date {
+    func getMinWindow() -> Date {
         return windowStart.addingTimeInterval(minWindowTime)
     }
     
-    func getMaxWindowDate() -> Date {
+    func getMaxWindow() -> Date {
         return windowStart.addingTimeInterval(maxWindowTime)
     }
 }

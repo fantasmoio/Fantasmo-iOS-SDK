@@ -15,22 +15,41 @@ class SDKImageQualityEvaluatorTests: XCTestCase {
         // check factory constructor produces the CoreML evaluator
         let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)
         
-        // create a mock session and get a test frame
-        let mockSession = MockARSession(videoName: "parking-daytime")
-        let frame = try mockSession.getNextFrame()
+        // create a mock daytime session and get a test frame
+        let daytimeSession = MockARSession(videoName: "parking-daytime")
+        let daytimeFrame = try daytimeSession.getNextFrame()
         
-        // perform image quality evaluation
-        let evaluation = imageQualityEvaluator.evaluate(frame: frame)
+        // perform image quality evaluation on a daytime frame
+        let daytimeEvaluation = imageQualityEvaluator.evaluate(frame: daytimeFrame)
         
         // check that it returned a valid evaluation
-        XCTAssertEqual(evaluation.type, .imageQuality)
-        XCTAssertGreaterThan(evaluation.score, 0.0)
-        XCTAssertLessThan(evaluation.score, 1.0)
-        
+        XCTAssertEqual(daytimeEvaluation.type, .imageQuality)
+        XCTAssertGreaterThan(daytimeEvaluation.score, 0.0)
+        XCTAssertLessThan(daytimeEvaluation.score, 1.0)
+
         // check the evaluation contains userInfo with model version and no error message
-        let userInfo = try XCTUnwrap(evaluation.userInfo)
+        let userInfo = try XCTUnwrap(daytimeEvaluation.userInfo)
         XCTAssertEqual(userInfo[FMImageQualityEvaluator.versionUserInfoKey], imageQualityEvaluator.modelVersion)
         XCTAssertTrue(userInfo[FMImageQualityEvaluator.errorUserInfoKey] == nil)
+        
+        // check evaluating the same frame again produces the same score
+        let duplicateEvaluation = imageQualityEvaluator.evaluate(frame: daytimeFrame)
+        XCTAssertEqual(duplicateEvaluation.score, daytimeEvaluation.score)
+        
+        // create a mock nighttime session and get a test frame
+        let nighttimeSession = MockARSession(videoName: "parking-nighttime")
+        let nighttimeFrame = try nighttimeSession.getNextFrame()
+        
+        // perform image quality evaluation on a daytime frame
+        let nighttimeEvaluation = imageQualityEvaluator.evaluate(frame: nighttimeFrame)
+        
+        // check that it returned a valid evaluation
+        XCTAssertEqual(nighttimeEvaluation.type, .imageQuality)
+        XCTAssertGreaterThan(nighttimeEvaluation.score, 0.0)
+        XCTAssertLessThan(nighttimeEvaluation.score, 1.0)
+        
+        // check that the two scores are different
+        XCTAssertNotEqual(daytimeEvaluation.score, nighttimeEvaluation.score)
     }
     
     func testImageQualityEvaluatorResizesPixelBuffer() throws {

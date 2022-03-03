@@ -11,24 +11,17 @@ class RemoteConfig {
             
     struct Config: Codable {
         let remoteConfigId: String
-        let frameAcceptanceThresholdTimeout: Float
         let isBehaviorRequesterEnabled: Bool
         let isTrackingStateFilterEnabled: Bool
         let isMovementFilterEnabled: Bool
         let movementFilterThreshold: Float
-        let isBlurFilterEnabled: Bool
-        let blurFilterVarianceThreshold: Float
-        let blurFilterSuddenDropThreshold: Float
-        let blurFilterAverageThroughputThreshold: Float
         let isCameraPitchFilterEnabled: Bool
         let cameraPitchFilterMaxUpwardTilt: Float
         let cameraPitchFilterMaxDownwardTilt: Float
-        let isImageQualityFilterEnabled: Bool
-        let imageQualityFilterScoreThreshold: Float
-        let imageQualityFilterModelUri: String?
-        let imageQualityFilterModelVersion: String?
         let isImageEnhancerEnabled: Bool
         let imageEnhancerTargetBrightness: Float
+        let imageQualityFilterModelUri: String?
+        let imageQualityFilterModelVersion: String?
     }
         
     private static let userDefaultsKey = "FantasmoSDK.RemoteConfig"

@@ -11,18 +11,18 @@ import Foundation
 class FrameFilterRejectionStatisticsAccumulator {
     
     public private(set) var counts =
-        Dictionary<FMFilterRejectionReason, Int>(initialValueForAllCases: 0)
+        Dictionary<FMFrameFilterRejectionReason, Int>(initialValueForAllCases: 0)
         
     var total: Int {
         counts.values.reduce(0, +)
     }
 
-    func accumulate(filterRejectionReason: FMFilterRejectionReason) {
+    func accumulate(filterRejectionReason: FMFrameFilterRejectionReason) {
         counts[filterRejectionReason]! += 1
     }
     
     func reset() {
-        counts = Dictionary<FMFilterRejectionReason, Int>(initialValueForAllCases: 0)
+        counts = Dictionary<FMFrameFilterRejectionReason, Int>(initialValueForAllCases: 0)
     }
     
 }

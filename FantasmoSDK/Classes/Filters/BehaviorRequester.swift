@@ -21,7 +21,7 @@ class BehaviorRequester {
     private var lastTriggerTime = clock()
     private var lastTriggerBehavior: FMBehaviorRequest?
     
-    private var rejectionCounts = [FMFilterRejectionReason : Int]()
+    private var rejectionCounts = [FMFrameFilterRejectionReason : Int]()
 
     private var requestHandler: ((FMBehaviorRequest) -> Void)
 
@@ -29,32 +29,27 @@ class BehaviorRequester {
         self.requestHandler = handler
     }
 
-    func processResult(_ frameFilterResult: FMFrameFilterResult) {
-        switch frameFilterResult {
-        case .accepted:
-            break
-        case .rejected(let rejectionReason):
-            var count = rejectionCounts[rejectionReason] == nil ? 0 : rejectionCounts[rejectionReason]!
-            count += 1
+    func processFilterRejection(reason: FMFrameFilterRejectionReason) {
+        var count = rejectionCounts[reason] == nil ? 0 : rejectionCounts[reason]!
+        count += 1
 
-            if count > incidenceThreshold {
-                let elapsed = Double(clock() - lastTriggerTime) / Double(CLOCKS_PER_SEC)
-                if elapsed > throttleThreshold {
-                    let newBehavior = rejectionReason.mapToBehaviorRequest()
-                    let behaviorRequest = (newBehavior != lastTriggerBehavior) ? newBehavior : defaultBehavior
-                    requestHandler(behaviorRequest)
-                    lastTriggerBehavior = behaviorRequest
-                    lastTriggerTime = clock()
-                    rejectionCounts.removeAll(keepingCapacity: true)
-                }
-            } else {
-                rejectionCounts[rejectionReason] = count
+        if count > incidenceThreshold {
+            let elapsed = Double(clock() - lastTriggerTime) / Double(CLOCKS_PER_SEC)
+            if elapsed > throttleThreshold {
+                let newBehavior = reason.mapToBehaviorRequest()
+                let behaviorRequest = (newBehavior != lastTriggerBehavior) ? newBehavior : defaultBehavior
+                requestHandler(behaviorRequest)
+                lastTriggerBehavior = behaviorRequest
+                lastTriggerTime = clock()
+                rejectionCounts.removeAll(keepingCapacity: true)
             }
-            
-            if !didRequestInitialDefaultBehavior {
-                didRequestInitialDefaultBehavior = true
-                requestHandler(defaultBehavior)
-            }
+        } else {
+            rejectionCounts[reason] = count
+        }
+        
+        if !didRequestInitialDefaultBehavior {
+            didRequestInitialDefaultBehavior = true
+            requestHandler(defaultBehavior)
         }
     }
     

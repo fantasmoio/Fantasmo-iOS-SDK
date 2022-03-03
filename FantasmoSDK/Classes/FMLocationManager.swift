@@ -10,32 +10,37 @@ import UIKit
 import ARKit
 import CoreLocation
 
+// TODO - replaced with debug stats delegate
 protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didUpdateLocation result: FMLocationResult)
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
     func locationManager(didChangeState state: FMLocationManager.State)
+    func locationManager(didChangeNumberOfActiveUploads numberOfActiveUploads: Int)
     func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
-    func locationManager(willUploadFrame frame: FMFrame)
 }
 
 class FMLocationManager: NSObject {
     
     enum State: String {
-        case stopped        // doing nothing
-        case localizing     // localizing
-        case uploading      // uploading image while localizing
-        case paused         // paused
-   }
-    
-    private var isEvaluatingFrame: Bool = false
-    
+        case stopped
+        case localizing
+    }
+        
     // MARK: - Properties
     
     public private(set) var state: State = .stopped {
         didSet {
             if state != oldValue {
                 delegate?.locationManager(didChangeState: state)
+            }
+        }
+    }
+    
+    public private(set) var numberOfActiveUploads: Int = 0 {
+        didSet {
+            if numberOfActiveUploads != oldValue {
+                delegate?.locationManager(didChangeNumberOfActiveUploads: numberOfActiveUploads)
             }
         }
     }
@@ -83,9 +88,7 @@ class FMLocationManager: NSObject {
         }
     }
     
-    private var frameFilterQueue = DispatchQueue(label: "io.fantasmo.frameFilterQueue", qos: .userInteractive)
-    
-    private var frameFilterChain = FMFrameFilterChain(config: RemoteConfig.config())
+    private var frameEvaluatorChain = FMFrameEvaluatorChain(config: RemoteConfig.config())
         
     private var behaviorRequester: BehaviorRequester?
     
@@ -177,7 +180,7 @@ class FMLocationManager: NSObject {
 
         accumulatedARKitInfo.reset()
         frameEventAccumulator.reset()
-        frameFilterChain.restart()
+        frameEvaluatorChain.reset()
         behaviorRequester?.restart()
         motionManager.restart()
         locationFuser.reset()
@@ -224,8 +227,7 @@ class FMLocationManager: NSObject {
         guard isConnected else { return }
         
         log.debug(parameters: ["simulation": isSimulation])
-        state = .uploading
-                        
+        
         let openCVRelativeAnchorTransform = openCVPoseOfAnchorInVirtualDeviceCS(for: frame)
         let openCVRelativeAnchorPose = openCVRelativeAnchorTransform.map { FMPose($0) }
 
@@ -235,7 +237,7 @@ class FMLocationManager: NSObject {
             excessiveTilt:
                 (frameEventAccumulator.counts[.pitchTooHigh] ?? 0) +
                 (frameEventAccumulator.counts[.pitchTooLow] ?? 0),
-            excessiveBlur: frameEventAccumulator.counts[.imageTooBlurry] ?? 0,
+            excessiveBlur: 0, // blur filter no longer in use, server still requires this param
             excessiveMotion: frameEventAccumulator.counts[.movingTooFast] ?? 0,
             insufficientFeatures: frameEventAccumulator.counts[.insufficientFeatures] ?? 0,
             lossOfTracking:
@@ -249,14 +251,6 @@ class FMLocationManager: NSObject {
             yaw: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.yaw.spread,
             roll: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.roll.spread
         )
-
-        var imageQualityFilterInfo: FMImageQualityFilterInfo?
-        if #available(iOS 13.0, *), let imageQualityFilter = frameFilterChain.getFilter(ofType: FMImageQualityFilter.self) {
-            imageQualityFilterInfo = FMImageQualityFilterInfo(
-                modelVersion: imageQualityFilter.modelVersion,
-                lastImageQualityScore: imageQualityFilter.lastImageQualityScore
-            )
-        }
         
         var imageEnhancementInfo: FMImageEnhancementInfo?
         if frame.enhancedImage != nil, let gamma = frame.enhancedImageGamma {
@@ -273,20 +267,15 @@ class FMLocationManager: NSObject {
             rotationSpread: rotationSpread,
             totalDistance: accumulatedARKitInfo.totalTranslation,
             magneticField: motionManager.magneticField,
-            imageQualityFilterInfo: imageQualityFilterInfo,
             imageEnhancementInfo: imageEnhancementInfo,
             remoteConfigId: RemoteConfig.config().remoteConfigId
         )
         
-        // If no valid approximate coordinate is found, throw an error and stop updating location for 1 second
+        // If no valid approximate coordinate is found, throw an error
         guard CLLocationCoordinate2DIsValid(approximateLocation.coordinate) else {
             let error = FMError(FMLocationError.invalidCoordinate)
             self.errors.append(error)
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
-            self.state = .paused
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.state = .localizing
-            }
             return
         }
         
@@ -305,10 +294,7 @@ class FMLocationManager: NSObject {
             let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
             self.delegate?.locationManager(didUpdateLocation: result)
             self.lastResult = result
-            
-            if self.state != .stopped {
-                self.state = .localizing
-            }
+            self.numberOfActiveUploads -= 1
         }
         
         // Set up error closure
@@ -316,24 +302,17 @@ class FMLocationManager: NSObject {
             log.error(error)
             self.errors.append(error)
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
-            
-            if self.state != .stopped {
-                self.state = .localizing
-            }
+            self.numberOfActiveUploads -= 1
         }
+        
+        numberOfActiveUploads += 1
         
         FMApi.shared.sendLocalizationRequest(frame: frame,
                                              request: localizationRequest,
                                              completion: localizeCompletion,
                                              error: localizeError)
     }
-    
-    private func localizeDone() {
-        if state != .stopped {
-           state = .localizing
-        }
-    }
-        
+            
     // MARK: - Helpers
     
     private func openCVPoseOfAnchorInVirtualDeviceCS(for frame: FMFrame) -> simd_float4x4? {
@@ -357,45 +336,50 @@ extension FMLocationManager : ARSessionDelegate {
         let fmFrame = FMFrame(arFrame: frame)
         lastFrame = fmFrame
         
-        guard !isEvaluatingFrame, state != .stopped else {
+        guard state != .stopped else {
             return
         }
         
-        isEvaluatingFrame = true
+        frameEvaluatorChain.evaluateAsync(frame: fmFrame)
         
-        frameFilterQueue.async { [weak self] in
-                        
-            // run the frame through the configured filters
-            let filterResult = self?.frameFilterChain.evaluate(fmFrame) ?? .accepted
-            
-            // handle the result on the main queue
-            DispatchQueue.main.async {
-                self?.handleFrameFilterResult(filterResult, frame: fmFrame)
-                self?.isEvaluatingFrame = false
-            }
+        if let frameToLocalize = frameEvaluatorChain.dequeueBestFrame() {
+            localize(frame: frameToLocalize)
         }
+        
+        accumulatedARKitInfo.update(with: fmFrame)
+        delegate?.locationManager(didUpdateFrame: fmFrame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
+    }
+}
+
+// MARK: - FMFrameEvaluationChainDelegate
+
+extension FMLocationManager : FMFrameEvaluatorChainDelegate {
+
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame) {
+        // evaluator was busy and discarded the frame, show info in debug view
     }
     
-    private func handleFrameFilterResult(_ filterResult: FMFrameFilterResult, frame: FMFrame) {
-        behaviorRequester?.processResult(filterResult)
-        accumulatedARKitInfo.update(with: frame)
-        
-        if case let .rejected(reason) = filterResult {
-            frameEventAccumulator.accumulate(filterRejectionReason: reason)
-        } else {
-            if state == .localizing {
-                delegate?.locationManager(willUploadFrame: frame)
-                localize(frame: frame)
-            }
-        }
-        
-        if #available(iOS 13, *), let imageQualityFilter = frameFilterChain.getFilter(ofType: FMImageQualityFilter.self) {
-            accumulatedARKitInfo.imageQualityFilterScores.append(imageQualityFilter.lastImageQualityScore)
-            accumulatedARKitInfo.imageQualityFilterScoreThreshold = imageQualityFilter.scoreThreshold
-            accumulatedARKitInfo.imageQualityFilterModelVersion = imageQualityFilter.modelVersion
-        }
-        
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason) {
+        // evaluator filter rejected the frame, show info in debug view
+        behaviorRequester?.processFilterRejection(reason: reason)
+        frameEventAccumulator.accumulate(filterRejectionReason: reason)
         delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
+    }
+    
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateNewBestFrame newBestFrame: FMFrame) {
+        // evaluated a new best frame, show info in debug view
+    }
+    
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float) {
+        // evaluated a frame below the current best score, show info in debug view
+    }
+    
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float) {
+        // evaluated a frame below the min score threshold, show info in debug view
+    }
+            
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFinishEvaluatingFrame frame: FMFrame) {
+        // finished evaluating a frame, evaluator is ready to evaluate new frames, show info in debug view
     }
 }
 

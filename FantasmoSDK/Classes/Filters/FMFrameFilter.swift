@@ -7,11 +7,9 @@
 
 import ARKit
 
-enum FMFilterRejectionReason: CaseIterable {
+enum FMFrameFilterRejectionReason: CaseIterable {
     case pitchTooLow
     case pitchTooHigh
-    case imageTooBlurry
-    case imageQualityScoreBelowThreshold
     case movingTooFast
     case movingTooLittle
     case insufficientFeatures
@@ -22,11 +20,11 @@ enum FMFilterRejectionReason: CaseIterable {
             return .tiltUp
         case .pitchTooHigh:
             return.tiltDown
-        case .movingTooFast, .imageTooBlurry:
+        case .movingTooFast:
             return .panSlowly
         case .movingTooLittle:
             return .panAround
-        case .insufficientFeatures, .imageQualityScoreBelowThreshold:
+        case .insufficientFeatures:
             return .panAround
         }
     }
@@ -34,7 +32,7 @@ enum FMFilterRejectionReason: CaseIterable {
 
 enum FMFrameFilterResult: Equatable {
     case accepted
-    case rejected(reason: FMFilterRejectionReason)
+    case rejected(reason: FMFrameFilterRejectionReason)
 }
 
 /// Prime filters are original blocks for a compound frame filter or can be used alone as a standalone filter.

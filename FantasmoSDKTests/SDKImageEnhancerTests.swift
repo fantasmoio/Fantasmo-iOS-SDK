@@ -9,22 +9,14 @@ import XCTest
 @testable import FantasmoSDK
 
 class SDKImageEnhancerTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
+        
     func testImageEnhancerNighttime() throws {
         try XCTSkipIf(MTLCreateSystemDefaultDevice() == nil, "metal not supported")
         
         let imageEnhancer = FMImageEnhancer(targetBrightness: 0.15)!
         let nighttimeSession = MockARSession(videoName: "parking-nighttime")
         
-        let nighttimeFrame1 = nighttimeSession.nextFrame()!
+        let nighttimeFrame1 = try nighttimeSession.getNextFrame()
         imageEnhancer.enhance(frame: nighttimeFrame1)
         // check `enhancedImage` and `enhancedImage` properties were set
         XCTAssertNotNil(nighttimeFrame1.enhancedImage)
@@ -35,7 +27,7 @@ class SDKImageEnhancerTests: XCTestCase {
         // increase target brightness
         imageEnhancer.targetBrightness = 0.25
         
-        let nighttimeFrame2 = nighttimeSession.nextFrame()!
+        let nighttimeFrame2 = try nighttimeSession.getNextFrame()
         imageEnhancer.enhance(frame: nighttimeFrame2)
         // check `enhancedImage` and `enhancedImage` properties were set
         XCTAssertNotNil(nighttimeFrame2.enhancedImage)
@@ -50,7 +42,7 @@ class SDKImageEnhancerTests: XCTestCase {
         let imageEnhancer = FMImageEnhancer(targetBrightness: 0.15)!
         let daytimeSession = MockARSession(videoName: "parking-daytime")
                 
-        let daytimeFrame = daytimeSession.nextFrame()!
+        let daytimeFrame = try daytimeSession.getNextFrame()
         imageEnhancer.enhance(frame: daytimeFrame)
         // check no gamma correction applied, daytime images exceed target brightness
         XCTAssertNil(daytimeFrame.enhancedImage)

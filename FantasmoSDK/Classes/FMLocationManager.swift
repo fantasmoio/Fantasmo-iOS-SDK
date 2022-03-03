@@ -16,19 +16,16 @@ protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
     func locationManager(didChangeState state: FMLocationManager.State)
+    func locationManager(didChangeNumberOfActiveUploads numberOfActiveUploads: Int)
     func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
-    func locationManager(willUploadFrame frame: FMFrame)
 }
 
 class FMLocationManager: NSObject {
     
     enum State: String {
-        case stopped        // doing nothing
-        case localizing     // localizing
-        case uploading      // uploading image while localizing
-        
-        // TODO - need to reprsent somehow multiple uploads happening at once here...
-   }
+        case stopped
+        case localizing
+    }
         
     // MARK: - Properties
     
@@ -36,6 +33,14 @@ class FMLocationManager: NSObject {
         didSet {
             if state != oldValue {
                 delegate?.locationManager(didChangeState: state)
+            }
+        }
+    }
+    
+    public private(set) var numberOfActiveUploads: Int = 0 {
+        didSet {
+            if numberOfActiveUploads != oldValue {
+                delegate?.locationManager(didChangeNumberOfActiveUploads: numberOfActiveUploads)
             }
         }
     }
@@ -222,8 +227,7 @@ class FMLocationManager: NSObject {
         guard isConnected else { return }
         
         log.debug(parameters: ["simulation": isSimulation])
-        state = .uploading
-                        
+        
         let openCVRelativeAnchorTransform = openCVPoseOfAnchorInVirtualDeviceCS(for: frame)
         let openCVRelativeAnchorPose = openCVRelativeAnchorTransform.map { FMPose($0) }
 
@@ -233,7 +237,7 @@ class FMLocationManager: NSObject {
             excessiveTilt:
                 (frameEventAccumulator.counts[.pitchTooHigh] ?? 0) +
                 (frameEventAccumulator.counts[.pitchTooLow] ?? 0),
-            excessiveBlur: frameEventAccumulator.counts[.imageTooBlurry] ?? 0,
+            excessiveBlur: 0, // blur filter no longer in use, server still requires this param
             excessiveMotion: frameEventAccumulator.counts[.movingTooFast] ?? 0,
             insufficientFeatures: frameEventAccumulator.counts[.insufficientFeatures] ?? 0,
             lossOfTracking:
@@ -290,10 +294,7 @@ class FMLocationManager: NSObject {
             let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
             self.delegate?.locationManager(didUpdateLocation: result)
             self.lastResult = result
-            
-            if self.state != .stopped {
-                self.state = .localizing
-            }
+            self.numberOfActiveUploads -= 1
         }
         
         // Set up error closure
@@ -301,24 +302,17 @@ class FMLocationManager: NSObject {
             log.error(error)
             self.errors.append(error)
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
-            
-            if self.state != .stopped {
-                self.state = .localizing
-            }
+            self.numberOfActiveUploads -= 1
         }
+        
+        numberOfActiveUploads += 1
         
         FMApi.shared.sendLocalizationRequest(frame: frame,
                                              request: localizationRequest,
                                              completion: localizeCompletion,
                                              error: localizeError)
     }
-    
-    private func localizeDone() {
-        if state != .stopped {
-           state = .localizing
-        }
-    }
-        
+            
     // MARK: - Helpers
     
     private func openCVPoseOfAnchorInVirtualDeviceCS(for frame: FMFrame) -> simd_float4x4? {
@@ -349,7 +343,6 @@ extension FMLocationManager : ARSessionDelegate {
         frameEvaluatorChain.evaluateAsync(frame: fmFrame)
         
         if let frameToLocalize = frameEvaluatorChain.dequeueBestFrame() {
-            delegate?.locationManager(willUploadFrame: frameToLocalize)
             localize(frame: frameToLocalize)
         }
         

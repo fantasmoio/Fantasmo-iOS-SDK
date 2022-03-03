@@ -14,6 +14,7 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var sdkVersionLabel: UILabel!
     
     @IBOutlet var managerStatusLabel: UILabel!
+    @IBOutlet var uploadingCountLabel: UILabel!
     
     @IBOutlet var cameraTranslationLabel: UILabel!
     @IBOutlet var distanceTraveledLabel : UILabel!
@@ -30,14 +31,10 @@ class FMSessionStatisticsView: UIView {
     
     @IBOutlet var filterStatsPitchLowLabel: UILabel!
     @IBOutlet var filterStatsPitchHighLabel: UILabel!
-    @IBOutlet var filterStatsBlurryLabel: UILabel!
     @IBOutlet var filterStatsTooFastLabel: UILabel!
     @IBOutlet var filterStatsTooLittleLabel: UILabel!
     @IBOutlet var filterStatsFeaturesLabel: UILabel!
-    
-    @IBOutlet var imageQualityFilterLabel: UILabel!
-    @IBOutlet var imageEnhancementLabel: UILabel!
-    
+        
     @IBOutlet var lastResultLabel: UILabel!
     @IBOutlet var errorsLabel: UILabel!
     @IBOutlet var deviceLocationLabel: UILabel!
@@ -85,7 +82,6 @@ class FMSessionStatisticsView: UIView {
         let rejectionCounts = rejections.counts
         filterStatsPitchLowLabel.text = "Pitch low: \(rejectionCounts[.pitchTooLow] ?? 0)"
         filterStatsPitchHighLabel.text = "Pitch high: \(rejectionCounts[.pitchTooHigh] ?? 0)"
-        filterStatsBlurryLabel.text = "Blurry: \(rejectionCounts[.imageTooBlurry] ?? 0)"
         filterStatsTooFastLabel.text = "Too fast: \(rejectionCounts[.movingTooFast] ?? 0)"
         filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
         filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
@@ -102,6 +98,7 @@ class FMSessionStatisticsView: UIView {
     }
     
     /// non-throttled update
+    /*
     public func update(frame: FMFrame) {
         var imageEnhancementText = "Gamma correction: "
         if let gamma = frame.enhancedImageGamma {
@@ -111,24 +108,24 @@ class FMSessionStatisticsView: UIView {
         }
         imageEnhancementLabel.text = imageEnhancementText
     }
-    
-    var localizingStart: Date?
-    var uploadingStart: Date?
-    
+     */
+        
     public func update(state: FMLocationManager.State) {
         let color: UIColor
         switch state {
         case .localizing:
-            localizingStart = Date()
             color = .green
-        case .uploading:
-            uploadingStart = Date()
+        case .stopped:
             color = .orange
-        default:
-            color = .black
         }
         let text = "Status: \(state.rawValue)"
         managerStatusLabel.attributedText = highlightString(state.rawValue, in: text, color: color)
+    }
+
+    public func update(numberOfActiveUploads: Int) {
+        let color: UIColor = (numberOfActiveUploads > 0) ? .green : .black
+        let text = "Uploading: \(numberOfActiveUploads)"
+        uploadingCountLabel.attributedText = highlightString("\(numberOfActiveUploads)", in: text, color: color)
     }
     
     public func update(errorCount: Int, lastError: FMError?) {
@@ -143,23 +140,12 @@ class FMSessionStatisticsView: UIView {
     
     public func update(lastResult: FMLocationResult?) {
         var lastResultText = "Last result: "
-        var uploadingTime: TimeInterval = 0
-        var localizingTime: TimeInterval = 0
         if let lastResult = lastResult {
             let coordinate = lastResult.location.coordinate
             lastResultText += String(format: "%f, %f (%@)",
                                      coordinate.latitude, coordinate.longitude,
                                      lastResult.confidence.description)
-            if let uploadingStart = uploadingStart {
-                uploadingTime = Date().timeIntervalSince(uploadingStart)
-                self.uploadingStart = nil
-            }
-            if let localizingStart = localizingStart {
-                localizingTime = Date().timeIntervalSince(localizingStart)
-                self.localizingStart = nil
-            }
         }
-        lastResultText += String(format: "\nLocalize time: %.1fs, Upload time: %.1fs", localizingTime, uploadingTime)
         lastResultLabel.text = lastResultText
     }
     

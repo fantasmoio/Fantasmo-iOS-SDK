@@ -367,6 +367,7 @@ public final class FMParkingViewController: UIViewController {
                 let nibName = String(describing: FMSessionStatisticsView.self)
                 statisticsView = Bundle(for: self.classForCoder).loadNibNamed(nibName, owner: self, options: nil)?.first as? FMSessionStatisticsView
                 statisticsView?.update(state: fmLocationManager.state)
+                statisticsView?.update(numberOfActiveUploads: fmLocationManager.numberOfActiveUploads)
                 statisticsView?.update(lastResult: fmLocationManager.lastResult)
                 statisticsView?.update(errorCount: fmLocationManager.errors.count, lastError: fmLocationManager.errors.last)
                 statisticsView?.update(deviceLocation: fmLocationManager.lastCLLocation)
@@ -414,12 +415,12 @@ extension FMParkingViewController: FMLocationManagerDelegate {
         statisticsView?.update(state: state)
     }
     
-    func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator) {
-        statisticsView?.updateThrottled(frame: frame, info: info, rejections: rejections)
+    func locationManager(didChangeNumberOfActiveUploads numberOfActiveUploads: Int) {
+        statisticsView?.update(numberOfActiveUploads: numberOfActiveUploads)
     }
     
-    func locationManager(willUploadFrame frame: FMFrame) {
-        statisticsView?.update(frame: frame)
+    func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator) {
+        statisticsView?.updateThrottled(frame: frame, info: info, rejections: rejections)
     }
 }
 

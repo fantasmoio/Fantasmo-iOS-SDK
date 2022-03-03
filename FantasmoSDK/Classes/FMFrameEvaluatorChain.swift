@@ -115,22 +115,22 @@ class FMFrameEvaluatorChain {
         evaluatingFrame = frame
         
         // begin async frame evaluation
-        frameEvaluationQueue.async {
-            // TODO - make sure retaining `self` isn't a problem here
-            
+        frameEvaluationQueue.async { [weak self] in
             // enhance image, apply gamma correction if too dark
-            self.imageEnhancer?.enhance(frame: frame)
+            self?.imageEnhancer?.enhance(frame: frame)
             
             // evaluate the frame using the configured evaluator
-            let evaluation = self.frameEvaluator.evaluate(frame: frame)
+            guard let evaluation = self?.frameEvaluator.evaluate(frame: frame) else {
+                return // chain deallocated
+            }
             
             DispatchQueue.main.async {
                 // process the evaluation on the main thread
-                self.processEvaluation(evaluation)
+                self?.processEvaluation(evaluation)
             }
         }
     }
-    
+        
     private func processEvaluation(_ evaluation: FMFrameEvaluation) {
         guard Thread.isMainThread else {
             fatalError("processEvaluation not called on main thread")

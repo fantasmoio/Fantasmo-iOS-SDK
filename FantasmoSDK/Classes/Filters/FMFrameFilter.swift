@@ -10,7 +10,6 @@ import ARKit
 enum FMFrameFilterRejectionReason: CaseIterable {
     case pitchTooLow
     case pitchTooHigh
-    case imageTooBlurry
     case movingTooFast
     case movingTooLittle
     case insufficientFeatures
@@ -21,7 +20,7 @@ enum FMFrameFilterRejectionReason: CaseIterable {
             return .tiltUp
         case .pitchTooHigh:
             return.tiltDown
-        case .movingTooFast, .imageTooBlurry:
+        case .movingTooFast:
             return .panSlowly
         case .movingTooLittle:
             return .panAround

@@ -17,8 +17,10 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var uploadingCountLabel: UILabel!
     
     @IBOutlet var translationLabel: UILabel!
-    @IBOutlet var totalTranslationLabel : UILabel!
-    @IBOutlet var remoteConfigLabel : UILabel!
+    @IBOutlet var totalTranslationLabel: UILabel!
+    @IBOutlet var remoteConfigLabel: UILabel!
+    
+    @IBOutlet var frameEvaluationLabel: UILabel!
     
     @IBOutlet var eulerAnglesLabel: UILabel!
     @IBOutlet var eulerAngleSpreadsLabel: UILabel!

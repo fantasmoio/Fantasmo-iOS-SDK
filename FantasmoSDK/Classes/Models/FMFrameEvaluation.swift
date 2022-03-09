@@ -14,6 +14,7 @@ enum FMFrameEvaluationType: String {
 struct FMFrameEvaluation: Encodable {
     let type: FMFrameEvaluationType
     let score: Float // 0.0 - 1.0
+    let timestamp: TimeInterval // time of evaluation
     let userInfo: [String: String?]?  // optional analytics, errors etc.
     
     public enum CodingKeys: String, CodingKey {

@@ -314,7 +314,7 @@ class FMApi {
             "appSessionId": request.analytics.appSessionId,
             "localizationSessionId": request.analytics.localizationSessionId,
 
-            // other analytics
+            // TODO - these will be removed in v2 image.localize
             "frameEventCounts": frameEventCounts.toJson(),
             "totalDistance": String(request.analytics.totalDistance),
             "rotationSpread": request.analytics.rotationSpread.toJson(),

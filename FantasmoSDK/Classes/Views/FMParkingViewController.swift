@@ -367,7 +367,7 @@ public final class FMParkingViewController: UIViewController {
                 let nibName = String(describing: FMSessionStatisticsView.self)
                 statisticsView = Bundle(for: self.classForCoder).loadNibNamed(nibName, owner: self, options: nil)?.first as? FMSessionStatisticsView
                 statisticsView?.update(state: fmLocationManager.state)
-                statisticsView?.update(numberOfActiveUploads: fmLocationManager.numberOfActiveUploads)
+                statisticsView?.update(activeUploads: fmLocationManager.activeUploads)
                 statisticsView?.update(lastResult: fmLocationManager.lastResult)
                 statisticsView?.update(errorCount: fmLocationManager.errors.count, lastError: fmLocationManager.errors.last)
                 statisticsView?.update(deviceLocation: fmLocationManager.lastCLLocation)
@@ -393,10 +393,16 @@ public final class FMParkingViewController: UIViewController {
 
 extension FMParkingViewController: FMLocationManagerDelegate {
     
+    func locationManager(didBeginUpload frame: FMFrame) {
+        statisticsView?.update(activeUploads: fmLocationManager.activeUploads)
+    }
+    
     func locationManager(didUpdateLocation result: FMLocationResult) {
         delegate?.parkingViewController(self, didReceiveLocalizationResult: result)
         localizingViewController?.didReceiveLocalizationResult(result)
+        
         statisticsView?.update(lastResult: result)
+        statisticsView?.update(activeUploads: fmLocationManager.activeUploads)
     }
 
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest) {
@@ -408,27 +414,25 @@ extension FMParkingViewController: FMLocationManagerDelegate {
         let fmError = error as! FMError  // TODO - change this method to receive an FMError
         delegate?.parkingViewController(self, didReceiveLocalizationError: fmError, errorMetadata: metadata)
         localizingViewController?.didReceiveLocalizationError(fmError, errorMetadata: metadata)
+        
         statisticsView?.update(errorCount: fmLocationManager.errors.count, lastError: fmError)
+        statisticsView?.update(activeUploads: fmLocationManager.activeUploads)
     }
     
     func locationManager(didChangeState state: FMLocationManager.State) {
         statisticsView?.update(state: state)
     }
-    
-    func locationManager(didChangeNumberOfActiveUploads numberOfActiveUploads: Int) {
-        statisticsView?.update(numberOfActiveUploads: numberOfActiveUploads)
-    }
-    
+        
     func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo) {
         statisticsView?.updateThrottled(frame: frame, info: info)
     }
     
     func locationManager(didUpdateFrameEvaluationStatistics frameEvaluationStatistics: FMFrameEvaluationStatistics) {
-    
+        statisticsView?.update(frameEvaluations: frameEvaluationStatistics)
     }
 
     func locationManager(didUpdateFrameRejectionStatistics frameRejectionStatistics: FMFrameRejectionStatistics) {
-    
+        statisticsView?.update(frameRejections: frameRejectionStatistics)
     }
 }
 

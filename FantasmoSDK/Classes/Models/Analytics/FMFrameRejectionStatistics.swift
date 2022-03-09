@@ -18,20 +18,25 @@ class FMFrameRejectionStatistics {
         .movingTooLittle: 0,
         .insufficientFeatures: 0
     ]
-
-    /// Total frames rejected because the frame evaluator was busy evaluating another frame.
-    public var evaluatingOtherFrame: Int = 0
+    
+    /// Last, most recent filter rejection that occurred in the session.
+    public private(set) var lastFilterRejection: FMFrameFilterRejectionReason?
     
     /// Total of all frames rejected in the session.
-    public var count: Int { return evaluatingOtherFrame + filterRejections.values.reduce(0, +) }
+    public var filterRejectionsCount: Int { return filterRejections.values.reduce(0, +) }
+    
+    /// Total frames rejected because the frame evaluator was busy evaluating another frame.
+    public var evaluatingOtherFrame: Int = 0
     
     /// Increment the count for a specific filter rejection.
     public func addFilterRejection(_ reason: FMFrameFilterRejectionReason) {
         filterRejections[reason]! += 1
+        lastFilterRejection = reason
     }
     
     /// Reset all statistics, used when starting a new session.
     public func reset() {
+        lastFilterRejection = nil
         filterRejections.forEach { k, v in
             filterRejections[k] = 0
         }

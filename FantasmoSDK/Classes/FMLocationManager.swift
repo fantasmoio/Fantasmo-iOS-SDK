@@ -12,11 +12,11 @@ import CoreLocation
 
 // TODO - replaced with debug stats delegate
 protocol FMLocationManagerDelegate: AnyObject {
+    func locationManager(didBeginUpload frame: FMFrame)
     func locationManager(didUpdateLocation result: FMLocationResult)
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
     func locationManager(didChangeState state: FMLocationManager.State)
-    func locationManager(didChangeNumberOfActiveUploads numberOfActiveUploads: Int)
     func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo)
     func locationManager(didUpdateFrameEvaluationStatistics frameEvaluationStatistics: FMFrameEvaluationStatistics)
     func locationManager(didUpdateFrameRejectionStatistics frameRejectionStatistics: FMFrameRejectionStatistics)
@@ -38,15 +38,7 @@ class FMLocationManager: NSObject {
             }
         }
     }
-    
-    public private(set) var numberOfActiveUploads: Int = 0 {
-        didSet {
-            if numberOfActiveUploads != oldValue {
-                delegate?.locationManager(didChangeNumberOfActiveUploads: numberOfActiveUploads)
-            }
-        }
-    }
-    
+        
     public var logLevel = FMLog.LogLevel.warning {
         didSet {
             log.logLevel = logLevel
@@ -99,6 +91,7 @@ class FMLocationManager: NSObject {
     public private(set) var lastCLLocation: CLLocation?
     public private(set) var lastResult: FMLocationResult?
     public private(set) var errors: [FMError] = []
+    public private(set) var activeUploads: [FMFrame] = []
     
     private weak var delegate: FMLocationManagerDelegate?
 
@@ -144,28 +137,8 @@ class FMLocationManager: NSObject {
         } else {
             behaviorRequester = nil
         }
-    }
-
-    /// Connect to the location service.
-    /// Use this method if your app does not need to receive `ARSession` or `CLLocationManager` delegate calls
-    ///
-    /// - Parameters:
-    ///   - accessToken: Token for service authorization.
-    ///   - delegate: Delegate for receiving location events.
-    ///   - session: ARSession to subscribe to as a delegate
-    ///   - locationManger: CLLocationManager to subscribe to as a delegate
-    public func connect(accessToken: String,
-                        delegate: FMLocationManagerDelegate,
-                        session: ARSession? = nil,
-                        locationManager: CLLocationManager? = nil) {
-        log.debug(parameters: [
-                    "delegate": delegate,
-                    "session": session,
-                    "locationManager": locationManager])
         
-        connect(accessToken: accessToken, delegate: delegate)
-        session?.delegate = self
-        locationManager?.delegate = self
+        frameEvaluatorChain.delegate = self
     }
     
     // MARK: - Public instance methods
@@ -296,20 +269,22 @@ class FMLocationManager: NSObject {
             log.debug(parameters: ["location": location, "zones": zones])
 
             let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
-            self.delegate?.locationManager(didUpdateLocation: result)
             self.lastResult = result
-            self.numberOfActiveUploads -= 1
+            self.activeUploads.removeAll { $0 === frame }
+            self.delegate?.locationManager(didUpdateLocation: result)
         }
         
         // Set up error closure
         let localizeError: FMApi.ErrorResult = { error in
             log.error(error)
+            
             self.errors.append(error)
+            self.activeUploads.removeAll { $0 === frame }
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
-            self.numberOfActiveUploads -= 1
         }
         
-        numberOfActiveUploads += 1
+        activeUploads.append(frame)
+        delegate?.locationManager(didBeginUpload: frame)
         
         FMApi.shared.sendLocalizationRequest(frame: frame,
                                              request: localizationRequest,
@@ -383,18 +358,18 @@ extension FMLocationManager : FMFrameEvaluatorChainDelegate {
         delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
     }
     
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame) {
-        // frame was rejected because the frame evaluator was busy evaluating another frame, update analytics
-        frameRejectionStatistics.evaluatingOtherFrame += 1
-        delegate?.locationManager(didUpdateFrameRejectionStatistics: frameRejectionStatistics)
-    }
-    
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason) {
         // frame was rejected by a frame filter, update analytics
         frameRejectionStatistics.addFilterRejection(reason)
         delegate?.locationManager(didUpdateFrameRejectionStatistics: frameRejectionStatistics)
         // send it to the behavior requester to suggest a remedy to the user
         behaviorRequester?.processFilterRejection(reason: reason)
+    }
+    
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame) {
+        // frame was rejected because the frame evaluator was busy evaluating another frame, update analytics
+        frameRejectionStatistics.evaluatingOtherFrame += 1
+        // delegate?.locationManager(didUpdateFrameRejectionStatistics: frameRejectionStatistics)
     }
 }
 

@@ -7,7 +7,7 @@
 
 import ARKit
 
-enum FMFrameFilterRejectionReason: CaseIterable {
+enum FMFrameFilterRejectionReason: String, CaseIterable {
     case pitchTooLow
     case pitchTooHigh
     case movingTooFast

@@ -12,15 +12,17 @@ import ARKit
 class FMSessionStatisticsView: UIView {
 
     @IBOutlet var sdkVersionLabel: UILabel!
-    
     @IBOutlet var managerStatusLabel: UILabel!
-    @IBOutlet var uploadingCountLabel: UILabel!
     
     @IBOutlet var translationLabel: UILabel!
     @IBOutlet var totalTranslationLabel: UILabel!
     @IBOutlet var remoteConfigLabel: UILabel!
     
-    @IBOutlet var frameEvaluationLabel: UILabel!
+    @IBOutlet var framesEvaluatedLabel: UILabel!
+    @IBOutlet var lastFrameScoreLabel: UILabel!
+
+    @IBOutlet var framesRejectedLabel: UILabel!
+    @IBOutlet var lastFrameRejectionLabel: UILabel!
     
     @IBOutlet var eulerAnglesLabel: UILabel!
     @IBOutlet var eulerAngleSpreadsLabel: UILabel!
@@ -63,43 +65,48 @@ class FMSessionStatisticsView: UIView {
         eulerAngleSpreadsLabel.text = eulerAngleSpreadsText
     }
     
-    /// non-throttled update
+    public func update(frameEvaluations: FMFrameEvaluationStatistics) {
+        framesEvaluatedLabel.text = "Frames evaluated: \(frameEvaluations.count)"
+        if let lastScore = frameEvaluations.lastScore {
+            lastFrameScoreLabel.text = String(format: "Last score: %.5f", lastScore)
+        }
+        lastFrameRejectionLabel.text = ""
+    }
+
+    public func update(frameRejections: FMFrameRejectionStatistics) {
+        framesRejectedLabel.text = "Frames rejected: \(frameRejections.filterRejectionsCount)"
+        if let lastRejection = frameRejections.lastFilterRejection {
+            lastFrameRejectionLabel.text = lastRejection.rawValue
+        }
+    }
+    
     /*
-    public func update(frame: FMFrame) {
         var imageEnhancementText = "Gamma correction: "
         if let gamma = frame.enhancedImageGamma {
-            imageEnhancementText += "\(gamma)"
+             imageEnhancementText += "\(gamma)"
         } else {
-            imageEnhancementText += "none"
+             imageEnhancementText += "none"
         }
         imageEnhancementLabel.text = imageEnhancementText
-    }
-     
-     let frameStats = info.trackingStateStatistics
-     frameStatsNormalLabel.text = "Normal: \(frameStats.framesWithNormalTrackingState)"
-     frameStatsLimitedLabel.text = "Limited: \(frameStats.framesWithLimitedTrackingState)"
-     frameStatsNotAvailableLabel.text = "Not available: \(frameStats.framesWithNotAvailableTracking)"
-     frameStatsExcessiveMotionLabel.text = "Excessive motion: \(frameStats.framesWithLimitedTrackingStateByReason[.excessiveMotion]!)"
-     frameStatsInsufficientFeaturesLabel.text = "Insufficient features: \(frameStats.framesWithLimitedTrackingStateByReason[.insufficientFeatures]!)"
-     
-     let rejectionCounts = rejections.counts
-     filterStatsPitchLowLabel.text = "Pitch low: \(rejectionCounts[.pitchTooLow] ?? 0)"
-     filterStatsPitchHighLabel.text = "Pitch high: \(rejectionCounts[.pitchTooHigh] ?? 0)"
-     filterStatsTooFastLabel.text = "Too fast: \(rejectionCounts[.movingTooFast] ?? 0)"
-     filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
-     filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
-     
-// TODO - fix this
-//        if let lastImageQualityFilterScore = info.imageQualityFilterScores.last {
-//            var imageQualityFilterText = "Image Quality Filter: enabled\n"
-//            imageQualityFilterText += "\tLive Score: \(String(format: "%.5f", lastImageQualityFilterScore))\n"
-//            imageQualityFilterText += "\tThreshold: \(String(format: "%.2f", info.imageQualityFilterScoreThreshold ?? 0))\n"
-//            imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)\n"
-//            imageQualityFilterText += "\tVersion: \(info.imageQualityFilterModelVersion ?? "n/a")"
-//            imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
-//        }
-     
+             
+        let frameStats = info.trackingStateStatistics
+        frameStatsNormalLabel.text = "Normal: \(frameStats.framesWithNormalTrackingState)"
+        frameStatsLimitedLabel.text = "Limited: \(frameStats.framesWithLimitedTrackingState)"
+        frameStatsNotAvailableLabel.text = "Not available: \(frameStats.framesWithNotAvailableTracking)"
+        frameStatsExcessiveMotionLabel.text = "Excessive motion: \(frameStats.framesWithLimitedTrackingStateByReason[.excessiveMotion]!)"
+        frameStatsInsufficientFeaturesLabel.text = "Insufficient features: \(frameStats.framesWithLimitedTrackingStateByReason[.insufficientFeatures]!)"
+
+        let rejectionCounts = rejections.counts
+        filterStatsPitchLowLabel.text = "Pitch low: \(rejectionCounts[.pitchTooLow] ?? 0)"
+        filterStatsPitchHighLabel.text = "Pitch high: \(rejectionCounts[.pitchTooHigh] ?? 0)"
+        filterStatsTooFastLabel.text = "Too fast: \(rejectionCounts[.movingTooFast] ?? 0)"
+        filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
+        filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
      */
+    
+    public func update(activeUploads: [FMFrame]) {
+        
+    }
         
     public func update(state: FMLocationManager.State) {
         let color: UIColor
@@ -111,12 +118,6 @@ class FMSessionStatisticsView: UIView {
         }
         let text = "Status: \(state.rawValue)"
         managerStatusLabel.attributedText = highlightString(state.rawValue, in: text, color: color)
-    }
-
-    public func update(numberOfActiveUploads: Int) {
-        let color: UIColor = (numberOfActiveUploads > 0) ? .green : .black
-        let text = "Uploading: \(numberOfActiveUploads)"
-        uploadingCountLabel.attributedText = highlightString("\(numberOfActiveUploads)", in: text, color: color)
     }
     
     public func update(errorCount: Int, lastError: FMError?) {

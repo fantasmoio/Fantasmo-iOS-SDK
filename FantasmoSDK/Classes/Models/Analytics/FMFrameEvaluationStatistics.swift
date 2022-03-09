@@ -16,6 +16,9 @@ class FMFrameEvaluationStatistics {
     /// Total frames evaluated in the session.
     public private(set) var count: Int = 0
     
+    /// The last, most recent score evaluated in the session.
+    public private(set) var lastScore: Float?
+    
     /// Highest score evaluated in the session.
     public private(set) var highestScore: Float?
     
@@ -56,6 +59,8 @@ class FMFrameEvaluationStatistics {
         
         count = max(1, count + 1)
         
+        lastScore = evaluation.score
+        
         if highestScore == nil || evaluation.score > highestScore! {
             highestScore = evaluation.score
         }
@@ -73,6 +78,7 @@ class FMFrameEvaluationStatistics {
     /// Reset all statistics, used when starting a new session.
     public func reset() {
         count = 0
+        lastScore = nil
         highestScore = nil
         lowestScore = nil
         averageScore = nil

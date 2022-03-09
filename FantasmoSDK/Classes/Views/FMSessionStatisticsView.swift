@@ -16,8 +16,8 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var managerStatusLabel: UILabel!
     @IBOutlet var uploadingCountLabel: UILabel!
     
-    @IBOutlet var cameraTranslationLabel: UILabel!
-    @IBOutlet var distanceTraveledLabel : UILabel!
+    @IBOutlet var translationLabel: UILabel!
+    @IBOutlet var totalTranslationLabel : UILabel!
     @IBOutlet var remoteConfigLabel : UILabel!
     
     @IBOutlet var eulerAnglesLabel: UILabel!
@@ -57,8 +57,8 @@ class FMSessionStatisticsView: UIView {
         let translationVector = frame.camera.transform.columns.3
         let translationFormatted = String(format: "Translation: %.2f, %.2f, %.2f",
                                           translationVector.x, translationVector.y, translationVector.z)
-        cameraTranslationLabel.text = translationFormatted
-        distanceTraveledLabel.text = String(format: "Distance traveled: %.2fm", info.totalTranslation)
+        translationLabel.text = translationFormatted
+        totalTranslationLabel.text = String(format: "Distance traveled: %.2fm", info.totalTranslation)
         
         let eulerAngles = EulerAngles(frame.camera.eulerAngles)
         eulerAnglesLabel.text = eulerAngles.description(format: "Euler Angles: %.2f˚, %.2f˚, %.2f˚", units: .degrees)

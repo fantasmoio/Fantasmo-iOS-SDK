@@ -64,14 +64,14 @@
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Translation: 0.00, 0.00, 0.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WUd-b1-MMC" userLabel="Camera Translation Label">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Translation: 0.00, 0.00, 0.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WUd-b1-MMC" userLabel="Translation Label">
                             <rect key="frame" x="0.0" y="127.5" width="384" height="20.5"/>
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Distance traveled: 0m" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vbd-yi-UFp" userLabel="Distance Traveled Label">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total translation: 0m" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vbd-yi-UFp" userLabel="Total Translation Label">
                             <rect key="frame" x="0.0" y="153" width="384" height="20.5"/>
                             <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -206,9 +206,7 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="cameraTranslationLabel" destination="WUd-b1-MMC" id="3Bg-Va-Jvx"/>
                 <outlet property="deviceLocationLabel" destination="kgX-fc-kHM" id="MsH-5d-JMZ"/>
-                <outlet property="distanceTraveledLabel" destination="vbd-yi-UFp" id="e2o-aV-vEB"/>
                 <outlet property="errorsLabel" destination="PBI-tq-xkJ" id="Lz7-zi-3Ml"/>
                 <outlet property="eulerAngleSpreadsLabel" destination="jvU-2T-GZj" id="YMA-98-x4y"/>
                 <outlet property="eulerAnglesLabel" destination="Ifi-EE-yAS" id="jot-VJ-a9R"/>
@@ -226,6 +224,8 @@
                 <outlet property="managerStatusLabel" destination="Hd6-Sn-Br5" id="TBd-1A-0fq"/>
                 <outlet property="remoteConfigLabel" destination="xFh-gh-OAB" id="uDN-PH-WQZ"/>
                 <outlet property="sdkVersionLabel" destination="4MQ-Tu-HZ0" id="dL9-7T-pU1"/>
+                <outlet property="totalTranslationLabel" destination="vbd-yi-UFp" id="nk2-hN-1Tq"/>
+                <outlet property="translationLabel" destination="WUd-b1-MMC" id="CTa-qH-J6O"/>
                 <outlet property="uploadingCountLabel" destination="KXD-w2-rOo" id="pTa-5K-BB5"/>
             </connections>
             <point key="canvasLocation" x="-455" y="155"/>

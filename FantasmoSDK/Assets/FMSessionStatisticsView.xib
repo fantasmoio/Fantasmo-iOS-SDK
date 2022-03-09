@@ -15,7 +15,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="0.0" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="EEl-fL-ZnH">
-                    <rect key="frame" x="15" y="463" width="384" height="399"/>
+                    <rect key="frame" x="15" y="551" width="384" height="311"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fantasmo SDK" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4MQ-Tu-HZ0" userLabel="sdkVersionLabel">
                             <rect key="frame" x="0.0" y="0.0" width="384" height="20.5"/>
@@ -103,96 +103,6 @@
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="LRo-P2-gqg" userLabel="Frame Stats Row 1">
-                            <rect key="frame" x="0.0" y="316" width="384" height="17"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Normal: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j02-ud-WcQ" userLabel="Frame Stats Normal Label">
-                                    <rect key="frame" x="0.0" y="0.0" width="128" height="17"/>
-                                    <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Limited: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XTY-vW-5Vn" userLabel="Frame Stats Limited Label">
-                                    <rect key="frame" x="128" y="0.0" width="128" height="17"/>
-                                    <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Not available: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xsk-e2-ywP" userLabel="Frame Stats Not Available Label">
-                                    <rect key="frame" x="256" y="0.0" width="128" height="17"/>
-                                    <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                        </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="5kK-H2-aIh" userLabel="Frame Stats Row 2">
-                            <rect key="frame" x="0.0" y="338" width="384" height="17"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Excessive motion: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wDf-gL-dv7" userLabel="Frame Stats Excessive Motion Label">
-                                    <rect key="frame" x="0.0" y="0.0" width="192" height="17"/>
-                                    <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Insufficient features: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XFi-IJ-ZwC" userLabel="Frame Stats Insufficient Features">
-                                    <rect key="frame" x="192" y="0.0" width="192" height="17"/>
-                                    <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                        </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="vBa-cP-vML" userLabel="Filter Stats Row 1">
-                            <rect key="frame" x="0.0" y="360" width="384" height="17"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Pitch low: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CxE-hz-leP" userLabel="Filter Stats Pitch Low Label">
-                                    <rect key="frame" x="0.0" y="0.0" width="192" height="17"/>
-                                    <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Pitch high: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAd-PB-gpI" userLabel="Filter Stats Pitch High Label">
-                                    <rect key="frame" x="192" y="0.0" width="192" height="17"/>
-                                    <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                        </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="kfj-0A-bdz" userLabel="Filter Stats Row 2">
-                            <rect key="frame" x="0.0" y="382" width="384" height="17"/>
-                            <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Too fast: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XQg-wF-Bk6" userLabel="Filter Stats Too Fast Label">
-                                    <rect key="frame" x="0.0" y="0.0" width="128" height="17"/>
-                                    <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Too little: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fzj-Kz-ukp" userLabel="Filter Stats Too Little Label">
-                                    <rect key="frame" x="128" y="0.0" width="128" height="17"/>
-                                    <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Features: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4aW-fH-IcH" userLabel="Filter Stats Features Label">
-                                    <rect key="frame" x="256" y="0.0" width="128" height="17"/>
-                                    <color key="backgroundColor" white="1" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                        </stackView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </stackView>
@@ -210,16 +120,6 @@
                 <outlet property="errorsLabel" destination="PBI-tq-xkJ" id="Lz7-zi-3Ml"/>
                 <outlet property="eulerAngleSpreadsLabel" destination="jvU-2T-GZj" id="YMA-98-x4y"/>
                 <outlet property="eulerAnglesLabel" destination="Ifi-EE-yAS" id="jot-VJ-a9R"/>
-                <outlet property="filterStatsFeaturesLabel" destination="4aW-fH-IcH" id="l3j-5n-ykh"/>
-                <outlet property="filterStatsPitchHighLabel" destination="HAd-PB-gpI" id="X55-tR-iwX"/>
-                <outlet property="filterStatsPitchLowLabel" destination="CxE-hz-leP" id="rOs-ZK-Yxu"/>
-                <outlet property="filterStatsTooFastLabel" destination="XQg-wF-Bk6" id="ndg-ZV-bST"/>
-                <outlet property="filterStatsTooLittleLabel" destination="Fzj-Kz-ukp" id="1Mn-g3-pyU"/>
-                <outlet property="frameStatsExcessiveMotionLabel" destination="wDf-gL-dv7" id="hMT-y5-fzZ"/>
-                <outlet property="frameStatsInsufficientFeaturesLabel" destination="XFi-IJ-ZwC" id="PiU-h3-bPh"/>
-                <outlet property="frameStatsLimitedLabel" destination="XTY-vW-5Vn" id="Ywt-Ru-4YG"/>
-                <outlet property="frameStatsNormalLabel" destination="j02-ud-WcQ" id="8C9-cK-QxT"/>
-                <outlet property="frameStatsNotAvailableLabel" destination="Xsk-e2-ywP" id="1I6-HF-Q85"/>
                 <outlet property="lastResultLabel" destination="XKk-ZN-TKq" id="gYM-iU-ohh"/>
                 <outlet property="managerStatusLabel" destination="Hd6-Sn-Br5" id="TBd-1A-0fq"/>
                 <outlet property="remoteConfigLabel" destination="xFh-gh-OAB" id="uDN-PH-WQZ"/>

@@ -17,7 +17,7 @@ protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
     func locationManager(didChangeState state: FMLocationManager.State)
     func locationManager(didChangeNumberOfActiveUploads numberOfActiveUploads: Int)
-    func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
+    func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo)
 }
 
 class FMLocationManager: NSObject {
@@ -347,7 +347,7 @@ extension FMLocationManager : ARSessionDelegate {
         }
         
         accumulatedARKitInfo.update(with: fmFrame)
-        delegate?.locationManager(didUpdateFrame: fmFrame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
+        delegate?.locationManager(didUpdateFrame: fmFrame, info: accumulatedARKitInfo)
     }
 }
 
@@ -363,7 +363,7 @@ extension FMLocationManager : FMFrameEvaluatorChainDelegate {
         // evaluator filter rejected the frame, show info in debug view
         behaviorRequester?.processFilterRejection(reason: reason)
         frameEventAccumulator.accumulate(filterRejectionReason: reason)
-        delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
+        delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo)
     }
     
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateNewBestFrame newBestFrame: FMFrame) {

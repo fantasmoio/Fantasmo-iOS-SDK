@@ -22,19 +22,7 @@ class FMSessionStatisticsView: UIView {
     
     @IBOutlet var eulerAnglesLabel: UILabel!
     @IBOutlet var eulerAngleSpreadsLabel: UILabel!
-        
-    @IBOutlet var frameStatsNormalLabel: UILabel!
-    @IBOutlet var frameStatsLimitedLabel: UILabel!
-    @IBOutlet var frameStatsNotAvailableLabel: UILabel!
-    @IBOutlet var frameStatsExcessiveMotionLabel: UILabel!
-    @IBOutlet var frameStatsInsufficientFeaturesLabel: UILabel!
     
-    @IBOutlet var filterStatsPitchLowLabel: UILabel!
-    @IBOutlet var filterStatsPitchHighLabel: UILabel!
-    @IBOutlet var filterStatsTooFastLabel: UILabel!
-    @IBOutlet var filterStatsTooLittleLabel: UILabel!
-    @IBOutlet var filterStatsFeaturesLabel: UILabel!
-        
     @IBOutlet var lastResultLabel: UILabel!
     @IBOutlet var errorsLabel: UILabel!
     @IBOutlet var deviceLocationLabel: UILabel!
@@ -47,7 +35,7 @@ class FMSessionStatisticsView: UIView {
         remoteConfigLabel.text = "Remote Config: \(RemoteConfig.config().remoteConfigId)"
     }
         
-    public func updateThrottled(frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
+    public func updateThrottled(frame: FMFrame, info: AccumulatedARKitInfo, refreshRate: TimeInterval = 10.0) {
         let shouldUpdate = frame.timestamp - lastFrameTimestamp > (1.0 / refreshRate)
         guard shouldUpdate else {
             return
@@ -58,7 +46,7 @@ class FMSessionStatisticsView: UIView {
         let translationFormatted = String(format: "Translation: %.2f, %.2f, %.2f",
                                           translationVector.x, translationVector.y, translationVector.z)
         translationLabel.text = translationFormatted
-        totalTranslationLabel.text = String(format: "Distance traveled: %.2fm", info.totalTranslation)
+        totalTranslationLabel.text = String(format: "Total translation: %.2fm", info.totalTranslation)
         
         let eulerAngles = EulerAngles(frame.camera.eulerAngles)
         eulerAnglesLabel.text = eulerAngles.description(format: "Euler Angles: %.2f˚, %.2f˚, %.2f˚", units: .degrees)
@@ -71,30 +59,6 @@ class FMSessionStatisticsView: UIView {
             rad2deg(eulerAngleSpreads.roll.minRotationAngle), rad2deg(eulerAngleSpreads.roll.maxRotationAngle), rad2deg(eulerAngleSpreads.roll.spread)
         )
         eulerAngleSpreadsLabel.text = eulerAngleSpreadsText
-        
-        let frameStats = info.trackingStateStatistics
-        frameStatsNormalLabel.text = "Normal: \(frameStats.framesWithNormalTrackingState)"
-        frameStatsLimitedLabel.text = "Limited: \(frameStats.framesWithLimitedTrackingState)"
-        frameStatsNotAvailableLabel.text = "Not available: \(frameStats.framesWithNotAvailableTracking)"
-        frameStatsExcessiveMotionLabel.text = "Excessive motion: \(frameStats.framesWithLimitedTrackingStateByReason[.excessiveMotion]!)"
-        frameStatsInsufficientFeaturesLabel.text = "Insufficient features: \(frameStats.framesWithLimitedTrackingStateByReason[.insufficientFeatures]!)"
-        
-        let rejectionCounts = rejections.counts
-        filterStatsPitchLowLabel.text = "Pitch low: \(rejectionCounts[.pitchTooLow] ?? 0)"
-        filterStatsPitchHighLabel.text = "Pitch high: \(rejectionCounts[.pitchTooHigh] ?? 0)"
-        filterStatsTooFastLabel.text = "Too fast: \(rejectionCounts[.movingTooFast] ?? 0)"
-        filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
-        filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
-        
-// TODO - fix this
-//        if let lastImageQualityFilterScore = info.imageQualityFilterScores.last {
-//            var imageQualityFilterText = "Image Quality Filter: enabled\n"
-//            imageQualityFilterText += "\tLive Score: \(String(format: "%.5f", lastImageQualityFilterScore))\n"
-//            imageQualityFilterText += "\tThreshold: \(String(format: "%.2f", info.imageQualityFilterScoreThreshold ?? 0))\n"
-//            imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)\n"
-//            imageQualityFilterText += "\tVersion: \(info.imageQualityFilterModelVersion ?? "n/a")"
-//            imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
-//        }
     }
     
     /// non-throttled update
@@ -108,6 +72,31 @@ class FMSessionStatisticsView: UIView {
         }
         imageEnhancementLabel.text = imageEnhancementText
     }
+     
+     let frameStats = info.trackingStateStatistics
+     frameStatsNormalLabel.text = "Normal: \(frameStats.framesWithNormalTrackingState)"
+     frameStatsLimitedLabel.text = "Limited: \(frameStats.framesWithLimitedTrackingState)"
+     frameStatsNotAvailableLabel.text = "Not available: \(frameStats.framesWithNotAvailableTracking)"
+     frameStatsExcessiveMotionLabel.text = "Excessive motion: \(frameStats.framesWithLimitedTrackingStateByReason[.excessiveMotion]!)"
+     frameStatsInsufficientFeaturesLabel.text = "Insufficient features: \(frameStats.framesWithLimitedTrackingStateByReason[.insufficientFeatures]!)"
+     
+     let rejectionCounts = rejections.counts
+     filterStatsPitchLowLabel.text = "Pitch low: \(rejectionCounts[.pitchTooLow] ?? 0)"
+     filterStatsPitchHighLabel.text = "Pitch high: \(rejectionCounts[.pitchTooHigh] ?? 0)"
+     filterStatsTooFastLabel.text = "Too fast: \(rejectionCounts[.movingTooFast] ?? 0)"
+     filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
+     filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
+     
+// TODO - fix this
+//        if let lastImageQualityFilterScore = info.imageQualityFilterScores.last {
+//            var imageQualityFilterText = "Image Quality Filter: enabled\n"
+//            imageQualityFilterText += "\tLive Score: \(String(format: "%.5f", lastImageQualityFilterScore))\n"
+//            imageQualityFilterText += "\tThreshold: \(String(format: "%.2f", info.imageQualityFilterScoreThreshold ?? 0))\n"
+//            imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)\n"
+//            imageQualityFilterText += "\tVersion: \(info.imageQualityFilterModelVersion ?? "n/a")"
+//            imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
+//        }
+     
      */
         
     public func update(state: FMLocationManager.State) {

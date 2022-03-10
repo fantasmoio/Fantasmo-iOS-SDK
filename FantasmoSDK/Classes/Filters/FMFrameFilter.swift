@@ -7,7 +7,7 @@
 
 import ARKit
 
-enum FMFrameFilterRejectionReason: CaseIterable {
+enum FMFrameFilterRejectionReason: String, CaseIterable {
     case pitchTooLow
     case pitchTooHigh
     case movingTooFast
@@ -35,7 +35,6 @@ enum FMFrameFilterResult: Equatable {
     case rejected(reason: FMFrameFilterRejectionReason)
 }
 
-/// Prime filters are original blocks for a compound frame filter or can be used alone as a standalone filter.
 protocol FMFrameFilter {
     func accepts(_ frame: FMFrame) -> FMFrameFilterResult
 }

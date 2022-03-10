@@ -12,12 +12,13 @@ import CoreLocation
 
 // TODO - replaced with debug stats delegate
 protocol FMLocationManagerDelegate: AnyObject {
+    func locationManager(didBeginUpload frame: FMFrame)
     func locationManager(didUpdateLocation result: FMLocationResult)
     func locationManager(didFailWithError error: Error, errorMetadata metadata: Any?)
     func locationManager(didRequestBehavior behavior: FMBehaviorRequest)
     func locationManager(didChangeState state: FMLocationManager.State)
-    func locationManager(didChangeNumberOfActiveUploads numberOfActiveUploads: Int)
-    func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator)
+    func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo)
+    func locationManager(didUpdateFrameEvaluationStatistics frameEvaluationStatistics: FMFrameEvaluationStatistics)
 }
 
 class FMLocationManager: NSObject {
@@ -36,15 +37,7 @@ class FMLocationManager: NSObject {
             }
         }
     }
-    
-    public private(set) var numberOfActiveUploads: Int = 0 {
-        didSet {
-            if numberOfActiveUploads != oldValue {
-                delegate?.locationManager(didChangeNumberOfActiveUploads: numberOfActiveUploads)
-            }
-        }
-    }
-    
+        
     public var logLevel = FMLog.LogLevel.warning {
         didSet {
             log.logLevel = logLevel
@@ -97,6 +90,7 @@ class FMLocationManager: NSObject {
     public private(set) var lastCLLocation: CLLocation?
     public private(set) var lastResult: FMLocationResult?
     public private(set) var errors: [FMError] = []
+    public private(set) var activeUploads: [FMFrame] = []
     
     private weak var delegate: FMLocationManagerDelegate?
 
@@ -108,7 +102,7 @@ class FMLocationManager: NSObject {
 
     // MARK: - Analytics Properties
     private var accumulatedARKitInfo = AccumulatedARKitInfo()
-    private var frameEventAccumulator = FrameFilterRejectionStatisticsAccumulator()
+    private var frameEvaluationStatistics = FMFrameEvaluationStatistics(type: .imageQuality)
     private var appSessionId: String? // provided by client
     private var appSessionTags: [String]? // provided by client
     private var localizationSessionId: String? // created by SDK
@@ -142,28 +136,6 @@ class FMLocationManager: NSObject {
             behaviorRequester = nil
         }
     }
-
-    /// Connect to the location service.
-    /// Use this method if your app does not need to receive `ARSession` or `CLLocationManager` delegate calls
-    ///
-    /// - Parameters:
-    ///   - accessToken: Token for service authorization.
-    ///   - delegate: Delegate for receiving location events.
-    ///   - session: ARSession to subscribe to as a delegate
-    ///   - locationManger: CLLocationManager to subscribe to as a delegate
-    public func connect(accessToken: String,
-                        delegate: FMLocationManagerDelegate,
-                        session: ARSession? = nil,
-                        locationManager: CLLocationManager? = nil) {
-        log.debug(parameters: [
-                    "delegate": delegate,
-                    "session": session,
-                    "locationManager": locationManager])
-        
-        connect(accessToken: accessToken, delegate: delegate)
-        session?.delegate = self
-        locationManager?.delegate = self
-    }
     
     // MARK: - Public instance methods
     
@@ -179,13 +151,15 @@ class FMLocationManager: NSObject {
         localizationSessionId = UUID().uuidString
 
         accumulatedARKitInfo.reset()
-        frameEventAccumulator.reset()
-        frameEvaluatorChain.reset()
+        frameEvaluationStatistics.reset()
         behaviorRequester?.restart()
         motionManager.restart()
         locationFuser.reset()
 
         state = .localizing
+        
+        frameEvaluatorChain.delegate = self
+        frameEvaluatorChain.resetWindow()
     }
     
     /// Stops the generation of location updates.
@@ -235,11 +209,11 @@ class FMLocationManager: NSObject {
 
         let frameEvents = FMFrameEvents(
             excessiveTilt:
-                (frameEventAccumulator.counts[.pitchTooHigh] ?? 0) +
-                (frameEventAccumulator.counts[.pitchTooLow] ?? 0),
+                (frameEvaluationStatistics.totalRejections[.pitchTooHigh] ?? 0) +
+                (frameEvaluationStatistics.totalRejections[.pitchTooLow] ?? 0),
             excessiveBlur: 0, // blur filter no longer in use, server still requires this param
-            excessiveMotion: frameEventAccumulator.counts[.movingTooFast] ?? 0,
-            insufficientFeatures: frameEventAccumulator.counts[.insufficientFeatures] ?? 0,
+            excessiveMotion: frameEvaluationStatistics.totalRejections[.movingTooFast] ?? 0,
+            insufficientFeatures: frameEvaluationStatistics.totalRejections[.insufficientFeatures] ?? 0,
             lossOfTracking:
                 accumulatedARKitInfo.trackingStateStatistics.framesWithNotAvailableTracking +
                 accumulatedARKitInfo.trackingStateStatistics.framesWithLimitedTrackingState,
@@ -292,20 +266,22 @@ class FMLocationManager: NSObject {
             log.debug(parameters: ["location": location, "zones": zones])
 
             let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
-            self.delegate?.locationManager(didUpdateLocation: result)
             self.lastResult = result
-            self.numberOfActiveUploads -= 1
+            self.activeUploads.removeAll { $0 === frame }
+            self.delegate?.locationManager(didUpdateLocation: result)
         }
         
         // Set up error closure
         let localizeError: FMApi.ErrorResult = { error in
             log.error(error)
+            
             self.errors.append(error)
+            self.activeUploads.removeAll { $0 === frame }
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
-            self.numberOfActiveUploads -= 1
         }
         
-        numberOfActiveUploads += 1
+        activeUploads.append(frame)
+        delegate?.locationManager(didBeginUpload: frame)
         
         FMApi.shared.sendLocalizationRequest(frame: frame,
                                              request: localizationRequest,
@@ -347,7 +323,7 @@ extension FMLocationManager : ARSessionDelegate {
         }
         
         accumulatedARKitInfo.update(with: fmFrame)
-        delegate?.locationManager(didUpdateFrame: fmFrame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
+        delegate?.locationManager(didUpdateFrame: fmFrame, info: accumulatedARKitInfo)
     }
 }
 
@@ -355,31 +331,43 @@ extension FMLocationManager : ARSessionDelegate {
 
 extension FMLocationManager : FMFrameEvaluatorChainDelegate {
 
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame) {
-        // evaluator was busy and discarded the frame, show info in debug view
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didStartWindow startDate: Date) {
+        // start a new evaluation window, update session analytics
+        frameEvaluationStatistics.startWindow(at: startDate)
+        delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
     }
     
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason) {
-        // evaluator filter rejected the frame, show info in debug view
-        behaviorRequester?.processFilterRejection(reason: reason)
-        frameEventAccumulator.accumulate(filterRejectionReason: reason)
-        delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo, rejections: frameEventAccumulator)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFinishEvaluatingFrame frame: FMFrame) {
+        // finished evaluating a frame, update session analytics
+        frameEvaluationStatistics.addEvaluation(frame: frame)
+        delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
     }
     
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateNewBestFrame newBestFrame: FMFrame) {
-        // evaluated a new best frame, show info in debug view
+        // new best frame was found, update session analytics
+        frameEvaluationStatistics.setCurrentBest(frame: newBestFrame)
+        delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
     }
     
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason) {
+        // frame was rejected by a frame filter, update session analytics
+        frameEvaluationStatistics.addFilterRejection(reason)
+        delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
+        
+        // send it to the behavior requester to suggest a remedy to the user
+        behaviorRequester?.processFilterRejection(reason: reason)
+    }
+        
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float) {
-        // evaluated a frame below the current best score, show info in debug view
+        // new frame was evaluated but its score was below the current best score
     }
     
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float) {
-        // evaluated a frame below the min score threshold, show info in debug view
+        // new frame was evaluated but its score was below the min score threshold
     }
-            
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFinishEvaluatingFrame frame: FMFrame) {
-        // finished evaluating a frame, evaluator is ready to evaluate new frames, show info in debug view
+        
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame) {
+        // frame was rejected because the frame evaluator was busy evaluating another frame
     }
 }
 

@@ -8,6 +8,7 @@
 import Foundation
 
 protocol FMFrameEvaluatorChainDelegate: AnyObject {
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didStartWindow startDate: Date)
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame)
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason)
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateNewBestFrame newBestFrame: FMFrame)
@@ -179,14 +180,15 @@ class FMFrameEvaluatorChain {
         }
         // return best frame and start new window
         defer {
-            reset()
+            resetWindow()
         }
         return currentBestFrame
     }
 
-    func reset() {
+    func resetWindow() {
         windowStart = Date()
         currentBestFrame = nil
+        delegate?.frameEvaluatorChain(self, didStartWindow: windowStart)
     }
     
     func getFilter<T:FMFrameFilter>(ofType type: T.Type) -> T? {

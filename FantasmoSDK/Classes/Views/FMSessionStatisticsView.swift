@@ -12,42 +12,49 @@ import ARKit
 class FMSessionStatisticsView: UIView {
 
     @IBOutlet var sdkVersionLabel: UILabel!
-    
     @IBOutlet var managerStatusLabel: UILabel!
-    @IBOutlet var uploadingCountLabel: UILabel!
+
+    @IBOutlet var uploadStackView: UIStackView!
     
-    @IBOutlet var cameraTranslationLabel: UILabel!
-    @IBOutlet var distanceTraveledLabel : UILabel!
-    @IBOutlet var remoteConfigLabel : UILabel!
+    @IBOutlet var currentWindowLabel: UILabel!
+    @IBOutlet var bestScoreLabel: UILabel!
+    
+    @IBOutlet var translationLabel: UILabel!
+    @IBOutlet var totalTranslationLabel: UILabel!
+    @IBOutlet var remoteConfigLabel: UILabel!
+    
+    @IBOutlet var framesEvaluatedLabel: UILabel!
+    @IBOutlet var liveScoreLabel: UILabel!
+
+    @IBOutlet var framesRejectedLabel: UILabel!
+    @IBOutlet var currentRejectionLabel: UILabel!
     
     @IBOutlet var eulerAnglesLabel: UILabel!
     @IBOutlet var eulerAngleSpreadsLabel: UILabel!
-        
-    @IBOutlet var frameStatsNormalLabel: UILabel!
-    @IBOutlet var frameStatsLimitedLabel: UILabel!
-    @IBOutlet var frameStatsNotAvailableLabel: UILabel!
-    @IBOutlet var frameStatsExcessiveMotionLabel: UILabel!
-    @IBOutlet var frameStatsInsufficientFeaturesLabel: UILabel!
     
-    @IBOutlet var filterStatsPitchLowLabel: UILabel!
-    @IBOutlet var filterStatsPitchHighLabel: UILabel!
-    @IBOutlet var filterStatsTooFastLabel: UILabel!
-    @IBOutlet var filterStatsTooLittleLabel: UILabel!
-    @IBOutlet var filterStatsFeaturesLabel: UILabel!
-        
     @IBOutlet var lastResultLabel: UILabel!
     @IBOutlet var errorsLabel: UILabel!
     @IBOutlet var deviceLocationLabel: UILabel!
     
-    var lastFrameTimestamp: TimeInterval = 0.0
-        
+    @IBOutlet var pitchTooHighLabel: UILabel!
+    @IBOutlet var pitchTooLowLabel: UILabel!
+    @IBOutlet var movingTooFastLabel: UILabel!
+    @IBOutlet var movingTooLittleLabel: UILabel!
+    @IBOutlet var insufficientFeaturesLabel: UILabel!
+    
+    private var windowTimer: Timer?
+    private var windowStart: Date?
+    
+    private var lastFrameTimestamp: TimeInterval = 0.0
+            
     override func awakeFromNib() {
         super.awakeFromNib()
         sdkVersionLabel.text = "Fantasmo SDK \(FMSDKInfo.fullVersion)"
         remoteConfigLabel.text = "Remote Config: \(RemoteConfig.config().remoteConfigId)"
+        startWindowTimer()
     }
         
-    public func updateThrottled(frame: FMFrame, info: AccumulatedARKitInfo, rejections: FrameFilterRejectionStatisticsAccumulator, refreshRate: TimeInterval = 10.0) {
+    public func updateThrottled(frame: FMFrame, info: AccumulatedARKitInfo, refreshRate: TimeInterval = 10.0) {
         let shouldUpdate = frame.timestamp - lastFrameTimestamp > (1.0 / refreshRate)
         guard shouldUpdate else {
             return
@@ -57,8 +64,8 @@ class FMSessionStatisticsView: UIView {
         let translationVector = frame.camera.transform.columns.3
         let translationFormatted = String(format: "Translation: %.2f, %.2f, %.2f",
                                           translationVector.x, translationVector.y, translationVector.z)
-        cameraTranslationLabel.text = translationFormatted
-        distanceTraveledLabel.text = String(format: "Distance traveled: %.2fm", info.totalTranslation)
+        translationLabel.text = translationFormatted
+        totalTranslationLabel.text = String(format: "Total translation: %.2fm", info.totalTranslation)
         
         let eulerAngles = EulerAngles(frame.camera.eulerAngles)
         eulerAnglesLabel.text = eulerAngles.description(format: "Euler Angles: %.2f˚, %.2f˚, %.2f˚", units: .degrees)
@@ -71,45 +78,67 @@ class FMSessionStatisticsView: UIView {
             rad2deg(eulerAngleSpreads.roll.minRotationAngle), rad2deg(eulerAngleSpreads.roll.maxRotationAngle), rad2deg(eulerAngleSpreads.roll.spread)
         )
         eulerAngleSpreadsLabel.text = eulerAngleSpreadsText
-        
-        let frameStats = info.trackingStateStatistics
-        frameStatsNormalLabel.text = "Normal: \(frameStats.framesWithNormalTrackingState)"
-        frameStatsLimitedLabel.text = "Limited: \(frameStats.framesWithLimitedTrackingState)"
-        frameStatsNotAvailableLabel.text = "Not available: \(frameStats.framesWithNotAvailableTracking)"
-        frameStatsExcessiveMotionLabel.text = "Excessive motion: \(frameStats.framesWithLimitedTrackingStateByReason[.excessiveMotion]!)"
-        frameStatsInsufficientFeaturesLabel.text = "Insufficient features: \(frameStats.framesWithLimitedTrackingStateByReason[.insufficientFeatures]!)"
-        
-        let rejectionCounts = rejections.counts
-        filterStatsPitchLowLabel.text = "Pitch low: \(rejectionCounts[.pitchTooLow] ?? 0)"
-        filterStatsPitchHighLabel.text = "Pitch high: \(rejectionCounts[.pitchTooHigh] ?? 0)"
-        filterStatsTooFastLabel.text = "Too fast: \(rejectionCounts[.movingTooFast] ?? 0)"
-        filterStatsTooLittleLabel.text = "Too little: \(rejectionCounts[.movingTooLittle] ?? 0)"
-        filterStatsFeaturesLabel.text = "Features: \(rejectionCounts[.insufficientFeatures] ?? 0)"
-        
-// TODO - fix this
-//        if let lastImageQualityFilterScore = info.imageQualityFilterScores.last {
-//            var imageQualityFilterText = "Image Quality Filter: enabled\n"
-//            imageQualityFilterText += "\tLive Score: \(String(format: "%.5f", lastImageQualityFilterScore))\n"
-//            imageQualityFilterText += "\tThreshold: \(String(format: "%.2f", info.imageQualityFilterScoreThreshold ?? 0))\n"
-//            imageQualityFilterText += "\tRejections: \(rejectionCounts[.imageQualityScoreBelowThreshold] ?? 0)\n"
-//            imageQualityFilterText += "\tVersion: \(info.imageQualityFilterModelVersion ?? "n/a")"
-//            imageQualityFilterLabel.attributedText = highlightString("enabled", in: imageQualityFilterText, color: .green)
-//        }
     }
     
-    /// non-throttled update
-    /*
-    public func update(frame: FMFrame) {
-        var imageEnhancementText = "Gamma correction: "
-        if let gamma = frame.enhancedImageGamma {
-            imageEnhancementText += "\(gamma)"
-        } else {
-            imageEnhancementText += "none"
-        }
-        imageEnhancementLabel.text = imageEnhancementText
-    }
-     */
+    public func update(frameEvaluationStatistics: FMFrameEvaluationStatistics) {
+        let window = frameEvaluationStatistics.windows.last
+        windowStart = window?.start
+        framesEvaluatedLabel.text = "Frames evaluated: \(window?.evaluations ?? 0)"
         
+        // update live score
+        var liveScoreText = "Live score: "
+        if let liveScore = window?.currentScore {
+            liveScoreText += String(format: "%.5f", liveScore)
+        } else {
+            liveScoreText += "n/a"
+        }
+        liveScoreLabel.text = liveScoreText
+        
+        // update window best score
+        var bestScoreText = "Best score: "
+        if let currentBestScore = window?.currentBestScore {
+            bestScoreText += String(format: "%.5f", currentBestScore)
+        } else {
+            bestScoreText += "n/a"
+        }
+        bestScoreLabel.text = bestScoreText
+        
+        // update window filter rejections
+        framesRejectedLabel.text = "Frames rejected: \(window?.rejections ?? 0)"
+        currentRejectionLabel.text = window?.currentRejectionReason?.rawValue ?? ""
+        
+        // update total filter rejection counts
+        pitchTooHighLabel.text = "Too High: \(frameEvaluationStatistics.totalRejections[.pitchTooHigh] ?? 0)"
+        pitchTooLowLabel.text = "Too Low: \(frameEvaluationStatistics.totalRejections[.pitchTooLow] ?? 0)"
+        movingTooFastLabel.text = "Too Fast: \(frameEvaluationStatistics.totalRejections[.movingTooFast] ?? 0)"
+        movingTooLittleLabel.text = "Too Little: \(frameEvaluationStatistics.totalRejections[.movingTooLittle] ?? 0)"
+        insufficientFeaturesLabel.text = "Insufficient Features: \(frameEvaluationStatistics.totalRejections[.insufficientFeatures] ?? 0)"
+    }
+        
+    public func update(activeUploads: [FMFrame]) {
+        uploadStackView.arrangedSubviews.forEach { sv in
+            sv.removeFromSuperview()
+        }
+        for frame in activeUploads {
+            let uploadText = "Uploading... "
+            var infoText = "Score: "
+            if let score = frame.evaluation?.score {
+                infoText += String(format: "%.5f", score)
+            } else {
+                infoText += "n/a"
+            }
+            if let gamma = frame.enhancedImageGamma {
+                infoText += String(format: ", Gamma: %.5f", gamma)
+            }
+            let label = UILabel()
+            label.font = UIFont.systemFont(ofSize: 16.0)
+            label.textColor = .black
+            label.backgroundColor = .init(white: 1.0, alpha: 0.3)
+            label.attributedText = highlightString(uploadText, in: "\(uploadText) [\(infoText)]", color: .green)
+            uploadStackView.addArrangedSubview(label)
+        }
+    }
+    
     public func update(state: FMLocationManager.State) {
         let color: UIColor
         switch state {
@@ -121,17 +150,11 @@ class FMSessionStatisticsView: UIView {
         let text = "Status: \(state.rawValue)"
         managerStatusLabel.attributedText = highlightString(state.rawValue, in: text, color: color)
     }
-
-    public func update(numberOfActiveUploads: Int) {
-        let color: UIColor = (numberOfActiveUploads > 0) ? .green : .black
-        let text = "Uploading: \(numberOfActiveUploads)"
-        uploadingCountLabel.attributedText = highlightString("\(numberOfActiveUploads)", in: text, color: color)
-    }
     
     public func update(errorCount: Int, lastError: FMError?) {
         var errorText = "Errors: \(errorCount)"
         if let lastErrorDescription = lastError?.debugDescription {
-            errorText += "\nLast error: \(lastErrorDescription)"
+            errorText += "\tLast error: \(lastErrorDescription)"
             errorsLabel.attributedText = highlightString(lastErrorDescription, in: errorText, color: .red)
         } else {
             errorsLabel.text = errorText
@@ -155,6 +178,20 @@ class FMSessionStatisticsView: UIView {
             locationText += String(format: "%.6f, %.6f", coordinate.latitude, coordinate.longitude)
         }
         deviceLocationLabel.text = locationText
+    }
+    
+    private func startWindowTimer() {
+        windowTimer?.invalidate()
+        windowTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { [weak self] _ in
+            guard let label = self?.currentWindowLabel else {
+                return
+            }
+            var timeElapsed: TimeInterval = 0
+            if let windowStart = self?.windowStart {
+                timeElapsed = Date().timeIntervalSince(windowStart)
+            }
+            label.text = String(format: "Current window: %.1fs", timeElapsed)
+        })
     }
     
     private func highlightString(_ string: String, in source: String, color: UIColor) -> NSAttributedString {

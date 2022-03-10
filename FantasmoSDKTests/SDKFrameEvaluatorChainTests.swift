@@ -110,7 +110,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         // adjust window times so we can easily test between them
         frameEvaluatorChain.minWindowTime = 0.5
         frameEvaluatorChain.maxWindowTime = 1.0
-        frameEvaluatorChain.reset()
+        frameEvaluatorChain.resetWindow()
         
         delegate.didFinishEvaluatingFrame = { frame in
             guard let evaluation = frame.evaluation else {

@@ -10,12 +10,17 @@ import Foundation
 
 class MockFrameEvaluatorDelegate: FMFrameEvaluatorChainDelegate {
     
+    var didStartWindow: ((Date) -> Void)?
     var didRejectFrameWhileEvaluatingOtherFrame: ((FMFrame, FMFrame) -> Void)?
     var didRejectFrameWithFilter: ((FMFrame, FMFrameFilter, FMFrameFilterRejectionReason) -> Void)?
     var didEvaluateNewBestFrame: ((FMFrame) -> Void)?
     var didEvaluateFrameBelowCurrentBestScore: ((FMFrame, Float) -> Void)?
     var didEvaluateFrameBelowMinScoreThreshold: ((FMFrame, Float) -> Void)?
     var didFinishEvaluatingFrame: ((FMFrame) -> Void)?
+    
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didStartWindow startDate: Date) {
+        didStartWindow?(startDate)
+    }
     
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame) {
         didRejectFrameWhileEvaluatingOtherFrame?(frame, otherFrame)

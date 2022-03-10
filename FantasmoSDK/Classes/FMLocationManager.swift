@@ -19,7 +19,6 @@ protocol FMLocationManagerDelegate: AnyObject {
     func locationManager(didChangeState state: FMLocationManager.State)
     func locationManager(didUpdateFrame frame: FMFrame, info: AccumulatedARKitInfo)
     func locationManager(didUpdateFrameEvaluationStatistics frameEvaluationStatistics: FMFrameEvaluationStatistics)
-    func locationManager(didUpdateFrameRejectionStatistics frameRejectionStatistics: FMFrameRejectionStatistics)
 }
 
 class FMLocationManager: NSObject {
@@ -104,7 +103,6 @@ class FMLocationManager: NSObject {
     // MARK: - Analytics Properties
     private var accumulatedARKitInfo = AccumulatedARKitInfo()
     private var frameEvaluationStatistics = FMFrameEvaluationStatistics(type: .imageQuality)
-    private var frameRejectionStatistics = FMFrameRejectionStatistics()
     private var appSessionId: String? // provided by client
     private var appSessionTags: [String]? // provided by client
     private var localizationSessionId: String? // created by SDK
@@ -137,8 +135,6 @@ class FMLocationManager: NSObject {
         } else {
             behaviorRequester = nil
         }
-        
-        frameEvaluatorChain.delegate = self
     }
     
     // MARK: - Public instance methods
@@ -156,13 +152,14 @@ class FMLocationManager: NSObject {
 
         accumulatedARKitInfo.reset()
         frameEvaluationStatistics.reset()
-        frameRejectionStatistics.reset()
-        frameEvaluatorChain.reset()
         behaviorRequester?.restart()
         motionManager.restart()
         locationFuser.reset()
 
         state = .localizing
+        
+        frameEvaluatorChain.delegate = self
+        frameEvaluatorChain.resetWindow()
     }
     
     /// Stops the generation of location updates.
@@ -212,11 +209,11 @@ class FMLocationManager: NSObject {
 
         let frameEvents = FMFrameEvents(
             excessiveTilt:
-                (frameRejectionStatistics.filterRejections[.pitchTooHigh] ?? 0) +
-                (frameRejectionStatistics.filterRejections[.pitchTooLow] ?? 0),
+                (frameEvaluationStatistics.totalRejections[.pitchTooHigh] ?? 0) +
+                (frameEvaluationStatistics.totalRejections[.pitchTooLow] ?? 0),
             excessiveBlur: 0, // blur filter no longer in use, server still requires this param
-            excessiveMotion: frameRejectionStatistics.filterRejections[.movingTooFast] ?? 0,
-            insufficientFeatures: frameRejectionStatistics.filterRejections[.insufficientFeatures] ?? 0,
+            excessiveMotion: frameEvaluationStatistics.totalRejections[.movingTooFast] ?? 0,
+            insufficientFeatures: frameEvaluationStatistics.totalRejections[.insufficientFeatures] ?? 0,
             lossOfTracking:
                 accumulatedARKitInfo.trackingStateStatistics.framesWithNotAvailableTracking +
                 accumulatedARKitInfo.trackingStateStatistics.framesWithLimitedTrackingState,
@@ -334,42 +331,43 @@ extension FMLocationManager : ARSessionDelegate {
 
 extension FMLocationManager : FMFrameEvaluatorChainDelegate {
 
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didStartWindow startDate: Date) {
+        // start a new evaluation window, update session analytics
+        frameEvaluationStatistics.startWindow(at: startDate)
+        delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
+    }
+    
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFinishEvaluatingFrame frame: FMFrame) {
-        // finished evaluating a frame, update analytics
-        frameEvaluationStatistics.update(withFrame: frame)
+        // finished evaluating a frame, update session analytics
+        frameEvaluationStatistics.addEvaluation(frame: frame)
         delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
     }
     
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateNewBestFrame newBestFrame: FMFrame) {
-        // new best frame was found, update analytics
-        frameEvaluationStatistics.newBestFrame += 1
-        delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
-    }
-    
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float) {
-        // new frame was evaluated but its score was below the current best score, update analytics
-        frameEvaluationStatistics.belowCurrentBestScore += 1
-        delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
-    }
-    
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float) {
-        // new frame was evaluated but its score was below the min score threshold, update analytics
-        frameEvaluationStatistics.belowMinScoreThreshold += 1
+        // new best frame was found, update session analytics
+        frameEvaluationStatistics.setCurrentBest(frame: newBestFrame)
         delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
     }
     
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason) {
-        // frame was rejected by a frame filter, update analytics
-        frameRejectionStatistics.addFilterRejection(reason)
-        delegate?.locationManager(didUpdateFrameRejectionStatistics: frameRejectionStatistics)
+        // frame was rejected by a frame filter, update session analytics
+        frameEvaluationStatistics.addFilterRejection(reason)
+        delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
+        
         // send it to the behavior requester to suggest a remedy to the user
         behaviorRequester?.processFilterRejection(reason: reason)
     }
+        
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float) {
+        // new frame was evaluated but its score was below the current best score
+    }
     
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float) {
+        // new frame was evaluated but its score was below the min score threshold
+    }
+        
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame) {
-        // frame was rejected because the frame evaluator was busy evaluating another frame, update analytics
-        frameRejectionStatistics.evaluatingOtherFrame += 1
-        // delegate?.locationManager(didUpdateFrameRejectionStatistics: frameRejectionStatistics)
+        // frame was rejected because the frame evaluator was busy evaluating another frame
     }
 }
 

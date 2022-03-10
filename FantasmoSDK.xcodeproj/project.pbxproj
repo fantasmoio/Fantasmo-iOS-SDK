@@ -60,7 +60,6 @@
 		017C5ED5278C540F000DEBCE /* CLLocation+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017C5ED4278C540F000DEBCE /* CLLocation+Codable.swift */; };
 		017C5ED7278DC7F7000DEBCE /* FMImageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017C5ED6278DC7F7000DEBCE /* FMImageButton.swift */; };
 		017EBDE227D8EE9400568642 /* FMFrameEvaluationStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017EBDE127D8EE9400568642 /* FMFrameEvaluationStatistics.swift */; };
-		017EBDE427D9046900568642 /* FMFrameRejectionStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017EBDE327D9046900568642 /* FMFrameRejectionStatistics.swift */; };
 		01827D292758E0B5006D21CE /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9468389F25921BF3005B1145 /* MockData.swift */; };
 		01827D2B2758E92E006D21CE /* SDKRemoteConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */; };
 		01827D2C2758E939006D21CE /* SDKGeometricTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */; };
@@ -279,7 +278,6 @@
 		017C5ED4278C540F000DEBCE /* CLLocation+Codable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocation+Codable.swift"; sourceTree = "<group>"; };
 		017C5ED6278DC7F7000DEBCE /* FMImageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMImageButton.swift; sourceTree = "<group>"; };
 		017EBDE127D8EE9400568642 /* FMFrameEvaluationStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameEvaluationStatistics.swift; sourceTree = "<group>"; };
-		017EBDE327D9046900568642 /* FMFrameRejectionStatistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameRejectionStatistics.swift; sourceTree = "<group>"; };
 		018EF3A72795A16A005A1381 /* FantasmoSDKTestHarnessDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FantasmoSDKTestHarnessDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		018EF3A92795A19D005A1381 /* Info-Dev.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-Dev.plist"; sourceTree = "<group>"; };
 		01933FBA27CE8B910089796C /* TestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
@@ -729,7 +727,6 @@
 				A34459F526A8251500C96205 /* Impl */,
 				A30EBE08269F32B200E572FA /* AccumulatedARKitInfo.swift */,
 				017EBDE127D8EE9400568642 /* FMFrameEvaluationStatistics.swift */,
-				017EBDE327D9046900568642 /* FMFrameRejectionStatistics.swift */,
 				A3445A0326A896B100C96205 /* TrackingStateFrameStatistics.swift */,
 				A30EBE0B269F578E00E572FA /* TotalDeviceTranslationAccumulator.swift */,
 				A34459EE26A8244F00C96205 /* EulerAngleSpreads.swift */,
@@ -1084,7 +1081,6 @@
 				A34459F326A8246900C96205 /* RotationAngleCalculator.swift in Sources */,
 				946838CB25921BF3005B1145 /* FMZone.swift in Sources */,
 				A0D0C57726BD086E00F35448 /* MotionManager.swift in Sources */,
-				017EBDE427D9046900568642 /* FMFrameRejectionStatistics.swift in Sources */,
 				0134BF872705E8F400DDEF7A /* FMTipLabel.swift in Sources */,
 				01B58687274D45DE0082FFF7 /* InitializeResponse.swift in Sources */,
 				0123A4D9270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift in Sources */,

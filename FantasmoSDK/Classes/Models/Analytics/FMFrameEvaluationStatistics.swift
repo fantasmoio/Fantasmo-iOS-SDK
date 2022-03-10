@@ -7,17 +7,34 @@
 
 import Foundation
 
-/// Accumulator of statistics about frame evaluation peformed in a session
+/// Model containing statistics about frame evaluations peformed in a localization session.
 class FMFrameEvaluationStatistics {
+    
+    /// Model representing a single frame evaluation window
+    class Window {
+        
+        let start: Date
+        
+        var currentScore: Float?
+        
+        var currentBestScore: Float?
+        
+        var currentRejectionReason: FMFrameFilterRejectionReason?
+        
+        var evaluations: Int = 0
+         
+        var rejections: Int = 0
+                        
+        init(_ start: Date) {
+            self.start = start
+        }
+    }
     
     /// Type of evaluation done in the session.
     public let type: FMFrameEvaluationType
     
-    /// Total frames evaluated in the session.
-    public private(set) var count: Int = 0
-    
-    /// The last, most recent score evaluated in the session.
-    public private(set) var lastScore: Float?
+    /// Ordered list of evaluation windows in the session, last window being the newest.
+    public private(set) var windows: [Window] = []
     
     /// Highest score evaluated in the session.
     public private(set) var highestScore: Float?
@@ -25,42 +42,40 @@ class FMFrameEvaluationStatistics {
     /// Lowest score evaluated in the session.
     public private(set) var lowestScore: Float?
     
-    /// Average of all scores evaluated in the session.
-    public private(set) var averageScore: Float?
-    
     /// Sum of all scores evaluated in the session.
-    public private(set) var combinedScores: Float = 0
+    public private(set) var sumOfAllScores: Float = 0
     
-    /// Sum of all time spent evaluating frames.
-    public private(set) var totalEvaluationTime: TimeInterval = 0
+    /// Total evaluations in the session.
+    public private(set) var totalEvaluations: Int = 0
     
-    /// Average time it took to evaluate a single frame.
-    public private(set) var averageEvaluationTime: TimeInterval = 0
-    
-    /// Total frames evaluted to be the current time window's new best frame.
-    public var newBestFrame: Int = 0
-    
-    /// Total frames evaluted below the current time window's best frame.
-    public var belowCurrentBestScore: Int = 0
-    
-    /// Total frames evaluted below the min score threshold.
-    public var belowMinScoreThreshold: Int = 0
+    /// Total rejections in the session.
+    public private(set) var totalRejections: [FMFrameFilterRejectionReason: Int] = [
+        .pitchTooLow: 0,
+        .pitchTooHigh: 0,
+        .movingTooFast: 0,
+        .movingTooLittle: 0,
+        .insufficientFeatures: 0
+    ]
     
     /// Designated constructor.
     init(type: FMFrameEvaluationType) {
         self.type = type
     }
     
-    /// Add an evaluated frame from the current session and update evaluation statistics.
-    public func update(withFrame frame: FMFrame) {
-        guard let evaluation = frame.evaluation else {
+    /// Creates a new window and makes it the current window.
+    public func startWindow(at startDate: Date) {
+        windows.append(Window(startDate))
+    }
+    
+    /// Adds evaluation data from the given frame to the current window and updates statistics.
+    public func addEvaluation(frame: FMFrame) {
+        guard let evaluation = frame.evaluation, let window = windows.last else {
             return
         }
         
-        count = max(1, count + 1)
-        
-        lastScore = evaluation.score
-        
+        // Update global session stats
+        totalEvaluations += 1
+        sumOfAllScores += evaluation.score
         if highestScore == nil || evaluation.score > highestScore! {
             highestScore = evaluation.score
         }
@@ -68,25 +83,41 @@ class FMFrameEvaluationStatistics {
             lowestScore = evaluation.score
         }
         
-        combinedScores += evaluation.score
-        averageScore = combinedScores / Float(count)
+        // Update current window stats
+        window.evaluations += 1
+        window.currentScore = evaluation.score
+        window.currentRejectionReason = nil
+    }
+    
+    /// Sets the best frame for the current window.
+    public func setCurrentBest(frame: FMFrame) {
+        guard let evaluation = frame.evaluation, let window = windows.last else {
+            return
+        }
         
-        totalEvaluationTime += max(0.0, evaluation.timestamp - frame.timestamp)
-        averageEvaluationTime = totalEvaluationTime / Double(count)
+        window.currentBestScore = evaluation.score
+    }
+    
+    /// Increment the count for a specific filter rejection and set as the current rejection.
+    public func addFilterRejection(_ rejectionReason: FMFrameFilterRejectionReason) {
+        guard let window = windows.last else {
+            return
+        }
+        // Add to session totals
+        totalRejections[rejectionReason]! += 1
+        
+        // Add to current window
+        window.rejections += 1
+        window.currentRejectionReason = rejectionReason
     }
     
     /// Reset all statistics, used when starting a new session.
     public func reset() {
-        count = 0
-        lastScore = nil
+        windows.removeAll()
         highestScore = nil
         lowestScore = nil
-        averageScore = nil
-        combinedScores = 0
-        totalEvaluationTime = 0
-        averageEvaluationTime = 0
-        newBestFrame = 0
-        belowCurrentBestScore = 0
-        belowMinScoreThreshold = 0
+        sumOfAllScores = 0
+        totalEvaluations = 0
+        totalRejections.forEach { k, v in totalRejections[k] = 0 }
     }
 }

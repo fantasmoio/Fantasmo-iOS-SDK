@@ -428,7 +428,7 @@ extension FMParkingViewController: FMLocationManagerDelegate {
     }
     
     func locationManager(didUpdateFrameEvaluationStatistics frameEvaluationStatistics: FMFrameEvaluationStatistics) {
-        statisticsView?.update(frameEvaluations: frameEvaluationStatistics)
+        statisticsView?.update(frameEvaluationStatistics: frameEvaluationStatistics)
     }
 }
 

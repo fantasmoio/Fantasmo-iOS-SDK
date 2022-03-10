@@ -80,8 +80,8 @@ class FMSessionStatisticsView: UIView {
         eulerAngleSpreadsLabel.text = eulerAngleSpreadsText
     }
     
-    public func update(frameEvaluations: FMFrameEvaluationStatistics) {
-        let window = frameEvaluations.windows.last
+    public func update(frameEvaluationStatistics: FMFrameEvaluationStatistics) {
+        let window = frameEvaluationStatistics.windows.last
         windowStart = window?.start
         framesEvaluatedLabel.text = "Frames evaluated: \(window?.evaluations ?? 0)"
         
@@ -108,11 +108,11 @@ class FMSessionStatisticsView: UIView {
         currentRejectionLabel.text = window?.currentRejectionReason?.rawValue ?? ""
         
         // update total filter rejection counts
-        pitchTooHighLabel.text = "Too High: \(frameEvaluations.totalRejections[.pitchTooHigh] ?? 0)"
-        pitchTooLowLabel.text = "Too Low: \(frameEvaluations.totalRejections[.pitchTooLow] ?? 0)"
-        movingTooFastLabel.text = "Too Fast: \(frameEvaluations.totalRejections[.movingTooFast] ?? 0)"
-        movingTooLittleLabel.text = "Too Little: \(frameEvaluations.totalRejections[.movingTooLittle] ?? 0)"
-        insufficientFeaturesLabel.text = "Insufficient Features: \(frameEvaluations.totalRejections[.insufficientFeatures] ?? 0)"
+        pitchTooHighLabel.text = "Too High: \(frameEvaluationStatistics.totalRejections[.pitchTooHigh] ?? 0)"
+        pitchTooLowLabel.text = "Too Low: \(frameEvaluationStatistics.totalRejections[.pitchTooLow] ?? 0)"
+        movingTooFastLabel.text = "Too Fast: \(frameEvaluationStatistics.totalRejections[.movingTooFast] ?? 0)"
+        movingTooLittleLabel.text = "Too Little: \(frameEvaluationStatistics.totalRejections[.movingTooLittle] ?? 0)"
+        insufficientFeaturesLabel.text = "Insufficient Features: \(frameEvaluationStatistics.totalRejections[.insufficientFeatures] ?? 0)"
     }
         
     public func update(activeUploads: [FMFrame]) {

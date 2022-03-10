@@ -73,7 +73,7 @@ class FMFrameEvaluationStatistics {
             return
         }
         
-        // Update global session stats
+        // Update session stats
         totalEvaluations += 1
         sumOfAllScores += evaluation.score
         if highestScore == nil || evaluation.score > highestScore! {

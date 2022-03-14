@@ -29,7 +29,8 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         XCTAssertEqual(config.isMovementFilterEnabled, frameEvaluatorChain.getFilter(ofType: FMMovementFilter.self) != nil)
         
         // check image enhancer is enabled/disabled
-        XCTAssertEqual(config.isImageEnhancerEnabled, frameEvaluatorChain.imageEnhancer != nil)
+        let metalSupported = MTLCreateSystemDefaultDevice() != nil
+        XCTAssertEqual(config.isImageEnhancerEnabled && metalSupported, frameEvaluatorChain.imageEnhancer != nil)
     }
     
     func testReturnsBestFrame() throws {

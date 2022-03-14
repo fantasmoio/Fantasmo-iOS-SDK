@@ -18,22 +18,10 @@ protocol FMFrameEvaluatorChainDelegate: AnyObject {
 }
 
 class FMFrameEvaluatorChain {
-        
-    // TODO - make these constants when we're able to get them from remote config
-    var minWindowTime: TimeInterval
-    var maxWindowTime: TimeInterval
-    var minScoreThreshold: Float
-    var minHighQualityScore: Float
-
+    
     private let frameEvaluator: FMFrameEvaluator
 
     private let frameEvaluationQueue = DispatchQueue(label: "io.fantasmo.frameEvaluationQueue", qos: .userInteractive)
-    
-    /// Active filters that are run in order before enhancement and evaluation
-    let filters: [FMFrameFilter]
-    
-    /// Image enhancer, applies gamma correction, nil if disabled via remote config
-    let imageEnhancer: FMImageEnhancer?
     
     private(set) var evaluatingFrame: FMFrame?
     
@@ -41,15 +29,35 @@ class FMFrameEvaluatorChain {
     
     private(set) var windowStart: Date
     
+    /// Active filters that are run in order before enhancement and evaluation
+    let filters: [FMFrameFilter]
+    
+    /// Image enhancer, applies gamma correction, nil if disabled via remote config
+    let imageEnhancer: FMImageEnhancer?
+    
+    /// Time in seconds since the last upload before any new uploads can be made. This acts as a rate limiter.
+    var minWindowTime: TimeInterval
+    
+    /// Time in seconds since the last upload after which the `currentBestFrame` (if set) should be uploaded.
+    var maxWindowTime: TimeInterval
+    
+    /// Required minimum evaluation score for a frame to be considered at all. Frames evaluated below this value should be discarded.
+    var minScoreThreshold: Float
+    
+    /// Minimum evaluation score for a frame to be considered "high quality". Any frames evaluated at or above this value will be uploaded
+    /// as soon as possible, while still respecting the `minWindowTime`.
+    var minHighQualityScore: Float
+    
     weak var delegate: FMFrameEvaluatorChainDelegate?
-            
+    
     init(config: RemoteConfig.Config) {
         
-        // TODO - get these from remote config
-        self.minWindowTime = 0.4
-        self.maxWindowTime = 1.2
-        self.minScoreThreshold = 0.0
-        self.minHighQualityScore = 0.9
+        // set window and score variables from remote config
+        
+        minWindowTime = config.minLocalizationWindowTime
+        maxWindowTime = config.maxLocalizationWindowTime
+        minScoreThreshold = config.minFrameEvaluationScore
+        minHighQualityScore = config.minFrameEvaluationHighQualityScore
         
         // configure pre evaluation filters
         

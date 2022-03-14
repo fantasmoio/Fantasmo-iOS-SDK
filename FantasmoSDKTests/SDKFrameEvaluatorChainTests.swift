@@ -13,6 +13,25 @@ import ARKit
 
 class SDKFrameEvaluatorChainTests: XCTestCase {
     
+    func testFrameEvaluatorChainConfig() throws {
+        let config = try XCTUnwrap(TestUtils.getDefaultConfig())
+        let frameEvaluatorChain = FMFrameEvaluatorChain(config: config)
+        
+        // check score and window params were set
+        XCTAssertEqual(frameEvaluatorChain.minScoreThreshold, config.minFrameEvaluationScore)
+        XCTAssertEqual(frameEvaluatorChain.minHighQualityScore, config.minFrameEvaluationHighQualityScore)
+        XCTAssertEqual(frameEvaluatorChain.minWindowTime, config.minLocalizationWindowTime)
+        XCTAssertEqual(frameEvaluatorChain.maxWindowTime, config.maxLocalizationWindowTime)
+        
+        // check enabled filters are available
+        XCTAssertEqual(config.isTrackingStateFilterEnabled, frameEvaluatorChain.getFilter(ofType: FMTrackingStateFilter.self) != nil)
+        XCTAssertEqual(config.isCameraPitchFilterEnabled, frameEvaluatorChain.getFilter(ofType: FMCameraPitchFilter.self) != nil)
+        XCTAssertEqual(config.isMovementFilterEnabled, frameEvaluatorChain.getFilter(ofType: FMMovementFilter.self) != nil)
+        
+        // check image enhancer is enabled/disabled
+        XCTAssertEqual(config.isImageEnhancerEnabled, frameEvaluatorChain.imageEnhancer != nil)
+    }
+    
     func testReturnsBestFrame() throws {
         // initialize a mock session and evaluator chain
         let mockSession = MockARSession(videoName: "parking-daytime")

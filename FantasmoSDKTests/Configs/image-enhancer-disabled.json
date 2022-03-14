@@ -8,5 +8,9 @@
     "movement_filter_threshold": 0.001,
     "is_camera_pitch_filter_enabled": true,
     "camera_pitch_filter_max_upward_tilt": 30.0,
-    "camera_pitch_filter_max_downward_tilt": 65.0
+    "camera_pitch_filter_max_downward_tilt": 65.0,
+    "min_localization_window_time": 0.4,
+    "max_localization_window_time": 1.2,
+    "min_frame_evaluation_score": 0.2,
+    "min_frame_evaluation_high_quality_score": 0.8
 }

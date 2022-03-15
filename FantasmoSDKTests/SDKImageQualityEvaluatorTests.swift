@@ -11,6 +11,30 @@ import XCTest
 
 class SDKImageQualityEvaluatorTests: XCTestCase {
 
+    func testImageQualityDaytimeScore() throws {
+        // get an instance of our CoreML evaluator
+        let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)
+        // create a mock daytime session
+        let daytimeSession = MockARSession(videoName: "parking-daytime")
+        // evaluate the first frame
+        let daytimeFrame = try daytimeSession.getNextFrame()
+        let daytimeEvaluation = imageQualityEvaluator.evaluate(frame: daytimeFrame)
+        // check the result is close enough to the expected value
+        XCTAssertEqual(daytimeEvaluation.score, 0.42355442, accuracy: 0.0001)
+    }
+
+    func testImageQualityNighttimeScore() throws {
+        // get an instance of our CoreML evaluator
+        let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)
+        // create a mock nighttime session
+        let nighttimeSession = MockARSession(videoName: "parking-nighttime")
+        // evaluate the first frame
+        let nighttimeFrame = try nighttimeSession.getNextFrame()
+        let nighttimeEvaluation = imageQualityEvaluator.evaluate(frame: nighttimeFrame)
+        // check the result is close enough to the expected value
+        XCTAssertEqual(nighttimeEvaluation.score, 0.74498034, accuracy: 0.0001)
+    }
+    
     func testImageQualityEvaluator() throws {
         // check factory constructor produces the CoreML evaluator
         let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)

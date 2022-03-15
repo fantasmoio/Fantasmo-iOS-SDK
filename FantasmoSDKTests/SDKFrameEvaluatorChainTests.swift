@@ -165,7 +165,8 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         XCTAssertTrue(Date() > minWindow && Date() < frameEvaluatorChain.getMaxWindow())
         
         // check the high quality frame was returned after the min window but before the max window
-        XCTAssertTrue(frameEvaluatorChain.dequeueBestFrame()! === highQualityFrame)
+        let bestFrame = try XCTUnwrap(frameEvaluatorChain.dequeueBestFrame())
+        XCTAssertTrue(bestFrame === highQualityFrame)
     }
     
     func testDoesNotReturnFrameBelowMinScoreThreshold() throws {

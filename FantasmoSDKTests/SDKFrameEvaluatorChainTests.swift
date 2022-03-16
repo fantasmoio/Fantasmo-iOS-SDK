@@ -148,7 +148,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         // wait for the high quality frame to be evaluated
         let highQualityFrame = try mockSession.getNextFrame()
         frameEvaluatorChain.evaluateAsync(frame: highQualityFrame)
-        wait(for: [highQualityFrameEvaluated, newBestFrameCalled], timeout: 3.0)
+        wait(for: [highQualityFrameEvaluated, newBestFrameCalled], timeout: 5.0)
         
         // check we are currently before the min window
         let minWindow = frameEvaluatorChain.getMinWindow()
@@ -194,7 +194,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         // wait for the low quality frame to be evaluated
         let lowQualityFrame = try mockSession.getNextFrame()
         frameEvaluatorChain.evaluateAsync(frame: lowQualityFrame)
-        wait(for: [lowQualityFrameEvaluated, belowMinScoreCalled], timeout: 3.0)
+        wait(for: [lowQualityFrameEvaluated, belowMinScoreCalled], timeout: 5.0)
         
         // wait until the max window
         let maxWindow = frameEvaluatorChain.getMaxWindow()
@@ -241,7 +241,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         // evaluate the two frames and wait
         frameEvaluatorChain.evaluateAsync(frame: firstFrame)
         frameEvaluatorChain.evaluateAsync(frame: secondFrame)
-        wait(for: [frameEvaluated, frameRejected], timeout: 3.0)
+        wait(for: [frameEvaluated, frameRejected], timeout: 5.0)
     }
                         
     // MARK: - Filters

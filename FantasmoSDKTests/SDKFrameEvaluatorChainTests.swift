@@ -508,11 +508,11 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         enhancingChain.evaluateAsync(frame: darkFrame)
         wait(for: [enhancedFrameEvaluated], timeout: 1.0)
         
-        // check that both scores are valid
+        // check that we have two valid evaluation scores
         XCTAssertTrue(enhancedScore > 0.0 && enhancedScore < 1.0)
         XCTAssertTrue(unenhancedScore > 0.0 && unenhancedScore < 1.0)
         
-        // check that both scores are different
-        XCTAssertNotEqual(enhancedScore, unenhancedScore)
+        // check that the enhanced score is better
+        XCTAssertGreaterThan(enhancedScore, unenhancedScore)
     }
 }

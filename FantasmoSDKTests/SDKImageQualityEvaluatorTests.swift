@@ -98,7 +98,7 @@ class SDKImageQualityEvaluatorTests: XCTestCase {
         
         // check the evaluation score is what we expect
         let daytimeEvaluation = imageQualityEvaluator.evaluate(frame: daytimeFrame)
-        XCTAssertEqual(daytimeEvaluation.score, 0.60582, accuracy: 0.00001)
+        XCTAssertEqual(daytimeEvaluation.score, 0.76154, accuracy: 0.00001)
         
         // create a mock nighttime AR session and get a test frame
         let nighttimeSession = MockARSession(videoName: "parking-nighttime")
@@ -106,6 +106,6 @@ class SDKImageQualityEvaluatorTests: XCTestCase {
         
         // check the evaluation score is what we expect
         let nighttimeEvaluation = imageQualityEvaluator.evaluate(frame: nighttimeFrame)
-        XCTAssertEqual(nighttimeEvaluation.score, 0.65518, accuracy: 0.00001)
+        XCTAssertEqual(nighttimeEvaluation.score, 0.83077, accuracy: 0.00001)
     }
 }

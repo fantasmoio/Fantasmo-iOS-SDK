@@ -20,8 +20,8 @@ class FMImageQualityEvaluator {
         case failedToCreateModel
         case failedToCreateInputArray
         case failedToResizePixelBuffer
-        case noPrediction
         case invalidFeatureValue
+        case noPrediction
     }
 
     /// Factory constructor, returns the CoreML evaluator if supported
@@ -65,7 +65,7 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     private let ciContext: CIContext
     
     /// Reusable CIFilter used to resize source pixel buffers.
-    private let ciResizeFilter: CIFilter
+    private let ciResizeFilter: CIFilter?
 
     /// The version string of the ML model instance, or nil if failed to load.
     private(set) var modelVersion: String?
@@ -85,22 +85,14 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     }
     
     init() {
-        // Create a reusable CIContext for resizing pixel buffers
+        // Create a reusable filter and context for resizing pixel buffers
+        ciResizeFilter = CIFilter(name: "CIBicubicScaleTransform")
         if let _ = MTLCreateSystemDefaultDevice() {
             // Use Metal if supported
             ciContext = CIContext(options: [.useSoftwareRenderer: false])
         } else {
-            // Otherwise use default options
+            // Otherwise use default options, this is for github workflows
             ciContext = CIContext()
-        }
-        
-        // Create a reusable CIFilter for resizing source pixel buffers
-        if let bicubicResizeFilter = CIFilter(name: "CIBicubicScaleTransform") {
-            // Use bicubic if supported
-            ciResizeFilter = bicubicResizeFilter
-        } else {
-            // Should never happen on iOS 13...
-            ciResizeFilter = CIFilter()
         }
         
         let fileManager = FileManager.default
@@ -132,6 +124,11 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     }
     
     func makeResizedPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> UnsafeMutablePointer<UInt8>? {
+        guard let ciResizeFilter = ciResizeFilter else {
+            // this should never happen, bicubic resize is available since iOS 13.0
+            return nil
+        }
+        
         let targetSize = CGSize(width: resizedPixelBufferWidth, height: resizedPixelBufferHeight)
         let originalSize = CGSize(width: CVPixelBufferGetWidth(pixelBuffer), height: CVPixelBufferGetHeight(pixelBuffer))
         let inputScale = targetSize.height / originalSize.height
@@ -141,6 +138,7 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
         ciResizeFilter.setValue(ciImage, forKey: kCIInputImageKey)
         ciResizeFilter.setValue(inputScale, forKey: kCIInputScaleKey)
         ciResizeFilter.setValue(inputAspectRatio, forKey: kCIInputAspectRatioKey)
+        
         guard let outputImage = ciResizeFilter.outputImage else {
             return nil
         }

@@ -27,7 +27,7 @@ class MockData {
             return nil
         }
         let resolution = CGSize(width: image.size.width * image.scale, height: image.size.height * image.scale)
-        return ImageEncoder.Image(data: jpegData, resolution: resolution, originalResolution: resolution)
+        return ImageEncoder.Image(data: jpegData, resolution: resolution, orientation: image.imageOrientation, originalResolution: resolution)
     }
 
     /// Generate a simulated localization query params from a known location.

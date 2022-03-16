@@ -374,7 +374,7 @@ class FMApi {
             return MockData.encodedImage(request)
         }
 
-        let encodedImage = imageEncoder.encodedImage(from: frame)
+        let encodedImage = imageEncoder.encodedImage(frame: frame)
         return encodedImage
     }
     

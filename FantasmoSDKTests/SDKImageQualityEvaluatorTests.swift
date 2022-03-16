@@ -6,95 +6,106 @@
 //
 
 import XCTest
+import CoreML
 @testable import FantasmoSDK
 
 
 class SDKImageQualityEvaluatorTests: XCTestCase {
-
-    func testImageQualityDaytimeScore() throws {
-        // get an instance of our CoreML evaluator
+    
+    let rgbMean: (Float, Float, Float) = (0.485, 0.456, 0.406)
+    let rgbStdDev: (Float, Float, Float) = (0.229, 0.224, 0.225)
+    
+    func testCreatesMLInput() throws {
+        // create a new evaluator
         let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)
-        // create a mock daytime session
-        let daytimeSession = MockARSession(videoName: "parking-daytime")
-        // evaluate the first frame
-        let daytimeFrame = try daytimeSession.getNextFrame()
-        let daytimeEvaluation = imageQualityEvaluator.evaluate(frame: daytimeFrame)
-        // check the result is close enough to the expected value
-        XCTAssertEqual(daytimeEvaluation.score, 0.42355442, accuracy: 0.0001)
+        
+        // specify that we're working with portrait oriented frames
+        imageQualityEvaluator.sourcePixelBuffersAreRotated = false
+        
+        // create a test portrait frame
+        let portraitImage = TestUtils.getTestImage("iqe-test-frame")
+        let portraitPixelBuffer = try XCTUnwrap(portraitImage?.pixelBuffer())
+        
+        // resize the test frame
+        let resizedPixelBuffer = try XCTUnwrap(imageQualityEvaluator.makeResizedPixelBuffer(portraitPixelBuffer))
+        
+        // create and populate an ml input array from resized pixel buffer
+        let mlInputArray = try XCTUnwrap(imageQualityEvaluator.makeInputArray())
+        imageQualityEvaluator.populateInputArray(mlInputArray, from: resizedPixelBuffer)
+        
+        // check the first input element is a single red pixel
+        XCTAssertEqual(mlInputArray[[0, 0, 0, 0]] as? Float, (1.0 - rgbMean.0) / rgbStdDev.0)
+        XCTAssertEqual(mlInputArray[[0, 1, 0, 0]] as? Float, (0.0 - rgbMean.1) / rgbStdDev.1)
+        XCTAssertEqual(mlInputArray[[0, 2, 0, 0]] as? Float, (0.0 - rgbMean.2) / rgbStdDev.2)
+        
+        // check the last input element is a single green pixel
+        XCTAssertEqual(mlInputArray[[0, 0, 319, 239]] as? Float, (0.0 - rgbMean.0) / rgbStdDev.0)
+        XCTAssertEqual(mlInputArray[[0, 1, 319, 239]] as? Float, (1.0 - rgbMean.1) / rgbStdDev.1)
+        XCTAssertEqual(mlInputArray[[0, 2, 319, 239]] as? Float, (0.0 - rgbMean.2) / rgbStdDev.2)
     }
-
-    func testImageQualityNighttimeScore() throws {
-        // get an instance of our CoreML evaluator
+        
+    func testCreatesMLInputFromRotatedFrame() throws {
+        // create a new evaluator
         let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)
-        // create a mock nighttime session
-        let nighttimeSession = MockARSession(videoName: "parking-nighttime")
-        // evaluate the first frame
-        let nighttimeFrame = try nighttimeSession.getNextFrame()
-        let nighttimeEvaluation = imageQualityEvaluator.evaluate(frame: nighttimeFrame)
-        // check the result is close enough to the expected value
-        XCTAssertEqual(nighttimeEvaluation.score, 0.74498034, accuracy: 0.0001)
+        
+        // specify that we're working with frames rotated 90° to the left, this simulates ARKit frames
+        imageQualityEvaluator.sourcePixelBuffersAreRotated = true
+        
+        // create a test frame rotated 90° to the left
+        let rotatedImage = TestUtils.getTestImage("iqe-test-frame-rotated")
+        let rotatedPixelBuffer = try XCTUnwrap(rotatedImage?.pixelBuffer())
+        
+        // resize the test frame
+        let resizedPixelBuffer = try XCTUnwrap(imageQualityEvaluator.makeResizedPixelBuffer(rotatedPixelBuffer))
+        
+        // create and populate an ml input array from resized pixel buffer
+        let mlInputArray = try XCTUnwrap(imageQualityEvaluator.makeInputArray())
+        imageQualityEvaluator.populateInputArray(mlInputArray, from: resizedPixelBuffer)
+        
+        // check the first input element is a single red pixel
+        XCTAssertEqual(mlInputArray[[0, 0, 0, 0]] as? Float, (1.0 - rgbMean.0) / rgbStdDev.0)
+        XCTAssertEqual(mlInputArray[[0, 1, 0, 0]] as? Float, (0.0 - rgbMean.1) / rgbStdDev.1)
+        XCTAssertEqual(mlInputArray[[0, 2, 0, 0]] as? Float, (0.0 - rgbMean.2) / rgbStdDev.2)
+        
+        // check the last input element is a single green pixel
+        XCTAssertEqual(mlInputArray[[0, 0, 319, 239]] as? Float, (0.0 - rgbMean.0) / rgbStdDev.0)
+        XCTAssertEqual(mlInputArray[[0, 1, 319, 239]] as? Float, (1.0 - rgbMean.1) / rgbStdDev.1)
+        XCTAssertEqual(mlInputArray[[0, 2, 319, 239]] as? Float, (0.0 - rgbMean.2) / rgbStdDev.2)
     }
     
-    func testImageQualityEvaluator() throws {
-        // check factory constructor produces the CoreML evaluator
+    func testResizeSettings() throws {
+        // create a new evaluator
         let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)
+
+        // check default resize settings
+        XCTAssertTrue(imageQualityEvaluator.sourcePixelBuffersAreRotated)
+        XCTAssertEqual(imageQualityEvaluator.resizedPixelBufferWidth, 320)
+        XCTAssertEqual(imageQualityEvaluator.resizedPixelBufferHeight, 240)
         
-        // create a mock daytime session and get a test frame
+        // check resize dimensions are flipped when working with portrait frames
+        imageQualityEvaluator.sourcePixelBuffersAreRotated = false
+        XCTAssertEqual(imageQualityEvaluator.resizedPixelBufferWidth, 240)
+        XCTAssertEqual(imageQualityEvaluator.resizedPixelBufferHeight, 320)
+    }
+    
+    func testExpectedImageQualityScores() throws {
+        // create a new evaluator
+        let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)
+
+        // create a mock daytime AR session and get a test frame
         let daytimeSession = MockARSession(videoName: "parking-daytime")
         let daytimeFrame = try daytimeSession.getNextFrame()
         
-        // perform image quality evaluation on a daytime frame
+        // check the evaluation score is what we expect
         let daytimeEvaluation = imageQualityEvaluator.evaluate(frame: daytimeFrame)
+        XCTAssertEqual(daytimeEvaluation.score, 0.60582, accuracy: 0.00001)
         
-        // check that it returned a valid evaluation
-        XCTAssertEqual(daytimeEvaluation.type, .imageQuality)
-        XCTAssertGreaterThan(daytimeEvaluation.score, 0.0)
-        XCTAssertLessThan(daytimeEvaluation.score, 1.0)
-
-        // check the evaluation contains userInfo with model version and no error message
-        let userInfo = try XCTUnwrap(daytimeEvaluation.userInfo)
-        XCTAssertEqual(userInfo[FMImageQualityEvaluator.versionUserInfoKey], imageQualityEvaluator.modelVersion)
-        XCTAssertTrue(userInfo[FMImageQualityEvaluator.errorUserInfoKey] == nil)
-        
-        // check evaluating the same frame again produces the same score
-        let duplicateEvaluation = imageQualityEvaluator.evaluate(frame: daytimeFrame)
-        XCTAssertEqual(duplicateEvaluation.score, daytimeEvaluation.score)
-        
-        // create a mock nighttime session and get a test frame
+        // create a mock nighttime AR session and get a test frame
         let nighttimeSession = MockARSession(videoName: "parking-nighttime")
         let nighttimeFrame = try nighttimeSession.getNextFrame()
         
-        // perform image quality evaluation on a daytime frame
+        // check the evaluation score is what we expect
         let nighttimeEvaluation = imageQualityEvaluator.evaluate(frame: nighttimeFrame)
-        
-        // check that it returned a valid evaluation
-        XCTAssertEqual(nighttimeEvaluation.type, .imageQuality)
-        XCTAssertGreaterThan(nighttimeEvaluation.score, 0.0)
-        XCTAssertLessThan(nighttimeEvaluation.score, 1.0)
-        
-        // check that the two scores are different
-        XCTAssertNotEqual(daytimeEvaluation.score, nighttimeEvaluation.score)
-    }
-    
-    func testImageQualityEvaluatorResizesPixelBuffer() throws {
-        // check factory constructor produces the CoreML evaluator
-        let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)
-        
-        // create a mock session and get a test frame
-        let mockSession = MockARSession(videoName: "parking-daytime")
-        let frame = try mockSession.getNextFrame()
-        
-        let resizedPixelBufferContext = imageQualityEvaluator.makeResizedPixelBuffer(frame.capturedImage)
-        
-        // Check the returned context has a buffer pointer
-        XCTAssertNotNil(resizedPixelBufferContext?.data)
-        
-        let cgImage = resizedPixelBufferContext?.makeImage()
-        XCTAssertNotNil(cgImage)
-        
-        // Check we can create an image from the buffer and that it's the correct size
-        let resizedImage = UIImage(cgImage: try XCTUnwrap(cgImage))
-        XCTAssertEqual(resizedImage.size.width, 320)
-        XCTAssertEqual(resizedImage.size.height, 240)
+        XCTAssertEqual(nighttimeEvaluation.score, 0.65518, accuracy: 0.00001)
     }
 }

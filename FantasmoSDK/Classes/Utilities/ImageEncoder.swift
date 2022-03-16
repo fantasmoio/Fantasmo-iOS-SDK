@@ -16,6 +16,7 @@ class ImageEncoder {
     struct Image {
         var data: Data
         var resolution: CGSize
+        var orientation: UIImage.Orientation
         var originalResolution: CGSize
     }
 
@@ -33,16 +34,20 @@ class ImageEncoder {
         self.compressionQuality = compressionQuality
     }
     
-    func encodedImage(from frame: FMFrame) -> ImageEncoder.Image? {
+    func encodedImage(frame: FMFrame) -> ImageEncoder.Image? {
+        return encodedImage(pixelBuffer: frame.enhancedImageOrCapturedImage, deviceOrientation: frame.deviceOrientation)
+    }
+    
+    func encodedImage(pixelBuffer: CVPixelBuffer, deviceOrientation: UIDeviceOrientation) -> ImageEncoder.Image? {
         var cgImage: CGImage?
-        VTCreateCGImageFromCVPixelBuffer(frame.enhancedImageOrCapturedImage, options: nil, imageOut: &cgImage)
+        VTCreateCGImageFromCVPixelBuffer(pixelBuffer, options: nil, imageOut: &cgImage)
         guard let cgImage = cgImage else {
             log.error("error creating cgImage")
             return nil
         }
         
         let imageOrientation: UIImage.Orientation
-        switch frame.deviceOrientation {
+        switch deviceOrientation {
         case .landscapeLeft:
             imageOrientation = .up
         case .landscapeRight:
@@ -65,7 +70,7 @@ class ImageEncoder {
                 log.error("error encoding jpeg")
                 return nil
             }
-            return Image(data: jpegData, resolution: image.size, originalResolution: image.size)
+            return Image(data: jpegData, resolution: image.size, orientation: imageOrientation, originalResolution: image.size)
         }
         
         // We need to shrink the image, calculate the new size keeping the aspect ratio.
@@ -97,6 +102,6 @@ class ImageEncoder {
             return nil
         }
         
-        return Image(data: jpegData, resolution: newSize, originalResolution: image.size)
+        return Image(data: jpegData, resolution: newSize, orientation: imageOrientation, originalResolution: image.size)
     }
 }

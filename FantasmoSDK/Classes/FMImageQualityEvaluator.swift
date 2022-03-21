@@ -12,8 +12,8 @@ import VideoToolbox
 
 class FMImageQualityEvaluator {
 
-    static let versionUserInfoKey = "imageQualityModelVersion"
-    static let errorUserInfoKey = "imageQualityError"
+    static let versionUserInfoKey = "modelVersion"
+    static let errorUserInfoKey = "error"
     
     enum Error: String {
         case notSupported

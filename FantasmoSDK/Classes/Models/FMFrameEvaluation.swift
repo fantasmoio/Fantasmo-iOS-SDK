@@ -19,13 +19,16 @@ struct FMFrameEvaluation: Encodable {
     public enum CodingKeys: String, CodingKey {
         case type
         case score
-        case userInfo
+        case imageQualityUserInfo
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(type.rawValue, forKey: .type)
         try container.encode(score, forKey: .score)
-        try container.encode(userInfo, forKey: .userInfo)
+        switch type {
+        case .imageQuality:
+            try container.encode(userInfo, forKey: .imageQualityUserInfo)
+        }
     }
 }

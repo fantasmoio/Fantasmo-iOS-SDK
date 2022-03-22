@@ -8,15 +8,18 @@
 import Foundation
 import CoreLocation
 
+
 struct FMImageEnhancementInfo: Codable {
     var gamma: Float
 }
+
 
 struct FMRotationSpread: Codable {
     var pitch: Float
     var yaw: Float
     var roll: Float
 }
+
 
 struct FMLegacyFrameEvents {
     var excessiveTilt: Int
@@ -27,10 +30,12 @@ struct FMLegacyFrameEvents {
     var total: Int
 }
 
+
 struct FMFrameResolution: Codable {
     var height: Int
     var width: Int
 }
+
 
 struct FMLocalizationAnalytics {
     var appSessionId: String?
@@ -44,7 +49,8 @@ struct FMLocalizationAnalytics {
     var remoteConfigId: String
 }
 
-struct FMSessionFrameEvaluations {
+
+struct FMSessionFrameEvaluations: Encodable {
     let count: Int
     let type: FMFrameEvaluationType
     let highestScore: Float
@@ -52,14 +58,37 @@ struct FMSessionFrameEvaluations {
     let averageScore: Float
     let averageTime: TimeInterval
     let userInfo: [String: String]?
+    
+    public enum CodingKeys: String, CodingKey {
+        case count
+        case type
+        case highestScore
+        case lowestScore
+        case averageScore
+        case averageTime
+        case imageQualityUserInfo
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(count, forKey: .count)
+        try container.encode(type.rawValue, forKey: .type)
+        try container.encode(highestScore, forKey: .highestScore)
+        try container.encode(lowestScore, forKey: .lowestScore)
+        try container.encode(averageScore, forKey: .averageScore)
+        try container.encode(averageTime, forKey: .averageTime)
+        if type == .imageQuality, let userInfo = userInfo {
+            try container.encode(userInfo, forKey: .imageQualityUserInfo)
+        }
+    }
 }
 
-struct FMSessionFrameRejections {
+struct FMSessionFrameRejections: Encodable {
     let count: Int
     let rejectionReasons: [FMFrameRejectionReason: Int]
 }
 
-struct FMSessionAnalytics {
+struct FMSessionAnalytics: Encodable {
     let localizationSessionId: String
     let appSessionId: String
     let appSessionTags: [String]

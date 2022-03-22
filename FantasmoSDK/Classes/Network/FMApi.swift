@@ -18,42 +18,6 @@ struct FMLocalizationRequest {
     var analytics: FMLocalizationAnalytics
 }
 
-struct FMLocalizationAnalytics {
-    var appSessionId: String?
-    var appSessionTags: [String]?
-    var localizationSessionId: String?
-    var legacyFrameEvents: FMLegacyFrameEvents
-    var rotationSpread: FMRotationSpread
-    var totalDistance: Float
-    var magneticField: MotionManager.MagneticField?
-    var imageEnhancementInfo: FMImageEnhancementInfo?
-    var remoteConfigId: String
-}
-
-struct FMImageEnhancementInfo: Codable {
-    var gamma: Float
-}
-
-struct FMRotationSpread: Codable {
-    var pitch: Float
-    var yaw: Float
-    var roll: Float
-}
-
-struct FMLegacyFrameEvents {
-    var excessiveTilt: Int
-    var excessiveBlur: Int
-    var excessiveMotion: Int
-    var insufficientFeatures: Int
-    var lossOfTracking: Int
-    var total: Int
-}
-
-struct FMFrameResolution: Codable {
-    var height: Int
-    var width: Int
-}
-
 class FMApi {
     
     static let shared = FMApi()

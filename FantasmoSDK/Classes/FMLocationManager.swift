@@ -318,7 +318,7 @@ class FMLocationManager: NSObject {
         )
         let frameRejections = FMSessionFrameRejections(
             count: frameEvaluationStatistics.totalRejections,
-            rejectionReasons: frameEvaluationStatistics.rejectionReasons
+            rejectionReasons: frameEvaluationStatistics.rejectionReasons.compactMapValues { $0 > 0 ? $0 : nil }
         )
         let sessionAnalytics = FMSessionAnalytics(
             localizationSessionId: localizationSessionId ?? "",

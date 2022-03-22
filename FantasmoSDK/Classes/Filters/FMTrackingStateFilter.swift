@@ -16,18 +16,18 @@ struct FMTrackingStateFilter: FMFrameFilter {
         case .limited(let reasonOfLimitedState):
             switch reasonOfLimitedState {
             case .initializing:
-                return .rejected(reason: .movingTooLittle)
+                return .rejected(reason: .trackingStateInitializing)
             case .relocalizing:
-                return .rejected(reason: .movingTooLittle)
+                return .rejected(reason: .trackingStateRelocalizing)
             case .excessiveMotion:
-                return .rejected(reason: .movingTooFast)
+                return .rejected(reason: .trackingStateExcessiveMotion)
             case .insufficientFeatures:
-                return .rejected(reason: .insufficientFeatures)
+                return .rejected(reason: .trackingStateInsufficentFeatures)
             default:
                 return .accepted
             }
         case .notAvailable:
-            return .rejected(reason: .movingTooLittle)
+            return .rejected(reason: .trackingStateNotAvailable)
         }
     }
     

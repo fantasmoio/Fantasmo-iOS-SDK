@@ -22,7 +22,7 @@ struct FMLocalizationAnalytics {
     var appSessionId: String?
     var appSessionTags: [String]?
     var localizationSessionId: String?
-    var frameEvents: FMFrameEvents
+    var legacyFrameEvents: FMLegacyFrameEvents
     var rotationSpread: FMRotationSpread
     var totalDistance: Float
     var magneticField: MotionManager.MagneticField?
@@ -40,7 +40,7 @@ struct FMRotationSpread: Codable {
     var roll: Float
 }
 
-struct FMFrameEvents {
+struct FMLegacyFrameEvents {
     var excessiveTilt: Int
     var excessiveBlur: Int
     var excessiveMotion: Int
@@ -291,7 +291,7 @@ class FMApi {
         
         let location = request.approximateLocation
 
-        let events = request.analytics.frameEvents
+        let events = request.analytics.legacyFrameEvents
         let frameEventCounts = [
             "excessiveTilt": events.excessiveTilt,
             "excessiveBlur": events.excessiveBlur,

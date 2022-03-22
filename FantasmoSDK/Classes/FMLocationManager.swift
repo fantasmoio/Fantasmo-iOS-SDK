@@ -206,14 +206,17 @@ class FMLocationManager: NSObject {
         let openCVRelativeAnchorPose = openCVRelativeAnchorTransform.map { FMPose($0) }
 
         // Set up parameters
-
-        let frameEvents = FMFrameEvents(
+        
+        let legacyFrameEvents = FMLegacyFrameEvents(
             excessiveTilt:
-                (frameEvaluationStatistics.totalRejections[.pitchTooHigh] ?? 0) +
-                (frameEvaluationStatistics.totalRejections[.pitchTooLow] ?? 0),
+                (frameEvaluationStatistics.rejectionReasons[.pitchTooHigh] ?? 0) +
+                (frameEvaluationStatistics.rejectionReasons[.pitchTooLow] ?? 0),
             excessiveBlur: 0, // blur filter no longer in use, server still requires this param
-            excessiveMotion: frameEvaluationStatistics.totalRejections[.movingTooFast] ?? 0,
-            insufficientFeatures: frameEvaluationStatistics.totalRejections[.insufficientFeatures] ?? 0,
+            excessiveMotion:
+                (frameEvaluationStatistics.rejectionReasons[.movingTooFast] ?? 0) +
+                (frameEvaluationStatistics.rejectionReasons[.trackingStateExcessiveMotion] ?? 0),
+            insufficientFeatures:
+                frameEvaluationStatistics.rejectionReasons[.trackingStateInsufficentFeatures] ?? 0,
             lossOfTracking:
                 accumulatedARKitInfo.trackingStateStatistics.framesWithNotAvailableTracking +
                 accumulatedARKitInfo.trackingStateStatistics.framesWithLimitedTrackingState,
@@ -237,7 +240,7 @@ class FMLocationManager: NSObject {
             appSessionId: appSessionId,
             appSessionTags: appSessionTags,
             localizationSessionId: localizationSessionId,
-            frameEvents: frameEvents,
+            legacyFrameEvents: legacyFrameEvents,
             rotationSpread: rotationSpread,
             totalDistance: accumulatedARKitInfo.totalTranslation,
             magneticField: motionManager.magneticField,
@@ -349,25 +352,19 @@ extension FMLocationManager : FMFrameEvaluatorChainDelegate {
         delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
     }
     
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason) {
-        // frame was rejected by a frame filter, update session analytics
-        frameEvaluationStatistics.addFilterRejection(reason)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameRejectionReason) {
+        // frame was rejected by a filter, update session analytics
+        frameEvaluationStatistics.addRejection(reason, filter: filter)
         delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
         
         // send it to the behavior requester to suggest a remedy to the user
         behaviorRequester?.processFilterRejection(reason: reason)
     }
-        
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float) {
-        // new frame was evaluated but its score was below the current best score
-    }
     
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float) {
-        // new frame was evaluated but its score was below the min score threshold
-    }
-        
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame) {
-        // frame was rejected because the frame evaluator was busy evaluating another frame
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, reason: FMFrameRejectionReason) {
+        // frame was rejected, update session analytics
+        frameEvaluationStatistics.addRejection(reason)
+        delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
     }
 }
 

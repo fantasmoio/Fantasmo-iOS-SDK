@@ -33,13 +33,13 @@ class FMImageQualityEvaluator {
         }
     }
     
-    static func makeEvaluation(score: Float, modelVersion: String? = nil) -> FMFrameEvaluation {
-        return FMFrameEvaluation(type: .imageQuality, score: score, userInfo: [versionUserInfoKey: modelVersion])
+    static func makeEvaluation(score: Float, time: TimeInterval, modelVersion: String? = nil) -> FMFrameEvaluation {
+        return FMFrameEvaluation(type: .imageQuality, score: score, time: time, userInfo: [versionUserInfoKey: modelVersion])
     }
     
     static func makeEvaluation(error: Error, modelVersion: String? = nil) -> FMFrameEvaluation {
         // We use a score of 1.0 so the frame is always accepted
-        return FMFrameEvaluation(type: .imageQuality, score: 1.0, userInfo: [versionUserInfoKey: modelVersion, errorUserInfoKey: error.rawValue])
+        return FMFrameEvaluation(type: .imageQuality, score: 1, time: 0, userInfo: [versionUserInfoKey: modelVersion, errorUserInfoKey: error.rawValue])
     }
 }
 
@@ -127,6 +127,8 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
             return FMImageQualityEvaluator.makeEvaluation(error: .failedToCreateInputArray, modelVersion: modelVersion)
         }
         
+        let evaluationStart = Date()
+        
         // Resize the pixel buffer down to the expected input size, use the enhanced image if available
         guard let resizedPixelBufferContext = makeResizedPixelBuffer(frame.enhancedImageOrCapturedImage),
               let resizedPixelBuffer = UnsafePointer<UInt8>(OpaquePointer(resizedPixelBufferContext.data))
@@ -186,6 +188,8 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
         let y2Exp = exp(Float32(truncating: featureValue[1]))
         let score = 1.0 / (1.0 + y2Exp / y1Exp)
         
-        return FMImageQualityEvaluator.makeEvaluation(score: score, modelVersion: modelVersion)
+        let evaluationTime = Date().timeIntervalSince(evaluationStart)
+        
+        return FMImageQualityEvaluator.makeEvaluation(score: score, time: evaluationTime, modelVersion: modelVersion)
     }
 }

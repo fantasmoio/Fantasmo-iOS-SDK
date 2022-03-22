@@ -7,32 +7,10 @@
 
 import ARKit
 
-enum FMFrameFilterRejectionReason: String, CaseIterable {
-    case pitchTooLow
-    case pitchTooHigh
-    case movingTooFast
-    case movingTooLittle
-    case insufficientFeatures
-    
-    func mapToBehaviorRequest() -> FMBehaviorRequest {
-        switch self {
-        case .pitchTooLow:
-            return .tiltUp
-        case .pitchTooHigh:
-            return.tiltDown
-        case .movingTooFast:
-            return .panSlowly
-        case .movingTooLittle:
-            return .panAround
-        case .insufficientFeatures:
-            return .panAround
-        }
-    }
-}
 
 enum FMFrameFilterResult: Equatable {
     case accepted
-    case rejected(reason: FMFrameFilterRejectionReason)
+    case rejected(reason: FMFrameRejectionReason)
 }
 
 protocol FMFrameFilter {

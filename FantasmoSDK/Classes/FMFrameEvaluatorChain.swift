@@ -9,11 +9,9 @@ import Foundation
 
 protocol FMFrameEvaluatorChainDelegate: AnyObject {
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didStartWindow startDate: Date)
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, whileEvaluatingOtherFrame otherFrame: FMFrame)
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameFilterRejectionReason)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, reason: FMFrameRejectionReason)
+    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didRejectFrame frame: FMFrame, withFilter filter: FMFrameFilter, reason: FMFrameRejectionReason)
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateNewBestFrame newBestFrame: FMFrame)
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowCurrentBestScore currentBestScore: Float)
-    func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didEvaluateFrame frame: FMFrame, belowMinScoreThreshold minScoreThreshold: Float)
     func frameEvaluatorChain(_ frameEvaluatorChain: FMFrameEvaluatorChain, didFinishEvaluatingFrame frame: FMFrame)
 }
 
@@ -104,8 +102,8 @@ class FMFrameEvaluatorChain {
         }
                 
         // if we're already evaluating a frame, reject it
-        if let evaluatingFrame = evaluatingFrame {
-            delegate?.frameEvaluatorChain(self, didRejectFrame: frame, whileEvaluatingOtherFrame: evaluatingFrame)
+        if evaluatingFrame != nil {
+            delegate?.frameEvaluatorChain(self, didRejectFrame: frame, reason: .otherEvaluationInProgress)
             return
         }
                 
@@ -153,11 +151,11 @@ class FMFrameEvaluatorChain {
         
         if evaluation.score < minScoreThreshold {
             // score is below the min threshold
-            delegate?.frameEvaluatorChain(self, didEvaluateFrame: frame, belowMinScoreThreshold: minScoreThreshold)
+            delegate?.frameEvaluatorChain(self, didRejectFrame: frame, reason: .scoreBelowMinThreshold)
         }
         else if let currentBestScore = currentBestFrame?.evaluation?.score, currentBestScore > evaluation.score {
             // score is below the current best score
-            delegate?.frameEvaluatorChain(self, didEvaluateFrame: frame, belowCurrentBestScore: currentBestScore)
+            delegate?.frameEvaluatorChain(self, didRejectFrame: frame, reason: .scoreBelowCurrentBest)
         }
         else {
             // score is the new best, update our current best frame

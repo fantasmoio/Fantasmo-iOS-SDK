@@ -97,6 +97,9 @@ class FMLocationManager: NSObject {
     // Fusion
     private var locationFuser = LocationFuser()
     
+    // Tracks device motion
+    private let motionManager = MotionManager()
+    
     /// States whether the client code using this manager set up connection with the manager.
     private var isConnected = false
 
@@ -106,10 +109,13 @@ class FMLocationManager: NSObject {
     private var appSessionId: String? // provided by client
     private var appSessionTags: [String]? // provided by client
     private var localizationSessionId: String? // created by SDK
-    private let motionManager = MotionManager()
-    
-    // MARK: - Lifecycle
+    private var startTime = Date() // resets on `startUpdatingLocation`
+    private var totalFramesUploaded: Int = 0 // total calls to `localize`
+    private var locationResultCount: Int = 0 // total successful results from `localize`
+    private var errorResultCount: Int = 0 // total error results from `localize`
         
+    // MARK: - Lifecycle
+    
     /// Connect to the location service.
     ///
     /// - Parameters:
@@ -155,7 +161,12 @@ class FMLocationManager: NSObject {
         behaviorRequester?.restart()
         motionManager.restart()
         locationFuser.reset()
-
+        
+        startTime = Date()
+        totalFramesUploaded = 0
+        locationResultCount = 0
+        errorResultCount = 0
+        
         state = .localizing
         
         frameEvaluatorChain.delegate = self
@@ -271,6 +282,7 @@ class FMLocationManager: NSObject {
             let result = self.locationFuser.locationFusedWithNew(location: location, zones: zones)
             self.lastResult = result
             self.activeUploads.removeAll { $0 === frame }
+            self.locationResultCount += 1
             self.delegate?.locationManager(didUpdateLocation: result)
         }
         
@@ -280,16 +292,64 @@ class FMLocationManager: NSObject {
             
             self.errors.append(error)
             self.activeUploads.removeAll { $0 === frame }
+            self.errorResultCount += 1
             self.delegate?.locationManager(didFailWithError: error, errorMetadata: nil)
         }
         
         activeUploads.append(frame)
+        totalFramesUploaded += 1
         delegate?.locationManager(didBeginUpload: frame)
         
         FMApi.shared.sendLocalizationRequest(frame: frame,
                                              request: localizationRequest,
                                              completion: localizeCompletion,
                                              error: localizeError)
+    }
+    
+    public func sendSessionAnalytics() {
+        let frameEvaluations = FMSessionFrameEvaluations(
+            count: frameEvaluationStatistics.totalEvaluations,
+            type: frameEvaluationStatistics.type,
+            highestScore: frameEvaluationStatistics.highestScore ?? 0,
+            lowestScore: frameEvaluationStatistics.lowestScore ?? 0,
+            averageScore: frameEvaluationStatistics.averageEvaluationScore,
+            averageTime: frameEvaluationStatistics.averageEvaluationTime,
+            userInfo: frameEvaluatorChain.frameEvaluator.userInfo
+        )
+        let frameRejections = FMSessionFrameRejections(
+            count: frameEvaluationStatistics.totalRejections,
+            rejectionReasons: frameEvaluationStatistics.rejectionReasons
+        )
+        let sessionAnalytics = FMSessionAnalytics(
+            localizationSessionId: localizationSessionId ?? "",
+            appSessionId: appSessionId ?? "",
+            appSessionTags: appSessionTags ?? [],
+            totalFrames: accumulatedARKitInfo.elapsedFrames,
+            totalFramesUploaded: totalFramesUploaded,
+            frameEvaluations: frameEvaluations,
+            frameRejections: frameRejections,
+            locationResultCount: locationResultCount,
+            errorResultCount: errorResultCount,
+            totalTranslation: accumulatedARKitInfo.totalTranslation,
+            rotationSpread: FMRotationSpread(
+                pitch: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.pitch.spread,
+                yaw: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.yaw.spread,
+                roll: accumulatedARKitInfo.eulerAngleSpreadsAccumulator.roll.spread
+            ),
+            timestamp: Date().timeIntervalSince1970,
+            totalDuration: Date().timeIntervalSince(startTime),
+            location: approximateLocation,
+            remoteConfigId: RemoteConfig.config().remoteConfigId,
+            udid: UIDevice.current.identifierForVendor?.uuidString ?? "",
+            deviceModel: UIDevice.current.identifier,
+            deviceOs: UIDevice.current.correctedSystemName,
+            deviceOsVersion: UIDevice.current.correctedSystemName,
+            sdkVersion: FMSDKInfo.fullVersion,
+            hostAppBundleIdentifier: FMSDKInfo.hostAppBundleIdentifier,
+            hostAppMarketingVersion: FMSDKInfo.hostAppMarketingVersion,
+            hostAppBuild: FMSDKInfo.hostAppBuild
+        )
+        print("sessionAnalytics: \(sessionAnalytics)")
     }
             
     // MARK: - Helpers

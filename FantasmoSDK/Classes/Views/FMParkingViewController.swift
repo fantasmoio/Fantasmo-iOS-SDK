@@ -385,6 +385,7 @@ public final class FMParkingViewController: UIViewController {
     deinit {
         fmLocationManager.unsetAnchor()
         fmLocationManager.stopUpdatingLocation()
+        fmLocationManager.sendSessionAnalytics()        
     }
 }
 

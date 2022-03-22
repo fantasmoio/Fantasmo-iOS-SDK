@@ -8,5 +8,6 @@
 import Foundation
 
 protocol FMFrameEvaluator: AnyObject {
+    var userInfo: [String: String]? { get }
     func evaluate(frame: FMFrame) -> FMFrameEvaluation
 }

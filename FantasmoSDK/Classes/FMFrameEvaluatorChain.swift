@@ -17,9 +17,9 @@ protocol FMFrameEvaluatorChainDelegate: AnyObject {
 
 class FMFrameEvaluatorChain {
     
-    private let frameEvaluator: FMFrameEvaluator
-
-    private let frameEvaluationQueue = DispatchQueue(label: "io.fantasmo.frameEvaluationQueue", qos: .userInteractive)
+    let frameEvaluator: FMFrameEvaluator
+    
+    let frameEvaluationQueue = DispatchQueue(label: "io.fantasmo.frameEvaluationQueue", qos: .userInteractive)
     
     private(set) var evaluatingFrame: FMFrame?
     

@@ -136,6 +136,7 @@ class FMFrameEvaluationStatistics {
         highestScore = nil
         lowestScore = nil
         sumOfAllScores = 0
+        totalEvaluationTime = 0
         totalEvaluations = 0
         rejectionReasons = [FMFrameRejectionReason: Int].init(initialValueForAllCases: 0)
     }

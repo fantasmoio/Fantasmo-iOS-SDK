@@ -37,8 +37,8 @@ class FMImageQualityEvaluatorNotSupported: FMFrameEvaluator {
 @available(iOS 13.0, *)
 class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     
-    private let modelVersionUserInfoKey = "modelVersion"
-    private let errorUserInfoKey = "error"
+    let modelVersionUserInfoKey = "modelVersion"
+    let errorUserInfoKey = "error"
     
     enum Error: String {
         case failedToCreateModel

@@ -301,7 +301,7 @@ class FMApi {
         var params: [String : String?] = [
             "intrinsics" : intrinsics.toJson(),
             "gravity" : pose.orientation.toJson(),
-            "capturedAt" : String(NSDate().timeIntervalSince1970 * 1000.0),
+            "capturedAt" : String(NSDate().timeIntervalSince1970),
             "uuid" : UUID().uuidString,
             
             "location": location.toJson(),

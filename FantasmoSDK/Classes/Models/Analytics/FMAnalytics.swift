@@ -50,6 +50,28 @@ struct FMLocalizationAnalytics {
 }
 
 
+struct FMImageQualityUserInfo: Encodable {
+    let modelVersion: String
+    let error: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case modelVersion
+        case error
+    }
+    
+    init(modelVersion: String? = nil, error: String? = nil) {
+        self.modelVersion = modelVersion ?? ""
+        self.error = error
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(modelVersion, forKey: .modelVersion)
+        try container.encodeIfPresent(error, forKey: .error)
+    }
+}
+
+
 struct FMSessionFrameEvaluations: Encodable {
     let count: Int
     let type: FMFrameEvaluationType
@@ -57,7 +79,7 @@ struct FMSessionFrameEvaluations: Encodable {
     let lowestScore: Float
     let averageScore: Float
     let averageTime: TimeInterval
-    let userInfo: [String: String]?
+    let imageQualityUserInfo: FMImageQualityUserInfo?
     
     enum CodingKeys: String, CodingKey {
         case count
@@ -77,11 +99,10 @@ struct FMSessionFrameEvaluations: Encodable {
         try container.encode(lowestScore, forKey: .lowestScore)
         try container.encode(averageScore, forKey: .averageScore)
         try container.encode(averageTime, forKey: .averageTime)
-        if type == .imageQuality, let userInfo = userInfo {
-            try container.encode(userInfo, forKey: .imageQualityUserInfo)
-        }
+        try container.encodeIfPresent(imageQualityUserInfo, forKey: .imageQualityUserInfo)
     }
 }
+
 
 struct FMSessionFrameRejections: Encodable {
     let count: Int

@@ -307,6 +307,10 @@ class FMLocationManager: NSObject {
     }
     
     public func sendSessionAnalytics() {
+        var imageQualityUserInfo: FMImageQualityUserInfo? = nil
+        if #available(iOS 13.0, *), let imageQualityEvaluator = (frameEvaluatorChain.frameEvaluator as? FMImageQualityEvaluatorCoreML) {
+            imageQualityUserInfo = FMImageQualityUserInfo(modelVersion: imageQualityEvaluator.modelVersion)
+        }
         let frameEvaluations = FMSessionFrameEvaluations(
             count: frameEvaluationStatistics.totalEvaluations,
             type: frameEvaluationStatistics.type,
@@ -314,14 +318,12 @@ class FMLocationManager: NSObject {
             lowestScore: frameEvaluationStatistics.lowestScore ?? 0,
             averageScore: frameEvaluationStatistics.averageEvaluationScore,
             averageTime: frameEvaluationStatistics.averageEvaluationTime,
-            userInfo: frameEvaluatorChain.frameEvaluator.userInfo
+            imageQualityUserInfo: imageQualityUserInfo
         )
-        
         let frameRejections = FMSessionFrameRejections(
             count: frameEvaluationStatistics.totalRejections,
             rejectionReasons: frameEvaluationStatistics.rejectionReasons.compactMapValues { $0 > 0 ? $0 : nil }
         )
-        
         let sessionAnalytics = FMSessionAnalytics(
             localizationSessionId: localizationSessionId ?? "",
             appSessionId: appSessionId ?? "",

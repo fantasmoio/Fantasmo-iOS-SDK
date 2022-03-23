@@ -24,21 +24,16 @@ class FMImageQualityEvaluator {
 
 /// Evaluator class for iOS versions that don't support CoreML
 class FMImageQualityEvaluatorNotSupported: FMFrameEvaluator {
-    
-    var userInfo: [String: String]? = nil
-    
     func evaluate(frame: FMFrame) -> FMFrameEvaluation {
-        // We use a score of 1.0 so the frame is always accepted
-        return FMFrameEvaluation(type: .imageQuality, score: 1, time: 0, userInfo: nil)
+        // Return with a score of 1.0 so the frame is always accepted
+        let imageQualityUserInfo = FMImageQualityUserInfo(error: "device not supported")
+        return FMFrameEvaluation(type: .imageQuality, score: 1, time: 0, imageQualityUserInfo: imageQualityUserInfo)
     }
 }
 
-
+/// CoreML image quality evaluator
 @available(iOS 13.0, *)
 class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
-    
-    let modelVersionUserInfoKey = "modelVersion"
-    let errorUserInfoKey = "error"
     
     enum Error: String {
         case failedToCreateModel
@@ -55,11 +50,7 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     private var isCheckingForUpdates: Bool = false
     
     public private(set) var modelVersion: String?
-    
-    var userInfo: [String: String]? {
-        return [modelVersionUserInfoKey: modelVersion ?? ""]
-    }
-    
+        
     init() {        
         let fileManager = FileManager.default
         let modelName = String(describing: ImageQualityModel.self)
@@ -191,14 +182,13 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     }
     
     func makeEvaluation(score: Float, time: TimeInterval) -> FMFrameEvaluation {
-        return FMFrameEvaluation(type: .imageQuality, score: score, time: time, userInfo: userInfo)
+        let imageQualityUserInfo = FMImageQualityUserInfo(modelVersion: modelVersion)
+        return FMFrameEvaluation(type: .imageQuality, score: score, time: time, imageQualityUserInfo: imageQualityUserInfo)
     }
     
     func makeEvaluation(error: Error) -> FMFrameEvaluation {
-        var evaluationUserInfo = self.userInfo ?? [:]
-        // Add the error to userInfo
-        evaluationUserInfo[errorUserInfoKey] = error.rawValue
         // Return with a score of 1.0 so the frame is always accepted
-        return FMFrameEvaluation(type: .imageQuality, score: 1, time: 0, userInfo: evaluationUserInfo)
+        let imageQualityUserInfo = FMImageQualityUserInfo(modelVersion: modelVersion, error: error.rawValue)
+        return FMFrameEvaluation(type: .imageQuality, score: 1, time: 0, imageQualityUserInfo: imageQualityUserInfo)
     }
 }

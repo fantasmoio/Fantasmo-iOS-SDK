@@ -51,16 +51,19 @@ class SDKFrameFilterTests: XCTestCase {
         let mockSession = MockARSession(videoName: "parking-daytime")
         
         let notAvailableFrame = try mockSession.getNextFrame(MockCamera(trackingState: .notAvailable))
-        XCTAssertEqual(filter.accepts(notAvailableFrame), .rejected(reason: .movingTooLittle))
+        XCTAssertEqual(filter.accepts(notAvailableFrame), .rejected(reason: .trackingStateNotAvailable))
 
         let initializingFrame = try mockSession.getNextFrame(MockCamera(trackingState: .limited(.initializing)))
-        XCTAssertEqual(filter.accepts(initializingFrame), .rejected(reason: .movingTooLittle))
+        XCTAssertEqual(filter.accepts(initializingFrame), .rejected(reason: .trackingStateInitializing))
 
+        let relocalizingFrame = try mockSession.getNextFrame(MockCamera(trackingState: .limited(.relocalizing)))
+        XCTAssertEqual(filter.accepts(relocalizingFrame), .rejected(reason: .trackingStateRelocalizing))
+        
         let excessiveMotionFrame = try mockSession.getNextFrame(MockCamera(trackingState: .limited(.excessiveMotion)))
-        XCTAssertEqual(filter.accepts(excessiveMotionFrame), .rejected(reason: .movingTooFast))
+        XCTAssertEqual(filter.accepts(excessiveMotionFrame), .rejected(reason: .trackingStateExcessiveMotion))
 
         let insufficientFeaturesFrame = try mockSession.getNextFrame(MockCamera(trackingState: .limited(.insufficientFeatures)))
-        XCTAssertEqual(filter.accepts(insufficientFeaturesFrame), .rejected(reason: .insufficientFeatures))
+        XCTAssertEqual(filter.accepts(insufficientFeaturesFrame), .rejected(reason: .trackingStateInsufficentFeatures))
 
         let normalFrame = try mockSession.getNextFrame(MockCamera(trackingState: .normal))
         XCTAssertEqual(filter.accepts(normalFrame), .accepted)

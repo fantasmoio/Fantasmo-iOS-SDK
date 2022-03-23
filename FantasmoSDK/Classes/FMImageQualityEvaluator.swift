@@ -11,19 +11,6 @@ import VideoToolbox
 
 
 class FMImageQualityEvaluator {
-
-    static let versionUserInfoKey = "imageQualityModelVersion"
-    static let errorUserInfoKey = "imageQualityError"
-    
-    enum Error: String {
-        case notSupported
-        case failedToCreateModel
-        case failedToCreateInputArray
-        case failedToResizePixelBuffer
-        case invalidFeatureValue
-        case noPrediction
-    }
-
     /// Factory constructor, returns the CoreML evaluator if supported
     static func makeEvaluator() -> FMFrameEvaluator {
         if #available(iOS 13.0, *) {
@@ -32,30 +19,30 @@ class FMImageQualityEvaluator {
             return FMImageQualityEvaluatorNotSupported()
         }
     }
-    
-    static func makeEvaluation(score: Float, modelVersion: String? = nil) -> FMFrameEvaluation {
-        return FMFrameEvaluation(type: .imageQuality, score: score, userInfo: [versionUserInfoKey: modelVersion])
-    }
-    
-    static func makeEvaluation(error: Error, modelVersion: String? = nil) -> FMFrameEvaluation {
-        // We use a score of 1.0 so the frame is always accepted
-        return FMFrameEvaluation(type: .imageQuality, score: 1.0, userInfo: [versionUserInfoKey: modelVersion, errorUserInfoKey: error.rawValue])
-    }
 }
 
 
 /// Evaluator class for iOS versions that don't support CoreML
 class FMImageQualityEvaluatorNotSupported: FMFrameEvaluator {
     func evaluate(frame: FMFrame) -> FMFrameEvaluation {
-        return FMImageQualityEvaluator.makeEvaluation(error: .notSupported)
+        // Return with a score of 1.0 so the frame is always accepted
+        let imageQualityUserInfo = FMImageQualityUserInfo(error: "device not supported")
+        return FMFrameEvaluation(type: .imageQuality, score: 1, time: 0, imageQualityUserInfo: imageQualityUserInfo)
     }
 }
 
-
+/// CoreML image quality evaluator
 @available(iOS 13.0, *)
 class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
-
-    /// The instance of the ML model in use, or nil if failed to load.
+    
+    enum Error: String {
+        case failedToCreateModel
+        case failedToCreateInputArray
+        case failedToResizePixelBuffer
+        case invalidFeatureValue
+        case noPrediction
+    }
+    
     private let mlModel: ImageQualityModel?
     
     /// Input shape is portrait oriented `[1, channels, height, width]`.
@@ -159,20 +146,21 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     func evaluate(frame: FMFrame) -> FMFrameEvaluation {
         guard let mlModel = mlModel else {
             log.error("failed to create model")
-            return FMImageQualityEvaluator.makeEvaluation(error: .failedToCreateModel, modelVersion: modelVersion)
+            return makeEvaluation(error: .failedToCreateModel)
         }
         guard let mlInputArray = makeInputArray() else {
             log.error("failed to create input array")
-            return FMImageQualityEvaluator.makeEvaluation(error: .failedToCreateInputArray, modelVersion: modelVersion)
+            return makeEvaluation(error: .failedToCreateInputArray)
         }
         
+        let evaluationStart = Date()
         // get the source pixel buffer, use the enhanced image buffer if available
         let sourcePixelBuffer = frame.enhancedImageOrCapturedImage
         
         // resize the source pixel buffer down to the required input size
         guard let resizedPixelBuffer = makeResizedPixelBuffer(sourcePixelBuffer) else {
             log.error("failed to resize pixel buffer")
-            return FMImageQualityEvaluator.makeEvaluation(error: .failedToResizePixelBuffer, modelVersion: modelVersion)
+            return makeEvaluation(error: .failedToResizePixelBuffer)
         }
         defer {
             resizedPixelBuffer.deallocate()
@@ -185,13 +173,13 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
         let imageQualityInput = ImageQualityModelInput(input_1: mlInputArray)
         guard let prediction = try? mlModel.prediction(input: imageQualityInput) else {
             log.error("no prediction")
-            return FMImageQualityEvaluator.makeEvaluation(error: .noPrediction, modelVersion: modelVersion)
+            return makeEvaluation(error: .noPrediction)
         }
         
         // get the prediction result
         guard let featureName = prediction.featureNames.first, let featureValue = prediction.featureValue(for: featureName)?.multiArrayValue, featureValue.count == 2 else {
             log.error("invalid feature value")
-            return FMImageQualityEvaluator.makeEvaluation(error: .invalidFeatureValue, modelVersion: modelVersion)
+            return makeEvaluation(error: .invalidFeatureValue)
         }
         
         // calculate score from the prediction result
@@ -199,7 +187,20 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
         let y2Exp = exp(Float32(truncating: featureValue[1]))
         let score = 1.0 / (1.0 + y2Exp / y1Exp)
         
-        return FMImageQualityEvaluator.makeEvaluation(score: score, modelVersion: modelVersion)
+        let evaluationTime = Date().timeIntervalSince(evaluationStart)
+        
+        return makeEvaluation(score: score, time: evaluationTime)
+    }
+    
+    func makeEvaluation(score: Float, time: TimeInterval) -> FMFrameEvaluation {
+        let imageQualityUserInfo = FMImageQualityUserInfo(modelVersion: modelVersion)
+        return FMFrameEvaluation(type: .imageQuality, score: score, time: time, imageQualityUserInfo: imageQualityUserInfo)
+    }
+    
+    func makeEvaluation(error: Error) -> FMFrameEvaluation {
+        // Return with a score of 1.0 so the frame is always accepted
+        let imageQualityUserInfo = FMImageQualityUserInfo(modelVersion: modelVersion, error: error.rawValue)
+        return FMFrameEvaluation(type: .imageQuality, score: 1, time: 0, imageQualityUserInfo: imageQualityUserInfo)
     }
     
     func populateInputArray(_ inputArray: MLMultiArray, from resizedPixelBuffer: UnsafeMutablePointer<UInt8>) {

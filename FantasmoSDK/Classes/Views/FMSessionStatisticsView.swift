@@ -16,6 +16,9 @@ class FMSessionStatisticsView: UIView {
 
     @IBOutlet var uploadStackView: UIStackView!
     
+    @IBOutlet var totalRejectionsLabel: UILabel!
+    @IBOutlet var rejectionStackView: UIStackView!
+    
     @IBOutlet var currentWindowLabel: UILabel!
     @IBOutlet var bestScoreLabel: UILabel!
     
@@ -27,7 +30,7 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var liveScoreLabel: UILabel!
 
     @IBOutlet var framesRejectedLabel: UILabel!
-    @IBOutlet var currentRejectionLabel: UILabel!
+    @IBOutlet var currentFilterRejectionLabel: UILabel!
     
     @IBOutlet var eulerAnglesLabel: UILabel!
     @IBOutlet var eulerAngleSpreadsLabel: UILabel!
@@ -35,18 +38,13 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var lastResultLabel: UILabel!
     @IBOutlet var errorsLabel: UILabel!
     @IBOutlet var deviceLocationLabel: UILabel!
-    
-    @IBOutlet var pitchTooHighLabel: UILabel!
-    @IBOutlet var pitchTooLowLabel: UILabel!
-    @IBOutlet var movingTooFastLabel: UILabel!
-    @IBOutlet var movingTooLittleLabel: UILabel!
-    @IBOutlet var insufficientFeaturesLabel: UILabel!
-    
+        
     private var windowTimer: Timer?
     private var windowStart: Date?
     
     private var lastFrameTimestamp: TimeInterval = 0.0
-            
+    private var rejectionLabels: [FMFrameRejectionReason: UILabel] = [:]
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         sdkVersionLabel.text = "Fantasmo SDK \(FMSDKInfo.fullVersion)"
@@ -105,16 +103,27 @@ class FMSessionStatisticsView: UIView {
         
         // update window filter rejections
         framesRejectedLabel.text = "Frames rejected: \(window?.rejections ?? 0)"
-        currentRejectionLabel.text = window?.currentRejectionReason?.rawValue ?? ""
+        currentFilterRejectionLabel.text = window?.currentFilterRejection?.rawValue ?? ""
         
-        // update total filter rejection counts
-        pitchTooHighLabel.text = "Too High: \(frameEvaluationStatistics.totalRejections[.pitchTooHigh] ?? 0)"
-        pitchTooLowLabel.text = "Too Low: \(frameEvaluationStatistics.totalRejections[.pitchTooLow] ?? 0)"
-        movingTooFastLabel.text = "Too Fast: \(frameEvaluationStatistics.totalRejections[.movingTooFast] ?? 0)"
-        movingTooLittleLabel.text = "Too Little: \(frameEvaluationStatistics.totalRejections[.movingTooLittle] ?? 0)"
-        insufficientFeaturesLabel.text = "Insufficient Features: \(frameEvaluationStatistics.totalRejections[.insufficientFeatures] ?? 0)"
+        // update total frame rejections
+        for (reason, total) in frameEvaluationStatistics.rejectionReasons {
+            guard total > 0 else {
+                continue
+            }
+            var label: UILabel! = rejectionLabels[reason]
+            if label == nil {
+                label = UILabel()
+                label.font = UIFont.systemFont(ofSize: 16.0)
+                label.textColor = .black
+                label.backgroundColor = .init(white: 1.0, alpha: 0.3)
+                rejectionStackView.addArrangedSubview(label)
+                rejectionLabels[reason] = label
+            }
+            label.text = "\t\(reason.rawValue): \(total)"
+        }
+        totalRejectionsLabel.text = "Total frame rejections: \(frameEvaluationStatistics.totalRejections)"
     }
-        
+    
     public func update(activeUploads: [FMFrame]) {
         uploadStackView.arrangedSubviews.forEach { sv in
             sv.removeFromSuperview()

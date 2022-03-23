@@ -27,6 +27,7 @@ class FMApi {
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
     typealias InitializationResult = (Bool) -> Void
     typealias IsLocalizationAvailableResult = (Bool) -> Void
+    typealias SendSessionAnalyticsResult = (FMError?) -> Void
     typealias ErrorResult = (FMError) -> Void
     
     enum ApiError: LocalizedError {
@@ -212,6 +213,37 @@ class FMApi {
             completion: postCompletion,
             error: postError
         )
+    }
+    
+    /// Send analytics about a localization session
+    ///
+    /// - Parameters:
+    ///   - sessionAnalytics: data model containing the session analytics
+    ///   - result: result closure containing an error or nil if the request was successful
+    func sendSessionAnalytics(_ sessionAnalytics: FMSessionAnalytics, result: @escaping SendSessionAnalyticsResult) {
+        // set up completion closure
+        let postCompletion: FMRestClient.RestResult = { code, data in
+            guard let code = code, let data = data else {
+                result(FMError(ApiError.noResponseData))
+                return
+            }
+            guard code == 200 else {
+                result(FMError(ApiError.httpError(code), data))
+                return
+            }
+            // success
+            result(nil)
+        }
+        // set up error closure
+        let postError: FMRestClient.RestError = { errorResponse in
+            result(FMError(errorResponse))
+        }
+        // send request
+        FMRestClient.post(.sessionAnalytics,
+                          payload: sessionAnalytics,
+                          token: token,
+                          completion: postCompletion,
+                          error: postError)
     }
     
     // MARK: - private methods

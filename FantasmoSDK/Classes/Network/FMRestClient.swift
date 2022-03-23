@@ -48,6 +48,35 @@ struct FMRestClient {
         Self.post(data: jsonData, with: request, completion: completion, error: error)
     }
     
+    /// Make a POST request with payload encoded as JSON
+    ///
+    /// - Parameters:
+    ///   - endpoint: The API endpoint to post to
+    ///   - payload: Encodable payload to be JSON encoded and sent in the request body
+    ///   - token: Optional API security token
+    ///   - completion: Completion closure
+    ///   - error: Error closure
+    static func post<T: Encodable>(_ endpoint: FMApiRouter.ApiEndpoint,
+                                   payload: T,
+                                   token: String?,
+                                   completion: RestResult? = nil,
+                                   error: RestError? = nil) {
+        
+        var request = Self.postRequestForEndpoint(endpoint, token: token)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        log.info(String(describing: request.url), parameters: ["payload": payload])
+        
+        let encoder = JSONEncoder()
+        guard let jsonData = try? encoder.encode(payload) else {
+            let badRequestError = FMError(RestClientError.badRequest)
+            log.error(badRequestError)
+            error?(badRequestError)
+            return
+        }
+        
+        Self.post(data: jsonData, with: request, completion: completion, error: error)
+    }
+    
     /// Make a POST request with image data and parameters
     ///
     /// - Parameters:

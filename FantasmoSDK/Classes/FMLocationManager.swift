@@ -316,10 +316,12 @@ class FMLocationManager: NSObject {
             averageTime: frameEvaluationStatistics.averageEvaluationTime,
             userInfo: frameEvaluatorChain.frameEvaluator.userInfo
         )
+        
         let frameRejections = FMSessionFrameRejections(
             count: frameEvaluationStatistics.totalRejections,
             rejectionReasons: frameEvaluationStatistics.rejectionReasons.compactMapValues { $0 > 0 ? $0 : nil }
         )
+        
         let sessionAnalytics = FMSessionAnalytics(
             localizationSessionId: localizationSessionId ?? "",
             appSessionId: appSessionId ?? "",
@@ -349,7 +351,14 @@ class FMLocationManager: NSObject {
             hostAppMarketingVersion: FMSDKInfo.hostAppMarketingVersion,
             hostAppBuild: FMSDKInfo.hostAppBuild
         )
-        print("sessionAnalytics: \(sessionAnalytics)")
+                
+        FMApi.shared.sendSessionAnalytics(sessionAnalytics) { error in
+            if let error = error {
+                log.error(error)
+            } else {
+                log.info("successfully sent session analytics")
+            }
+        }
     }
             
     // MARK: - Helpers

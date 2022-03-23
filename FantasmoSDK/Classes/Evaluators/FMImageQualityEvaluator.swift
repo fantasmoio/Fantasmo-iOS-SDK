@@ -72,15 +72,15 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     }
     
     init() {
-        // Create a reusable filter and context for resizing pixel buffers
+        // Create a reusable context for resizing pixel buffers
+        let isMetalSupported = MTLCreateSystemDefaultDevice() != nil
+        ciContext = CIContext(options: [.useSoftwareRenderer: !isMetalSupported])
+        // Create a reusable bicubic scaling filter
         ciResizeFilter = CIFilter(name: "CIBicubicScaleTransform")
-        if let _ = MTLCreateSystemDefaultDevice() {
-            // Use Metal if supported
-            ciContext = CIContext(options: [.useSoftwareRenderer: false])
-        } else {
-            // Otherwise use default options, this is for github workflows
-            ciContext = CIContext()
-        }
+        // The parameter C is from the bicubic convolution algorithm
+        // https://en.wikipedia.org/wiki/Bicubic_interpolation#Bicubic_convolution_algorithm
+        // The value 0.5 is used by PIL and produces scores closer to our reference
+        ciResizeFilter?.setValue(NSNumber(0.5), forKey: "inputC")
         
         let fileManager = FileManager.default
         let modelName = String(describing: ImageQualityModel.self)

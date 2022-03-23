@@ -8,6 +8,7 @@
 import Foundation
 
 enum FMFrameRejectionReason: String, CaseIterable {
+    // filter rejections
     case pitchTooLow
     case pitchTooHigh
     case movingTooFast
@@ -17,6 +18,7 @@ enum FMFrameRejectionReason: String, CaseIterable {
     case trackingStateExcessiveMotion
     case trackingStateInsufficentFeatures
     case trackingStateNotAvailable
+    // evaluator rejections
     case otherEvaluationInProgress
     case scoreBelowCurrentBest
     case scoreBelowMinThreshold

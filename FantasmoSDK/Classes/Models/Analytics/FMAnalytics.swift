@@ -59,7 +59,7 @@ struct FMSessionFrameEvaluations: Encodable {
     let averageTime: TimeInterval
     let userInfo: [String: String]?
     
-    public enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case count
         case type
         case highestScore
@@ -86,6 +86,21 @@ struct FMSessionFrameEvaluations: Encodable {
 struct FMSessionFrameRejections: Encodable {
     let count: Int
     let rejectionReasons: [FMFrameRejectionReason: Int]
+    
+    enum CodingKeys: String, CodingKey {
+        case count
+        case rejectionReasons
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(count, forKey: .count)
+        var rejectionReasonDict: [String: Int] = [:]
+        rejectionReasons.forEach { key, value in
+            rejectionReasonDict[key.rawValue] = value
+        }
+        try container.encode(rejectionReasonDict, forKey: .rejectionReasons)
+    }
 }
 
 struct FMSessionAnalytics: Encodable {

@@ -27,8 +27,7 @@ struct FMFrameEvaluation: Encodable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(type.rawValue, forKey: .type)
         try container.encode(score, forKey: .score)
-        switch type {
-        case .imageQuality:
+        if type == .imageQuality, let userInfo = userInfo {
             try container.encode(userInfo, forKey: .imageQualityUserInfo)
         }
     }

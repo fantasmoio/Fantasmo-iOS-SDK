@@ -108,4 +108,19 @@ class SDKImageQualityEvaluatorTests: XCTestCase {
         let nighttimeEvaluation = imageQualityEvaluator.evaluate(frame: nighttimeFrame)
         XCTAssertEqual(nighttimeEvaluation.score, 0.83077, accuracy: 0.001)
     }
+    
+    func testReturnsImageQualityUserInfo() throws {
+        // create a new evaluator
+        let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)
+
+        // create a AR session and evaluate a test frame
+        let session = MockARSession(videoName: "parking-daytime")
+        let frame = try session.getNextFrame()
+        let evaluation = imageQualityEvaluator.evaluate(frame: frame)
+        
+        // check image quality user info was returned
+        let userInfo = try XCTUnwrap(evaluation.imageQualityUserInfo)
+        XCTAssertEqual(userInfo.modelVersion, imageQualityEvaluator.modelVersion)
+        XCTAssertNil(userInfo.error)
+    }
 }

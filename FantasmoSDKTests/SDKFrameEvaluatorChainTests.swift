@@ -169,7 +169,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         XCTAssertTrue(bestFrame === highQualityFrame)
     }
     
-    func testDoesNotReturnFrameBelowMinScoreThreshold() throws {
+    func testRejectsFrameBelowMinScoreThreshold() throws {
         // initialize a mock session and evaluator chain
         let mockSession = MockARSession(videoName: "parking-daytime")
         let (frameEvaluatorChain, delegate) = TestUtils.makeFrameEvaluatorChainAndDelegate()

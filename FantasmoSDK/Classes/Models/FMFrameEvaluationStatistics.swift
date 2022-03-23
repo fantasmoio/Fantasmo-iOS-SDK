@@ -21,6 +21,8 @@ class FMFrameEvaluationStatistics {
         
         var currentFilterRejection: FMFrameRejectionReason?
         
+        var currentImageQualityUserInfo: FMImageQualityUserInfo?
+        
         var evaluations: Int = 0
          
         var rejections: Int = 0
@@ -99,6 +101,7 @@ class FMFrameEvaluationStatistics {
         // Update current window stats
         window.evaluations += 1
         window.currentScore = evaluation.score
+        window.currentImageQualityUserInfo = evaluation.imageQualityUserInfo
         
         // If an evaluation was made, the frame cleared the filters
         window.currentFilterRejection = nil

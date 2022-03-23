@@ -148,7 +148,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         // wait for the high quality frame to be evaluated
         let highQualityFrame = try mockSession.getNextFrame()
         frameEvaluatorChain.evaluateAsync(frame: highQualityFrame)
-        wait(for: [highQualityFrameEvaluated, newBestFrameCalled], timeout: 3.0)
+        wait(for: [highQualityFrameEvaluated, newBestFrameCalled], timeout: 5.0)
         
         // check we are currently before the min window
         let minWindow = frameEvaluatorChain.getMinWindow()
@@ -165,10 +165,11 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         XCTAssertTrue(Date() > minWindow && Date() < frameEvaluatorChain.getMaxWindow())
         
         // check the high quality frame was returned after the min window but before the max window
-        XCTAssertTrue(frameEvaluatorChain.dequeueBestFrame()! === highQualityFrame)
+        let bestFrame = try XCTUnwrap(frameEvaluatorChain.dequeueBestFrame())
+        XCTAssertTrue(bestFrame === highQualityFrame)
     }
     
-    func testDoesNotReturnFrameBelowMinScoreThreshold() throws {
+    func testRejectsFrameBelowMinScoreThreshold() throws {
         // initialize a mock session and evaluator chain
         let mockSession = MockARSession(videoName: "parking-daytime")
         let (frameEvaluatorChain, delegate) = TestUtils.makeFrameEvaluatorChainAndDelegate()
@@ -241,7 +242,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         // evaluate the two frames and wait
         frameEvaluatorChain.evaluateAsync(frame: firstFrame)
         frameEvaluatorChain.evaluateAsync(frame: secondFrame)
-        wait(for: [frameEvaluated, frameRejected], timeout: 3.0)
+        wait(for: [frameEvaluated, frameRejected], timeout: 5.0)
     }
                         
     // MARK: - Filters
@@ -468,43 +469,43 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         let (nonEnhancingChain, nonEnhancingDelegate) = TestUtils.makeFrameEvaluatorChainAndDelegate(config: config)
         XCTAssertNil(nonEnhancingChain.imageEnhancer)
                         
-        // create a single dark frame to evaluate
+        // create a dark frame to evaluate twice, first unenhanced then enhanced
         let mockSession = MockARSession(videoName: "parking-nighttime")
         let darkFrame = try mockSession.getNextFrame()
         
-        // expect that we will evaluate an unenhanced frame
+        // expect that we will first evaluate an unenhanced frame
         let unenhancedFrameEvaluated = expectation(description: "unenhanced frame evaluated")
         var unenhancedScore: Float = 0
         
         nonEnhancingDelegate.didFinishEvaluatingFrame = { frame in
             if let evaluation = frame.evaluation, frame.enhancedImage == nil, frame === darkFrame {
-                // save the score of the unenhanced frame
+                // save the unenhanced score
                 unenhancedScore = evaluation.score
                 unenhancedFrameEvaluated.fulfill()
             }
         }
         
-        // wait for dark frame to be evaluated
+        // wait for unenhanced frame to be evaluated
         nonEnhancingChain.evaluateAsync(frame: darkFrame)
         wait(for: [unenhancedFrameEvaluated], timeout: 1.0)
         
-        // create a frame evaluator chain with image enhancement enabled
+        // enable image enhancement
         let (enhancingChain, enhancingDelegate) = TestUtils.makeFrameEvaluatorChainAndDelegate()
         XCTAssertNotNil(enhancingChain.imageEnhancer)
         
-        // expect that we will evaluate an enhanced frame
+        // expect that we will enhance the same frame
         let enhancedFrameEvaluated = expectation(description: "enhanced frame evaluated")
         var enhancedScore: Float = 0
         
         enhancingDelegate.didFinishEvaluatingFrame = { frame in
             if let evaluation = frame.evaluation, frame.enhancedImage != nil, frame === darkFrame {
-                // save the score of the enhanced frame
+                // save the enhanced score
                 enhancedScore = evaluation.score
                 enhancedFrameEvaluated.fulfill()
             }
         }
         
-        // wait for the dark frame to be enhanced and evaluated
+        // wait for the frame to be enhanced and re-evaluated
         enhancingChain.evaluateAsync(frame: darkFrame)
         wait(for: [enhancedFrameEvaluated], timeout: 1.0)
         

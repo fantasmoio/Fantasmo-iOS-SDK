@@ -6,9 +6,17 @@
 //
 
 import Foundation
+import UIKit
 @testable import FantasmoSDK
 
 class TestUtils {
+    
+    static func getTestImage(_ name: String) -> UIImage? {
+        guard let fileUrl = Bundle(for: SDKRemoteConfigTests.self).url(forResource: name, withExtension: "png") else {
+            return nil
+        }
+        return UIImage(contentsOfFile: fileUrl.path)
+    }
     
     static func getTestConfig(_ name: String) -> RemoteConfig.Config? {
         let fileUrl = Bundle(for: SDKRemoteConfigTests.self).url(forResource: name, withExtension: "json")!

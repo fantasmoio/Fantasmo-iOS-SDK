@@ -25,6 +25,7 @@ class FMSessionStatisticsView: UIView {
     @IBOutlet var translationLabel: UILabel!
     @IBOutlet var totalTranslationLabel: UILabel!
     @IBOutlet var remoteConfigLabel: UILabel!
+    @IBOutlet var imageQualityModelLabel: UILabel!
     
     @IBOutlet var framesEvaluatedLabel: UILabel!
     @IBOutlet var liveScoreLabel: UILabel!
@@ -122,6 +123,11 @@ class FMSessionStatisticsView: UIView {
             label.text = "\t\(reason.rawValue): \(total)"
         }
         totalRejectionsLabel.text = "Total frame rejections: \(frameEvaluationStatistics.totalRejections)"
+        
+        if let imageQualityUserInfo = window?.currentImageQualityUserInfo {
+            imageQualityModelLabel.text = "Image Quality Model: \(imageQualityUserInfo.modelVersion)"
+            // TODO - show evaluation errors
+        }
     }
     
     public func update(activeUploads: [FMFrame]) {

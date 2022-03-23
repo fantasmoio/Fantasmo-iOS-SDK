@@ -547,6 +547,9 @@
 		0199418427C3EB1200118BD9 /* Evaluators */ = {
 			isa = PBXGroup;
 			children = (
+				0199418227C3EA0D00118BD9 /* FMFrameEvaluator.swift */,
+				0199418027C3C65D00118BD9 /* FMFrameEvaluatorChain.swift */,
+				0166C0A02746BEC3001D871E /* FMImageQualityEvaluator.swift */,
 			);
 			path = Evaluators;
 			sourceTree = "<group>";
@@ -624,9 +627,6 @@
 		9468389A25921BF3005B1145 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				0199418227C3EA0D00118BD9 /* FMFrameEvaluator.swift */,
-				0199418027C3C65D00118BD9 /* FMFrameEvaluatorChain.swift */,
-				0166C0A02746BEC3001D871E /* FMImageQualityEvaluator.swift */,
 				01B5867F274BF8CA0082FFF7 /* Config */,
 				0123A4E1270F521400763758 /* Errors */,
 				0144B79C27047C15009A4042 /* Views */,

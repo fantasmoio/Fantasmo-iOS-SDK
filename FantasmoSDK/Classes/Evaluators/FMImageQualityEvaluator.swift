@@ -112,7 +112,6 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     
     func makeResizedPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> UnsafeMutablePointer<UInt8>? {
         guard let ciResizeFilter = ciResizeFilter else {
-            // this should never happen, bicubic resize is available since iOS 13.0
             return nil
         }
         

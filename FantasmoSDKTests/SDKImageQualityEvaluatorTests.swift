@@ -28,9 +28,9 @@ class SDKImageQualityEvaluatorTests: XCTestCase {
         XCTAssertLessThan(daytimeEvaluation.score, 1.0)
 
         // check the evaluation contains userInfo with model version and no error message
-        let userInfo = try XCTUnwrap(daytimeEvaluation.userInfo)
-        XCTAssertEqual(userInfo[imageQualityEvaluator.modelVersionUserInfoKey], imageQualityEvaluator.modelVersion)
-        XCTAssertTrue(userInfo[imageQualityEvaluator.errorUserInfoKey] == nil)
+        let userInfo = try XCTUnwrap(daytimeEvaluation.imageQualityUserInfo)
+        XCTAssertEqual(userInfo.modelVersion, imageQualityEvaluator.modelVersion)
+        XCTAssertTrue(userInfo.error == nil)
         
         // check evaluating the same frame again produces the same score
         let duplicateEvaluation = imageQualityEvaluator.evaluate(frame: daytimeFrame)

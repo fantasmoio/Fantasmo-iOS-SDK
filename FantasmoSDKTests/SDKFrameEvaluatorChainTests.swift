@@ -61,7 +61,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
             XCTAssertGreaterThan(evaluation.score, 0.0)
             XCTAssertLessThan(evaluation.score, frameEvaluatorChain.minHighQualityScore)
             XCTAssertEqual(evaluation.type, .imageQuality)
-            XCTAssertNotNil(evaluation.userInfo)
+            XCTAssertNotNil(evaluation.imageQualityUserInfo)
             // finished evaluating a frame, increment the fulfillment count
             frameEvaluated.fulfill()
             // evaluate the next frame, if any

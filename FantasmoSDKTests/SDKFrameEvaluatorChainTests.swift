@@ -128,8 +128,8 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         frameEvaluatorChain.minHighQualityScore = 0.5
         
         // adjust window times so we can easily test between them
-        frameEvaluatorChain.minWindowTime = 0.5
-        frameEvaluatorChain.maxWindowTime = 1.0
+        frameEvaluatorChain.minWindowTime = 1.0
+        frameEvaluatorChain.maxWindowTime = 2.0
         frameEvaluatorChain.resetWindow()
         
         delegate.didFinishEvaluatingFrame = { frame in

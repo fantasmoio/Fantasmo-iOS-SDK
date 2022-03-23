@@ -50,8 +50,8 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         newBestFrameCalled.assertForOverFulfill = false
         
         // adjust window times so we can easily test between them
-        frameEvaluatorChain.minWindowTime = 0.5
-        frameEvaluatorChain.maxWindowTime = 1.0
+        frameEvaluatorChain.minWindowTime = 1.0
+        frameEvaluatorChain.maxWindowTime = 2.0
         
         delegate.didFinishEvaluatingFrame = { frame in
             guard let evaluation = frame.evaluation else {
@@ -61,7 +61,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
             XCTAssertGreaterThan(evaluation.score, 0.0)
             XCTAssertLessThan(evaluation.score, frameEvaluatorChain.minHighQualityScore)
             XCTAssertEqual(evaluation.type, .imageQuality)
-            XCTAssertNotNil(evaluation.userInfo)
+            XCTAssertNotNil(evaluation.imageQualityUserInfo)
             // finished evaluating a frame, increment the fulfillment count
             frameEvaluated.fulfill()
             // evaluate the next frame, if any
@@ -128,8 +128,8 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         frameEvaluatorChain.minHighQualityScore = 0.5
         
         // adjust window times so we can easily test between them
-        frameEvaluatorChain.minWindowTime = 0.5
-        frameEvaluatorChain.maxWindowTime = 1.0
+        frameEvaluatorChain.minWindowTime = 1.0
+        frameEvaluatorChain.maxWindowTime = 2.0
         frameEvaluatorChain.resetWindow()
         
         delegate.didFinishEvaluatingFrame = { frame in
@@ -174,8 +174,8 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         let (frameEvaluatorChain, delegate) = TestUtils.makeFrameEvaluatorChainAndDelegate()
 
         // expect that we will evaluate a low quality frame and our delegate method will be called
-        let lowQualityFrameEvaluated = expectation(description: "low quality frame evaluated")
-        let belowMinScoreCalled = expectation(description: "belowMinScore delegate method called")
+        let frameEvaluated = expectation(description: "frame evaluated")
+        let frameRejectedBelowMinScoreThreshold = expectation(description: "frame rejected below min score threshold")
                 
         // increase the min score threshold, our test frames should score below this
         frameEvaluatorChain.minScoreThreshold = 0.8
@@ -184,16 +184,18 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
                 return
             }
             XCTAssertLessThan(evaluation.score, frameEvaluatorChain.minScoreThreshold)
-            lowQualityFrameEvaluated.fulfill()
+            frameEvaluated.fulfill()
         }
-        delegate.didEvaluateFrameBelowMinScoreThreshold = { _, _ in
-            belowMinScoreCalled.fulfill()
+        delegate.didRejectFrame = { frame, reason in
+            if reason == .scoreBelowMinThreshold {
+                frameRejectedBelowMinScoreThreshold.fulfill()
+            }
         }
         
         // wait for the low quality frame to be evaluated
         let lowQualityFrame = try mockSession.getNextFrame()
         frameEvaluatorChain.evaluateAsync(frame: lowQualityFrame)
-        wait(for: [lowQualityFrameEvaluated, belowMinScoreCalled], timeout: 3.0)
+        wait(for: [frameEvaluated, frameRejectedBelowMinScoreThreshold], timeout: 3.0)
         
         // wait until the max window
         let maxWindow = frameEvaluatorChain.getMaxWindow()
@@ -218,7 +220,7 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         frameEvaluated.assertForOverFulfill = true
         
         // expect exactly one frame to be rejected
-        let frameRejected = expectation(description: "frame rejected")
+        let frameRejected = expectation(description: "frame rejected other evaluation in progress")
         frameRejected.expectedFulfillmentCount = 1
         frameRejected.assertForOverFulfill = true
         
@@ -230,11 +232,10 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
             // check first frame was evaluated
             XCTAssertTrue(frame === firstFrame)
         }
-        delegate.didRejectFrameWhileEvaluatingOtherFrame = { frame, otherFrame in
-            frameRejected.fulfill()
-            // check second frame was rejected because evaluating the first frame
-            XCTAssertTrue(frame === secondFrame)
-            XCTAssertTrue(otherFrame === firstFrame)
+        delegate.didRejectFrame = { frame, reason in
+            if reason == .otherEvaluationInProgress {
+                frameRejected.fulfill()
+            }
         }
         
         // evaluate the two frames and wait

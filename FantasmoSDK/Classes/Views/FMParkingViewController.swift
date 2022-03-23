@@ -321,6 +321,12 @@ public final class FMParkingViewController: UIViewController {
         super.viewDidDisappear(animated)
         
         sceneView.session.pause()
+        
+        if isBeingDismissed {
+            fmLocationManager.unsetAnchor()
+            fmLocationManager.stopUpdatingLocation()
+            fmLocationManager.sendSessionAnalytics()
+        }
     }
                 
     public override func viewDidLayoutSubviews() {
@@ -380,11 +386,6 @@ public final class FMParkingViewController: UIViewController {
         
     public override var shouldAutorotate: Bool {
         return false
-    }
-    
-    deinit {
-        fmLocationManager.unsetAnchor()
-        fmLocationManager.stopUpdatingLocation()
     }
 }
 

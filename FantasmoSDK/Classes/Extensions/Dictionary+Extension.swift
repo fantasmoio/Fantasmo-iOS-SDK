@@ -27,3 +27,14 @@ extension Dictionary where Key == UUID {
         return id
     }
 }
+
+extension Dictionary where Key: CaseIterable {
+
+    /// Initialize dictionary with all possible values of keys and the passed `initialValueForAllCases` as a corresponding value for each of them.
+    init(initialValueForAllCases: Value) {
+        self.init()
+        Key.allCases.forEach { aKey in
+            self[aKey] = initialValueForAllCases
+        }
+    }
+}

@@ -41,6 +41,7 @@ struct FMApiRouter {
         case isLocalizationAvailable
         case initialize
         case localize
+        case sessionAnalytics
         
         var path: String {
             switch self {
@@ -50,16 +51,18 @@ struct FMApiRouter {
                 return "initialize"
             case .localize:
                 return "image.localize"
+            case .sessionAnalytics:
+                return "analytics/session"
             }
         }
         
         var url: URL {
             let apiVersion: ApiVersion
             switch self {
-            case .initialize, .isLocalizationAvailable:
-                apiVersion = .v2
             case .localize:
                 apiVersion = .v1
+            default:
+                apiVersion = .v2
             }
             return apiVersion.baseUrl.appendingPathComponent(self.path)
         }

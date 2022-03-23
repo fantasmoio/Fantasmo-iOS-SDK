@@ -11,19 +11,6 @@ import VideoToolbox
 
 
 class FMImageQualityEvaluator {
-
-    static let versionUserInfoKey = "modelVersion"
-    static let errorUserInfoKey = "error"
-    
-    enum Error: String {
-        case notSupported
-        case failedToCreateModel
-        case failedToCreateInputArray
-        case failedToResizePixelBuffer
-        case noPrediction
-        case invalidFeatureValue
-    }
-
     /// Factory constructor, returns the CoreML evaluator if supported
     static func makeEvaluator() -> FMFrameEvaluator {
         if #available(iOS 13.0, *) {
@@ -32,29 +19,30 @@ class FMImageQualityEvaluator {
             return FMImageQualityEvaluatorNotSupported()
         }
     }
-    
-    static func makeEvaluation(score: Float, modelVersion: String? = nil) -> FMFrameEvaluation {
-        return FMFrameEvaluation(type: .imageQuality, score: score, userInfo: [versionUserInfoKey: modelVersion])
-    }
-    
-    static func makeEvaluation(error: Error, modelVersion: String? = nil) -> FMFrameEvaluation {
-        // We use a score of 1.0 so the frame is always accepted
-        return FMFrameEvaluation(type: .imageQuality, score: 1.0, userInfo: [versionUserInfoKey: modelVersion, errorUserInfoKey: error.rawValue])
-    }
 }
 
 
 /// Evaluator class for iOS versions that don't support CoreML
 class FMImageQualityEvaluatorNotSupported: FMFrameEvaluator {
     func evaluate(frame: FMFrame) -> FMFrameEvaluation {
-        return FMImageQualityEvaluator.makeEvaluation(error: .notSupported)
+        // Return with a score of 1.0 so the frame is always accepted
+        let imageQualityUserInfo = FMImageQualityUserInfo(error: "device not supported")
+        return FMFrameEvaluation(type: .imageQuality, score: 1, time: 0, imageQualityUserInfo: imageQualityUserInfo)
     }
 }
 
-
+/// CoreML image quality evaluator
 @available(iOS 13.0, *)
 class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
-                
+    
+    enum Error: String {
+        case failedToCreateModel
+        case failedToCreateInputArray
+        case failedToResizePixelBuffer
+        case invalidFeatureValue
+        case noPrediction
+    }
+    
     private let mlModel: ImageQualityModel?
     private let mlInputShape: [NSNumber] = [1, 3, 320, 240]
     private let imageWidth: Int = 320
@@ -62,7 +50,7 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     private var isCheckingForUpdates: Bool = false
     
     public private(set) var modelVersion: String?
-    
+        
     init() {        
         let fileManager = FileManager.default
         let modelName = String(describing: ImageQualityModel.self)
@@ -120,19 +108,21 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
     func evaluate(frame: FMFrame) -> FMFrameEvaluation {
         guard let mlModel = mlModel else {
             log.error("failed to create model")
-            return FMImageQualityEvaluator.makeEvaluation(error: .failedToCreateModel, modelVersion: modelVersion)
+            return makeEvaluation(error: .failedToCreateModel)
         }
         guard let mlInputArray = try? MLMultiArray(shape: mlInputShape, dataType: MLMultiArrayDataType.float32) else {
             log.error("failed to create input array")
-            return FMImageQualityEvaluator.makeEvaluation(error: .failedToCreateInputArray, modelVersion: modelVersion)
+            return makeEvaluation(error: .failedToCreateInputArray)
         }
+        
+        let evaluationStart = Date()
         
         // Resize the pixel buffer down to the expected input size, use the enhanced image if available
         guard let resizedPixelBufferContext = makeResizedPixelBuffer(frame.enhancedImageOrCapturedImage),
               let resizedPixelBuffer = UnsafePointer<UInt8>(OpaquePointer(resizedPixelBufferContext.data))
         else {
             log.error("failed to resize pixel buffer")
-            return FMImageQualityEvaluator.makeEvaluation(error: .failedToResizePixelBuffer, modelVersion: modelVersion)
+            return makeEvaluation(error: .failedToResizePixelBuffer)
         }
         defer {
             resizedPixelBuffer.deallocate()
@@ -174,18 +164,31 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
         let imageQualityInput = ImageQualityModelInput(input_1: mlInputArray)
         guard let prediction = try? mlModel.prediction(input: imageQualityInput) else {
             log.error("no prediction")
-            return FMImageQualityEvaluator.makeEvaluation(error: .noPrediction, modelVersion: modelVersion)
+            return makeEvaluation(error: .noPrediction)
         }
         
         guard let featureName = prediction.featureNames.first, let featureValue = prediction.featureValue(for: featureName)?.multiArrayValue, featureValue.count == 2 else {
             log.error("invalid feature value")
-            return FMImageQualityEvaluator.makeEvaluation(error: .invalidFeatureValue, modelVersion: modelVersion)
+            return makeEvaluation(error: .invalidFeatureValue)
         }
 
         let y1Exp = exp(Float32(truncating: featureValue[0]))
         let y2Exp = exp(Float32(truncating: featureValue[1]))
         let score = 1.0 / (1.0 + y2Exp / y1Exp)
         
-        return FMImageQualityEvaluator.makeEvaluation(score: score, modelVersion: modelVersion)
+        let evaluationTime = Date().timeIntervalSince(evaluationStart)
+        
+        return makeEvaluation(score: score, time: evaluationTime)
+    }
+    
+    func makeEvaluation(score: Float, time: TimeInterval) -> FMFrameEvaluation {
+        let imageQualityUserInfo = FMImageQualityUserInfo(modelVersion: modelVersion)
+        return FMFrameEvaluation(type: .imageQuality, score: score, time: time, imageQualityUserInfo: imageQualityUserInfo)
+    }
+    
+    func makeEvaluation(error: Error) -> FMFrameEvaluation {
+        // Return with a score of 1.0 so the frame is always accepted
+        let imageQualityUserInfo = FMImageQualityUserInfo(modelVersion: modelVersion, error: error.rawValue)
+        return FMFrameEvaluation(type: .imageQuality, score: 1, time: 0, imageQualityUserInfo: imageQualityUserInfo)
     }
 }

@@ -18,42 +18,6 @@ struct FMLocalizationRequest {
     var analytics: FMLocalizationAnalytics
 }
 
-struct FMLocalizationAnalytics {
-    var appSessionId: String?
-    var appSessionTags: [String]?
-    var localizationSessionId: String?
-    var frameEvents: FMFrameEvents
-    var rotationSpread: FMRotationSpread
-    var totalDistance: Float
-    var magneticField: MotionManager.MagneticField?
-    var imageEnhancementInfo: FMImageEnhancementInfo?
-    var remoteConfigId: String
-}
-
-struct FMImageEnhancementInfo: Codable {
-    var gamma: Float
-}
-
-struct FMRotationSpread: Codable {
-    var pitch: Float
-    var yaw: Float
-    var roll: Float
-}
-
-struct FMFrameEvents {
-    var excessiveTilt: Int
-    var excessiveBlur: Int
-    var excessiveMotion: Int
-    var insufficientFeatures: Int
-    var lossOfTracking: Int
-    var total: Int
-}
-
-struct FMFrameResolution: Codable {
-    var height: Int
-    var width: Int
-}
-
 class FMApi {
     
     static let shared = FMApi()
@@ -63,6 +27,7 @@ class FMApi {
     typealias LocalizationResult = (CLLocation, [FMZone]?) -> Void
     typealias InitializationResult = (Bool) -> Void
     typealias IsLocalizationAvailableResult = (Bool) -> Void
+    typealias SendSessionAnalyticsResult = (FMError?) -> Void
     typealias ErrorResult = (FMError) -> Void
     
     enum ApiError: LocalizedError {
@@ -250,6 +215,37 @@ class FMApi {
         )
     }
     
+    /// Send analytics about a localization session
+    ///
+    /// - Parameters:
+    ///   - sessionAnalytics: data model containing the session analytics
+    ///   - result: result closure containing an error or nil if the request was successful
+    func sendSessionAnalytics(_ sessionAnalytics: FMSessionAnalytics, result: @escaping SendSessionAnalyticsResult) {
+        // set up completion closure
+        let postCompletion: FMRestClient.RestResult = { code, data in
+            guard let code = code, let data = data else {
+                result(FMError(ApiError.noResponseData))
+                return
+            }
+            guard code == 200 else {
+                result(FMError(ApiError.httpError(code), data))
+                return
+            }
+            // success
+            result(nil)
+        }
+        // set up error closure
+        let postError: FMRestClient.RestError = { errorResponse in
+            result(FMError(errorResponse))
+        }
+        // send request
+        FMRestClient.post(.sessionAnalytics,
+                          payload: sessionAnalytics,
+                          token: token,
+                          completion: postCompletion,
+                          error: postError)
+    }
+    
     // MARK: - private methods
     
     private func getInitializeParams(location: CLLocation) -> [String: Any] {
@@ -291,7 +287,7 @@ class FMApi {
         
         let location = request.approximateLocation
 
-        let events = request.analytics.frameEvents
+        let events = request.analytics.legacyFrameEvents
         let frameEventCounts = [
             "excessiveTilt": events.excessiveTilt,
             "excessiveBlur": events.excessiveBlur,

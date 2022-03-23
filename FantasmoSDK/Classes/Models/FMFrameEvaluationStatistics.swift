@@ -19,7 +19,7 @@ class FMFrameEvaluationStatistics {
         
         var currentBestScore: Float?
         
-        var currentRejectionReason: FMFrameFilterRejectionReason?
+        var currentFilterRejection: FMFrameRejectionReason?
         
         var evaluations: Int = 0
          
@@ -45,17 +45,29 @@ class FMFrameEvaluationStatistics {
     /// Sum of all scores evaluated in the session.
     public private(set) var sumOfAllScores: Float = 0
     
+    /// Total time spent evaluating frames in the session.
+    public private(set) var totalEvaluationTime: TimeInterval = 0
+    
     /// Total evaluations in the session.
     public private(set) var totalEvaluations: Int = 0
     
+    /// Dictionary of frame rejection reasons and the number of times each occurred in the session.
+    public private(set) var rejectionReasons = [FMFrameRejectionReason: Int].init(initialValueForAllCases: 0)
+    
     /// Total rejections in the session.
-    public private(set) var totalRejections: [FMFrameFilterRejectionReason: Int] = [
-        .pitchTooLow: 0,
-        .pitchTooHigh: 0,
-        .movingTooFast: 0,
-        .movingTooLittle: 0,
-        .insufficientFeatures: 0
-    ]
+    public var totalRejections: Int {
+        return rejectionReasons.values.reduce(0, +)
+    }
+    
+    // Average of all evaluation scores in the session.
+    public var averageEvaluationScore: Float {
+        return totalEvaluations > 0 ? sumOfAllScores / Float(totalEvaluations) : 0
+    }
+    
+    // Average time it took to evaluate a single frame in the session
+    public var averageEvaluationTime: TimeInterval {
+        return totalEvaluations > 0 ? totalEvaluationTime / TimeInterval(totalEvaluations) : 0
+    }
     
     /// Designated constructor.
     init(type: FMFrameEvaluationType) {
@@ -75,6 +87,7 @@ class FMFrameEvaluationStatistics {
         
         // Update session stats
         totalEvaluations += 1
+        totalEvaluationTime += evaluation.time
         sumOfAllScores += evaluation.score
         if highestScore == nil || evaluation.score > highestScore! {
             highestScore = evaluation.score
@@ -86,7 +99,9 @@ class FMFrameEvaluationStatistics {
         // Update current window stats
         window.evaluations += 1
         window.currentScore = evaluation.score
-        window.currentRejectionReason = nil
+        
+        // If an evaluation was made, the frame cleared the filters
+        window.currentFilterRejection = nil
     }
     
     /// Sets the best frame for the current window.
@@ -98,17 +113,21 @@ class FMFrameEvaluationStatistics {
         window.currentBestScore = evaluation.score
     }
     
-    /// Increment the count for a specific filter rejection and set as the current rejection.
-    public func addFilterRejection(_ rejectionReason: FMFrameFilterRejectionReason) {
-        guard let window = windows.last else {
+    /// Increment the count for a rejection type.
+    public func addRejection(_ rejectionReason: FMFrameRejectionReason, filter: FMFrameFilter? = nil) {
+        guard let window = windows.last, let rejectionCount = rejectionReasons[rejectionReason] else {
             return
         }
-        // Add to session totals
-        totalRejections[rejectionReason]! += 1
+        // Add to session total rejections
+        rejectionReasons[rejectionReason] = rejectionCount + 1
         
-        // Add to current window
-        window.rejections += 1
-        window.currentRejectionReason = rejectionReason
+        // Add to current window rejections
+        window.rejections += 1        
+        
+        if filter != nil {
+            // Set the window as currently being blocked by a filter
+            window.currentFilterRejection = rejectionReason
+        }
     }
     
     /// Reset all statistics, used when starting a new session.
@@ -117,7 +136,8 @@ class FMFrameEvaluationStatistics {
         highestScore = nil
         lowestScore = nil
         sumOfAllScores = 0
+        totalEvaluationTime = 0
         totalEvaluations = 0
-        totalRejections.forEach { k, v in totalRejections[k] = 0 }
+        rejectionReasons = [FMFrameRejectionReason: Int].init(initialValueForAllCases: 0)
     }
 }

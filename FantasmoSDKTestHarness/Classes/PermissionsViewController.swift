@@ -28,7 +28,7 @@ class PermissionsViewController: UIViewController {
     
     static var hasRequiredPermissions: Bool {
         let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
-        let locationAuthorizationStatus = CLLocationManager().authorizationStatus
+        let locationAuthorizationStatus = CLLocationManager.authorizationStatus()
         return cameraAuthorizationStatus == .authorized &&
             (locationAuthorizationStatus == .authorizedAlways ||  locationAuthorizationStatus == .authorizedWhenInUse)
     }
@@ -40,7 +40,7 @@ class PermissionsViewController: UIViewController {
     }
     
     private func updateButtonsAndImages() {
-        let locationAuthorizationStatus = CLLocationManager().authorizationStatus
+        let locationAuthorizationStatus = CLLocationManager.authorizationStatus()
         let isLocationNotDetermined = locationAuthorizationStatus == .notDetermined
         let isLocationAuthorized = (locationAuthorizationStatus == .authorizedWhenInUse || locationAuthorizationStatus == .authorizedAlways)
         let isLocationDenied = (!isLocationNotDetermined && !isLocationAuthorized)
@@ -62,7 +62,7 @@ class PermissionsViewController: UIViewController {
     }
 
     @IBAction func handleAuthorizeLocationButton(_ sender: UIButton) {
-        let locationAuthorizationStatus = locationManager.authorizationStatus
+        let locationAuthorizationStatus = CLLocationManager.authorizationStatus()
         if locationAuthorizationStatus == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
         } else if locationAuthorizationStatus != .authorizedWhenInUse && locationAuthorizationStatus != .authorizedAlways {
@@ -90,6 +90,11 @@ class PermissionsViewController: UIViewController {
 }
 
 extension PermissionsViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        updateButtonsAndImages()
+    }
+    
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         updateButtonsAndImages()
     }

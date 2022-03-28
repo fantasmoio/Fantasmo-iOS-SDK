@@ -17,7 +17,6 @@ class MapViewController: UIViewController {
     @IBOutlet var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet var sidebarView: UIView!
     @IBOutlet var sidebarViewTopConstraint: NSLayoutConstraint!
-    @IBOutlet var sidebarStackView: UIStackView!
     
     var didLocateUser: Bool = false
     
@@ -36,19 +35,20 @@ class MapViewController: UIViewController {
             pendingResults.forEach { addLocationResult($0) }
             showLocationResults(animated: false)
         }
-                
-        sidebarStackView.layer.shadowColor = UIColor.black.cgColor
-        sidebarStackView.layer.shadowOffset = .zero
-        sidebarStackView.layer.shadowRadius = 4.0
-        sidebarStackView.layer.shadowOpacity = 0.2
-        sidebarStackView.clipsToBounds = false
+        
+        sidebarView.layer.shadowColor = UIColor.black.cgColor
+        sidebarView.layer.shadowOffset = .zero
+        sidebarView.layer.shadowRadius = 4.0
+        sidebarView.layer.shadowOpacity = 0.2
+        sidebarView.clipsToBounds = false
     }
         
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        sidebarViewTopConstraint.constant = view.safeAreaInsets.top - additionalSafeAreaInsets.top
-        additionalSafeAreaInsets = .init(top: sidebarView.frame.height, left: 0, bottom: 0, right: 0)
+        let sidebarViewTopPadding = 10.0
+        sidebarViewTopConstraint.constant = view.safeAreaInsets.top - additionalSafeAreaInsets.top + sidebarViewTopPadding
+        additionalSafeAreaInsets = .init(top: sidebarView.frame.height + 2.0 * sidebarViewTopPadding, left: 0, bottom: 0, right: 0)
     }
     
     @IBAction func handleLocateUserButton(_ sender: UIButton) {

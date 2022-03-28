@@ -693,13 +693,24 @@
                                 </connections>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xaW-IH-HM8" userLabel="Sidebar View">
-                                <rect key="frame" x="359" y="44" width="50" height="120.5"/>
+                                <rect key="frame" x="359" y="64" width="50" height="100.5"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EU6-Lf-5BU" userLabel="Sidebar Background">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="100.5"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="7"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="0.0" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="oIR-nZ-omM">
-                                        <rect key="frame" x="0.0" y="10" width="50" height="100.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="100.5"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGM-03-Zug" userLabel="Locate Button">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="TGM-03-Zug" secondAttribute="height" id="Hr3-29-ogL"/>
                                                 </constraints>
@@ -733,6 +744,7 @@
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iht-dh-E4L" userLabel="Result Button">
                                                 <rect key="frame" x="0.0" y="50.5" width="50" height="50"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="iht-dh-E4L" secondAttribute="height" id="ezU-8O-8Ta"/>
                                                 </constraints>
@@ -743,7 +755,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="TGM-03-Zug" firstAttribute="width" secondItem="TGM-03-Zug" secondAttribute="height" id="2Am-8R-SY8"/>
                                             <constraint firstItem="AmU-y2-4B0" firstAttribute="width" secondItem="AmU-y2-4B0" secondAttribute="height" id="3Ua-jN-bjo"/>
@@ -752,27 +764,32 @@
                                             <constraint firstItem="iht-dh-E4L" firstAttribute="width" secondItem="iht-dh-E4L" secondAttribute="height" id="eCy-7j-M9K"/>
                                             <constraint firstItem="AmU-y2-4B0" firstAttribute="width" secondItem="AmU-y2-4B0" secondAttribute="height" id="f4X-qF-T9S"/>
                                         </constraints>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="7"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
-                                        </userDefinedRuntimeAttributes>
                                     </stackView>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="RvE-Sm-KM5">
-                                        <rect key="frame" x="15" y="75.5" width="20" height="20"/>
+                                        <rect key="frame" x="15" y="65.5" width="20" height="20"/>
                                         <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </activityIndicatorView>
                                 </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="oIR-nZ-omM" firstAttribute="leading" secondItem="xaW-IH-HM8" secondAttribute="leading" id="EmL-BC-EXA"/>
                                     <constraint firstAttribute="width" constant="50" id="JHq-94-TYw"/>
                                     <constraint firstItem="RvE-Sm-KM5" firstAttribute="centerX" secondItem="AmU-y2-4B0" secondAttribute="centerX" id="OGN-sG-ETN"/>
+                                    <constraint firstAttribute="trailing" secondItem="EU6-Lf-5BU" secondAttribute="trailing" id="PBc-SI-RbQ"/>
+                                    <constraint firstAttribute="bottom" secondItem="EU6-Lf-5BU" secondAttribute="bottom" id="QN2-Il-UWZ"/>
                                     <constraint firstItem="RvE-Sm-KM5" firstAttribute="centerY" secondItem="AmU-y2-4B0" secondAttribute="centerY" id="j9E-Nn-FEF"/>
                                     <constraint firstAttribute="trailing" secondItem="oIR-nZ-omM" secondAttribute="trailing" id="mq2-OS-dZ5"/>
-                                    <constraint firstAttribute="height" secondItem="oIR-nZ-omM" secondAttribute="height" constant="20" id="rcg-RH-tc3"/>
+                                    <constraint firstItem="EU6-Lf-5BU" firstAttribute="leading" secondItem="xaW-IH-HM8" secondAttribute="leading" id="qQh-qN-aXw"/>
+                                    <constraint firstAttribute="height" secondItem="oIR-nZ-omM" secondAttribute="height" id="rcg-RH-tc3"/>
                                     <constraint firstItem="oIR-nZ-omM" firstAttribute="centerY" secondItem="xaW-IH-HM8" secondAttribute="centerY" id="saw-8K-EoI"/>
+                                    <constraint firstItem="EU6-Lf-5BU" firstAttribute="top" secondItem="xaW-IH-HM8" secondAttribute="top" id="tMb-rU-7ko"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="7"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="IUX-lo-TBx"/>
@@ -783,7 +800,7 @@
                             <constraint firstItem="s8S-6Y-TUe" firstAttribute="top" secondItem="mfo-H2-KXC" secondAttribute="top" id="HHv-6X-T96"/>
                             <constraint firstAttribute="trailing" secondItem="s8S-6Y-TUe" secondAttribute="trailing" id="N1u-tf-J3e"/>
                             <constraint firstAttribute="bottom" secondItem="s8S-6Y-TUe" secondAttribute="bottom" id="YTC-au-C1N"/>
-                            <constraint firstItem="xaW-IH-HM8" firstAttribute="top" secondItem="mfo-H2-KXC" secondAttribute="top" constant="44" id="gct-ec-2E3"/>
+                            <constraint firstItem="xaW-IH-HM8" firstAttribute="top" secondItem="mfo-H2-KXC" secondAttribute="top" constant="64" id="gct-ec-2E3"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -795,7 +812,6 @@
                         <outlet property="locateUserButton" destination="TGM-03-Zug" id="Zfa-g8-uMU"/>
                         <outlet property="mapView" destination="s8S-6Y-TUe" id="AFx-yv-ooo"/>
                         <outlet property="showLocationResultsButton" destination="iht-dh-E4L" id="eL0-Un-Fyu"/>
-                        <outlet property="sidebarStackView" destination="oIR-nZ-omM" id="l4Q-wX-axd"/>
                         <outlet property="sidebarView" destination="xaW-IH-HM8" id="hsS-ic-Reo"/>
                         <outlet property="sidebarViewTopConstraint" destination="gct-ec-2E3" id="Ep8-Nl-h85"/>
                     </connections>
@@ -808,7 +824,7 @@
     <resources>
         <image name="camera.fill" catalog="system" width="128" height="94"/>
         <image name="checkmark.circle.fill" catalog="system" width="128" height="121"/>
-        <image name="gear" width="26" height="26"/>
+        <image name="gear" width="24" height="24"/>
         <image name="gearshape.fill" catalog="system" width="128" height="121"/>
         <image name="location.fill" catalog="system" width="128" height="121"/>
         <image name="map.fill" catalog="system" width="128" height="110"/>

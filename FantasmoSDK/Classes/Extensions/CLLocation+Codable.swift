@@ -24,7 +24,7 @@ extension CLLocation: Encodable {
         try container.encode(altitude, forKey: .altitude)
         try container.encode(horizontalAccuracy, forKey: .horizontalAccuracy)
         try container.encode(verticalAccuracy, forKey: .verticalAccuracy)
-        try container.encode(timestamp, forKey: .timestamp)
+        try container.encode(timestamp.timeIntervalSince1970, forKey: .timestamp)
     }
 }
 

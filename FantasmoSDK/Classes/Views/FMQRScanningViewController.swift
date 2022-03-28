@@ -87,12 +87,12 @@ public class FMQRScanningViewController: UIViewController {
         toolbar.closeButton.addTarget(self, action: #selector(handleCloseButton(_:)), for: .touchUpInside)
         view.addSubview(toolbar)
         
-        manualEntryButton = buttonWithTitle("Enter Code", systemImageName: "keyboard.fill")
+        manualEntryButton = buttonWithTitle("Enter Code", imageName: "btn-keyboard")
         manualEntryButton.addTarget(self, action: #selector(handleManualEntryButton(_:)), for: .touchUpInside)
         view.addSubview(manualEntryButton)
         manualEntryButton.sizeToFit()
 
-        torchButton = buttonWithTitle("Torch", systemImageName: "flashlight.on.fill")
+        torchButton = buttonWithTitle("Torch", imageName: "btn-torch")
         torchButton.addTarget(self, action: #selector(handleTorchButton(_:)), for: .touchUpInside)
         view.addSubview(torchButton)
         torchButton.sizeToFit()
@@ -152,7 +152,7 @@ public class FMQRScanningViewController: UIViewController {
         torchButton.frame = torchButtonRect
     }
     
-    private func buttonWithTitle(_ buttonTitle: String, systemImageName: String) -> FMImageButton {
+    private func buttonWithTitle(_ buttonTitle: String, imageName: String) -> FMImageButton {
         let buttonRange = NSRange(location: 0, length: buttonTitle.count)
         let buttonTitleString = NSMutableAttributedString(string: buttonTitle)
         buttonTitleString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: buttonRange)
@@ -163,10 +163,9 @@ public class FMQRScanningViewController: UIViewController {
         button.setAttributedTitle(buttonTitleString, for: .normal)
         button.contentEdgeInsets = .init(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
         button.tintColor = .white
-        
-        if #available(iOS 13.0, *) {
-            button.setImage(UIImage(systemName: systemImageName), for: .normal)
-        }
+        let bundle = Bundle(for: type(of: self))
+        let buttonImage = UIImage(named: imageName, in: bundle, compatibleWith: nil)
+        button.setImage(buttonImage, for: .normal)
         
         return button
     }

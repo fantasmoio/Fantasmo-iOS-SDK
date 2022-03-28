@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BCi-iE-1vE">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BCi-iE-1vE">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,7 +12,7 @@
         <!--Settings View Controller-->
         <scene sceneID="pAl-iN-4FN">
             <objects>
-                <viewController id="xlT-PS-WqX" userLabel="Settings View Controller" customClass="SettingsViewController" customModule="Fantasmo_Spot_Tester" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="xlT-PS-WqX" userLabel="Settings View Controller" customClass="SettingsViewController" customModule="FantasmoSDKTestHarness" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="avc-sp-NU0">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -304,7 +305,7 @@
         <!--Permissions View Controller-->
         <scene sceneID="s20-4v-vd7">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="gf6-ix-y4b" customClass="PermissionsViewController" customModule="Fantasmo_Spot_Tester" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="gf6-ix-y4b" customClass="PermissionsViewController" customModule="FantasmoSDKTestHarness" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NGx-bO-nH4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -339,7 +340,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="2xa-GI-OsW">
                                         <rect key="frame" x="0.0" y="0.0" width="362" height="60"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3DN-R6-LoO" userLabel="Camera Permission Button" customClass="FilledButton" customModule="Fantasmo_Spot_Tester" customModuleProvider="target">
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3DN-R6-LoO" userLabel="Camera Permission Button" customClass="FilledButton" customModule="FantasmoSDKTestHarness" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="137" height="60"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
@@ -394,7 +395,7 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="hbL-Bm-fnW">
                                         <rect key="frame" x="0.0" y="80" width="362" height="60"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YLn-0G-2td" userLabel="Camera Permission Button" customClass="FilledButton" customModule="Fantasmo_Spot_Tester" customModuleProvider="target">
+                                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YLn-0G-2td" userLabel="Camera Permission Button" customClass="FilledButton" customModule="FantasmoSDKTestHarness" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="137" height="60"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
@@ -455,7 +456,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Psd-xb-Zc1" userLabel="Bottom View">
                                 <rect key="frame" x="26" y="553" width="362" height="289"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8hP-r9-iyV" customClass="FilledButton" customModule="Fantasmo_Spot_Tester" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8hP-r9-iyV" customClass="FilledButton" customModule="FantasmoSDKTestHarness" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="42.5" width="362" height="60"/>
                                         <color key="backgroundColor" systemColor="systemBlueColor"/>
                                         <constraints>
@@ -523,7 +524,7 @@
         <!--Localize View Controller-->
         <scene sceneID="6ow-zv-tl7">
             <objects>
-                <viewController id="akc-1m-fZ0" customClass="LocalizeViewController" customModule="Fantasmo_Spot_Tester" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="akc-1m-fZ0" customClass="LocalizeViewController" customModule="FantasmoSDKTestHarness" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Vs7-eF-El4">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -586,7 +587,7 @@
                                                     <constraint firstAttribute="height" constant="10" id="kbN-dn-5nL"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhe-Kg-zDH" customClass="FilledButton" customModule="Fantasmo_Spot_Tester" customModuleProvider="target">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhe-Kg-zDH" customClass="FilledButton" customModule="FantasmoSDKTestHarness" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="163" width="350" height="60"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                                 <constraints>
@@ -619,7 +620,7 @@
                                         <rect key="frame" x="0.0" y="243" width="350" height="422"/>
                                         <attributedString key="attributedText">
                                             <fragment>
-                                                <mutableString key="content">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                                <string key="content">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                                 <attributes>
                                                     <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <font key="NSFont" size="17" name="SFMono-Regular"/>
@@ -656,7 +657,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="UUn-b8-6c4">
-                        <barButtonItem key="rightBarButtonItem" image="gearshape.fill" catalog="system" id="FgO-Mt-fP3">
+                        <barButtonItem key="rightBarButtonItem" image="gear" id="FgO-Mt-fP3">
                             <color key="tintColor" systemColor="tintColor"/>
                             <connections>
                                 <segue destination="TZk-4f-9aa" kind="presentation" id="7S0-2x-a5v"/>
@@ -680,7 +681,7 @@
         <!--Map View Controller-->
         <scene sceneID="S1u-t0-vp9">
             <objects>
-                <viewController id="O6Q-hm-mC5" userLabel="Map View Controller" customClass="MapViewController" customModule="Fantasmo_Spot_Tester" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="O6Q-hm-mC5" userLabel="Map View Controller" customClass="MapViewController" customModule="FantasmoSDKTestHarness" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mfo-H2-KXC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -807,6 +808,7 @@
     <resources>
         <image name="camera.fill" catalog="system" width="128" height="94"/>
         <image name="checkmark.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="gear" width="26" height="26"/>
         <image name="gearshape.fill" catalog="system" width="128" height="121"/>
         <image name="location.fill" catalog="system" width="128" height="121"/>
         <image name="map.fill" catalog="system" width="128" height="110"/>

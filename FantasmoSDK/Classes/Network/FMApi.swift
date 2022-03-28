@@ -258,7 +258,7 @@ class FMApi {
                 "altitude": location.altitude,
                 "horizontalAccuracy": location.horizontalAccuracy,
                 "verticalAccuracy": location.verticalAccuracy,
-                "timestamp": location.timestamp.timeIntervalSince1970
+                "timestamp": location.timestamp
             ]
         ]
         return params.merging(getDeviceAndHostAppInfo()) { (_, new) in new }

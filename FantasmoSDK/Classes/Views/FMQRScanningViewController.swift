@@ -156,7 +156,7 @@ public class FMQRScanningViewController: UIViewController {
         let buttonRange = NSRange(location: 0, length: buttonTitle.count)
         let buttonTitleString = NSMutableAttributedString(string: buttonTitle)
         buttonTitleString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: buttonRange)
-        buttonTitleString.addAttribute(.foregroundColor, value: UIColor.white.cgColor, range: buttonRange)
+        buttonTitleString.addAttribute(.foregroundColor, value: UIColor.white, range: buttonRange)
         buttonTitleString.addAttribute(.font, value: UIFont.systemFont(ofSize: 14.0), range: buttonRange)
 
         let button = FMImageButton()

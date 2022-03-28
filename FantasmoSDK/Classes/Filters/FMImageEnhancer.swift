@@ -19,7 +19,6 @@ class FMImageEnhancer {
     private let device: MTLDevice
     private let library: MTLLibrary
     private let commandQueue: MTLCommandQueue
-    private let calculateGammaCorrectionPipelineState: MTLComputePipelineState
     private let convertYCbCrToRGBPipelineState: MTLComputePipelineState
     private let textureCache: CVMetalTextureCache
     
@@ -58,19 +57,6 @@ class FMImageEnhancer {
             return nil
         }
         
-        // set up pipeline state for calculating gamma correction
-        let calculateGammaCorrectionFunctionName = "calculate_gamma_correction"
-        guard let calculateGammaCorrectionFunction = library.makeFunction(name: calculateGammaCorrectionFunctionName) else {
-            log.error("unable to find compute shader: \(calculateGammaCorrectionFunctionName)")
-            return nil
-        }
-        do {
-            self.calculateGammaCorrectionPipelineState = try device.makeComputePipelineState(function: calculateGammaCorrectionFunction)
-        } catch {
-            log.error("error creating compute pipeline state for \(calculateGammaCorrectionFunctionName) - \(error.localizedDescription)")
-            return nil
-        }
-
         // set up pipeline state for converting ycbcr textures to rgb
         let convertYCbCrToRGBFunctionName = "convert_ycbcr_to_rgb"
         guard let convertYCbCrToRGBFunction = library.makeFunction(name: convertYCbCrToRGBFunctionName) else {
@@ -128,7 +114,7 @@ class FMImageEnhancer {
                                                   maxPixelValue: vector_float4(1,1,1,1))
         let histogram = MPSImageHistogram(device: device, histogramInfo: &histogramInfo)
         let histogramLength = histogram.histogramSize(forSourceFormat: yTexture.pixelFormat)
-        guard let histogramBuffer = device.makeBuffer(length: histogramLength, options: [.storageModePrivate]) else {
+        guard let histogramBuffer = device.makeBuffer(length: histogramLength, options: [.storageModeShared]) else {
             log.error("error creating image histogram buffer")
             return
         }
@@ -137,33 +123,12 @@ class FMImageEnhancer {
                          sourceTexture: yTexture,
                          histogram: histogramBuffer,
                          histogramOffset: 0)
-                
-        // create a result buffer for our gamma correction
-        guard let gammaResult = device.makeBuffer(length: MemoryLayout<Float>.size, options: [.storageModeShared]) else {
-            log.error("error creating gamme result buffer")
-            return
-        }
         
-        // create a gamma compute encoder and pass it the histogram data
-        guard let gammaEncoder = commandBuffer.makeComputeCommandEncoder() else {
-            log.error("error creating gamma encoder")
-            return
-        }
-        
-        var targetBrightness = self.targetBrightness
-        gammaEncoder.setComputePipelineState(calculateGammaCorrectionPipelineState)
-        gammaEncoder.setBuffer(histogramBuffer, offset: 0, index: 0)
-        gammaEncoder.setBytes(&histogramInfo.numberOfHistogramEntries, length: MemoryLayout<Int>.size, index: 1)
-        gammaEncoder.setBytes(&targetBrightness, length: MemoryLayout<Float>.size, index: 2)
-        gammaEncoder.setBuffer(gammaResult, offset: 0, index: 3)
-        gammaEncoder.dispatchThreads(MTLSizeMake(1, 1, 1), threadsPerThreadgroup: MTLSizeMake(1, 1, 1))
-        gammaEncoder.endEncoding()
-        
-        // execute histogram and gamma shaders
+        // execute histogram compute shader
         commandBuffer.commit()
         commandBuffer.waitUntilCompleted()
 
-        var gamma = gammaResult.contents().bindMemory(to: Float.self, capacity: 1).pointee
+        var gamma = computeGamma(histogramBuffer: histogramBuffer, numberOfBins: histogramInfo.numberOfHistogramEntries)
         guard gamma < 1.0 else {
             // image is bright enough
             return
@@ -198,12 +163,22 @@ class FMImageEnhancer {
         convertYCbCrToRGBEncoder.setTexture(rgbTexture, index: 2)
         convertYCbCrToRGBEncoder.setBytes(&gamma, length: MemoryLayout<Float>.size, index: 0)
 
-        let threadsPerGrid = MTLSize(width: rgbTexture.width, height: rgbTexture.height, depth: 1)
         let threadExecutionWidth = convertYCbCrToRGBPipelineState.threadExecutionWidth
         let threadExecutionHeight = convertYCbCrToRGBPipelineState.maxTotalThreadsPerThreadgroup / threadExecutionWidth
         let threadsPerThreadgroup = MTLSizeMake(threadExecutionWidth, threadExecutionHeight, 1)
-
-        convertYCbCrToRGBEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        
+        if device.supportsFeatureSet(.iOS_GPUFamily4_v1) {
+            // device supports non-uniform threadgroups
+            let threadsPerGrid = MTLSize(width: rgbTexture.width, height: rgbTexture.height, depth: 1)
+            convertYCbCrToRGBEncoder.dispatchThreads(threadsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        } else {
+            // device only supports grid-aligned threadgroups (iPhone 6s, 7 and SE)
+            let gridWidth = Int(ceil(Float(rgbTexture.width) / Float(threadExecutionWidth)))
+            let gridHeight = Int(ceil(Float(rgbTexture.height) / Float(threadExecutionHeight)))
+            let threadgroupsPerGrid = MTLSizeMake(gridWidth, gridHeight, 1)
+            convertYCbCrToRGBEncoder.dispatchThreadgroups(threadgroupsPerGrid, threadsPerThreadgroup: threadsPerThreadgroup)
+        }
+        
         convertYCbCrToRGBEncoder.endEncoding()
         
         // create a blit encoder to copy the pixel data from the gpu to a buffer
@@ -275,5 +250,60 @@ class FMImageEnhancer {
             return nil
         }
         return CVMetalTextureGetTexture(cvMetalTexture)
+    }
+        
+    func computeGamma(histogramBuffer: MTLBuffer, numberOfBins: Int) -> Float {
+        var averageBrightness = getAverageBrightness(histogramBuffer: histogramBuffer, numberOfBins: numberOfBins)
+        if averageBrightness >= targetBrightness {
+            // image is bright enough, no correction needed
+            return 1.0
+        }
+        // create upper and lower target brightness ranges +/- 1%
+        let targetBrightnessUpper = targetBrightness + targetBrightness / 100.0
+        let targetBrightnessLower = targetBrightness - targetBrightness / 100.0
+        // prepare a bisection loop to find an appropriate gamma
+        let maxIterations = 50
+        var iterations = 0
+        var gamma: Float = 1.0
+        var mod: Float = 0.5
+        // begin bisection loop
+        while true {
+            // add/subtract the current modifier
+            if (averageBrightness < targetBrightness) {
+                gamma -= mod
+            } else {
+                gamma += mod
+            }
+            // calculate the new average brightness with current gamma
+            averageBrightness = getAverageBrightness(histogramBuffer: histogramBuffer, numberOfBins: numberOfBins, gamma: gamma)
+            // check if the new average brightness is in the target range
+            if (averageBrightness >= targetBrightnessLower && averageBrightness <= targetBrightnessUpper) {
+                // success
+                break;
+            }
+            // check iteration count, make sure we don't loop forever
+            iterations += 1
+            if iterations >= maxIterations {
+                // failed to reached target brightness after max_iterations, abort
+                log.error("no suitable gamma found after \(iterations) iterations")
+                gamma = 1.0
+                break
+            }
+            // halve our modifier for the next iteration
+            mod /= 2.0
+        }
+        return gamma
+    }
+    
+    func getAverageBrightness(histogramBuffer: MTLBuffer, numberOfBins: Int, gamma: Float = 1.0) -> Float {
+        let bins = histogramBuffer.contents().assumingMemoryBound(to: UInt32.self)
+        var pixelCount: UInt32 = 0
+        var totalBrightness: Float = 0.0
+        for i in 0..<numberOfBins {
+            let binEdgeValue = Float(i) / Float(numberOfBins)
+            totalBrightness += powf(binEdgeValue, gamma) * Float(bins[i])
+            pixelCount += bins[i]
+        }
+        return totalBrightness / Float(pixelCount);
     }
 }

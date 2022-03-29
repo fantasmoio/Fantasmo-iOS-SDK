@@ -21,6 +21,7 @@ Pod::Spec.new do |s|
   s.swift_version    		= '5'
   
   s.source_files = 'FantasmoSDK/Classes/**/*.{h,m,swift,mlmodel,mlmodelc,metal}'
+  s.exclude_files = 'FantasmoSDK/Classes/Filters/FMBlurFilter.swift'
   s.resources = 'FantasmoSDK/Assets/**'
 
   s.xcconfig = {'COREML_CODEGEN_LANGUAGE' => 'Swift', 'COREML_CODEGEN_SWIFT_GLOBAL_MODULE' => 'NO'}

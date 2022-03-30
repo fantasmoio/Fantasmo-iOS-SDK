@@ -21,16 +21,16 @@ public struct FMConfiguration {
 
     private static var _accessToken: String?
     
-    /// Sets your Fantasmo access token.
+    /// Sets the Fantasmo access token.
     ///
-    /// Note: Access tokens set via `setAccessToken(_:)` method override tokens listed in your app's Info.plist
+    /// Note: Access tokens set with `setAccessToken(_:)` override tokens in the app's Info.plist
     public static func setAccessToken(_ accessToken: String) {
         _accessToken = accessToken
     }
     
-    /// Returns the current Fantasmo access token set either via `setAccessToken(_:)` or that is listed your app's Info.plist
+    /// Returns the current Fantasmo access token set with `setAccessToken(_:)` or from the app's Info.plist
     ///
-    /// Note: Access tokens set via `setAccessToken(_:)` method override tokens listed in your app's Info.plist
+    /// Note: Access tokens set with `setAccessToken(_:)` override tokens in the app's Info.plist
     public static func accessToken() -> String {
         if let accessToken = _accessToken {
             return accessToken

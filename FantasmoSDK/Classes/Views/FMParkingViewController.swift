@@ -439,6 +439,9 @@ extension FMParkingViewController: FMLocationManagerDelegate {
 extension FMParkingViewController: ARSessionDelegate {
 
     public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        // Pass the current AR frame to the location manager
+        fmLocationManager.session(session, didUpdate: frame)
+        
         switch state {
         case .qrScanning:
             if qrCodeAwaitingContinue {
@@ -477,11 +480,6 @@ extension FMParkingViewController: ARSessionDelegate {
                     self?.fmLocationManager.unsetAnchor()
                 }
             }
-        
-        case .localizing:
-            // If localizing, pass the current AR frame to the location manager
-            fmLocationManager.session(session, didUpdate: frame)
-        
         default:
             break
         }

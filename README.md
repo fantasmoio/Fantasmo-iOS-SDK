@@ -56,16 +56,22 @@ to
 
 ### Importing
 
-In the near term, the Fantasmo SDK will be provided as a Cocoapod. In the meantime,
-the Fantasmo SDK directory can be imported directly into a project.
+In the near term, the Fantasmo SDK will be provided as a Cocoapod. In the meantime, the Fantasmo SDK directory can be imported directly into a project.
 
 ### Access Tokens
 
-Add your access token to your app's `Info.plist`.
+Set your Fantasmo access token by adding it to your app's `Info.plist`.
 ```xml
 <key>FM_ACCESS_TOKEN</key>
 <string>a0fc7aa1e1144f1e81eaa2ad47794a9e</string>
 ```
+
+You may also set your access token at runtime via the `FMConfiguration` class.
+```swift
+FMConfiguration.setAccessToken("a0fc7aa1e1144f1e81eaa2ad47794a9e")
+```
+
+Note: Access tokens set via `FMConfiguration` take precedence over ones in the `Info.plist`.
 
 ### Camera and Location Access
 

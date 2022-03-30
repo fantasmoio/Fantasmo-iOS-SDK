@@ -128,7 +128,8 @@ class FMImageEnhancer {
         commandBuffer.commit()
         commandBuffer.waitUntilCompleted()
 
-        var gamma = computeGamma(histogramBuffer: histogramBuffer, numberOfBins: histogramInfo.numberOfHistogramEntries)
+        let histogramBins = histogramBuffer.contents().assumingMemoryBound(to: UInt32.self)
+        var gamma = computeGamma(histogramBins: histogramBins, count: histogramInfo.numberOfHistogramEntries)
         guard gamma < 1.0 else {
             // image is bright enough
             return
@@ -252,8 +253,8 @@ class FMImageEnhancer {
         return CVMetalTextureGetTexture(cvMetalTexture)
     }
         
-    func computeGamma(histogramBuffer: MTLBuffer, numberOfBins: Int) -> Float {
-        var averageBrightness = getAverageBrightness(histogramBuffer: histogramBuffer, numberOfBins: numberOfBins)
+    func computeGamma(histogramBins: UnsafeMutablePointer<UInt32>, count: Int) -> Float {
+        var averageBrightness = getAverageBrightness(histogramBins: histogramBins, count: count)
         if averageBrightness >= targetBrightness {
             // image is bright enough, no correction needed
             return 1.0
@@ -275,7 +276,7 @@ class FMImageEnhancer {
                 gamma += mod
             }
             // calculate the new average brightness with current gamma
-            averageBrightness = getAverageBrightness(histogramBuffer: histogramBuffer, numberOfBins: numberOfBins, gamma: gamma)
+            averageBrightness = getAverageBrightness(histogramBins: histogramBins, count: count, gamma: gamma)
             // check if the new average brightness is in the target range
             if (averageBrightness >= targetBrightnessLower && averageBrightness <= targetBrightnessUpper) {
                 // success
@@ -295,14 +296,13 @@ class FMImageEnhancer {
         return gamma
     }
     
-    func getAverageBrightness(histogramBuffer: MTLBuffer, numberOfBins: Int, gamma: Float = 1.0) -> Float {
-        let bins = histogramBuffer.contents().assumingMemoryBound(to: UInt32.self)
+    func getAverageBrightness(histogramBins: UnsafeMutablePointer<UInt32>, count: Int, gamma: Float = 1.0) -> Float {
         var pixelCount: UInt32 = 0
         var totalBrightness: Float = 0.0
-        for i in 0..<numberOfBins {
-            let binEdgeValue = Float(i) / Float(numberOfBins)
-            totalBrightness += powf(binEdgeValue, gamma) * Float(bins[i])
-            pixelCount += bins[i]
+        for i in 0..<count {
+            let binEdgeValue = Float(i) / Float(count - 1)
+            totalBrightness += powf(binEdgeValue, gamma) * Float(histogramBins[i])
+            pixelCount += histogramBins[i]
         }
         return totalBrightness / Float(pixelCount);
     }

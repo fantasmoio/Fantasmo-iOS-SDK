@@ -49,6 +49,7 @@
 		0134BF872705E8F400DDEF7A /* FMTipLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0134BF862705E8F400DDEF7A /* FMTipLabel.swift */; };
 		0134BF8A270610E800DDEF7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
 		0134C42127E8E36800BC6B87 /* FMFrameRejectionReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0134C42027E8E36800BC6B87 /* FMFrameRejectionReason.swift */; };
+		013521E427F480CD00581B48 /* SDKConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013521E327F480CD00581B48 /* SDKConfigurationTests.swift */; };
 		0139EE4527E1177900F3F329 /* iqe-test-frame.png in Resources */ = {isa = PBXBuildFile; fileRef = 0139EE4427E1177900F3F329 /* iqe-test-frame.png */; };
 		013BF22627A2A745001DE841 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 013BF22527A2A745001DE841 /* Shaders.metal */; };
 		0143E8D4270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */; };
@@ -171,6 +172,13 @@
 			remoteGlobalIDString = 9468388A25921BAF005B1145;
 			remoteInfo = FantasmoSDK;
 		};
+		013521E627F4841100581B48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9468388225921BAF005B1145 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01138A1527551D5F00AB31DF;
+			remoteInfo = FantasmoSDKTestHarness;
+		};
 		018EF38E2795A16A005A1381 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9468388225921BAF005B1145 /* Project object */;
@@ -271,6 +279,7 @@
 		01343E96271D8376003A4716 /* FMSDKInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSDKInfo.swift; sourceTree = "<group>"; };
 		0134BF862705E8F400DDEF7A /* FMTipLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMTipLabel.swift; sourceTree = "<group>"; };
 		0134C42027E8E36800BC6B87 /* FMFrameRejectionReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameRejectionReason.swift; sourceTree = "<group>"; };
+		013521E327F480CD00581B48 /* SDKConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKConfigurationTests.swift; sourceTree = "<group>"; };
 		0139EE4427E1177900F3F329 /* iqe-test-frame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iqe-test-frame.png"; sourceTree = "<group>"; };
 		013BF22527A2A745001DE841 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.metal; };
 		0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSessionStatisticsView.swift; sourceTree = "<group>"; };
@@ -727,6 +736,7 @@
 				01296D002756528900636BBE /* Configs */,
 				01933FBC27CE90130089796C /* Utils */,
 				012C7BF227B19B29003DC67F /* Videos */,
+				013521E327F480CD00581B48 /* SDKConfigurationTests.swift */,
 				01F9B62127CF7E1500260FFF /* SDKFrameEvaluatorChainTests.swift */,
 				0131340627CE570B00CA4242 /* SDKFrameFilterTests.swift */,
 				FFA8586C2701D5D20069EB5D /* SDKGeometricTests.swift */,
@@ -915,6 +925,7 @@
 			);
 			dependencies = (
 				A0D5E88E26BA97DA00CE5B1C /* PBXTargetDependency */,
+				013521E727F4841100581B48 /* PBXTargetDependency */,
 			);
 			name = FantasmoSDKTests;
 			productName = FantasmoSDKTests;
@@ -941,6 +952,7 @@
 					};
 					A0D5E88626BA97DA00CE5B1C = {
 						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 01138A1527551D5F00AB31DF;
 					};
 				};
 			};
@@ -1180,6 +1192,7 @@
 				0131340727CE570B00CA4242 /* SDKFrameFilterTests.swift in Sources */,
 				01BB298927B2A1B900BAE286 /* SDKImageEnhancerTests.swift in Sources */,
 				01BB298F27B3CC2800BAE286 /* SDKImageEncoderTests.swift in Sources */,
+				013521E427F480CD00581B48 /* SDKConfigurationTests.swift in Sources */,
 				01827D2B2758E92E006D21CE /* SDKRemoteConfigTests.swift in Sources */,
 				01933FBE27CE910D0089796C /* SDKImageQualityEvaluatorTests.swift in Sources */,
 				012C7BFA27B19B29003DC67F /* MockARSession.swift in Sources */,
@@ -1193,6 +1206,11 @@
 			isa = PBXTargetDependency;
 			target = 9468388A25921BAF005B1145 /* FantasmoSDK */;
 			targetProxy = 01138A2A27551F2000AB31DF /* PBXContainerItemProxy */;
+		};
+		013521E727F4841100581B48 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01138A1527551D5F00AB31DF /* FantasmoSDKTestHarness */;
+			targetProxy = 013521E627F4841100581B48 /* PBXContainerItemProxy */;
 		};
 		018EF38D2795A16A005A1381 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1641,6 +1659,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FantasmoSDKTestHarness.app/FantasmoSDKTestHarness";
 			};
 			name = Debug;
 		};
@@ -1660,6 +1679,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FantasmoSDKTestHarness.app/FantasmoSDKTestHarness";
 			};
 			name = Release;
 		};

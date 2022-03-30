@@ -214,7 +214,7 @@ class FMSessionStatisticsView: UIView {
         let attributedString = NSMutableAttributedString(string: source)
         let colorRange = sourceString.range(of: string)
         if colorRange.length != NSNotFound {
-            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: color.cgColor, range: colorRange)
+            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: colorRange)
         }
         return NSAttributedString(attributedString: attributedString)
     }

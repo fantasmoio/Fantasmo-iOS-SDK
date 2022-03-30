@@ -13,16 +13,19 @@ kernel void convert_ycbcr_to_rgb(texture2d<float, access::read> y_texture [[text
                                  texture2d<float, access::read> cbcr_texture [[texture(1)]],
                                  texture2d<float, access::write> rgb_texture [[texture(2)]],
                                  device const float& gamma [[ buffer(0) ]],
-                                 uint2 gid [[thread_position_in_grid]])
+                                 uint2 position [[thread_position_in_grid]])
 {
+    if (position.x >= y_texture.get_width() || position.y >= y_texture.get_height()) {
+        return;
+    }
     float3 color_offset = float3(-(16.0 / 255.0), -0.5, -0.5);
     float3x3 color_transform = float3x3(float3(1.164,  1.164, 1.164),
                                         float3(0.000, -0.392, 2.017),
                                         float3(1.596, -0.813, 0.000));
     
-    float y = y_texture.read(gid).r;
+    float y = y_texture.read(position).r;
     
-    uint2 cbcr_coord = uint2(gid.x / 2, gid.y / 2); // half because ARKit uses 4:2:0 chroma subsampling
+    uint2 cbcr_coord = uint2(position.x / 2, position.y / 2); // half because ARKit uses 4:2:0 chroma subsampling
     float2 cbcr = cbcr_texture.read(cbcr_coord).rg;
     
     float3 ycbcr = float3(y, cbcr);
@@ -32,7 +35,7 @@ kernel void convert_ycbcr_to_rgb(texture2d<float, access::read> y_texture [[text
         rgb = pow(rgb, gamma);
     }
     
-    rgb_texture.write(float4(float3(rgb), 1.0), gid);
+    rgb_texture.write(float4(float3(rgb), 1.0), position);
 }
 
 kernel void calculate_gamma_correction(device const uint32_t* histogram_data [[ buffer(0) ]],

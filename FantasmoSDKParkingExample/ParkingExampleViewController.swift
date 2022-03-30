@@ -165,7 +165,8 @@ extension ParkingExampleViewController: CLLocationManagerDelegate {
     
     /// Returns whether the user denied access to location services.
     private var didDenyLocationAccess: Bool {
-        return locationManager.authorizationStatus == .denied || locationManager.authorizationStatus == .restricted
+        let authorizationStatus = CLLocationManager.authorizationStatus()
+        return authorizationStatus == .denied || authorizationStatus == .restricted
     }
     
     /// Enable the "Verify Parking" button only if we have a location or we're in simulation mode.

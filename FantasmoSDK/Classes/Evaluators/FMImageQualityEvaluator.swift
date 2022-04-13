@@ -81,33 +81,12 @@ class FMImageQualityEvaluatorCoreML: FMFrameEvaluator {
         // https://en.wikipedia.org/wiki/Bicubic_interpolation#Bicubic_convolution_algorithm
         // The value 0.5 is used by PIL and produces scores closer to our reference
         ciResizeFilter?.setValue(NSNumber(0.5), forKey: "inputC")
-        
-        let fileManager = FileManager.default
-        let modelName = String(describing: ImageQualityModel.self)
-        let appSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let currentModelLocation = appSupportDirectory.appendingPathComponent(modelName).appendingPathExtension("mlmodelc")
-        
-        defer {
-            if let mlModel = mlModel, let version = mlModel.model.modelDescription.metadata[MLModelMetadataKey.versionString] as? String {
-                modelVersion = version
-                log.info("loaded image quality model \(version)")
-            }
+        // Load the latest model, this could be the bundled or a downloaded model
+        mlModel = try? ImageQualityModel.loadLatest()
+        if let mlModel = mlModel, let version = mlModel.model.modelDescription.metadata[MLModelMetadataKey.versionString] as? String {
+            modelVersion = version
+            log.info("loaded image quality model \(version)")
         }
-        
-        // Check if we have a downloaded model
-        if fileManager.fileExists(atPath: currentModelLocation.path) {
-            do {
-                // Attempt to load the downloaded model
-                mlModel = try ImageQualityModel(contentsOf: currentModelLocation)
-                return
-            } catch {
-                log.error("error loading downloaded model: \(error.localizedDescription)")
-                try? fileManager.removeItem(at: currentModelLocation)
-            }
-        }
-        
-        // Load the default bundled model
-        mlModel = try? ImageQualityModel(configuration: MLModelConfiguration())
     }
     
     func makeResizedPixelBuffer(_ pixelBuffer: CVPixelBuffer) -> UnsafeMutablePointer<UInt8>? {

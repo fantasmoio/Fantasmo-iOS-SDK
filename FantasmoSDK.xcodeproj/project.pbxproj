@@ -34,6 +34,7 @@
 		0123A4D9270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */; };
 		0123A4DC270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */; };
 		0123A4DF270F520800763758 /* FMLocationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4DE270F520800763758 /* FMLocationError.swift */; };
+		01270D382805E48C003AA9DB /* ImageQualityModel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01270D372805E48C003AA9DB /* ImageQualityModel+Extensions.swift */; };
 		01296D032756627500636BBE /* movement-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01296D012756627500636BBE /* movement-filter.json */; };
 		01296D08275672FB00636BBE /* tracking-state-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01296D07275672FB00636BBE /* tracking-state-filter.json */; };
 		01296D0A2756744500636BBE /* camera-pitch-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01296D092756744500636BBE /* camera-pitch-filter.json */; };
@@ -266,6 +267,7 @@
 		0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewControllerProtocol.swift; sourceTree = "<group>"; };
 		0123A4DE270F520800763758 /* FMLocationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationError.swift; sourceTree = "<group>"; };
+		01270D372805E48C003AA9DB /* ImageQualityModel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageQualityModel+Extensions.swift"; sourceTree = "<group>"; };
 		01296D012756627500636BBE /* movement-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "movement-filter.json"; sourceTree = "<group>"; };
 		01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKRemoteConfigTests.swift; sourceTree = "<group>"; };
 		01296D07275672FB00636BBE /* tracking-state-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tracking-state-filter.json"; sourceTree = "<group>"; };
@@ -472,6 +474,7 @@
 			children = (
 				01905FAE27E248870052602E /* ImageQualityModel.mlmodel */,
 				01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */,
+				01270D372805E48C003AA9DB /* ImageQualityModel+Extensions.swift */,
 			);
 			path = CoreML;
 			sourceTree = "<group>";
@@ -1106,6 +1109,7 @@
 				0199418327C3EA0D00118BD9 /* FMFrameEvaluator.swift in Sources */,
 				011A10E527A173C800B84A0F /* FMImageEnhancer.swift in Sources */,
 				0134C42127E8E36800BC6B87 /* FMFrameRejectionReason.swift in Sources */,
+				01270D382805E48C003AA9DB /* ImageQualityModel+Extensions.swift in Sources */,
 				A3CB774226372A9B009625BB /* simd_quatf+Extension.swift in Sources */,
 				A3CB77372636BDB8009625BB /* FMOrientation.swift in Sources */,
 				A3798CA526AAF52D007CB41F /* ARCamera+Extension.swift in Sources */,

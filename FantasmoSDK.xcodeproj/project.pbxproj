@@ -29,6 +29,7 @@
 		01138A482755355A00AB31DF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A432755355A00AB31DF /* MapViewController.swift */; };
 		011589E62742957100CFC368 /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011589E52742957100CFC368 /* ImageEncoder.swift */; };
 		01172678274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */; };
+		0119641028085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0119640F28085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc */; };
 		011A10E527A173C800B84A0F /* FMImageEnhancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011A10E427A173C800B84A0F /* FMImageEnhancer.swift */; };
 		0123A4D7270F2E7E00763758 /* FMParkingViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */; };
 		0123A4D9270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */; };
@@ -263,6 +264,7 @@
 		01138A432755355A00AB31DF /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		011589E52742957100CFC368 /* ImageEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoder.swift; sourceTree = "<group>"; };
 		01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQualityModelUpdater.swift; sourceTree = "<group>"; };
+		0119640F28085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "dummy-image-quality-model-0.0.1.mlmodelc"; sourceTree = "<group>"; };
 		011A10E427A173C800B84A0F /* FMImageEnhancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMImageEnhancer.swift; sourceTree = "<group>"; };
 		0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMParkingViewControllerDelegate.swift; sourceTree = "<group>"; };
 		0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewControllerProtocol.swift; sourceTree = "<group>"; };
@@ -479,6 +481,14 @@
 				01270D372805E48C003AA9DB /* ImageQualityModel+Extensions.swift */,
 			);
 			path = CoreML;
+			sourceTree = "<group>";
+		};
+		0119640A28084B44007DDD20 /* MLModels */ = {
+			isa = PBXGroup;
+			children = (
+				0119640F28085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc */,
+			);
+			path = MLModels;
 			sourceTree = "<group>";
 		};
 		0123A4E1270F521400763758 /* Errors */ = {
@@ -737,8 +747,9 @@
 		A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */ = {
 			isa = PBXGroup;
 			children = (
-				0139EE4327E1177100F3F329 /* Images */,
 				01296D002756528900636BBE /* Configs */,
+				0139EE4327E1177100F3F329 /* Images */,
+				0119640A28084B44007DDD20 /* MLModels */,
 				01933FBC27CE90130089796C /* Utils */,
 				012C7BF227B19B29003DC67F /* Videos */,
 				013521E327F480CD00581B48 /* SDKConfigurationTests.swift */,
@@ -1041,6 +1052,7 @@
 				017E114927E20AA700B2740E /* iqe-test-frame-rotated.png in Resources */,
 				012C7BF927B19B29003DC67F /* qr-code.mp4 in Resources */,
 				0139EE4527E1177900F3F329 /* iqe-test-frame.png in Resources */,
+				0119641028085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc in Resources */,
 				012C7BF727B19B29003DC67F /* parking-nighttime.mp4 in Resources */,
 				40EA810526E7C6A8002E96A6 /* Assets.xcassets in Resources */,
 			);

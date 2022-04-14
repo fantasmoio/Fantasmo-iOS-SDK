@@ -13,6 +13,11 @@ import ARKit
 
 class SDKFrameEvaluatorChainTests: XCTestCase {
     
+    override class func setUp() {
+        // Tests are based on the latest bundled model
+        ImageQualityModel.removeDownloadedModel()
+    }
+        
     func testFrameEvaluatorChainConfig() throws {
         let config = try XCTUnwrap(TestUtils.getDefaultConfig())
         let frameEvaluatorChain = FMFrameEvaluatorChain(config: config)
@@ -102,7 +107,8 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         
         // check the best frame is now returned
         let frameWithBestScore = framesToEvaluate.max { $0.evaluation!.score < $1.evaluation!.score }
-        XCTAssertTrue(frameEvaluatorChain.dequeueBestFrame()! === frameWithBestScore)
+        let frameDequeued = try XCTUnwrap(frameEvaluatorChain.dequeueBestFrame())
+        XCTAssertTrue(frameDequeued === frameWithBestScore)
         
         // check a second dequeue does not return anything
         XCTAssertNil(frameEvaluatorChain.dequeueBestFrame())

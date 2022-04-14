@@ -10,7 +10,15 @@ import UIKit
 @testable import FantasmoSDK
 
 class TestUtils {
-    
+
+    static func url(for filename: String) -> URL? {
+        guard let lastDotIndex = filename.lastIndex(of: ".") else {
+            return nil
+        }
+        let name = String(filename.prefix(upTo: lastDotIndex))
+        let ext = String(filename.suffix(from: filename.index(after: lastDotIndex)))
+        return Bundle(for: TestUtils.self).url(forResource: name, withExtension: ext)
+    }
     
     static func getTestImage(_ name: String) -> UIImage? {
         guard let fileUrl = Bundle(for: TestUtils.self).url(forResource: name, withExtension: "png") else {

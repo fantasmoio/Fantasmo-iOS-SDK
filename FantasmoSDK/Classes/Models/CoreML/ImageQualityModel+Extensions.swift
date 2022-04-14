@@ -19,14 +19,6 @@ extension ImageQualityModel {
         get { return UserDefaults.standard.string(forKey: downloadedVersionKey) }
         set { UserDefaults.standard.set(newValue, forKey: downloadedVersionKey) }
     }
-        
-    // Returns the greater of the two model versions between the downloaded and bundled
-    static var latestVersion: String {
-        if let downloadedVersion = downloadedVersion, downloadedVersion.compare(bundledVersion, options: .numeric) == .orderedDescending {
-            return downloadedVersion
-        }
-        return bundledVersion
-    }
     
     // Loads the latest `ImageQualityModel` model based on the `bundledVersion` and `downloadedVersion` values.
     static func loadLatest() throws -> ImageQualityModel {
@@ -52,5 +44,16 @@ extension ImageQualityModel {
         }
         // bundled model is newer or we failed to load a downloaded one
         return try ImageQualityModel(configuration: MLModelConfiguration())
+    }
+    
+    static var downloadedModelLocation: URL {
+        let appSupportDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let modelName = String(describing: self)
+        return appSupportDirectory.appendingPathComponent(modelName).appendingPathExtension("mlmodelc")
+    }
+    
+    static func removeDownloadedModel() {
+        try? FileManager.default.removeItem(at: downloadedModelLocation)
+        downloadedVersion = nil
     }
 }

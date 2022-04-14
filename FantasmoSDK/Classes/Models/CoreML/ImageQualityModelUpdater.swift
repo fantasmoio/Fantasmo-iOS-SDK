@@ -34,7 +34,13 @@ class ImageQualityModelUpdater {
             return
         }
         
-        let currentLatestVersion = ImageQualityModel.latestVersion
+        let currentLatestVersion: String
+        if let downloadedVersion = ImageQualityModel.downloadedVersion,
+           downloadedVersion.compare(ImageQualityModel.bundledVersion, options: .numeric) == .orderedDescending {
+            currentLatestVersion = downloadedVersion
+        } else {
+            currentLatestVersion = ImageQualityModel.bundledVersion
+        }
         log.info("current model version: \(currentLatestVersion)")
         log.info("remote config model version: \(remoteConfigModelVersion)")
         

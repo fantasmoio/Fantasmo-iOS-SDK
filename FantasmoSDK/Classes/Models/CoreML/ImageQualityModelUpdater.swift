@@ -62,10 +62,7 @@ class ImageQualityModelUpdater {
                 return
             }
         }
-        
-        let modelName = String(describing: ImageQualityModel.self)
-        let currentModelLocation = appSupportDirectory.appendingPathComponent(modelName).appendingPathExtension("mlmodelc")
-        
+                
         isUpdatingModel = true
         
         downloadModel(at: remoteConfigModelUrl) { modelData, downloadError in
@@ -74,8 +71,9 @@ class ImageQualityModelUpdater {
                 log.error("error downloading model: \(downloadError?.localizedDescription ?? "")")
                 return
             }
-            
-            self.compileModel(data: modelData, overwriting: currentModelLocation) { compileError in
+        
+            let downloadedModelLocation = ImageQualityModel.getDownloadedModelLocation()
+            self.compileModel(data: modelData, overwriting: downloadedModelLocation) { compileError in
                 self.isUpdatingModel = false
                 if let compileError = compileError {
                     log.error("error compiling model: \(compileError.localizedDescription)")

@@ -24,10 +24,8 @@ extension ImageQualityModel {
     static func loadLatest() throws -> ImageQualityModel {
         if let downloadedModelVersion = downloadedVersion, downloadedModelVersion.compare(bundledVersion, options: .numeric) == .orderedDescending {
             // we have a downloaded model and it's newer than the bundled one
-            let modelName = String(describing: ImageQualityModel.self)
             let fileManager = FileManager.default
-            let appSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-            let downloadedModelLocation = appSupportDirectory.appendingPathComponent(modelName).appendingPathExtension("mlmodelc")
+            let downloadedModelLocation = getDownloadedModelLocation()
             // check the downloaded model file exists
             if fileManager.fileExists(atPath: downloadedModelLocation.path) {
                 do {
@@ -46,14 +44,14 @@ extension ImageQualityModel {
         return try ImageQualityModel(configuration: MLModelConfiguration())
     }
     
-    static var downloadedModelLocation: URL {
+    static func getDownloadedModelLocation() -> URL {
         let appSupportDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let modelName = String(describing: self)
         return appSupportDirectory.appendingPathComponent(modelName).appendingPathExtension("mlmodelc")
     }
     
     static func removeDownloadedModel() {
-        try? FileManager.default.removeItem(at: downloadedModelLocation)
+        try? FileManager.default.removeItem(at: getDownloadedModelLocation())
         downloadedVersion = nil
     }
 }

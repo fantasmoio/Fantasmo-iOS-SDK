@@ -70,7 +70,7 @@ class SDKImageQualityModelUpdaterTests: XCTestCase {
         
         // Check the compiled model is present
         let fileManager = FileManager.default
-        let downloadedModelLocation = ImageQualityModel.downloadedModelLocation
+        let downloadedModelLocation = ImageQualityModel.getDownloadedModelLocation()
         XCTAssertTrue(fileManager.fileExists(atPath: downloadedModelLocation.path))
         
         // Check the downloaded model is loaded
@@ -92,7 +92,7 @@ class SDKImageQualityModelUpdaterTests: XCTestCase {
     func testBundledModelLoadedWhenNewer() throws {
         // Place an older image quality model in the downloaded location
         let oldModelLocation = try XCTUnwrap(TestUtils.url(for: "dummy-image-quality-model-0.0.1.mlmodelc"))
-        let downloadedModelLocation = ImageQualityModel.downloadedModelLocation
+        let downloadedModelLocation = ImageQualityModel.getDownloadedModelLocation()
         try FileManager.default.copyItem(at: oldModelLocation, to: downloadedModelLocation)
         ImageQualityModel.downloadedVersion = "0.0.1"
         

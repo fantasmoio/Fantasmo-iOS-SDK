@@ -35,8 +35,7 @@ extension ImageQualityModel {
                 } catch {
                     // failed to load the downloaded model, remove it
                     log.error("error loading downloaded model: \(error.localizedDescription)")
-                    try? fileManager.removeItem(at: downloadedModelLocation)
-                    ImageQualityModel.downloadedVersion = nil
+                    removeDownloadedModel()
                 }
             }
         }

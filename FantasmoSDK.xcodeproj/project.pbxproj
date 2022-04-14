@@ -29,11 +29,13 @@
 		01138A482755355A00AB31DF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A432755355A00AB31DF /* MapViewController.swift */; };
 		011589E62742957100CFC368 /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011589E52742957100CFC368 /* ImageEncoder.swift */; };
 		01172678274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */; };
+		0119641028085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc in Resources */ = {isa = PBXBuildFile; fileRef = 0119640F28085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc */; };
 		011A10E527A173C800B84A0F /* FMImageEnhancer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011A10E427A173C800B84A0F /* FMImageEnhancer.swift */; };
 		0123A4D7270F2E7E00763758 /* FMParkingViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */; };
 		0123A4D9270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */; };
 		0123A4DC270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */; };
 		0123A4DF270F520800763758 /* FMLocationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0123A4DE270F520800763758 /* FMLocationError.swift */; };
+		01270D382805E48C003AA9DB /* ImageQualityModel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01270D372805E48C003AA9DB /* ImageQualityModel+Extensions.swift */; };
 		01296D032756627500636BBE /* movement-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01296D012756627500636BBE /* movement-filter.json */; };
 		01296D08275672FB00636BBE /* tracking-state-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01296D07275672FB00636BBE /* tracking-state-filter.json */; };
 		01296D0A2756744500636BBE /* camera-pitch-filter.json in Resources */ = {isa = PBXBuildFile; fileRef = 01296D092756744500636BBE /* camera-pitch-filter.json */; };
@@ -88,6 +90,7 @@
 		01905FAF27E248870052602E /* ImageQualityModel.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01905FAE27E248870052602E /* ImageQualityModel.mlmodel */; };
 		01933FBB27CE8B910089796C /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01933FBA27CE8B910089796C /* TestUtils.swift */; };
 		01933FBE27CE910D0089796C /* SDKImageQualityEvaluatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01933FBD27CE910D0089796C /* SDKImageQualityEvaluatorTests.swift */; };
+		019776C628071715005E4257 /* SDKImageQualityModelUpdaterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019776C528071715005E4257 /* SDKImageQualityModelUpdaterTests.swift */; };
 		01984383271590A9004CAC3A /* FMToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01984382271590A9004CAC3A /* FMToolbar.swift */; };
 		0199417F27C3A45600118BD9 /* FMFrameEvaluation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0199417E27C3A45600118BD9 /* FMFrameEvaluation.swift */; };
 		0199418127C3C65D00118BD9 /* FMFrameEvaluatorChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0199418027C3C65D00118BD9 /* FMFrameEvaluatorChain.swift */; };
@@ -261,11 +264,13 @@
 		01138A432755355A00AB31DF /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		011589E52742957100CFC368 /* ImageEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoder.swift; sourceTree = "<group>"; };
 		01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQualityModelUpdater.swift; sourceTree = "<group>"; };
+		0119640F28085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = "dummy-image-quality-model-0.0.1.mlmodelc"; sourceTree = "<group>"; };
 		011A10E427A173C800B84A0F /* FMImageEnhancer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMImageEnhancer.swift; sourceTree = "<group>"; };
 		0123A4D6270F2E7E00763758 /* FMParkingViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMParkingViewControllerDelegate.swift; sourceTree = "<group>"; };
 		0123A4D8270F3C9000763758 /* FMLocalizingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocalizingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		0123A4DB270F3CA300763758 /* FMQRScanningViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMQRScanningViewControllerProtocol.swift; sourceTree = "<group>"; };
 		0123A4DE270F520800763758 /* FMLocationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationError.swift; sourceTree = "<group>"; };
+		01270D372805E48C003AA9DB /* ImageQualityModel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImageQualityModel+Extensions.swift"; sourceTree = "<group>"; };
 		01296D012756627500636BBE /* movement-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "movement-filter.json"; sourceTree = "<group>"; };
 		01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKRemoteConfigTests.swift; sourceTree = "<group>"; };
 		01296D07275672FB00636BBE /* tracking-state-filter.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "tracking-state-filter.json"; sourceTree = "<group>"; };
@@ -299,6 +304,7 @@
 		01905FAE27E248870052602E /* ImageQualityModel.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ImageQualityModel.mlmodel; sourceTree = "<group>"; };
 		01933FBA27CE8B910089796C /* TestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		01933FBD27CE910D0089796C /* SDKImageQualityEvaluatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKImageQualityEvaluatorTests.swift; sourceTree = "<group>"; };
+		019776C528071715005E4257 /* SDKImageQualityModelUpdaterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKImageQualityModelUpdaterTests.swift; sourceTree = "<group>"; };
 		01984382271590A9004CAC3A /* FMToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMToolbar.swift; sourceTree = "<group>"; };
 		0199417E27C3A45600118BD9 /* FMFrameEvaluation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameEvaluation.swift; sourceTree = "<group>"; };
 		0199418027C3C65D00118BD9 /* FMFrameEvaluatorChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameEvaluatorChain.swift; sourceTree = "<group>"; };
@@ -472,8 +478,17 @@
 			children = (
 				01905FAE27E248870052602E /* ImageQualityModel.mlmodel */,
 				01172677274E9DB4005EA7C0 /* ImageQualityModelUpdater.swift */,
+				01270D372805E48C003AA9DB /* ImageQualityModel+Extensions.swift */,
 			);
 			path = CoreML;
+			sourceTree = "<group>";
+		};
+		0119640A28084B44007DDD20 /* MLModels */ = {
+			isa = PBXGroup;
+			children = (
+				0119640F28085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc */,
+			);
+			path = MLModels;
 			sourceTree = "<group>";
 		};
 		0123A4E1270F521400763758 /* Errors */ = {
@@ -732,8 +747,9 @@
 		A0D5E88826BA97DA00CE5B1C /* FantasmoSDKTests */ = {
 			isa = PBXGroup;
 			children = (
-				0139EE4327E1177100F3F329 /* Images */,
 				01296D002756528900636BBE /* Configs */,
+				0139EE4327E1177100F3F329 /* Images */,
+				0119640A28084B44007DDD20 /* MLModels */,
 				01933FBC27CE90130089796C /* Utils */,
 				012C7BF227B19B29003DC67F /* Videos */,
 				013521E327F480CD00581B48 /* SDKConfigurationTests.swift */,
@@ -743,6 +759,7 @@
 				01BB298E27B3CC2800BAE286 /* SDKImageEncoderTests.swift */,
 				01BB298827B2A1B900BAE286 /* SDKImageEnhancerTests.swift */,
 				01933FBD27CE910D0089796C /* SDKImageQualityEvaluatorTests.swift */,
+				019776C528071715005E4257 /* SDKImageQualityModelUpdaterTests.swift */,
 				A0D5E88926BA97DA00CE5B1C /* SDKLocationTests.swift */,
 				01296D052756656C00636BBE /* SDKRemoteConfigTests.swift */,
 				A0D5E88B26BA97DA00CE5B1C /* Info.plist */,
@@ -1035,6 +1052,7 @@
 				017E114927E20AA700B2740E /* iqe-test-frame-rotated.png in Resources */,
 				012C7BF927B19B29003DC67F /* qr-code.mp4 in Resources */,
 				0139EE4527E1177900F3F329 /* iqe-test-frame.png in Resources */,
+				0119641028085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc in Resources */,
 				012C7BF727B19B29003DC67F /* parking-nighttime.mp4 in Resources */,
 				40EA810526E7C6A8002E96A6 /* Assets.xcassets in Resources */,
 			);
@@ -1106,6 +1124,7 @@
 				0199418327C3EA0D00118BD9 /* FMFrameEvaluator.swift in Sources */,
 				011A10E527A173C800B84A0F /* FMImageEnhancer.swift in Sources */,
 				0134C42127E8E36800BC6B87 /* FMFrameRejectionReason.swift in Sources */,
+				01270D382805E48C003AA9DB /* ImageQualityModel+Extensions.swift in Sources */,
 				A3CB774226372A9B009625BB /* simd_quatf+Extension.swift in Sources */,
 				A3CB77372636BDB8009625BB /* FMOrientation.swift in Sources */,
 				A3798CA526AAF52D007CB41F /* ARCamera+Extension.swift in Sources */,
@@ -1191,6 +1210,7 @@
 				01827D2E2758EF1F006D21CE /* MockCamera.swift in Sources */,
 				0131340727CE570B00CA4242 /* SDKFrameFilterTests.swift in Sources */,
 				01BB298927B2A1B900BAE286 /* SDKImageEnhancerTests.swift in Sources */,
+				019776C628071715005E4257 /* SDKImageQualityModelUpdaterTests.swift in Sources */,
 				01BB298F27B3CC2800BAE286 /* SDKImageEncoderTests.swift in Sources */,
 				013521E427F480CD00581B48 /* SDKConfigurationTests.swift in Sources */,
 				01827D2B2758E92E006D21CE /* SDKRemoteConfigTests.swift in Sources */,

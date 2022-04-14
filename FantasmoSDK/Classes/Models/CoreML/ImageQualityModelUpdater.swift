@@ -26,36 +26,35 @@ class ImageQualityModelUpdater {
         log.info("checking for model updates")
         
         let remoteConfig = RemoteConfig.config()
-        guard let latestModelVersion = remoteConfig.imageQualityFilterModelVersion,
-              let latestModelUrlString = remoteConfig.imageQualityFilterModelUri,
-              let latestModelUrl = URL(string: latestModelUrlString)
+        guard let remoteConfigModelVersion = remoteConfig.imageQualityFilterModelVersion,
+              let remoteConfigModelUrlString = remoteConfig.imageQualityFilterModelUri,
+              let remoteConfigModelUrl = URL(string: remoteConfigModelUrlString)
         else {
             log.info("no model specified in remote config")
             return
         }
-
-        let fileManager = FileManager.default
-        let modelName = String(describing: ImageQualityModel.self)
-        let appSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        let currentModelLocation = appSupportDirectory.appendingPathComponent(modelName).appendingPathExtension("mlmodelc")
-                
-        if fileManager.fileExists(atPath: currentModelLocation.path) {
-            do {
-                log.info("checking current model version")
-                let currentModel = try ImageQualityModel(contentsOf: currentModelLocation)
-                let currentModelDescription = currentModel.model.modelDescription
-                let currentModelVersion = currentModelDescription.metadata[MLModelMetadataKey.versionString] as? String ?? ""
-                if currentModelVersion == latestModelVersion {
-                    log.info("version \(currentModelVersion) is already the latest")
-                    return
-                }
-            } catch {
-                log.error("error checking current model version: \(error.localizedDescription)")
-                try? fileManager.removeItem(at: currentModelLocation)
-            }
+        
+        let currentLatestVersion: String
+        if let downloadedVersion = ImageQualityModel.downloadedVersion,
+           downloadedVersion.compare(ImageQualityModel.bundledVersion, options: .numeric) == .orderedDescending {
+            currentLatestVersion = downloadedVersion
+        } else {
+            currentLatestVersion = ImageQualityModel.bundledVersion
+        }
+        log.info("current model version: \(currentLatestVersion)")
+        log.info("remote config model version: \(remoteConfigModelVersion)")
+        
+        let isRemoteConfigModelNewer = remoteConfigModelVersion.compare(currentLatestVersion, options: .numeric) == .orderedDescending
+        if !isRemoteConfigModelNewer {
+            log.info("current model is already the latest")
+            return
         }
         
-        // Create the app support directory if needed, it doesn't exist by default
+        log.info("updating model to version \(remoteConfigModelVersion)")
+        
+        // First create the app support directory if needed, it doesn't exist by default
+        let fileManager = FileManager.default
+        let appSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         if !fileManager.fileExists(atPath: appSupportDirectory.path, isDirectory: nil) {
             guard let _  = try? fileManager.createDirectory(
                 at: appSupportDirectory, withIntermediateDirectories: true, attributes: nil) else {
@@ -65,22 +64,23 @@ class ImageQualityModelUpdater {
         }
                 
         isUpdatingModel = true
-        log.info("updating model to version \(latestModelVersion)")
         
-        downloadModel(at: latestModelUrl) { modelData, downloadError in
+        downloadModel(at: remoteConfigModelUrl) { modelData, downloadError in
             guard downloadError == nil, let modelData = modelData else {
                 self.isUpdatingModel = false
                 log.error("error downloading model: \(downloadError?.localizedDescription ?? "")")
                 return
             }
-            
-            self.compileModel(data: modelData, overwriting: currentModelLocation) { compileError in
+        
+            let downloadedModelLocation = ImageQualityModel.getDownloadedModelLocation()
+            self.compileModel(data: modelData, overwriting: downloadedModelLocation) { compileError in
                 self.isUpdatingModel = false
                 if let compileError = compileError {
                     log.error("error compiling model: \(compileError.localizedDescription)")
-                } else {
-                    log.info("successfully updated model")
+                    return
                 }
+                log.info("successfully updated model to version: \(remoteConfigModelVersion)")
+                ImageQualityModel.downloadedVersion = remoteConfigModelVersion
             }
         }
     }

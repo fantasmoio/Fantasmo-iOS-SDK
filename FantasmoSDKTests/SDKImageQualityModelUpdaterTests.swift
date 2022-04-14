@@ -50,7 +50,22 @@ class SDKImageQualityModelUpdaterTests: XCTestCase {
         XCTAssertFalse(imageQualityModelUpdater.isUpdatingModel)
     }
     
-    func testModelUpdated() throws {
+    func testModelUpdate() throws {
+        // Place an older image quality model in the downloaded location
+        let oldModelLocation = try XCTUnwrap(TestUtils.url(for: "dummy-image-quality-model-0.0.1.mlmodelc"))
+        let downloadedModelLocation = ImageQualityModel.getDownloadedModelLocation()
+        let fileManager = FileManager.default
+        try fileManager.copyItem(at: oldModelLocation, to: downloadedModelLocation)
+        ImageQualityModel.downloadedVersion = "0.0.1"
+    
+        var model: ImageQualityModel
+        var modelVersion: String
+        
+        // Check the bundled model is the one loaded because it's newer
+        model = try ImageQualityModel.loadLatest()
+        modelVersion = try XCTUnwrap(model.model.modelDescription.metadata[.versionString] as? String)
+        XCTAssertEqual(modelVersion, ImageQualityModel.bundledVersion)
+        
         // Mock a remote config with a newer model
         let testConfig = TestUtils.makeTestConfig(
             imageQualityFilterModelUri: "https://fantasmo-ci.s3.eu-west-3.amazonaws.com/dummy-image-quality-model-9.9.9.mlmodel",
@@ -69,13 +84,11 @@ class SDKImageQualityModelUpdaterTests: XCTestCase {
         _ = XCTWaiter.wait(for: [expectation(description: "")], timeout: 3.0)
         
         // Check the compiled model is present
-        let fileManager = FileManager.default
-        let downloadedModelLocation = ImageQualityModel.getDownloadedModelLocation()
         XCTAssertTrue(fileManager.fileExists(atPath: downloadedModelLocation.path))
         
         // Check the downloaded model is loaded
-        let model = try ImageQualityModel.loadLatest()
-        let modelVersion = try XCTUnwrap(model.model.modelDescription.metadata[.versionString] as? String)
+        model = try ImageQualityModel.loadLatest()
+        modelVersion = try XCTUnwrap(model.model.modelDescription.metadata[.versionString] as? String)
         XCTAssertEqual(modelVersion, "9.9.9")
         
         // Check the current downloaded model version was updated
@@ -87,18 +100,5 @@ class SDKImageQualityModelUpdaterTests: XCTestCase {
         // Check the update is not triggered again
         imageQualityModelUpdater.checkForUpdates()
         XCTAssertFalse(imageQualityModelUpdater.isUpdatingModel)
-    }
-    
-    func testBundledModelLoadedWhenNewer() throws {
-        // Place an older image quality model in the downloaded location
-        let oldModelLocation = try XCTUnwrap(TestUtils.url(for: "dummy-image-quality-model-0.0.1.mlmodelc"))
-        let downloadedModelLocation = ImageQualityModel.getDownloadedModelLocation()
-        try FileManager.default.copyItem(at: oldModelLocation, to: downloadedModelLocation)
-        ImageQualityModel.downloadedVersion = "0.0.1"
-        
-        // Check the bundled model is loaded because it's newer
-        let model = try ImageQualityModel.loadLatest()
-        let modelVersion = try XCTUnwrap(model.model.modelDescription.metadata[.versionString] as? String)
-        XCTAssertEqual(modelVersion, ImageQualityModel.bundledVersion)
     }
 }

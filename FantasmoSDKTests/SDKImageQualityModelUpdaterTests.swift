@@ -57,13 +57,10 @@ class SDKImageQualityModelUpdaterTests: XCTestCase {
         let fileManager = FileManager.default
         try fileManager.copyItem(at: oldModelLocation, to: downloadedModelLocation)
         ImageQualityModel.downloadedVersion = "0.0.1"
-    
-        var model: ImageQualityModel
-        var modelVersion: String
         
         // Check the bundled model is the one loaded because it's newer
-        model = try ImageQualityModel.loadLatest()
-        modelVersion = try XCTUnwrap(model.model.modelDescription.metadata[.versionString] as? String)
+        var model = try ImageQualityModel.loadLatest()
+        var modelVersion = try XCTUnwrap(model.model.modelDescription.metadata[.versionString] as? String)
         XCTAssertEqual(modelVersion, ImageQualityModel.bundledVersion)
         
         // Mock a remote config with a newer model

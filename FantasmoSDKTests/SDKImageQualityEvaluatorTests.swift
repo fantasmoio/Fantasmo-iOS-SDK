@@ -15,6 +15,11 @@ class SDKImageQualityEvaluatorTests: XCTestCase {
     let rgbMean: (Float, Float, Float) = (0.485, 0.456, 0.406)
     let rgbStdDev: (Float, Float, Float) = (0.229, 0.224, 0.225)
     
+    override class func setUp() {
+        // Tests are based on the latest bundled model
+        ImageQualityModel.removeDownloadedModel()
+    }
+    
     func testCreatesMLInput() throws {
         // create a new evaluator
         let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)
@@ -98,7 +103,7 @@ class SDKImageQualityEvaluatorTests: XCTestCase {
         
         // check the evaluation score is what we expect
         let daytimeEvaluation = imageQualityEvaluator.evaluate(frame: daytimeFrame)
-        XCTAssertEqual(daytimeEvaluation.score, 0.76551, accuracy: 0.001)
+        XCTAssertEqual(daytimeEvaluation.score, 0.76551, accuracy: 0.01)
         
         // create a mock nighttime AR session and get a test frame
         let nighttimeSession = MockARSession(videoName: "parking-nighttime")
@@ -106,7 +111,7 @@ class SDKImageQualityEvaluatorTests: XCTestCase {
         
         // check the evaluation score is what we expect
         let nighttimeEvaluation = imageQualityEvaluator.evaluate(frame: nighttimeFrame)
-        XCTAssertEqual(nighttimeEvaluation.score, 0.81611, accuracy: 0.001)
+        XCTAssertEqual(nighttimeEvaluation.score, 0.81611, accuracy: 0.01)
     }
     
     func testReturnsImageQualityUserInfo() throws {

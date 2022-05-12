@@ -52,13 +52,13 @@ class ImageQualityModelUpdater {
         
         log.info("updating model to version \(remoteConfigModelVersion)")
         
-        // First create the app support directory if needed, it doesn't exist by default
+        // First create the model download directory if needed, it doesn't exist by default
         let fileManager = FileManager.default
-        let appSupportDirectory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-        if !fileManager.fileExists(atPath: appSupportDirectory.path, isDirectory: nil) {
+        let modelDownloadDirectory = ImageQualityModel.getDownloadedModelDirectory()
+        if !fileManager.fileExists(atPath: modelDownloadDirectory.path, isDirectory: nil) {
             guard let _  = try? fileManager.createDirectory(
-                at: appSupportDirectory, withIntermediateDirectories: true, attributes: nil) else {
-                log.error("unable to create app support directory")
+                at: modelDownloadDirectory, withIntermediateDirectories: true, attributes: nil) else {
+                log.error("unable to create model download directory: \(modelDownloadDirectory.path)")
                 return
             }
         }

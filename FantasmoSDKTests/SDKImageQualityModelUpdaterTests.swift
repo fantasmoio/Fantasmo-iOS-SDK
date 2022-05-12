@@ -55,6 +55,7 @@ class SDKImageQualityModelUpdaterTests: XCTestCase {
         let oldModelLocation = try XCTUnwrap(TestUtils.url(for: "dummy-image-quality-model-0.0.1.mlmodelc"))
         let downloadedModelLocation = ImageQualityModel.getDownloadedModelLocation()
         let fileManager = FileManager.default
+        try? fileManager.createDirectory(at: ImageQualityModel.getDownloadedModelDirectory(), withIntermediateDirectories: true)
         try fileManager.copyItem(at: oldModelLocation, to: downloadedModelLocation)
         ImageQualityModel.downloadedVersion = "0.0.1"
         

@@ -43,10 +43,14 @@ extension ImageQualityModel {
         return try ImageQualityModel(configuration: MLModelConfiguration())
     }
     
+    static func getDownloadedModelDirectory() -> URL {
+        return FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+    }
+    
     static func getDownloadedModelLocation() -> URL {
-        let appSupportDirectory = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+        let modelDirectory = getDownloadedModelDirectory()
         let modelName = String(describing: self)
-        return appSupportDirectory.appendingPathComponent(modelName).appendingPathExtension("mlmodelc")
+        return modelDirectory.appendingPathComponent(modelName).appendingPathExtension("mlmodelc")
     }
     
     static func removeDownloadedModel() {

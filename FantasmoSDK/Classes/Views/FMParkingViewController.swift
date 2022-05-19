@@ -322,7 +322,7 @@ public final class FMParkingViewController: UIViewController {
         
         sceneView.session.pause()
         
-        if isBeingDismissed {
+        if isBeingDismissed || isMovingFromParent {
             fmLocationManager.unsetAnchor()
             fmLocationManager.stopUpdatingLocation()
             fmLocationManager.sendSessionAnalytics()

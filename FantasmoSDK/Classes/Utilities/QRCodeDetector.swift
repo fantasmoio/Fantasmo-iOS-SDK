@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreImage
-import ARKit
 
 class QRCodeDetector: FMQRCodeDetector {
     
@@ -21,20 +20,21 @@ class QRCodeDetector: FMQRCodeDetector {
     
     private var isChecking: Bool = false
     
-    private var lastFrameTimestamp: TimeInterval = 0.0
+    private var lastCheckTimestamp: TimeInterval = 0.0
     
-    func checkFrameAsyncThrottled(_ frame: ARFrame) {
+    func checkAsyncThrottled(_ pixelBuffer: CVPixelBuffer) {
         guard !isChecking, detectedQRCode == nil else {
             return
         }
-        let checkAllowed = frame.timestamp - lastFrameTimestamp > (1.0 / checksAllowedPerSecond)
+        let timestampNow = Date().timeIntervalSince1970
+        let checkAllowed = timestampNow - lastCheckTimestamp > (1.0 / checksAllowedPerSecond)
         guard checkAllowed else {
             return
         }
-        lastFrameTimestamp = frame.timestamp
+        lastCheckTimestamp = timestampNow
         isChecking = true
         DispatchQueue.global(qos: .utility).async { [weak self] in
-            let image = CIImage(cvPixelBuffer: frame.capturedImage)
+            let image = CIImage(cvPixelBuffer: pixelBuffer)
             let qrCode = self?.detector?.features(in: image).first as? CIQRCodeFeature
             DispatchQueue.main.async {
                 self?.isChecking = false

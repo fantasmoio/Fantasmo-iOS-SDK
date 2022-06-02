@@ -53,7 +53,7 @@ class FMApi {
                                  error: @escaping ErrorResult) {
         
         // set up request parameters
-        guard let image = encodedImage(from: frame, request: request) else {
+        guard let image = imageEncoder.encodedImage(frame: frame) else {
             error(FMError(ApiError.invalidImage))
             return
         }
@@ -346,32 +346,7 @@ class FMApi {
         // add device and host app info
         params.merge(getDeviceAndHostAppInfo()) { (_, new) in new }
         
-        // add fixed simulated data if simulating
-        if request.isSimulation {
-            params.merge(MockData.params(request)) { (_, new) in new }
-        }
-        
         return params
-    }
-    
-    /// Generate the image data used to perform "localize" HTTP request .
-    /// Image of `frame` is oriented taking into account orientation of camera when taking image. For example, if device was upside-down when
-    /// frame was captured from camera, then resulting image is rotated by 180 degrees. So server always receives properly oriented image
-    /// as if it was captured from properly oriented camera.
-    ///
-    /// - Parameters:
-    ///   - frame: Frame to localize
-    ///   - request: Localization request struct
-    ///   - Returns: Prepared localization image
-    private func encodedImage(from frame: FMFrame, request: FMLocalizationRequest) -> ImageEncoder.Image? {
-        
-        // mock if simulation
-        guard !request.isSimulation else {
-            return MockData.encodedImage(request)
-        }
-
-        let encodedImage = imageEncoder.encodedImage(frame: frame)
-        return encodedImage
     }
     
     /// Returns a dictionary of common device and host app info that can be added to request parameters.

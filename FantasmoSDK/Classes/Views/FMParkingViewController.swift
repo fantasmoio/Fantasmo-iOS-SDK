@@ -234,14 +234,21 @@ public final class FMParkingViewController: UIViewController {
     
     // MARK: -
     // MARK: Debug
-        
+   
+    
+    /// A video asset of a recorded AR session. If set, the parking session will run in simulation mode and use the recorded sensor data.
+    public var simulationAsset: AVAsset? {
+        didSet {
+            fmLocationManager.isSimulation = simulationAsset != nil
+        }
+    }
+
+    @available(*, deprecated, message: "Use `simulationAsset` instead.")
     public var isSimulation: Bool {
         set {
-            fmLocationManager.isSimulation = newValue
-            fmLocationManager.simulationZone = isSimulation ? .parking : .unknown
         }
         get {
-            return fmLocationManager.isSimulation
+            return simulationAsset != nil
         }
     }
 
@@ -266,7 +273,7 @@ public final class FMParkingViewController: UIViewController {
     // MARK: -
     // MARK: UI
     
-    private var sceneView: ARSCNView!
+    private var sceneView: FMSceneView!
     
     private var containerView: UIView!
     
@@ -274,15 +281,13 @@ public final class FMParkingViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-                
-        let session = ARSession()
-        session.delegate = self
      
-        sceneView = ARSCNView(frame: .zero)
-        sceneView.session = session
-        sceneView.antialiasingMode = .multisampling4X
-        sceneView.automaticallyUpdatesLighting = false
-        sceneView.preferredFramesPerSecond = 60
+        if let simulationAsset = simulationAsset {
+            sceneView = FMSimulationView(asset: simulationAsset)
+        } else {
+            sceneView = FMARSceneView()
+        }
+        sceneView.delegate = self
         self.view.addSubview(sceneView)
         
         containerView = UIView()
@@ -291,26 +296,12 @@ public final class FMParkingViewController: UIViewController {
         if let statisticsView = statisticsView {
             self.view.addSubview(statisticsView)
         }
-        
-        if let camera = sceneView.pointOfView?.camera {
-            camera.wantsHDR = true
-            camera.wantsExposureAdaptation = true
-            camera.exposureOffset = -1
-            camera.minimumExposure = -1
-        }
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-                
-        let configuration = ARWorldTrackingConfiguration()
-        if #available(iOS 11.3, *) {
-            configuration.isAutoFocusEnabled = true
-        }
-        configuration.worldAlignment = .gravity
         
-        let options: ARSession.RunOptions = [.resetTracking]
-        sceneView.session.run(configuration, options: options)
+        sceneView.run()
                 
         if state == .idle {
             startQRScanning()
@@ -320,7 +311,7 @@ public final class FMParkingViewController: UIViewController {
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        sceneView.session.pause()
+        sceneView.pause()
         
         if isBeingDismissed || isMovingFromParent {
             fmLocationManager.unsetAnchor()
@@ -434,13 +425,13 @@ extension FMParkingViewController: FMLocationManagerDelegate {
 }
 
 // MARK: -
-// MARK: ARSessionDelegate
+// MARK: FMSceneViewDelegate
 
-extension FMParkingViewController: ARSessionDelegate {
-
-    public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+extension FMParkingViewController: FMSceneViewDelegate {
+    
+    func sceneView(_ sceneView: FMSceneView, didUpdate frame: FMFrame) {
         // Pass the current AR frame to the location manager
-        fmLocationManager.session(session, didUpdate: frame)
+        fmLocationManager.sceneView(sceneView, didUpdate: frame)
         
         switch state {
         case .qrScanning:
@@ -451,7 +442,7 @@ extension FMParkingViewController: ARSessionDelegate {
             }
             guard let qrCode = qrCodeDetector.detectedQRCode else {
                 // No code has been detected yet, check for one now.
-                qrCodeDetector.checkFrameAsyncThrottled(frame)
+                qrCodeDetector.checkAsyncThrottled(frame.capturedImage)
                 return
             }
             // A code has been detected, notify the scanning view
@@ -485,7 +476,7 @@ extension FMParkingViewController: ARSessionDelegate {
         }
     }
     
-    public func session(_ session: ARSession, didFailWithError error: Error) {
+    func sceneView(_ sceneView: FMSceneView, didFailWithError error: Error) {
         guard error is ARError else {
             return
         }

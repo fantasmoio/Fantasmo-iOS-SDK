@@ -58,6 +58,9 @@
 		0134BF8A270610E800DDEF7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9468389925921BF3005B1145 /* Assets.xcassets */; };
 		0134C42127E8E36800BC6B87 /* FMFrameRejectionReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0134C42027E8E36800BC6B87 /* FMFrameRejectionReason.swift */; };
 		013521E427F480CD00581B48 /* SDKConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013521E327F480CD00581B48 /* SDKConfigurationTests.swift */; };
+		013628E3284FA901008CF88D /* ar-session-nick.mov in Resources */ = {isa = PBXBuildFile; fileRef = 013628E2284FA901008CF88D /* ar-session-nick.mov */; };
+		013628E4284FA901008CF88D /* ar-session-nick.mov in Resources */ = {isa = PBXBuildFile; fileRef = 013628E2284FA901008CF88D /* ar-session-nick.mov */; };
+		013628E6284FB361008CF88D /* FMSimulation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013628E5284FB361008CF88D /* FMSimulation.swift */; };
 		0139EE4527E1177900F3F329 /* iqe-test-frame.png in Resources */ = {isa = PBXBuildFile; fileRef = 0139EE4427E1177900F3F329 /* iqe-test-frame.png */; };
 		013BF22627A2A745001DE841 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 013BF22527A2A745001DE841 /* Shaders.metal */; };
 		0143E8D4270C694400A3CF35 /* FMSessionStatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */; };
@@ -297,6 +300,8 @@
 		0134BF862705E8F400DDEF7A /* FMTipLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMTipLabel.swift; sourceTree = "<group>"; };
 		0134C42027E8E36800BC6B87 /* FMFrameRejectionReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFrameRejectionReason.swift; sourceTree = "<group>"; };
 		013521E327F480CD00581B48 /* SDKConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKConfigurationTests.swift; sourceTree = "<group>"; };
+		013628E2284FA901008CF88D /* ar-session-nick.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "ar-session-nick.mov"; sourceTree = "<group>"; };
+		013628E5284FB361008CF88D /* FMSimulation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSimulation.swift; sourceTree = "<group>"; };
 		0139EE4427E1177900F3F329 /* iqe-test-frame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iqe-test-frame.png"; sourceTree = "<group>"; };
 		013BF22527A2A745001DE841 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.metal; };
 		0143E8D3270C694400A3CF35 /* FMSessionStatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMSessionStatisticsView.swift; sourceTree = "<group>"; };
@@ -448,6 +453,7 @@
 		01138A1727551D5F00AB31DF /* FantasmoSDKTestHarness */ = {
 			isa = PBXGroup;
 			children = (
+				011E0D2228490BF10006FB4F /* Videos */,
 				01138A3A2755344700AB31DF /* Classes */,
 				01138A33275533D400AB31DF /* Extensions */,
 				01138A1827551D5F00AB31DF /* AppDelegate.swift */,
@@ -501,6 +507,14 @@
 				0119640F28085DFC007DDD20 /* dummy-image-quality-model-0.0.1.mlmodelc */,
 			);
 			path = MLModels;
+			sourceTree = "<group>";
+		};
+		011E0D2228490BF10006FB4F /* Videos */ = {
+			isa = PBXGroup;
+			children = (
+				013628E2284FA901008CF88D /* ar-session-nick.mov */,
+			);
+			path = Videos;
 			sourceTree = "<group>";
 		};
 		0123A4E1270F521400763758 /* Errors */ = {
@@ -730,6 +744,7 @@
 				0134C42027E8E36800BC6B87 /* FMFrameRejectionReason.swift */,
 				406437FD26E787A200B38B45 /* FMCamera.swift */,
 				011E0D1A2849036A0006FB4F /* FMSimulationFrame.swift */,
+				013628E5284FB361008CF88D /* FMSimulation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1018,6 +1033,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				013628E3284FA901008CF88D /* ar-session-nick.mov in Resources */,
 				01138A2E27551F5B00AB31DF /* Settings.bundle in Resources */,
 				01138A2527551D6000AB31DF /* LaunchScreen.storyboard in Resources */,
 				01138A2227551D6000AB31DF /* Assets.xcassets in Resources */,
@@ -1029,6 +1045,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				013628E4284FA901008CF88D /* ar-session-nick.mov in Resources */,
 				018EF39E2795A16A005A1381 /* Settings.bundle in Resources */,
 				018EF39F2795A16A005A1381 /* LaunchScreen.storyboard in Resources */,
 				018EF3A02795A16A005A1381 /* Assets.xcassets in Resources */,
@@ -1186,6 +1203,7 @@
 				A02646BC260CE44900A7FA6B /* FMRestClient.swift in Sources */,
 				011E0D1B2849036A0006FB4F /* FMSimulationFrame.swift in Sources */,
 				406437FE26E787A300B38B45 /* FMCamera.swift in Sources */,
+				013628E6284FB361008CF88D /* FMSimulation.swift in Sources */,
 				017C5ED3278C53A2000DEBCE /* IsLocalizationAvailableResponse.swift in Sources */,
 				0144B7A427047CEB009A4042 /* FMLocalizingViewController.swift in Sources */,
 				01B58681274BF8DF0082FFF7 /* RemoteConfig.swift in Sources */,

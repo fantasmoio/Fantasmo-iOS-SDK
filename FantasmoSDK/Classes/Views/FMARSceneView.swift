@@ -14,6 +14,8 @@ class FMARSceneView: UIView, FMSceneView {
     var delegate: FMSceneViewDelegate?
     
     var arScnView: ARSCNView!
+
+    var clLocationManager: CLLocationManager!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,6 +36,10 @@ class FMARSceneView: UIView, FMSceneView {
             camera.exposureOffset = -1
             camera.minimumExposure = -1
         }
+        
+        clLocationManager = CLLocationManager()
+        clLocationManager.delegate = self
+        clLocationManager.desiredAccuracy = kCLLocationAccuracyBest
     }
     
     required init?(coder: NSCoder) {
@@ -45,11 +51,7 @@ class FMARSceneView: UIView, FMSceneView {
         
         arScnView.frame = self.bounds
     }
-    
-    func setSessionDelegate(_ sessionDelegate: ARSessionDelegate) {
-        arScnView.session.delegate = sessionDelegate
-    }
-    
+        
     func run() {
         let configuration = ARWorldTrackingConfiguration()
         if #available(iOS 11.3, *) {
@@ -64,6 +66,15 @@ class FMARSceneView: UIView, FMSceneView {
     func pause() {
         arScnView.session.pause()
     }
+    
+    func startUpdatingLocation() {
+        clLocationManager.requestWhenInUseAuthorization()
+        clLocationManager.startUpdatingLocation()
+    }
+    
+    func stopUpdatingLocation() {
+        clLocationManager.stopUpdatingLocation()
+    }
 }
 
 extension FMARSceneView: ARSessionDelegate {
@@ -76,5 +87,15 @@ extension FMARSceneView: ARSessionDelegate {
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         delegate?.sceneView(self, didFailWithError: error)
+    }
+}
+
+extension FMARSceneView: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else {
+            return
+        }
+        delegate?.sceneView(self, didUpdate: location)
     }
 }

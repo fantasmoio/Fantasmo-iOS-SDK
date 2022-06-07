@@ -396,6 +396,10 @@ extension FMLocationManager : FMSceneViewDelegate {
         delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo)
     }
     
+    func sceneView(_ sceneView: FMSceneView, didUpdate location: CLLocation) {
+        lastCLLocation = location
+    }
+    
     func sceneView(_ sceneView: FMSceneView, didFailWithError error: Error) {
     }
 }
@@ -435,13 +439,5 @@ extension FMLocationManager : FMFrameEvaluatorChainDelegate {
         // frame was rejected, update session analytics
         frameEvaluationStatistics.addRejection(reason)
         delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
-    }
-}
-
-// MARK: - CLLocationManagerDelegate
-
-extension FMLocationManager : CLLocationManagerDelegate {
-    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        lastCLLocation = locations.last
     }
 }

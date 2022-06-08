@@ -12,6 +12,7 @@
 		010CB25F27EA256400F72393 /* FMAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010CB25E27EA256400F72393 /* FMAnalytics.swift */; };
 		010F22A02850963F004111C4 /* parking-session-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 010F229D2850963F004111C4 /* parking-session-1.mov */; };
 		010F22A12850963F004111C4 /* parking-session-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 010F229D2850963F004111C4 /* parking-session-1.mov */; };
+		010F22A22850B020004111C4 /* parking-session-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 010F229D2850963F004111C4 /* parking-session-1.mov */; };
 		01138A1927551D5F00AB31DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A1827551D5F00AB31DF /* AppDelegate.swift */; };
 		01138A1B27551D5F00AB31DF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A1A27551D5F00AB31DF /* SceneDelegate.swift */; };
 		01138A2027551D5F00AB31DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01138A1E27551D5F00AB31DF /* Main.storyboard */; };
@@ -1060,6 +1061,7 @@
 				0103238E2732D4F100056E91 /* Settings.bundle in Resources */,
 				01A3A501270F14B200B7679F /* LaunchScreen.storyboard in Resources */,
 				01A3A4FE270F14B200B7679F /* Assets.xcassets in Resources */,
+				010F22A22850B020004111C4 /* parking-session-1.mov in Resources */,
 				01A3A4FC270F14B000B7679F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

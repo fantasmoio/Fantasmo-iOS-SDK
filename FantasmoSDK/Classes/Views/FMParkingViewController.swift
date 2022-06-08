@@ -298,7 +298,7 @@ public final class FMParkingViewController: UIViewController {
         
         #if targetEnvironment(simulator)
         guard simulation != nil else {
-            fatalError("You must set a `simulation` to run in the Simulator.")
+            fatalError("You must set the `simulation` property to run in Simulator.")
         }
         #endif
         

@@ -12,7 +12,6 @@ class SettingsViewController: UIViewController {
     @IBOutlet var localizeForeverSwitch: UISwitch!
     @IBOutlet var stopLocalizingSettingsViews: [UIView]!
     @IBOutlet var confidenceSegmentedControl: UISegmentedControl!
-    @IBOutlet var locationsTextField: UITextField!
     @IBOutlet var errorsTextField: UITextField!
     
     override func viewDidLoad() {
@@ -26,7 +25,6 @@ class SettingsViewController: UIViewController {
             $0.isHidden = localizeForever
         }
         
-        locationsTextField.text = String(Settings.maxLocationResults)
         errorsTextField.text = String(Settings.maxErrorResults)
                 
         switch Settings.desiredResultConfidence {
@@ -36,14 +34,6 @@ class SettingsViewController: UIViewController {
             confidenceSegmentedControl.selectedSegmentIndex = 1
         case .high:
             confidenceSegmentedControl.selectedSegmentIndex = 2
-        }
-    }
-
-    @IBAction func handleLocationsTextFieldChanged(_ sender: UITextField) {
-        if let numberText = locationsTextField.text, let numberValue = Int(numberText) {
-            Settings.maxLocationResults = numberValue
-        } else {
-            locationsTextField.text = String(Settings.maxLocationResults)
         }
     }
     

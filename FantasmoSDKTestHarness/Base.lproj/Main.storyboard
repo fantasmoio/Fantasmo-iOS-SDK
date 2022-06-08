@@ -21,10 +21,10 @@
                                 <rect key="frame" x="0.0" y="56" width="414" height="786"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ycc-JG-IiO" userLabel="Content View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="344"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="274"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="0.0" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="CAl-42-e7z">
-                                                <rect key="frame" x="30" y="30" width="354" height="284"/>
+                                                <rect key="frame" x="30" y="30" width="354" height="214"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="uBU-Ql-lwf">
                                                         <rect key="frame" x="0.0" y="0.0" width="354" height="39.5"/>
@@ -90,49 +90,8 @@
                                                             </segmentedControl>
                                                         </subviews>
                                                     </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="CyM-eM-HBW">
-                                                        <rect key="frame" x="0.0" y="174" width="354" height="40"/>
-                                                        <subviews>
-                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="3Or-GS-WXo">
-                                                                <rect key="frame" x="0.0" y="0.0" width="304" height="33.5"/>
-                                                                <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="07D-Cg-sfl">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="304" height="33.5"/>
-                                                                        <attributedString key="attributedText">
-                                                                            <fragment content="Stop localizing when this many successful results are received below the confidence level.">
-                                                                                <attributes>
-                                                                                    <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="0.69999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                    <font key="NSFont" metaFont="system"/>
-                                                                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="2" tighteningFactorForTruncation="0.0"/>
-                                                                                </attributes>
-                                                                            </fragment>
-                                                                        </attributedString>
-                                                                        <nil key="highlightedColor"/>
-                                                                    </label>
-                                                                </subviews>
-                                                            </stackView>
-                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dyK-fy-m0M">
-                                                                <rect key="frame" x="314" y="0.0" width="40" height="40"/>
-                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="40" id="gzU-8o-lyY"/>
-                                                                    <constraint firstAttribute="height" constant="40" id="q9D-h8-Glg"/>
-                                                                </constraints>
-                                                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="19"/>
-                                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad" keyboardAppearance="alert" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="one-time-code"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="doneAccessory" value="YES"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                                <connections>
-                                                                    <action selector="handleLocationsTextFieldChanged:" destination="xlT-PS-WqX" eventType="editingDidEnd" id="Glu-4N-upa"/>
-                                                                    <outlet property="delegate" destination="xlT-PS-WqX" id="vU8-eL-Mo1"/>
-                                                                </connections>
-                                                            </textField>
-                                                        </subviews>
-                                                    </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="HHc-wm-O3X">
-                                                        <rect key="frame" x="0.0" y="244" width="354" height="40"/>
+                                                        <rect key="frame" x="0.0" y="174" width="354" height="40"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="QSX-CN-H67">
                                                                 <rect key="frame" x="0.0" y="0.0" width="304" height="33.5"/>
@@ -216,9 +175,7 @@
                         <outlet property="confidenceSegmentedControl" destination="CMy-1w-vr9" id="5CO-Lm-zng"/>
                         <outlet property="errorsTextField" destination="MDY-Ug-jLi" id="lRp-nR-bdM"/>
                         <outlet property="localizeForeverSwitch" destination="r1R-NH-aVn" id="72z-MC-dBa"/>
-                        <outlet property="locationsTextField" destination="dyK-fy-m0M" id="naa-Xs-MCC"/>
                         <outletCollection property="stopLocalizingSettingsViews" destination="bqn-HC-s6E" collectionClass="NSMutableArray" id="1Yc-Uy-FXt"/>
-                        <outletCollection property="stopLocalizingSettingsViews" destination="CyM-eM-HBW" collectionClass="NSMutableArray" id="XMY-6r-PnK"/>
                         <outletCollection property="stopLocalizingSettingsViews" destination="HHc-wm-O3X" collectionClass="NSMutableArray" id="Mgq-aP-vKC"/>
                     </connections>
                 </viewController>

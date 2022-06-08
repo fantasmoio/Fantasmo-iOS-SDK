@@ -73,8 +73,10 @@ class LocalizeViewController: UIViewController {
             return
         }
         var location: CLLocation
-        if isSimulationSwitch.isOn {
-            location = CLLocation(latitude: 52.50578283943285, longitude: 13.378954977173915)
+        var simulation: FMSimulation?
+        if isSimulationSwitch.isOn  {
+            simulation = FMSimulation(named: "parking-session-1")
+            location = simulation!.location
         } else if let currentLocation = currentLocation {
             location = currentLocation
         } else {
@@ -92,7 +94,7 @@ class LocalizeViewController: UIViewController {
             }
             self?.results.removeAll()
             self?.mapViewController?.clearLocationResults()
-            self?.startParkingFlow()
+            self?.startParkingFlow(simulation: simulation)
         }
     }
     
@@ -101,12 +103,12 @@ class LocalizeViewController: UIViewController {
         testSpotButton.setTitle(newTitle, for: .normal)
     }
     
-    func startParkingFlow() {
+    func startParkingFlow(simulation: FMSimulation? = nil) {
         let sessionId = UUID().uuidString
         let sessionTags = ["ios-sdk-test-harness"]
         let parkingViewController = FMParkingViewController(sessionId: sessionId, sessionTags: sessionTags)
         parkingViewController.delegate = self
-        parkingViewController.isSimulation = isSimulationSwitch.isOn
+        parkingViewController.simulation = simulation
         parkingViewController.showsStatistics = showsStatisticsSwitch.isOn
         if !scanQRCodeSwitch.isOn {
             parkingViewController.qrCodeDetector = MockQRCodeDetector()
@@ -144,7 +146,7 @@ extension LocalizeViewController: FMParkingViewControllerDelegate {
             return
         }
                 
-        if numberOfLocationResults < Settings.maxLocationResults, result.confidence < Settings.desiredResultConfidence {
+        if result.confidence < Settings.desiredResultConfidence {
             return
         }
         

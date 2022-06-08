@@ -495,13 +495,13 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OUm-hH-qDJ">
                                                 <rect key="frame" x="0.0" y="0.0" width="350" height="31"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" text="Scan QR Code" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lkW-dP-Tt4">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" text="Skip QR Code" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lkW-dP-Tt4">
                                                         <rect key="frame" x="0.0" y="0.0" width="301" height="31"/>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="IbN-bi-aOw">
+                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="IbN-bi-aOw" userLabel="Skip QR Code Switch">
                                                         <rect key="frame" x="301" y="0.0" width="51" height="31"/>
                                                     </switch>
                                                 </subviews>
@@ -625,8 +625,8 @@
                         <outlet property="activityIndicator" destination="6wc-3p-aIB" id="Tye-Ef-ziM"/>
                         <outlet property="isSimulationSwitch" destination="iK8-Qy-d57" id="03i-2G-MFG"/>
                         <outlet property="resultText" destination="V5O-8d-Jka" id="QZj-0n-I2L"/>
-                        <outlet property="scanQRCodeSwitch" destination="IbN-bi-aOw" id="dAN-we-U3S"/>
                         <outlet property="showsStatisticsSwitch" destination="u3m-hm-PUG" id="8KJ-Xa-enY"/>
+                        <outlet property="skipQRCodeSwitch" destination="IbN-bi-aOw" id="vQ3-pt-Ngo"/>
                         <outlet property="testSpotButton" destination="Bhe-Kg-zDH" id="2zd-he-owz"/>
                         <segue destination="gf6-ix-y4b" kind="presentation" identifier="presentPermissionsViewController" id="h6o-kC-PR7"/>
                     </connections>

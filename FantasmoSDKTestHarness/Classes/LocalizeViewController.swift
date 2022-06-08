@@ -19,7 +19,7 @@ class LocalizeViewController: UIViewController {
     }
     
     @IBOutlet var resultText: UITextView!
-    @IBOutlet var scanQRCodeSwitch: UISwitch!
+    @IBOutlet var skipQRCodeSwitch: UISwitch!
     @IBOutlet var isSimulationSwitch: UISwitch!
     @IBOutlet var showsStatisticsSwitch: UISwitch!
     @IBOutlet var testSpotButton: UIButton!
@@ -31,6 +31,7 @@ class LocalizeViewController: UIViewController {
     var currentLocation: CLLocation?
     let locationManager: CLLocationManager = CLLocationManager()
     let networkMonitor: NWPathMonitor = NWPathMonitor()
+    let parkingSimulation = FMSimulation(named: "parking-session-1")
     var startDate: Date!
     
     override func viewDidLoad() {
@@ -73,10 +74,8 @@ class LocalizeViewController: UIViewController {
             return
         }
         var location: CLLocation
-        var simulation: FMSimulation?
         if isSimulationSwitch.isOn  {
-            simulation = FMSimulation(named: "parking-session-1")
-            location = simulation!.location
+            location = parkingSimulation.location
         } else if let currentLocation = currentLocation {
             location = currentLocation
         } else {
@@ -94,24 +93,26 @@ class LocalizeViewController: UIViewController {
             }
             self?.results.removeAll()
             self?.mapViewController?.clearLocationResults()
-            self?.startParkingFlow(simulation: simulation)
+            self?.startParkingFlow()
         }
     }
     
     @IBAction func handleSimulationModeSwitch(_ sender: UISwitch) {
-        let newTitle = isSimulationSwitch.isOn ? "Localize (Simulated)" : "Localize"
+        let newTitle = isSimulationSwitch.isOn ? "Localize (Simulation)" : "Localize"
         testSpotButton.setTitle(newTitle, for: .normal)
     }
     
-    func startParkingFlow(simulation: FMSimulation? = nil) {
+    func startParkingFlow() {
         let sessionId = UUID().uuidString
         let sessionTags = ["ios-sdk-test-harness"]
         let parkingViewController = FMParkingViewController(sessionId: sessionId, sessionTags: sessionTags)
         parkingViewController.delegate = self
-        parkingViewController.simulation = simulation
         parkingViewController.showsStatistics = showsStatisticsSwitch.isOn
-        if !scanQRCodeSwitch.isOn {
+        if skipQRCodeSwitch.isOn {
             parkingViewController.qrCodeDetector = MockQRCodeDetector()
+        }
+        if isSimulationSwitch.isOn {
+            parkingViewController.simulation = parkingSimulation
         }
         parkingViewController.modalPresentationStyle = .fullScreen
         self.present(parkingViewController, animated: true) { [weak self] in

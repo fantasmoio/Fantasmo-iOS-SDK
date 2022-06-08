@@ -57,7 +57,7 @@ class FMSimulationView: UIView, FMSceneView {
         
         playerLayer.frame = bounds
     }
-        
+    
     func run() {
         player.play()
     }
@@ -73,7 +73,6 @@ class FMSimulationView: UIView, FMSceneView {
     func stopUpdatingLocation() {
         sendsLocationUpdates = false
     }
-
 }
 
 extension FMSimulationView: AVPlayerItemMetadataOutputPushDelegate {
@@ -97,16 +96,20 @@ extension FMSimulationView: AVPlayerItemMetadataOutputPushDelegate {
             let decodedData = try jsonDecoder.decode(FMSimulationFrame.self, from: itemData)
             let frame = FMFrame(camera: decodedData.camera, capturedImage: capturedImage, timestamp: Date().timeIntervalSince1970)
             delegate?.sceneView(self, didUpdate: frame)
-            // simulate location update
-            let location = decodedData.location
-            let clLocation = CLLocation(
-                coordinate: location.coordinate,
-                altitude: location.altitude,
-                horizontalAccuracy: location.horizontalAccuracy,
-                verticalAccuracy: location.verticalAccuracy,
-                timestamp: Date()
-            )
-            delegate?.sceneView(self, didUpdate: clLocation)
+
+            if sendsLocationUpdates {
+                // simulate location update
+                let location = decodedData.location
+                let clLocation = CLLocation(
+                    coordinate: location.coordinate,
+                    altitude: location.altitude,
+                    horizontalAccuracy: location.horizontalAccuracy,
+                    verticalAccuracy: location.verticalAccuracy,
+                    timestamp: Date()
+                )
+                delegate?.sceneView(self, didUpdate: clLocation)
+            }
+
         } catch {
             var errorMessage = "error decoding metadata\n"
             if let decodingError = error as? DecodingError {

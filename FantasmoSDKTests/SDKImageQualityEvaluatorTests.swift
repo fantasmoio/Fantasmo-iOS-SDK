@@ -20,6 +20,10 @@ class SDKImageQualityEvaluatorTests: XCTestCase {
         ImageQualityModel.removeDownloadedModel()
     }
     
+    override func tearDown() {
+        ImageQualityModel.removeDownloadedModel()
+    }
+    
     func testCreatesMLInput() throws {
         // create a new evaluator
         let imageQualityEvaluator = try XCTUnwrap(FMImageQualityEvaluator.makeEvaluator() as? FMImageQualityEvaluatorCoreML)

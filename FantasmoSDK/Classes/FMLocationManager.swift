@@ -50,13 +50,9 @@ class FMLocationManager: NSObject {
         }
     }
 
-    /// When in simulation mode, mock data is used from the assets directory instead of the live camera feed.
-    /// This mode is useful for implementation and debugging.
+    /// This flag indicates that the frames being sent to localize are from a simulation.
     public var isSimulation = false
     
-    /// The zone that will be simulated.
-    public var simulationZone = FMZone.ZoneType.parking
-
     /// An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
     /// Current implementation returns most recent location received from CoreLocation unless an override was set.
     var approximateLocation: CLLocation {
@@ -269,7 +265,7 @@ class FMLocationManager: NSObject {
         
         let localizationRequest = FMLocalizationRequest(
             isSimulation: isSimulation,
-            simulationZone: simulationZone,
+            simulationZone: .parking,
             approximateLocation: approximateLocation,
             relativeOpenCVAnchorPose: openCVRelativeAnchorPose,
             analytics: localizationAnalytics
@@ -380,24 +376,31 @@ class FMLocationManager: NSObject {
 
 // MARK: - ARSessionDelegate
 
-extension FMLocationManager : ARSessionDelegate {
-    public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+extension FMLocationManager : FMSceneViewDelegate {
+
+    public func sceneView(_ sceneView: FMSceneView, didUpdate frame: FMFrame) {
         
-        let fmFrame = FMFrame(arFrame: frame)
-        lastFrame = fmFrame
+        lastFrame = frame
         
         guard state != .stopped else {
             return
         }
         
-        frameEvaluatorChain.evaluateAsync(frame: fmFrame)
+        frameEvaluatorChain.evaluateAsync(frame: frame)
         
         if let frameToLocalize = frameEvaluatorChain.dequeueBestFrame() {
             localize(frame: frameToLocalize)
         }
         
-        accumulatedARKitInfo.update(with: fmFrame)
-        delegate?.locationManager(didUpdateFrame: fmFrame, info: accumulatedARKitInfo)
+        accumulatedARKitInfo.update(with: frame)
+        delegate?.locationManager(didUpdateFrame: frame, info: accumulatedARKitInfo)
+    }
+    
+    func sceneView(_ sceneView: FMSceneView, didUpdate location: CLLocation) {
+        lastCLLocation = location
+    }
+    
+    func sceneView(_ sceneView: FMSceneView, didFailWithError error: Error) {
     }
 }
 
@@ -436,13 +439,5 @@ extension FMLocationManager : FMFrameEvaluatorChainDelegate {
         // frame was rejected, update session analytics
         frameEvaluationStatistics.addRejection(reason)
         delegate?.locationManager(didUpdateFrameEvaluationStatistics: frameEvaluationStatistics)
-    }
-}
-
-// MARK: - CLLocationManagerDelegate
-
-extension FMLocationManager : CLLocationManagerDelegate {
-    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        lastCLLocation = locations.last
     }
 }

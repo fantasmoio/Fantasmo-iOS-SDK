@@ -8,7 +8,7 @@
 import Foundation
 import FantasmoSDK
 import CoreImage
-import ARKit
+import UIKit
 
 class MockQRCodeDetector: FMQRCodeDetector {
     
@@ -16,7 +16,7 @@ class MockQRCodeDetector: FMQRCodeDetector {
         
     private let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])
     
-    func checkFrameAsyncThrottled(_ frame: ARFrame) {
+    func checkAsyncThrottled(_ pixelBuffer: CVPixelBuffer) {
         guard detectedQRCode == nil else {
             return
         }

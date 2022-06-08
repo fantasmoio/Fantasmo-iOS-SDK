@@ -22,11 +22,13 @@ public final class FMParkingViewController: UIViewController {
     /// If the value is `false` then you should _not_ attempt to localize and instead resort to other options.
     public static func isParkingAvailable(near location: CLLocation, completion: @escaping (Bool) -> Void) {
         log.debug()
+        #if !targetEnvironment(simulator)
         guard ARWorldTrackingConfiguration.isSupported else {
             log.error(FMError(FMDeviceError.notSupported))
             completion(false)
             return
         }
+        #endif
         guard CLLocationCoordinate2DIsValid(location.coordinate) else {
             log.error(FMError(FMLocationError.invalidCoordinate))
             completion(false)
@@ -153,9 +155,7 @@ public final class FMParkingViewController: UIViewController {
     
     // MARK: -
     // MARK: Localization
-        
-    private let clLocationManager: CLLocationManager = CLLocationManager()
-        
+    
     private let fmLocationManager: FMLocationManager = FMLocationManager()
     
     private var localizingViewControllerType: FMLocalizingViewControllerProtocol.Type = FMLocalizingViewController.self
@@ -182,13 +182,9 @@ public final class FMParkingViewController: UIViewController {
         
         state = .localizing
         showChildViewController(localizingViewControllerType.init(), animated: true)
-                
-        clLocationManager.delegate = self
-        clLocationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         if usesInternalLocationManager {
-            clLocationManager.requestWhenInUseAuthorization()
-            clLocationManager.startUpdatingLocation()
+            sceneView.startUpdatingLocation()
         }
         
         fmLocationManager.connect(accessToken: accessToken, delegate: self)
@@ -207,10 +203,9 @@ public final class FMParkingViewController: UIViewController {
                 return
             }
             if usesInternalLocationManager {
-                clLocationManager.requestWhenInUseAuthorization()
-                clLocationManager.startUpdatingLocation()
+                sceneView.startUpdatingLocation()
             } else {
-                clLocationManager.stopUpdatingLocation()
+                sceneView.stopUpdatingLocation()
             }
         }
     }
@@ -234,14 +229,21 @@ public final class FMParkingViewController: UIViewController {
     
     // MARK: -
     // MARK: Debug
-        
+   
+    
+    /// A recorded parking simulation to run. If set, the recorded video and sensor data will be used instead of the real thing.
+    public var simulation: FMSimulation? {
+        didSet {
+            fmLocationManager.isSimulation = simulation != nil
+        }
+    }
+
+    @available(*, deprecated, message: "Use the `simulation` property instead.")
     public var isSimulation: Bool {
         set {
-            fmLocationManager.isSimulation = newValue
-            fmLocationManager.simulationZone = isSimulation ? .parking : .unknown
         }
         get {
-            return fmLocationManager.isSimulation
+            return simulation != nil
         }
     }
 
@@ -266,7 +268,7 @@ public final class FMParkingViewController: UIViewController {
     // MARK: -
     // MARK: UI
     
-    private var sceneView: ARSCNView!
+    private var sceneView: FMSceneView!
     
     private var containerView: UIView!
     
@@ -274,15 +276,13 @@ public final class FMParkingViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-                
-        let session = ARSession()
-        session.delegate = self
      
-        sceneView = ARSCNView(frame: .zero)
-        sceneView.session = session
-        sceneView.antialiasingMode = .multisampling4X
-        sceneView.automaticallyUpdatesLighting = false
-        sceneView.preferredFramesPerSecond = 60
+        if let simulation = simulation {
+            sceneView = FMSimulationView(asset: simulation.asset)
+        } else {
+            sceneView = FMARSceneView()
+        }
+        sceneView.delegate = self
         self.view.addSubview(sceneView)
         
         containerView = UIView()
@@ -291,26 +291,18 @@ public final class FMParkingViewController: UIViewController {
         if let statisticsView = statisticsView {
             self.view.addSubview(statisticsView)
         }
-        
-        if let camera = sceneView.pointOfView?.camera {
-            camera.wantsHDR = true
-            camera.wantsExposureAdaptation = true
-            camera.exposureOffset = -1
-            camera.minimumExposure = -1
-        }
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-                
-        let configuration = ARWorldTrackingConfiguration()
-        if #available(iOS 11.3, *) {
-            configuration.isAutoFocusEnabled = true
-        }
-        configuration.worldAlignment = .gravity
         
-        let options: ARSession.RunOptions = [.resetTracking]
-        sceneView.session.run(configuration, options: options)
+        #if targetEnvironment(simulator)
+        guard simulation != nil else {
+            fatalError("You must set a `simulation` to run in Simulator.")
+        }
+        #endif
+        
+        sceneView.run()
                 
         if state == .idle {
             startQRScanning()
@@ -320,7 +312,7 @@ public final class FMParkingViewController: UIViewController {
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        sceneView.session.pause()
+        sceneView.pause()
         
         if isBeingDismissed || isMovingFromParent {
             fmLocationManager.unsetAnchor()
@@ -434,13 +426,13 @@ extension FMParkingViewController: FMLocationManagerDelegate {
 }
 
 // MARK: -
-// MARK: ARSessionDelegate
+// MARK: FMSceneViewDelegate
 
-extension FMParkingViewController: ARSessionDelegate {
-
-    public func session(_ session: ARSession, didUpdate frame: ARFrame) {
+extension FMParkingViewController: FMSceneViewDelegate {
+    
+    func sceneView(_ sceneView: FMSceneView, didUpdate frame: FMFrame) {
         // Pass the current AR frame to the location manager
-        fmLocationManager.session(session, didUpdate: frame)
+        fmLocationManager.sceneView(sceneView, didUpdate: frame)
         
         switch state {
         case .qrScanning:
@@ -451,7 +443,7 @@ extension FMParkingViewController: ARSessionDelegate {
             }
             guard let qrCode = qrCodeDetector.detectedQRCode else {
                 // No code has been detected yet, check for one now.
-                qrCodeDetector.checkFrameAsyncThrottled(frame)
+                qrCodeDetector.checkAsyncThrottled(frame.capturedImage)
                 return
             }
             // A code has been detected, notify the scanning view
@@ -485,7 +477,15 @@ extension FMParkingViewController: ARSessionDelegate {
         }
     }
     
-    public func session(_ session: ARSession, didFailWithError error: Error) {
+    func sceneView(_ sceneView: FMSceneView, didUpdate location: CLLocation) {
+        guard usesInternalLocationManager, state == .localizing else {
+            return
+        }
+        fmLocationManager.sceneView(sceneView, didUpdate: location)
+        statisticsView?.update(deviceLocation: fmLocationManager.lastCLLocation)
+    }
+    
+    func sceneView(_ sceneView: FMSceneView, didFailWithError error: Error) {
         guard error is ARError else {
             return
         }
@@ -509,19 +509,5 @@ extension FMParkingViewController: ARSessionDelegate {
             alertController.addAction(restartAction)
             self.present(alertController, animated: true, completion: nil)
         }
-    }
-}
-
-// MARK: -
-// MARK: CLLocationManagerDelegate
-
-extension FMParkingViewController: CLLocationManagerDelegate {
-    
-    public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard usesInternalLocationManager, state == .localizing else {
-            return
-        }
-        fmLocationManager.locationManager(manager, didUpdateLocations: locations)
-        statisticsView?.update(deviceLocation: fmLocationManager.lastCLLocation)
     }
 }

@@ -13,7 +13,6 @@ class Settings {
     enum Key: String {
         case localizeForever
         case desiredResultConfidence
-        case maxLocationResults
         case maxErrorResults
     }
 
@@ -31,16 +30,7 @@ class Settings {
             UserDefaults.standard.set(newValue, forKey: Key.maxErrorResults.rawValue)
         }
         get {
-            return UserDefaults.standard.object(forKey: Key.maxErrorResults.rawValue) as? Int ?? 5
-        }
-    }
-    
-    static var maxLocationResults: Int {
-        set {
-            UserDefaults.standard.set(newValue, forKey: Key.maxLocationResults.rawValue)
-        }
-        get {
-            return UserDefaults.standard.object(forKey: Key.maxLocationResults.rawValue) as? Int ?? 5
+            return UserDefaults.standard.object(forKey: Key.maxErrorResults.rawValue) as? Int ?? 10
         }
     }
     

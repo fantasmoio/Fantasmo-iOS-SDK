@@ -21,6 +21,7 @@ class ParkingExampleViewController: UIViewController {
     var lastResult: FMLocationResult?
     var locationManager = CLLocationManager()
     var deviceLocation: CLLocation!
+    var parkingSimulation = FMSimulation(named: "parking-session-1")
         
     @IBAction func handleEndRideButton(_ button: UIButton) {
         let myLocation = getMyLocation()
@@ -44,9 +45,11 @@ class ParkingExampleViewController: UIViewController {
                 
         /// Assign a delegate
         parkingViewController.delegate = self
-                
-        /// Run in simulation mode, if you're not near a space
-        parkingViewController.isSimulation = isSimulationSwitch.isOn
+        
+        if isSimulationSwitch.isOn {
+            /// If you're not physically near a space or you're running in the Simulator, use our recorded parking simulation
+            parkingViewController.simulation = parkingSimulation
+        }
         
         /// Optionally register custom view controllers for each step
         ///
@@ -66,6 +69,7 @@ extension ParkingExampleViewController: FMParkingViewControllerDelegate {
         /// Note: If you choose to implement this method, you *must* call the `continueBlock` with the validation result
         let isValidCode = qrCode.messageString != nil
         continueBlock(isValidCode)
+        
         /// Validation can also be done asynchronously.
         ///
         ///     APIService.validateQRCode(qrCode) { isValidCode in
@@ -78,6 +82,7 @@ extension ParkingExampleViewController: FMParkingViewControllerDelegate {
         /// Note: If you choose to implement this method, you *must* call the `continueBlock` with the validation result
         let isValidCode = qrCodeString.isEmpty == false
         continueBlock(isValidCode)
+        
         /// Validation can also be done asynchronously.
         ///
         ///     APIService.validateQRCode(qrCode) { isValidCode in
@@ -86,13 +91,14 @@ extension ParkingExampleViewController: FMParkingViewControllerDelegate {
     }
     
     func parkingViewController(_ parkingViewController: FMParkingViewController, didReceiveLocalizationResult result: FMLocationResult) {
-        /// Got a localization result
-        /// Localization will continue until you dismiss the view
-        /// You should decide on acceptable criteria for a result, one way is by checking the `confidence` value
-        if result.confidence == .low {
-            return
-        }
-        /// We're satisfied with the result, dismiss to stop localizing
+        /// Got a localization result. You should decide on acceptable criteria for the result and dismiss the view when you're satisfied.
+        /// For example you could optionally require a result confidence of `.medium` or higher.
+        ///
+        ///     if result.confidence == .low {
+        ///         return
+        ///     }
+        ///
+        /// Dismiss the view to stop localizing.
         parkingViewController.dismiss(animated: true) {
             let coordinate = result.location.coordinate
             self.resultLabel.text = "Coordinates: \(coordinate.latitude), \(coordinate.longitude)\n\nConfidence: \(result.confidence)"
@@ -114,7 +120,7 @@ extension ParkingExampleViewController: FMParkingViewControllerDelegate {
         /// Localization will continue until you dismiss the view
         /// You should decide on an acceptable threshold of errors and dismiss the view when it's reached
         errorCount += 1
-        if errorCount < 5 {
+        if errorCount < 10 {
             return
         }
         /// Too many errors, dismiss to stop localizing
@@ -156,7 +162,7 @@ extension ParkingExampleViewController: CLLocationManagerDelegate {
     private func getMyLocation() -> CLLocation {
         var location: CLLocation
         if isSimulationSwitch.isOn {
-            location = CLLocation(latitude: 52.50578283943285, longitude: 13.378954977173915)
+            location = parkingSimulation.location
         } else {
             location = deviceLocation
         }

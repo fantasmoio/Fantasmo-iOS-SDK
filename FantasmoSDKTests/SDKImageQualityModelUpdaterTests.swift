@@ -16,6 +16,10 @@ class SDKImageQualityModelUpdaterTests: XCTestCase {
         ImageQualityModel.removeDownloadedModel()
     }
     
+    override func tearDownWithError() throws {
+        ImageQualityModel.removeDownloadedModel()
+    }
+    
     func testBundledModelVersion() throws {
         let bundledModel = try ImageQualityModel(configuration: MLModelConfiguration())
         let bundledModelVersion = try XCTUnwrap(bundledModel.model.modelDescription.metadata[.versionString] as? String)

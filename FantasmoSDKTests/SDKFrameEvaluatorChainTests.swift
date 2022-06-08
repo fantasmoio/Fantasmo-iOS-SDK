@@ -17,6 +17,10 @@ class SDKFrameEvaluatorChainTests: XCTestCase {
         // Tests are based on the latest bundled model
         ImageQualityModel.removeDownloadedModel()
     }
+    
+    override class func tearDown() {
+        ImageQualityModel.removeDownloadedModel()
+    }
         
     func testFrameEvaluatorChainConfig() throws {
         let config = try XCTUnwrap(TestUtils.getDefaultConfig())

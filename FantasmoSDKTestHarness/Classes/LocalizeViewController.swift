@@ -109,7 +109,7 @@ class LocalizeViewController: UIViewController {
         parkingViewController.delegate = self
         parkingViewController.showsStatistics = showsStatisticsSwitch.isOn
         if skipQRCodeSwitch.isOn {
-            parkingViewController.qrCodeDetector = MockQRCodeDetector()
+            parkingViewController.qrCodeScannerEnabled = false
         }
         if isSimulationSwitch.isOn {
             parkingViewController.simulation = parkingSimulation

@@ -321,18 +321,20 @@ class MyCustomLocalizingViewController: UIViewController, FMLocalizingViewContro
 }
 ```
 
-### Testing and Debugging 
+### Simulation Mode
 
-Since it's not always possible to be onsite for testing, a simulation mode is provided to make test localization queries.
+Since it's not always possible to be onsite for testing, a simulation mode is provided. Recorded simulations can be found inside the `FantasmoSDKTestHarness/Videos` folder and set to run in your parking view.
 
 ```swift
-parkingViewController.isSimulation = true
+parkingViewController.simulation = FMSimulation(named: "parking-session-1")
 ```
 
-And for debugging, it's sometimes useful to show the statistics view to see what's happening under the hood.
+### Debugging
+
+Sometimes it's useful to see what's happening under the hood. To see live, detailed debug info you can show the statistics view.
 
 ```swift
-parkingViewController.showsStatistics = showsStatisticsSwitch.isOn
+parkingViewController.showsStatistics = true
 ```
 
 ### Logging

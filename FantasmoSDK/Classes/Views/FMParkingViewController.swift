@@ -97,6 +97,7 @@ public final class FMParkingViewController: UIViewController {
             guard state == .idle else {
                 fatalError("`qrCodeScannerEnabled` property cannot be modified after presenting the view.")
             }
+            fmLocationManager.qrCodeSkipped = !qrCodeScannerEnabled
         }
     }
     

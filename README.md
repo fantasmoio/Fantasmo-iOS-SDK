@@ -224,14 +224,14 @@ func parkingViewController(_ parkingViewController: FMParkingViewController,
 
 ### Disabling QR Codes
 
-While we recommend using the QR code scanner, it is not required. If you do not wish to use the QR code scanner, you can disable it by setting the `qrCodeScannerEnabled` property to false. Please note that you must do this _before_ presenting the view controller to the user.
+While we recommend using the QR code scanner, it is not required. If you do not wish to use the QR code scanner, you can disable it by setting the `qrCodeScannerEnabled` property to false. Please note that you must do this before presenting the view controller to the user.
 
 ```swift
     // disable the QR code scanner
     parkingViewController.qrCodeScannerEnabled = false
 ```
 
-It is important to mention that when scanning a QR code on a vehicle, an anchor is set in the AR session. This anchor allows Fantasmo to locate the vehicle even if the user walks away. If the QR code scanner is disabled however, this anchor is set at the earliest possible moment during localization. This can result in the anchor not being precisely where the vehicle is, if the user has moved.
+Normally when scanning a QR code on a vehicle, an anchor is set in the AR session. This anchor allows Fantasmo to locate the vehicle even if the user walks away. If the QR code scanner is disabled however, this anchor is set at the earliest possible moment during localization. This may result in the anchor not being precisely where the vehicle is, if the user has moved.
 
 ### Localizing 
 

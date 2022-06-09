@@ -222,6 +222,17 @@ func parkingViewController(_ parkingViewController: FMParkingViewController,
 
 **Important:** If you implement either of the QR code validation methods, you must call the `continueBlock` with a boolean value. A value of `true` indicates the QR code is valid and that localization should start. Passing `false` to this block indicates the code is invalid and allows the user to scan, or enter in a new code. This block may be called synchronously or asynchronously but must be done so on the main queue.
 
+### Disabling QR Codes
+
+While we recommend using the QR code scanner, it is not required. If you do not wish to use the QR code scanner, you can disable it by setting the `qrCodeScannerEnabled` property to false. Please note that you must do this _before_ presenting the view controller to the user.
+
+```swift
+    // disable the QR code scanner
+    parkingViewController.qrCodeScannerEnabled = false
+```
+
+It is important to mention that when scanning a QR code on a vehicle, an anchor is set in the AR session. This anchor allows Fantasmo to locate the vehicle even if the user walks away. If the QR code scanner is disabled however, this anchor is set at the earliest possible moment during localization. This can result in the anchor not being precisely where the vehicle is, if the user has moved.
+
 ### Localizing 
 
 During localization, frames are continuously captured and sent to the server. Filtering logic in the SDK will automatically select the best frames, and it will issue behavior requests to the user to help improve the incoming images. Confidence in the location result increases during successive updates and clients can choose to stop localizing by dismissing the view, when a desired confidence level is reached.

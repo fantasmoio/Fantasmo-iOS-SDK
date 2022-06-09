@@ -71,7 +71,7 @@ class FMLocationManager: NSObject {
         }
     }
     
-    private var anchorFrame: FMFrame? {
+    public private(set) var anchorFrame: FMFrame? {
         didSet {
             locationFuser.reset()
         }

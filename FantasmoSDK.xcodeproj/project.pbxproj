@@ -25,7 +25,6 @@
 		01138A37275533D400AB31DF /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A35275533D400AB31DF /* UITextField+Extensions.swift */; };
 		01138A392755344000AB31DF /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A382755343F00AB31DF /* PermissionsViewController.swift */; };
 		01138A3E275534DC00AB31DF /* FilledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A3D275534DC00AB31DF /* FilledButton.swift */; };
-		01138A442755355A00AB31DF /* MockQRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A3F2755355A00AB31DF /* MockQRCodeDetector.swift */; };
 		01138A452755355A00AB31DF /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A402755355A00AB31DF /* Settings.swift */; };
 		01138A462755355A00AB31DF /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A412755355A00AB31DF /* SettingsViewController.swift */; };
 		01138A472755355A00AB31DF /* LocalizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A422755355A00AB31DF /* LocalizeViewController.swift */; };
@@ -87,7 +86,6 @@
 		018EF3942795A16A005A1381 /* LocalizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A422755355A00AB31DF /* LocalizeViewController.swift */; };
 		018EF3952795A16A005A1381 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A35275533D400AB31DF /* UITextField+Extensions.swift */; };
 		018EF3962795A16A005A1381 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A432755355A00AB31DF /* MapViewController.swift */; };
-		018EF3972795A16A005A1381 /* MockQRCodeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A3F2755355A00AB31DF /* MockQRCodeDetector.swift */; };
 		018EF3982795A16A005A1381 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A402755355A00AB31DF /* Settings.swift */; };
 		018EF3992795A16A005A1381 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A1A27551D5F00AB31DF /* SceneDelegate.swift */; };
 		018EF39A2795A16A005A1381 /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01138A382755343F00AB31DF /* PermissionsViewController.swift */; };
@@ -268,7 +266,6 @@
 		01138A35275533D400AB31DF /* UITextField+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		01138A382755343F00AB31DF /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
 		01138A3D275534DC00AB31DF /* FilledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilledButton.swift; sourceTree = "<group>"; };
-		01138A3F2755355A00AB31DF /* MockQRCodeDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockQRCodeDetector.swift; sourceTree = "<group>"; };
 		01138A402755355A00AB31DF /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		01138A412755355A00AB31DF /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		01138A422755355A00AB31DF /* LocalizeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizeViewController.swift; sourceTree = "<group>"; };
@@ -484,7 +481,6 @@
 				01138A3D275534DC00AB31DF /* FilledButton.swift */,
 				01138A422755355A00AB31DF /* LocalizeViewController.swift */,
 				01138A432755355A00AB31DF /* MapViewController.swift */,
-				01138A3F2755355A00AB31DF /* MockQRCodeDetector.swift */,
 				01138A382755343F00AB31DF /* PermissionsViewController.swift */,
 				01138A402755355A00AB31DF /* Settings.swift */,
 				01138A412755355A00AB31DF /* SettingsViewController.swift */,
@@ -1109,7 +1105,6 @@
 				01138A472755355A00AB31DF /* LocalizeViewController.swift in Sources */,
 				01138A37275533D400AB31DF /* UITextField+Extensions.swift in Sources */,
 				01138A482755355A00AB31DF /* MapViewController.swift in Sources */,
-				01138A442755355A00AB31DF /* MockQRCodeDetector.swift in Sources */,
 				01138A452755355A00AB31DF /* Settings.swift in Sources */,
 				01138A1B27551D5F00AB31DF /* SceneDelegate.swift in Sources */,
 				01138A392755344000AB31DF /* PermissionsViewController.swift in Sources */,
@@ -1127,7 +1122,6 @@
 				018EF3942795A16A005A1381 /* LocalizeViewController.swift in Sources */,
 				018EF3952795A16A005A1381 /* UITextField+Extensions.swift in Sources */,
 				018EF3962795A16A005A1381 /* MapViewController.swift in Sources */,
-				018EF3972795A16A005A1381 /* MockQRCodeDetector.swift in Sources */,
 				018EF3982795A16A005A1381 /* Settings.swift in Sources */,
 				018EF3992795A16A005A1381 /* SceneDelegate.swift in Sources */,
 				018EF39A2795A16A005A1381 /* PermissionsViewController.swift in Sources */,

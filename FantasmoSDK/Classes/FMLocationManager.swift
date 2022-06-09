@@ -53,6 +53,9 @@ class FMLocationManager: NSObject {
     /// This flag indicates that the frames being sent to localize are from a simulation.
     public var isSimulation = false
     
+    /// This flag is sent to session analytics indicating whether the QR code scanner was skipped.
+    public var qrCodeSkipped = false
+    
     /// An estimate of the location. Coarse resolution is acceptable such as GPS or cellular tower proximity.
     /// Current implementation returns most recent location received from CoreLocation unless an override was set.
     var approximateLocation: CLLocation {
@@ -340,6 +343,7 @@ class FMLocationManager: NSObject {
             totalDuration: Date().timeIntervalSince(startTime),
             location: approximateLocation,
             remoteConfigId: RemoteConfig.config().remoteConfigId,
+            qrCodeSkipped: qrCodeSkipped,
             udid: UIDevice.current.identifierForVendor?.uuidString ?? "",
             deviceModel: UIDevice.current.identifier,
             deviceOs: UIDevice.current.correctedSystemName,

@@ -140,6 +140,7 @@ struct FMSessionAnalytics: Encodable {
     let totalDuration: TimeInterval
     let location: CLLocation
     let remoteConfigId: String
+    var qrCodeSkipped: Bool
     let udid: String
     let deviceModel: String
     let deviceOs: String

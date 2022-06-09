@@ -86,7 +86,21 @@ public final class FMParkingViewController: UIViewController {
     // MARK: -
     // MARK: QR Codes
     
-    public var qrCodeDetector: FMQRCodeDetector = QRCodeDetector()
+    /// Enables or disables the QR code scanner. When `false`, the QR code scanner is disabled and localization begins immediately
+    /// after presenting the view controller. The default is `true`. This property cannot be modified after presenting the view.
+    ///
+    /// When using the QR code scanner, an anchor is set in the AR session. This anchor allows Fantasmo to locate the vehicle even
+    /// if the user walks away. When the QR code scanner is disabled, this anchor is set during localization when the tracking state
+    /// is normal.
+    public var qrCodeScannerEnabled: Bool = true {
+        didSet {
+            guard state == .idle else {
+                fatalError("`qrCodeScannerEnabled` property cannot be modified after presenting the view.")
+            }
+        }
+    }
+    
+    private var qrCodeDetector: FMQRCodeDetector = QRCodeDetector()
     
     private var qrCodeAwaitingContinue: Bool = false
     
@@ -171,14 +185,16 @@ public final class FMParkingViewController: UIViewController {
     
     /// Presents the default or custom registered localizing view controller and starts the localization process.
     ///
-    /// This method is only intended to be called while QR scanning, it performs an animated transition to the localization view.
+    /// If this method is called while the QR code scanner is active it performs an animated transition to the localization view.
     private func startLocalizing() {
-        if state != .qrScanning {
+        if state == .localizing {
             return
         }
         
-        qrScanningViewController?.didStopQRScanning()
-        delegate?.parkingViewControllerDidStopQRScanning(self)
+        if state == .qrScanning {
+            qrScanningViewController?.didStopQRScanning()
+            delegate?.parkingViewControllerDidStopQRScanning(self)
+        }
         
         state = .localizing
         showChildViewController(localizingViewControllerType.init(), animated: true)
@@ -304,8 +320,14 @@ public final class FMParkingViewController: UIViewController {
         
         sceneView.run()
                 
-        if state == .idle {
+        if state != .idle {
+            return
+        }
+        
+        if qrCodeScannerEnabled {
             startQRScanning()
+        } else {
+            startLocalizing()
         }
     }
     
@@ -472,6 +494,12 @@ extension FMParkingViewController: FMSceneViewDelegate {
                     self?.fmLocationManager.unsetAnchor()
                 }
             }
+        
+        case .localizing where qrCodeScannerEnabled == false:
+            if fmLocationManager.anchorFrame == nil && frame.camera.trackingState == .normal {
+                fmLocationManager.setAnchor()
+            }
+        
         default:
             break
         }

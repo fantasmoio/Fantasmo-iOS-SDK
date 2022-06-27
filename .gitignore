@@ -1,8 +1,15 @@
 # Ignoring the pod directory 
 PodExample/Pods/
 PodExample/Podfile.lock
+
+# Ignoring Mac OS stuff
 .DS_Store
 .AppleDouble
 .LSOverride
+
+# Ignoring Carthage stuff
 xcuserdata/
 Carthage/
+
+# Ignoring build stuff
+DerivedData/

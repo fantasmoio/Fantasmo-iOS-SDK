@@ -300,6 +300,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3DN-R6-LoO" userLabel="Camera Permission Button" customClass="FilledButton" customModule="FantasmoSDKTestHarness" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="137" height="60"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="btn_authorize_camera"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="60" id="EvP-ih-2wN"/>
                                                 </constraints>
@@ -331,6 +332,7 @@
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="GWz-p9-9Yz">
                                                 <rect key="frame" x="227" y="0.5" width="60" height="59"/>
                                                 <color key="tintColor" systemColor="systemGreenColor"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="img_checkmark_camera"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="GWz-p9-9Yz" secondAttribute="height" id="Zwc-7S-EXq"/>
                                                 </constraints>
@@ -338,6 +340,7 @@
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="x.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="QJB-J8-GOM">
                                                 <rect key="frame" x="302" y="0.5" width="60" height="59"/>
                                                 <color key="tintColor" systemColor="systemRedColor"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="img_cross_camera"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="QJB-J8-GOM" secondAttribute="height" id="2ft-9y-5h0"/>
                                                 </constraints>
@@ -355,6 +358,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YLn-0G-2td" userLabel="Camera Permission Button" customClass="FilledButton" customModule="FantasmoSDKTestHarness" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="137" height="60"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="btn_authorize_location"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="60" id="DER-k9-DIg"/>
                                                 </constraints>
@@ -387,6 +391,7 @@
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkmark.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="MsB-0C-H8r">
                                                 <rect key="frame" x="227" y="0.5" width="60" height="59"/>
                                                 <color key="tintColor" systemColor="systemGreenColor"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="img_checkmark_location"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="MsB-0C-H8r" secondAttribute="height" id="Fcr-2q-7kf"/>
                                                 </constraints>
@@ -394,6 +399,7 @@
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="x.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Cyn-jP-kv2">
                                                 <rect key="frame" x="302" y="0.5" width="60" height="59"/>
                                                 <color key="tintColor" systemColor="systemRedColor"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="img_cross_location"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="Cyn-jP-kv2" secondAttribute="height" id="bMY-Uc-F7b"/>
                                                 </constraints>
@@ -416,6 +422,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8hP-r9-iyV" customClass="FilledButton" customModule="FantasmoSDKTestHarness" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="42.5" width="362" height="60"/>
                                         <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="btn_continue"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="6aS-WD-fCn"/>
                                         </constraints>
@@ -503,6 +510,7 @@
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="IbN-bi-aOw" userLabel="Skip QR Code Switch">
                                                         <rect key="frame" x="301" y="0.0" width="51" height="31"/>
+                                                        <accessibility key="accessibilityConfiguration" identifier="tog_scanQRCode"/>
                                                     </switch>
                                                 </subviews>
                                             </stackView>
@@ -517,6 +525,7 @@
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="u3m-hm-PUG">
                                                         <rect key="frame" x="301" y="0.0" width="51" height="31"/>
+                                                        <accessibility key="accessibilityConfiguration" identifier="tog_debugStatistics"/>
                                                     </switch>
                                                 </subviews>
                                             </stackView>
@@ -531,6 +540,7 @@
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="iK8-Qy-d57">
                                                         <rect key="frame" x="301" y="0.0" width="51" height="31"/>
+                                                        <accessibility key="accessibilityConfiguration" identifier="tog_simulationMode"/>
                                                         <connections>
                                                             <action selector="handleSimulationModeSwitch:" destination="akc-1m-fZ0" eventType="valueChanged" id="nWc-z2-ozs"/>
                                                         </connections>
@@ -547,6 +557,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bhe-Kg-zDH" customClass="FilledButton" customModule="FantasmoSDKTestHarness" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="163" width="350" height="60"/>
                                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="btn_localize"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="60" id="ZPZ-Rw-Oj3"/>
                                                 </constraints>
@@ -575,6 +586,9 @@
                                     </activityIndicatorView>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V5O-8d-Jka">
                                         <rect key="frame" x="0.0" y="243" width="350" height="422"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="txt_localizeResults">
+                                            <accessibilityTraits key="traits" staticText="YES"/>
+                                        </accessibility>
                                         <attributedString key="attributedText">
                                             <fragment>
                                                 <string key="content">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>

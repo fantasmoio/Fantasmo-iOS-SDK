@@ -88,11 +88,13 @@ public class FMQRScanningViewController: UIViewController {
         view.addSubview(toolbar)
         
         manualEntryButton = buttonWithTitle("Enter Code", imageName: "btn-keyboard")
+        manualEntryButton.isAccessibilityElement = true
         manualEntryButton.addTarget(self, action: #selector(handleManualEntryButton(_:)), for: .touchUpInside)
         view.addSubview(manualEntryButton)
         manualEntryButton.sizeToFit()
 
         torchButton = buttonWithTitle("Torch", imageName: "btn-torch")
+        torchButton.isAccessibilityElement = true
         torchButton.addTarget(self, action: #selector(handleTorchButton(_:)), for: .touchUpInside)
         view.addSubview(torchButton)
         torchButton.sizeToFit()

@@ -9,7 +9,19 @@ import UIKit
 import ARKit
 import SceneKit
 
-public final class FMParkingViewController: UIViewController {
+public protocol FMParkingViewControllerProtocol: UIViewController {
+    func registerLocalizingViewController(_ classType: FMLocalizingViewControllerProtocol.Type)
+    func registerQRScanningViewController(_ classType: FMQRScanningViewControllerProtocol.Type)
+    func enterQRCode(string: String)
+}
+
+public extension FMParkingViewControllerProtocol {
+    // Optional
+    func registerQRScanningViewController(_ classType: FMQRScanningViewControllerProtocol.Type) {}
+    func enterQRCode(string: String) {}
+}
+
+public final class FMParkingViewController: UIViewController, FMParkingViewControllerProtocol {
         
     /// Check if there's an available parking space near a supplied CLLocation and that Fantasmo is supported on the device.
     ///
